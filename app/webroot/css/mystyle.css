@@ -1,0 +1,19 @@
+.clear{ clear:both;}
+
+body {
+    padding-top: 70px; /* 上部のナビゲーションバーの分の余白 */
+}
+ 
+/* アイコンを右寄せ */
+.fixed-sidebar .icon-chevron-right {
+  float: right;
+  margin-top: 4px;
+  margin-right: -6px;
+}
+ 
+@media (max-width: 767px) {
+  .fixed-sidebar {
+    position:static; /* 固定化解除*/
+    width: auto;
+  }
+}
