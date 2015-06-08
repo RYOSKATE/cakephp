@@ -14,10 +14,13 @@
     $('#myTab a:first').tab('show')
     })
 
-    $('#myTab a').click(function (e) {
-      e.preventDefault()
-      $(this).tab('show')
-    })
+    $('#myTab a').click(
+        function (e) 
+        { 
+            e.preventDefault()
+            $(this).tab('show')
+        }
+    )
 </script>
 <!-- Pie leftChart[origin] with leftlegend[origin]-->
 <script type="text/javascript">
@@ -57,7 +60,7 @@ origin(実際の由来は+1する)
     // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい
     AmCharts.ready(function () 
     {
-        for (var origin = 0; origin <chartData.length; ++origin) 
+        for (var origin = 4; origin <chartData.length; ++origin) 
         {   
             // PIE CHART
             leftChart[origin] = new AmCharts.AmPieChart();
@@ -83,8 +86,8 @@ origin(実際の由来は+1する)
 
             // LEGEND
             rightlegend[origin] = new AmCharts.AmLegend();
-            leftlegend[origin].align = "center";
-            leftlegend[origin].markerType = "circle";
+            rightlegend[origin].align = "center";
+            rightlegend[origin].markerType = "circle";
             rightChart[origin].balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
             rightChart[origin].addLegend(rightlegend[origin]);
 
@@ -108,9 +111,9 @@ origin(実際の由来は+1する)
             rightChart[origin].validateNow();
             // changes switch of the leftlegend[origin] (x or v)
             leftlegend[origin].switchType = "x";
-            leftlegend[origin].switchType = "x";
+            rightlegend[origin].switchType = "x";
             leftlegend[origin].validateNow();
-            leftlegend[origin].validateNow();
+            rightlegend[origin].validateNow();
         }
     });
 
@@ -124,110 +127,16 @@ origin(実際の由来は+1する)
 <div class="page-header">
   <h1><small>由来比較</small></h1>
 </div>
-
 <!-- Nav tabs -->
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->
-<ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#o2" role="tab" data-toggle="tab">o2</a></li>
-  <li><a href ="#o12" role="tab" data-toggle="tab">o12</a></li>         
-  <li><a href ="#o1"  role="tab" data-toggle="tab">o1</a></li> 
+<ul class="nav nav-tabs" id = "mytab" role="tablist">
   <li><a href ="#o13" role="tab" data-toggle="tab">o13</a></li>         
   <li><a href ="#o123"role="tab" data-toggle="tab">o123</a></li>        
   <li><a href ="#o23" role="tab" data-toggle="tab">o23</a></li>         
-  <li><a href ="#o3" role="tab" data-toggle="tab">o3</a></li>         
+  <li><a href ="#o3"  role="tab" data-toggle="tab">o3</a></li>         
 </ul>
-
 <!-- Tab panes -->
 <div class="tab-content">
-  <div class="tab-pane fade in active" id="o2">
-<!--
-    <table align="center" cellspacing="20" class="table panel">
-        <tr>
-            <td>
-                <input type="radio" checked="true" name="group" id="rb1" onclick="setLabelPosition()">labels outside
-                <input type="radio" name="group" id="rb2" onclick="setLabelPosition()">labels inside</td>
-            <td>
-                <input type="radio" name="group2" id="rb3" onclick="set3D()">3D
-                <input type="radio" checked="true" name="group2" id="rb4" onclick="set3D()">2D</td>
-            <td>Legend switch type:
-                <input type="radio" checked="true" name="group3" id="rb5"
-                onclick="setSwitch()">x
-                <input type="radio" name="group3" id="rb6" onclick="setSwitch()">v</td>
-        </tr>
-    </table>
--->
-    <div class="row">
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="leftChart1" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="rightChart1" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-  </div>
-  <div class="tab-pane fade in active" id="o12">
-    <div class="row">
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="leftChart2" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="rightChart2" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
-  <div class="tab-pane fade in active" id="o1">
-    <div class="row">
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="leftChart3" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-6">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
-                </div>
-                <div class="panel-body">
-                    <div id="rightChart3" style="height:500px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
   <div class="tab-pane fade in active" id="o13">
     <div class="row">
         <div class="col-md-6 col-sm-6">

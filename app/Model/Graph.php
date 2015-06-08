@@ -19,7 +19,11 @@ class Graph extends AppModel
         	$lines = str_getcsv($buf, "\r\n");
         	foreach ($lines as $line) 
             {
-        		$ret[] = array('model'=>'model1') + str_getcsv($line);
+                $col = str_getcsv($line);
+                if(4<=$col[1])//由来o3,o13,o23,o123のみ
+                {
+        		  $ret[] = array('model'=>'model1') +$col;
+                }
         	}
 
             if (!$this->saveAll($ret)) 
