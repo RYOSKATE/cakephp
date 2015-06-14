@@ -25,13 +25,15 @@ class Graph extends AppModel
         		  $ret[] = array('model'=>'model1') +$col;
                 }
         	}
-
+        echo '<pre>';
+            print_r($ret[0]);
+        echo '</pre>';
             if (!$this->saveAll($ret)) 
             {
                 throw new Exception();
             }
 
-            $this->commit();
+            //$this->commit();
         }
         catch(Exception $e) 
         {
