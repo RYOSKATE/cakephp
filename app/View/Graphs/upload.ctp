@@ -23,16 +23,33 @@
     <fieldset>
         <legend>データのアップロード</legend>
     <?php
-        echo $this->Form->file('result');
+        echo $this->Form->input('modelName',array
+        (
+            'type'=>'select',
+            'options'=>$modelName,
+             'style' => 'width: 200px',
+             'onchange' => 'submit(this.form)'
+            //'style' => 'width:200px;',
+            //'selected' => $selected,  // 規定値をvalueで指定
+            // 'div' => false           // div親要素の有無(true/false)
+            // 'size' => 1,          // 高さ設定(リストボックスとして表示)
+            //'empty' => false,          // 空白を許可
+            //'div'   => 'col col-md-6 col-md-offset-2',
+            //'class' => 'btn btn-lg btn-primary',
+            )
+        );//モデル名コンボボックス
+        echo $this->Form->file('result');//ファイル選択
     ?>
     </fieldset>
-<?php echo $this->Form->end('アップロード', array
-    (
-    'div'   => 'col col-md-6 col-md-offset-2',
-    'class' => 'btn btn-lg btn-primary',
-    'style' => 'padding:8px 20px;'
-    ));
-?>
+
+    <?php echo $this->Form->end('アップロード', array
+        (
+        'div'   => 'col col-md-6 col-md-offset-2',
+        'class' => 'btn btn-lg btn-primary',
+        'style' => 'padding:8px 20px;'
+        ));//アップロードボタン
+    ?>
+
 </div>
 
 </div>

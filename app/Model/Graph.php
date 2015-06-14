@@ -2,7 +2,7 @@
 class Graph extends AppModel 
 {
 
-    function uploadFromCSV($fileName) 
+    function uploadFromCSV($fileName,$modelname) 
     {
 
     // php.iniの変更点
@@ -22,7 +22,7 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-        		  $ret[] = array('model'=>'model1') +$col;
+        		  $ret[] = array('model'=>$modelname) +$col;
                 }
         	}
         echo '<pre>';

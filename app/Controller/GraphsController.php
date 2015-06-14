@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','GroupData','ModelName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
     /*
     CSV入力      Graph
     メトリクス   ModelLayer
@@ -52,6 +52,16 @@ class GraphsController extends AppController
 
     public function upload()
     { 
+        $data = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('modelName',$data);
+
+        $modelname = '';
+        if ($this->request->is('post')) 
+        {
+            $modelname = $this->request->data;
+        }
+        //$this->set('model_names',$this->ModelName->find('list');
+      // ↑VIEWにプルダウンメニュー用のアイテムリストを送る
         if (!empty($this->data)) 
         {
             $model = $this->Graph;
@@ -66,7 +76,7 @@ class GraphsController extends AppController
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
                 move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName))
+                if($model->uploadFromCSV($fileName,$modelname))
 		          $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
                 else
                   $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
@@ -80,7 +90,7 @@ class GraphsController extends AppController
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
                 move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName))
+                if($model->uploadFromCSV($fileName,$modelname))
                   $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
                 else
                   $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
