@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
     /*
     CSV入力      Graph
     メトリクス   ModelLayer
@@ -21,7 +21,15 @@ class GraphsController extends AppController
 
     }*/
 
-    public function onedevgroup() {}
+    public function onedevgroup() 
+    {
+        //開発グループテーブルを作成し、upload時に重複チェック→新規登録、id付きで、を実装後にそれらを取得しここで有効にする。
+        //$data = $this->GroupData->find('list', array('conditions' => array('GroupData.group_name' => 'pending')));
+        //$this->set('groupName',$data);
+                echo '<pre>';
+            //print_r($data);
+        echo '</pre>';
+    }
 
     public function alldevgroup() 
     {
@@ -63,16 +71,19 @@ class GraphsController extends AppController
 
     public function upload()
     { 
-        $data = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
-        $this->set('modelName',$data);
+        $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('modelName',$modelNameData);
 
-        $selectModelName = $data[0];
+        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('groupName',$modelNameData);
+
+        $selectModelName = $modelNameData[0];
         if ($this->request->is('post')) 
         {
             $selectModelName = $this->request->data['Graph']['addModelName'];//追加するモデル名がテキストフィールドに入力されていた場合。
             if($selectModelName==null)//ここの動作は未確認
             {
-                $selectModelName = $data[$this->request->data['Graph']['modelName']];
+                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
             }
         }
         //$this->set('model_names',$this->ModelName->find('list');
@@ -95,7 +106,12 @@ class GraphsController extends AppController
                 {
                     //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信
                     if($this->GroupData->uploadFromCSV($fileName,$selectModelName))
-                        $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                    {
+                        if($this->GroupName->uploadFromCSV($fileName,$groupNameData))
+                            $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                        else
+                            $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                    }
                     else
                         $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                 }

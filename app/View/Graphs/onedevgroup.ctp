@@ -220,7 +220,14 @@
 </ol>
 
 <div class="page-header">
-  <p>AndroidNW</p>
+  <p><?php echo $this->Form->input('グループ名',array
+        (
+            'type'=>'select',
+            'options'=>$groupName,
+            'options'=>array("testA","testB"),
+             'onchange' => 'submit(this.form)'
+            )
+        );//モデル名コンボボックス?></p>
 </div>
 
 <div id="chartdiv" style="height:600px;"></div>
