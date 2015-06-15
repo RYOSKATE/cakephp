@@ -55,10 +55,10 @@ class GraphsController extends AppController
         $data = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('modelName',$data);
 
-        $modelname = '';
+        $selectModelName = $data[0];
         if ($this->request->is('post')) 
         {
-            $modelname = $this->request->data;
+            $selectModelName = $data[$this->request->data['Graph']['modelName']];
         }
         //$this->set('model_names',$this->ModelName->find('list');
       // ↑VIEWにプルダウンメニュー用のアイテムリストを送る
@@ -76,7 +76,7 @@ class GraphsController extends AppController
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
                 move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName,$modelname))
+                if($model->uploadFromCSV($fileName,$selectModelName))
 		          $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
                 else
                   $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
@@ -90,7 +90,7 @@ class GraphsController extends AppController
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
                 move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName,$modelname))
+                if($model->uploadFromCSV($fileName,$selectModelName))
                   $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
                 else
                   $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
