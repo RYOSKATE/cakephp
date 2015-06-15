@@ -69,7 +69,11 @@ class GraphsController extends AppController
         $selectModelName = $data[0];
         if ($this->request->is('post')) 
         {
-            $selectModelName = $data[$this->request->data['Graph']['modelName']];
+            $selectModelName = $this->request->data['Graph']['addModelName'];//追加するモデル名がテキストフィールドに入力されていた場合。
+            if($selectModelName==null)//ここの動作は未確認
+            {
+                $selectModelName = $data[$this->request->data['Graph']['modelName']];
+            }
         }
         //$this->set('model_names',$this->ModelName->find('list');
       // ↑VIEWにプルダウンメニュー用のアイテムリストを送る

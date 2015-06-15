@@ -23,6 +23,7 @@
     <fieldset>
         <legend>データのアップロード</legend>
     <?php
+        echo $this->Form->text('addModelName');
         echo $this->Form->input('modelName',array
         (
             'type'=>'select',

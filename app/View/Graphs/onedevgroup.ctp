@@ -24,6 +24,8 @@
 			var newDate = new Date(firstDate);
 			newDate.setDate(newDate.getDate() + i);
 
+
+			//firstdataset:欠陥数/seconddataset:コード行数のようにする遷移が
 			var a1 = Math.round(Math.random() * (40 + i)) + 100 + i;
 			var b1 = Math.round(Math.random() * (1000 + i)) + 500 + i * 2;
 
