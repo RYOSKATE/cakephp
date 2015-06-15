@@ -77,21 +77,13 @@ class GraphsController extends AppController
             {
                 move_uploaded_file($up_file, $fileName);
                 if($model->uploadFromCSV($fileName,$selectModelName))
-		          $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-                else
-                  $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-                //$this->redirect(array('action'=>'index'));
-            
-            }
-
-            //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信
-            $model = $this->GroupData;
-
-            if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
-            {
-                move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName,$selectModelName))
-                  $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                {
+                    //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信
+                    if($this->GroupData->uploadFromCSV($fileName,$selectModelName))
+                        $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                    else
+                        $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                }
                 else
                   $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                 //$this->redirect(array('action'=>'index'));

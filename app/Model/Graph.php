@@ -33,7 +33,7 @@ class Graph extends AppModel
                 throw new Exception();
             }
 
-            //$this->commit();
+            $this->commit();
         }
         catch(Exception $e) 
         {

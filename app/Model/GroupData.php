@@ -51,7 +51,7 @@ class GroupData extends AppModel
             $data = array();
             foreach ($group_array as $key => $value)
             {
-                $data[]      = array('model'=>'testA',
+                $data[]      = array('model'=>$modelname,
                                 'group_name' =>$key,
                                 'file_num'   =>$value['file_num'],
                                 'defact_num' =>$value['defact_num'],
