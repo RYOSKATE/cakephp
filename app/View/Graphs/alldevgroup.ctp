@@ -1,13 +1,47 @@
 <?php $this->Html->script('amcharts/xy', array('inline' => false));?>
-
+<?php
+//デバッグ用表示
+    echo 'デバッグ用表示';
+    echo '<pre>';
+        print_r($testA[0]);
+    echo '</pre>';
+?>
 <script type="text/javascript">
-	AmCharts.themes.none = {};
+
+    var testAData = JSON.parse('<?=json_encode($testA);?>');
+    /*
+    $data[]      = array('model'=>$modelname,
+                'group_name' =>$key,
+                'file_num'   =>$value['file_num'],
+                'defact_num' =>$value['defact_num'],
+                'loc'        =>$value['loc'],
+                'date'       =>$time);
+    */
+    var testArray = new Array();
+    var value1 = testAData[0];
+    var value2 = testAData[0]["GroupData"]["defact_num"];
+    var value3 = Number(testAData[0]['GroupData']["file_num"]);
+    var value = 183;
+
+    for( var i  = 0; i < testAData.length; ++i )
+    {
+        var temp = testAData[i]['GroupData'];
+        var y = Number(temp['defact_num']);
+        var x = Number(temp['file_num']);
+        var name = temp['group_name'];
+        var dist = Math.abs(y-x)/Math.sqrt(2);
+        var value = parseInt(Math.round(dist));
+        testArray.push({"group":name ,"y": y,"x": x ,"value": value,/*,"y2": -5,"x2": -3,"value2": 44*/} );
+    }
+
+	AmCharts.themes.none = {}; 
 
 	var chart = AmCharts.makeChart("chartdiv", {
     "type": "xy",
     "pathToImages": "http://www.amcharts.com/lib/3/images/",
     "theme": "none",
-    "dataProvider": [{
+    "dataProvider":testArray,
+    /*"dataProvider": [{
         "y": 10,
         "x": 14,
         "value": 59,
@@ -21,42 +55,7 @@
         "y2": -15,
         "x2": -8,
         "value2": 12
-    }, {
-        "y": -10,
-        "x": 8,
-        "value": 19,
-        "y2": -4,
-        "x2": 6,
-        "value2": 35
-    }, {
-        "y": -6,
-        "x": 5,
-        "value": 65,
-        "y2": -5,
-        "x2": -6,
-        "value2": 168
-    }, {
-        "y": 15,
-        "x": -4,
-        "value": 92,
-        "y2": -10,
-        "x2": -8,
-        "value2": 102
-    }, {
-        "y": 13,
-        "x": 1,
-        "value": 8,
-        "y2": -2,
-        "x2": 0,
-        "value2": 41
-    }, {
-        "y": 1,
-        "x": 6,
-        "value": 35,
-        "y2": 0,
-        "x2": -3,
-        "value2": 16
-    }],
+    }],*/
     "valueAxes": [{
         "position":"bottom",
         "axisAlpha": 0
@@ -67,7 +66,7 @@
     }],
     "startDuration": 1.5,
     "graphs": [{
-        "balloonText": "x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>",
+        "balloonText": "group:<b>[[group]]</b> <br> x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>",
         "bullet": "circle",
         "bulletBorderAlpha": 0.2,
 		"bulletAlpha": 0.8,

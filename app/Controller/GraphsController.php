@@ -23,14 +23,25 @@ class GraphsController extends AppController
 
     public function onedevgroup() {}
 
-    public function alldevgroup() {}
+    public function alldevgroup() 
+    {
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        //$this->set('data',$this->OriginChart->find('all'));
+        $conditions = array('conditions' => array('GroupData.model' => 'testA'));
+        $data = $this->GroupData->find('all',$conditions);
+
+        $this->set('testA',$data);
+        echo '<pre>';
+            //print_r($data);
+        echo '</pre>';
+    }
 
     public function origin()
     {
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         //$this->set('data',$this->OriginChart->find('all'));
-        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'model1')));
-        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'model2')));
+        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'testA')));
+        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'testB')));
 
         $this->set('model1',$this->OriginChart->getOriginTable($data1));
         $this->set('model2',$this->OriginChart->getOriginTable($data2));
