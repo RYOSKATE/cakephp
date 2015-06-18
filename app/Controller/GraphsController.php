@@ -84,38 +84,17 @@ class GraphsController extends AppController
     { 
         //すでに存在するモデル名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
-        array_splice($modelNameData,0,0,'');
-        $this->set('modelName',$modelNameData);
+        array_splice($modelNameData,0,0,'');//先頭に空欄を追加
+        $this->set('modelName',$modelNameData);//コンボボックスに使われる
 
-
-        /*if ($this->request->is('post')) 
-        {
-            $selectModelName = $this->request->data['Graph']['新規モデル名'];//追加するモデル名がテキストフィールドに入力されていた場合。
-
-            if($selectModelName==null)//ここの動作は未確認
-            {
-                $selectModelName = $modelNameData[$this->request->data['Graph']['モデル名']];//実際はモデル名ではなくidの数値が送られてくる
-            }
-            return;
-        }*/
-        //$this->set('model_names',$this->ModelName->find('list');
-      // ↑VIEWにプルダウンメニュー用のアイテムリストを送る
         if (!empty($this->data)) 
         {
-            echo '<pre>';
-            print_r($this->data);
-            echo '</pre>';
-            //すでに存在する開発グループ名一覧を取得
-            $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-
             //コンボボックスで選ばれたグループ名を取得
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル名']];
             if($selectModelName=='')
             {
                 $selectModelName = $this->data['Graph'] ['新規モデル名'];
             }
-
-            $model = $this->Graph;
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
 
@@ -125,12 +104,12 @@ class GraphsController extends AppController
             //まずgraphテーブルに由来に3が含まれる全てのデータを送信する
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
-                $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-                die();
                 move_uploaded_file($up_file, $fileName);
-                if($model->uploadFromCSV($fileName,$selectModelName))
+                if($this->Graph->uploadFromCSV($fileName,$selectModelName))
                 {
-                    //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信
+                    //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
+                    //すでに存在する開発グループ名一覧を取得
+                    $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
                     if($this->GroupData->uploadFromCSV($fileName,$selectModelName))
                     {
                         if($this->GroupName->uploadFromCSV($fileName,$groupNameData))

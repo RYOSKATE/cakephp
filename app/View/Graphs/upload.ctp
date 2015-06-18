@@ -14,7 +14,8 @@
         'wrapInput' => false,
         'class' => 'form-control'
     ),
-    'class' => 'well form-inline'
+    'class' => 'well form-inline',
+    'enctype' => 'multipart/form-data',
 )); 
 ?>    
     <fieldset>
