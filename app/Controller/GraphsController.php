@@ -83,24 +83,29 @@ class GraphsController extends AppController
         $selectModelName = $modelNameData[0];
         if ($this->request->is('post')) 
         {
-            $selectModelName = $this->request->data['Graph']['addModelName'];//追加するモデル名がテキストフィールドに入力されていた場合。
+            $selectModelName = $this->request->data['Graph']['新規モデル名'];//追加するモデル名がテキストフィールドに入力されていた場合。
+
             if($selectModelName==null)//ここの動作は未確認
             {
-                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
+                $selectModelName = $modelNameData[$this->request->data['Graph']['モデル名']];//実際はモデル名ではなくidの数値が送られてくる
             }
+            return;
         }
         //$this->set('model_names',$this->ModelName->find('list');
       // ↑VIEWにプルダウンメニュー用のアイテムリストを送る
-        if (!empty($this->data)) 
+        if (!empty($this->data['Graph']['選択ファイル'])) 
         {
             $model = $this->Graph;
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
 
-            $up_file = $this->data['Graph']['result']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-
-            $fileName = $uploadfile.$this->data['Graph']['result']['name'];//data_10_utf.csv
-
+            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+ 
+            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+            echo '<pre>';
+            print_r($this->data);
+            print_r($uploadfile);
+            echo '</pre>';
             //まずgraphテーブルに由来に3が含まれる全てのデータを送信する
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {

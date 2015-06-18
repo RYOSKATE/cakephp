@@ -7,28 +7,27 @@
 
 <div class="options form">
 
-<?php echo $this->Form->create('Graph', array
-    (
-        'inputDefaults' => array
-        (     
-                'div'       => 'form-group',
-                'label'     => array('class' => 'col col-md-3 control-label'),
-                'wrapInput' => 'col col-md-7',
-                'class'     => 'form-control',
-        ),
-        'class'   => 'well form-horizontal',
-        'enctype' => 'multipart/form-data',
-    )); 
+<?php    echo $this->Form->create('Graph', array(
+    'inputDefaults' => array(
+        'div' => 'form-group',
+        'label' => false,//array('class' => 'control-label'),
+        'wrapInput' => false,
+        'class' => 'form-control'
+    ),
+    'class' => 'well form-inline'
+)); 
 ?>    
     <fieldset>
         <legend>データのアップロード</legend>
     <?php
-        echo $this->Form->text('addModelName');
+
+
         echo $this->Form->input('モデル名',array
         (
             'type'=>'select',
             'options'=>$modelName,
-             'onchange' => 'submit(this.form)'
+             'onchange' => 'submit(this.form)',
+             'label'=>array('class' => 'control-label'),
             //'style' => 'width:200px;',
             //'selected' => $selected,  // 規定値をvalueで指定
             // 'div' => false           // div親要素の有無(true/false)
@@ -38,7 +37,10 @@
             //'class' => 'btn btn-lg btn-primary',
             )
         );//モデル名コンボボックス
-        echo $this->Form->file('result');//ファイル選択
+        echo $this->Form->input('新規モデル名', array('placeholder' => 'new Model Name')); 
+        //echo $this->Form->text('addModelName');
+         //echo $this->Form->end();
+        echo $this->Form->file('選択ファイル');//ファイル選択
     ?>
     </fieldset>
 
