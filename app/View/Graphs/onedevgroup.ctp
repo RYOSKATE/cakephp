@@ -10,7 +10,7 @@
     echo '</pre>';
 ?>
 <script type="text/javascript">
-	//data[0][0]["GroupData"] ["defact_num"]/[group_name]/ [defact_num]/[file_num]/[loc]/[date] ;
+	//data[0][0]["GroupData"]   ["defact_num"]/[group_name]/ [file_num]/[file_num]/[loc]/[date] ;
 	//	  1-4[日付分]
 	var data = new Array();
 	data.push(JSON.parse('<?=json_encode($data1);?>'));
@@ -24,56 +24,25 @@
 		createStockChart();
 	});
 
-	var chartData1 = [];
-	var chartData2 = [];
-	var chartData3 = [];
-	var chartData4 = [];
-
+	var chartData = new Array();
 	function generateChartData() 
 	{
-		var firstDate = new Date();
-		firstDate.setDate(firstDate.getDate() - 499);//1-31の日
-		firstDate.setHours(0, 0, 0, 0);
+		var date = data[0][0]['GroupData']['date'];
+		var firstDate = new Date(date);
 
-		for (var i = 0; i < 500; i++)
+		for(var i =0;i<data.length;++i)
 		{
-			var newDate = new Date(firstDate);
-			newDate.setDate(newDate.getDate() + i);
-
-
-			//firstdataset:欠陥数/seconddataset:コード行数のようにする遷移が
-			var a1 = Math.round(Math.random() * (40 + i)) + 100 + i;
-			var b1 = Math.round(Math.random() * (1000 + i)) + 500 + i * 2;
-
-			var a2 = Math.round(Math.random() * (100 + i)) + 200 + i;
-			var b2 = Math.round(Math.random() * (1000 + i)) + 600 + i * 2;
-
-			var a3 = Math.round(Math.random() * (100 + i)) + 200;
-			var b3 = Math.round(Math.random() * (1000 + i)) + 600 + i * 2;
-
-			var a4 = Math.round(Math.random() * (100 + i)) + 200 + i;
-			var b4 = Math.round(Math.random() * (100 + i)) + 600 + i;
-
-			chartData1.push({
-				date: newDate,
-				value: a1,
-				volume: b1
-			});
-			chartData2.push({
-				date: newDate,
-				value: a2,
-				volume: b2
-			});
-			chartData3.push({
-				date: newDate,
-				value: a3,
-				volume: b3
-			});
-			chartData4.push({
-				date: newDate,
-				value: a4,
-				volume: b4
-			});
+			var chartDataTemp = [];
+			for(var j =0;j<data[i].length;++j)
+			{
+				var dataTemp = data[i][j]['GroupData'];
+				chartDataTemp.push({
+					date: dataTemp['date'],
+					value: dataTemp['defact_num'],
+					volume: 0
+				});
+			}
+			chartData.push(chartDataTemp);
 		}
 	}
 
@@ -84,56 +53,25 @@
 
 		// DATASETS //////////////////////////////////////////
 		// create data sets first
-		var dataSet1 = new AmCharts.DataSet();
-		dataSet1.title = "first data set";
-		dataSet1.fieldMappings = [{
-			fromField: "value",
-			toField: "value"
-		}, {
-			fromField: "volume",
-			toField: "volume"
-		}];
-		dataSet1.dataProvider = chartData1;
-		dataSet1.categoryField = "date";
-
-		var dataSet2 = new AmCharts.DataSet();
-		dataSet2.title = "second data set";
-		dataSet2.fieldMappings = [{
-			fromField: "value",
-			toField: "value"
-		}, {
-			fromField: "volume",
-			toField: "volume"
-		}];
-		dataSet2.dataProvider = chartData2;
-		dataSet2.categoryField = "date";
-
-		var dataSet3 = new AmCharts.DataSet();
-		dataSet3.title = "third data set";
-		dataSet3.fieldMappings = [{
-			fromField: "value",
-			toField: "value"
-		}, {
-			fromField: "volume",
-			toField: "volume"
-		}];
-		dataSet3.dataProvider = chartData3;
-		dataSet3.categoryField = "date";
-
-		var dataSet4 = new AmCharts.DataSet();
-		dataSet4.title = "fourth data set";
-		dataSet4.fieldMappings = [{
-			fromField: "value",
-			toField: "value"
-		}, {
-			fromField: "volume",
-			toField: "volume"
-		}];
-		dataSet4.dataProvider = chartData4;
-		dataSet4.categoryField = "date";
+		var dataSet = new Array();
+		for(var i =0;i<chartData.length;++i)
+		{
+			var dataSetTemp = new AmCharts.DataSet();
+			dataSetTemp.title = "first data set";//選択されたモデル名に変更する必要あり
+			dataSetTemp.fieldMappings = [{
+					fromField: "value",
+					toField: "value"
+				}, {
+					fromField: "volume",
+					toField: "volume"
+			}];
+			dataSetTemp.dataProvider = chartData[i];
+			dataSetTemp.categoryField = "date";
+			dataSet.push(dataSetTemp);
+		}
 
 		// set data sets to the chart
-		chart.dataSets = [dataSet1, dataSet2, dataSet3, dataSet4];
+		chart.dataSets = dataSet;
 
 		// PANELS ///////////////////////////////////////////
 		// first stock panel
