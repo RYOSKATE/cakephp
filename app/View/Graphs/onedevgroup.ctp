@@ -220,14 +220,7 @@
 </ol>
 
 <div class="page-header">
-  <p><?php echo $this->Form->input('グループ名',array
-        (
-            'type'=>'select',
-            'options'=>$groupName,
-            'options'=>array("testA","testB"),
-             'onchange' => 'submit(this.form)'
-            )
-        );//モデル名コンボボックス?></p>
+<?php echo $this->element('selectGroup',$groupName); ?>
 </div>
 
 <div id="chartdiv" style="height:600px;"></div>

@@ -10,11 +10,15 @@ class GraphsController extends AppController
     メトリクス   ModelLayer
     由来比較     OriginChart
     */
-    public function index()
+    //$groupNameに開発グループ名一覧をセットする
+    public function setGroupName()
     {
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$groupNameData);
+    }
+    public function index()
+    {
     }
 
     /*public function view($id) 
@@ -28,6 +32,7 @@ class GraphsController extends AppController
 
     public function onedevgroup() 
     {
+        $this->setGroupName();
         //開発グループテーブルを作成し、upload時に重複チェック→新規登録、id付きで、を実装後にそれらを取得しここで有効にする。
         //$data = $this->GroupData->find('list', array('conditions' => array('GroupData.group_name' => 'pending')));
         //$this->set('groupName',$data);
@@ -38,6 +43,7 @@ class GraphsController extends AppController
 
     public function alldevgroup() 
     {
+        $this->setGroupName();
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         //$this->set('data',$this->OriginChart->find('all'));
         $conditions = array('conditions' => array('GroupData.model' => 'testA'));
@@ -68,25 +74,21 @@ class GraphsController extends AppController
 
         if($model !=NULL)
         {
-    		$conditions = array('conditions' => array('ModelLayer.model' => $model));
-    		$data2 = $this->ModelLayer->find('all',$conditions);
-    		$this->set('data2',$data2);
-	    }
+            $conditions = array('conditions' => array('ModelLayer.model' => $model));
+            $data2 = $this->ModelLayer->find('all',$conditions);
+            $this->set('data2',$data2);
+        }
     }
 
     public function upload()
     { 
         //すでに存在するモデル名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
+        array_splice($modelNameData,0,0,'');
         $this->set('modelName',$modelNameData);
 
-        //すでに存在する開発グループ名一覧を取得
-        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-        $this->set('groupName',$groupNameData);
 
-        //コンボボックスで選択されたモデル名を取得
-        $selectModelName = $modelNameData[0];
-        if ($this->request->is('post')) 
+        /*if ($this->request->is('post')) 
         {
             $selectModelName = $this->request->data['Graph']['新規モデル名'];//追加するモデル名がテキストフィールドに入力されていた場合。
 
@@ -95,11 +97,24 @@ class GraphsController extends AppController
                 $selectModelName = $modelNameData[$this->request->data['Graph']['モデル名']];//実際はモデル名ではなくidの数値が送られてくる
             }
             return;
-        }
+        }*/
         //$this->set('model_names',$this->ModelName->find('list');
       // ↑VIEWにプルダウンメニュー用のアイテムリストを送る
-        if (!empty($this->data['Graph']['選択ファイル'])) 
+        if (!empty($this->data)) 
         {
+            echo '<pre>';
+            print_r($this->data);
+            echo '</pre>';
+            //すでに存在する開発グループ名一覧を取得
+            $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+
+            //コンボボックスで選ばれたグループ名を取得
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル名']];
+            if($selectModelName=='')
+            {
+                $selectModelName = $this->data['Graph'] ['新規モデル名'];
+            }
+
             $model = $this->Graph;
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
@@ -107,13 +122,11 @@ class GraphsController extends AppController
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
  
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-            echo '<pre>';
-            print_r($this->data);
-            print_r($uploadfile);
-            echo '</pre>';
             //まずgraphテーブルに由来に3が含まれる全てのデータを送信する
             if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
             {
+                $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                die();
                 move_uploaded_file($up_file, $fileName);
                 if($model->uploadFromCSV($fileName,$selectModelName))
                 {

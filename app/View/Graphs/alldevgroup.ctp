@@ -100,7 +100,7 @@
 </ol>
 
 <div class="page-header">
-  <p>ALL</p>
+<?php echo $this->element('selectGroup',$groupName); ?>
 </div>
 
 <div id="chartdiv" style="height:500px;"></div>

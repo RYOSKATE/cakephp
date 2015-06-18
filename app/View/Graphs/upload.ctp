@@ -26,7 +26,7 @@
         (
             'type'=>'select',
             'options'=>$modelName,
-             'onchange' => 'submit(this.form)',
+            // 'onchange' => 'submit(this.form)',
              'label'=>array('class' => 'control-label'),
             //'style' => 'width:200px;',
             //'selected' => $selected,  // 規定値をvalueで指定
@@ -48,7 +48,7 @@
         (
         'div'   => 'col col-md-6 col-md-offset-2',
         'class' => 'btn btn-lg btn-primary',
-        'style' => 'padding:8px 20px;'
+        'style' => 'padding:8px 20px;',
         ));//アップロードボタン
     ?>
 
