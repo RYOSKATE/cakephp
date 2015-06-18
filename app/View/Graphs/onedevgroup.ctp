@@ -220,8 +220,45 @@
 </ol>
 
 <div class="page-header">
-<?php echo $this->element('selectModel',$modelName); ?>
-<?php echo $this->element('selectGroup',$groupName); ?>
+<?php 
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                        array('div' => 'form-group',),
+                                        'class' => 'well form-inline',
+                                        )
+                            );
+
+	echo $this->Form->input('モデル1',array
+	(
+	    'type'=>'select',
+	    'options'=>$modelName,
+	    'class' => 'form-control'
+	 ));
+	echo $this->Form->input('モデル2',array
+	(
+	    'type'=>'select',
+	    'options'=>$modelName,
+	    'class' => 'form-control'
+	 ));
+	echo $this->Form->input('モデル3',array
+	(
+	    'type'=>'select',
+	    'options'=>$modelName,
+	    'class' => 'form-control'
+	 ));
+	echo $this->Form->input('モデル4',array
+	(
+	    'type'=>'select',
+	    'options'=>$modelName,
+	    'class' => 'form-control'
+	 ));
+
+    echo $this->Form->end('セット', array
+    (
+    'class' => 'form-control'
+    ));
+    echo $this->element('selectGroup',$groupName); 
+
+?>
 </div>
 
 <div id="chartdiv" style="height:600px;"></div>

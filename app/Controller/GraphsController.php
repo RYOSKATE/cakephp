@@ -40,11 +40,30 @@ class GraphsController extends AppController
 
     public function onedevgroup() 
     {
-        $this->setGroupName();
-        $this->setModelName();
-        //開発グループテーブルを作成し、upload時に重複チェック→新規登録、id付きで、を実装後にそれらを取得しここで有効にする。
-        //$data = $this->GroupData->find('list', array('conditions' => array('GroupData.group_name' => 'pending')));
-        //$this->set('groupName',$data);
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
+
+        $selectGroupName = $groupNameData[1];
+        $selectModelName = $modelNameData[1];
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        if (!empty($this->data)) 
+        {    
+           /* echo '<pre>';
+                print_r($this);roo
+            echo '</pre>';
+
+            $selectGraphName = $this->request->data['Graph']['開発グループ'];//追加するモデル名がテキストフィールドに入力されていた場合。
+            if($selectModelName==null)//ここの動作は未確認
+            {
+                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
+            }*/
+            //$selectGroupName = $this->data['Graph'] ['開発グループ'];
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル1']];
+        }
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
+        $data = $this->GroupData->find('all',$conditions);
+
+        $this->set('data',$data);
                 echo '<pre>';
             //print_r($data);
         echo '</pre>';
@@ -109,7 +128,6 @@ class GraphsController extends AppController
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         array_splice($modelNameData,0,0,'');//先頭に空欄を追加
         $this->set('modelName',$modelNameData);
-
         if (!empty($this->data)) 
         {
             //コンボボックスで選ばれたグループ名を取得
@@ -130,29 +148,34 @@ class GraphsController extends AppController
  
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
             //まずgraphテーブルに由来に3が含まれる全てのデータを送信する
-            if (is_uploaded_file($up_file))//C:\xampp\tmp\php7F8D.tmp
+            $success = is_uploaded_file($up_file);//C:\xampp\tmp\php7F8D.tmp
+            if ($success)
             {
                 move_uploaded_file($up_file, $fileName);
-                if($this->Graph->uploadFromCSV($fileName,$selectModelName))
-                {
-                    //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
+                //まずCSVを全体をアップロードする
+                $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
+                if($success)
+                {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
                     //すでに存在する開発グループ名一覧を取得
                     $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                    if($this->GroupData->uploadFromCSV($fileName,$selectModelName))
-                    {
-                        if($this->GroupName->uploadFromCSV($fileName,$groupNameData))
-                            $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-                        else
-                            $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                    $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
+                    if($success)
+                    {   //最後にグループ名を追加する
+                        $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                        if($success)
+                        {   //最後にグループ名を追加する
+                           if(!in_array($selectModelName,$groupNameData))
+                           {
+                                $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
+                           }
+                        }
                     }
-                    else
-                        $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                 }
-                else
-                  $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-                //$this->redirect(array('action'=>'index'));
-            
             }
+            if($success)
+                $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+            else
+                $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
         }
     }
 

@@ -26,7 +26,7 @@ class GroupData extends AppModel
                 }
         	}
             date_default_timezone_set('Asia/Tokyo');
-            $time = time();
+
             $group_array = array();
             for ($i = 0; $i< count($ret); ++$i) 
             {
@@ -48,6 +48,7 @@ class GroupData extends AppModel
                 
             }
 
+            $time = date('Y-m-d', time());
             $data = array();
             foreach ($group_array as $key => $value)
             {
@@ -56,7 +57,8 @@ class GroupData extends AppModel
                                 'file_num'   =>$value['file_num'],
                                 'defact_num' =>$value['defact_num'],
                                 'loc'        =>$value['loc'],
-                                'date'       =>$time);
+                                'date'       =>$time
+                                );
             }
                 echo '<pre>';
                     //print_r($data);
