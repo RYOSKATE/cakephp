@@ -59,7 +59,7 @@ class GroupData extends AppModel
                                 'date'       =>$time);
             }
                 echo '<pre>';
-                    print_r($data);
+                    //print_r($data);
                 echo '</pre>';
 
 

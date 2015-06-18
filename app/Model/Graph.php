@@ -26,7 +26,7 @@ class Graph extends AppModel
                 }
         	}
         echo '<pre>';
-            print_r($ret[0]);
+            //print_r($ret[0]);
         echo '</pre>';
             if (!$this->saveAll($ret)) 
             {
@@ -41,7 +41,7 @@ class Graph extends AppModel
             return false;
         }
         echo '<pre>';
-            print_r($ret[0]);
+            //print_r($ret[0]);
         echo '</pre>';
         return true;
     }

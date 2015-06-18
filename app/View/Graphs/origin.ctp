@@ -25,12 +25,12 @@
 <!-- Pie leftChart[origin] with leftlegend[origin]-->
 <script type="text/javascript">
 
-    var defactsByOrigin = JSON.parse('<?=json_encode($model1);?>');
+    var defactsByOrigin1 = JSON.parse('<?=json_encode($model1);?>');
 
-    var chartData = [];
-    for (var origin = 0; origin < defactsByOrigin.length; ++origin) 
+    var chartData1 = [];
+    for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
     {
-        var defacts = defactsByOrigin[origin];
+        var defacts = defactsByOrigin1[origin];
         var chartDataByOrigin = [];
         for (var j = 0; j < defacts.length; ++j) 
         {
@@ -39,7 +39,24 @@
                 chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": defacts[j] });
             }
         }
-        chartData.push(chartDataByOrigin);
+        chartData1.push(chartDataByOrigin);
+    }
+
+    var defactsByOrigin2 = JSON.parse('<?=json_encode($model2);?>');
+
+    var chartData2 = [];
+    for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
+    {
+        var defacts = defactsByOrigin2[origin];
+        var chartDataByOrigin = [];
+        for (var j = 0; j < defacts.length; ++j) 
+        {
+            if(defacts[j]!=0)
+            {
+                chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": defacts[j] });
+            }
+        }
+        chartData2.push(chartDataByOrigin);
     }
 
     var leftChart = [];
@@ -60,11 +77,11 @@ origin(実際の由来は+1する)
     // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい
     AmCharts.ready(function () 
     {
-        for (var origin = 4; origin <chartData.length; ++origin) 
+        for (var origin = 4; origin <chartData1.length; ++origin) 
         {   
             // PIE CHART
             leftChart[origin] = new AmCharts.AmPieChart();
-            leftChart[origin].dataProvider = chartData[origin];
+            leftChart[origin].dataProvider = chartData1[origin];
             leftChart[origin].titleField = "numOfDefacts";
             leftChart[origin].valueField = "numOfFiles";
 
@@ -80,7 +97,7 @@ origin(実際の由来は+1する)
 
             // PIE CHART
             rightChart[origin] = new AmCharts.AmPieChart();
-            rightChart[origin].dataProvider = chartData[origin];
+            rightChart[origin].dataProvider = chartData2[origin];
             rightChart[origin].titleField = "numOfDefacts";
             rightChart[origin].valueField = "numOfFiles";
 

@@ -45,7 +45,7 @@ class GroupName extends AppModel
                 $data[] = array('id'=>$i,'name'=> $result[$i]);
             }
                 echo '<pre>';
-                    print_r($data);
+                    //print_r($data);
                 echo '</pre>';
 
 

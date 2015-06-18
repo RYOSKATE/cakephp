@@ -71,12 +71,15 @@ class GraphsController extends AppController
 
     public function upload()
     { 
+        //すでに存在するモデル名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('modelName',$modelNameData);
 
+        //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$modelNameData);
 
+        //コンボボックスで選択されたモデル名を取得
         $selectModelName = $modelNameData[0];
         if ($this->request->is('post')) 
         {
