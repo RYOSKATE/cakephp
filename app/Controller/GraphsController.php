@@ -10,7 +10,12 @@ class GraphsController extends AppController
     メトリクス   ModelLayer
     由来比較     OriginChart
     */
-    public function index() {}
+    public function index()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('groupName',$groupNameData);
+    }
 
     /*public function view($id) 
     {
@@ -77,7 +82,7 @@ class GraphsController extends AppController
 
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-        $this->set('groupName',$modelNameData);
+        $this->set('groupName',$groupNameData);
 
         //コンボボックスで選択されたモデル名を取得
         $selectModelName = $modelNameData[0];
