@@ -100,12 +100,27 @@ class GraphsController extends AppController
     public function origin()
     {
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        //$this->set('data',$this->OriginChart->find('all'));
-        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'testA')));
-        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => 'testB')));
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
+
+        $selectGroupName = $groupNameData[1];
+        $selectModelName1 = $modelNameData[1];
+        $selectModelName2 = $modelNameData[2];
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        if ($this->request->is('post')) 
+        {    
+
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+        }
+
+        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => $selectModelName1)));
+        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => $selectModelName2)));
 
         $this->set('model1',$this->OriginChart->getOriginTable($data1));
         $this->set('model2',$this->OriginChart->getOriginTable($data2));
+        $this->set('leftModelName',$selectModelName1);
+        $this->set('rightModelName',$selectModelName2);
     }
 
     public function metrics($model = NULL)

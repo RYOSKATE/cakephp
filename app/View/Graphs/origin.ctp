@@ -143,6 +143,32 @@ origin(実際の由来は+1する)
 
 <div class="page-header">
   <h1><small>由来比較</small></h1>
+  <?php 
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                        array('div' => 'form-group',),
+                                        'class' => 'well form-inline',
+                                        )
+                            );
+
+    echo $this->Form->input('モデル1',array
+    (
+        'type'=>'select',
+        'options'=>$modelName,
+        'class' => 'form-control'
+     ));
+    echo $this->Form->input('モデル2',array
+    (
+        'type'=>'select',
+        'options'=>$modelName,
+        'class' => 'form-control'
+     ));
+
+    echo $this->Form->end('セット', array
+    (
+    'class' => 'form-control'
+    ));
+    echo $this->element('selectGroup',$groupName); 
+?>
 </div>
 <!-- Nav tabs -->
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->
@@ -159,7 +185,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
+                    <div class="panel-title"><?php echo $leftModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="leftChart4" style="height:500px;"></div>
@@ -169,7 +195,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
+                    <div class="panel-title"><?php echo $rightModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="rightChart4" style="height:500px;"></div>
