@@ -1,14 +1,8 @@
 <?php $this->Html->script('amcharts/xy', array('inline' => false));?>
-<?php
-//デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-        print_r($testA[0]);
-    echo '</pre>';
-?>
+
 <script type="text/javascript">
 
-    var testAData = JSON.parse('<?=json_encode($testA);?>');
+    var testAData = JSON.parse('<?=json_encode($data);?>');
     /*
     $data[]      = array('model'=>$modelname,
                 'group_name' =>$key,
@@ -100,8 +94,15 @@
 </ol>
 
 <div class="page-header">
-<?php echo $this->element('selectModel',$modelName); ?>
-<?php echo $this->element('selectGroup',$groupName); ?>
+<?php 
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                        array('div' => 'form-group',),
+                                        'class' => 'well form-inline')
+                                        );
+    echo $this->element('selectModel',$modelName);
+    echo $this->element('selectGroup',$groupName); 
+    echo $this->Form->end();
+?>
 </div>
 
 <div id="chartdiv" style="height:500px;"></div>

@@ -16,12 +16,14 @@ class GraphsController extends AppController
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$groupNameData);
+        return $groupNameData;
     }
     public function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('modelName',$modelNameData);
+        return $modelNameData;
     }
     public function index()
     {
@@ -50,24 +52,30 @@ class GraphsController extends AppController
 
     public function alldevgroup() 
     {
-        $this->setGroupName();
-        $this->setModelName();
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
+
+        $selectGroupName = $groupNameData[1];
+        $selectModelName = $modelNameData[1];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
-        {
-            $selectModelName = $this->request->data['Graph']['addModelName'];//追加するモデル名がテキストフィールドに入力されていた場合。
+        {    
+           /* echo '<pre>';
+                print_r($this);roo
+            echo '</pre>';
+
+            $selectGraphName = $this->request->data['Graph']['開発グループ'];//追加するモデル名がテキストフィールドに入力されていた場合。
             if($selectModelName==null)//ここの動作は未確認
             {
                 $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
-            }
+            }*/
+            //$selectGroupName = $this->data['Graph'] ['開発グループ'];
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
-        $conditions = array('conditions' => array('GroupData.model' => 'testA'));
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
         $data = $this->GroupData->find('all',$conditions);
 
-        $this->set('testA',$data);
-        echo '<pre>';
-            //print_r($data);
-        echo '</pre>';
+        $this->set('data',$data);
     }
 
     public function origin()
