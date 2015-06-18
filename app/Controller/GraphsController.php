@@ -59,6 +59,7 @@ class GraphsController extends AppController
             $data = $this->GroupData->find('all',array('conditions' => array('GroupData.model' => $selectModelName[$i],'GroupData.group_name' => $selectGroupName)));
             $this->set('data'.$i,$data);
         }
+        $this->set('model',$selectModelName);
     }
 
     public function alldevgroup() 
@@ -161,7 +162,7 @@ class GraphsController extends AppController
                         $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
                         if($success)
                         {   //最後にグループ名を追加する
-                           if(!in_array($selectModelName,$groupNameData))
+                           if(!in_array($selectModelName,$modelNameData))
                            {
                                 $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
                            }

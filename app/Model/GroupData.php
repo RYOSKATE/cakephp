@@ -40,15 +40,15 @@ class GroupData extends AppModel
                     }
                     else
                     {
-                        $group_array[$names[$j]]['file_num']   +=1;
-                        $group_array[$names[$j]]['defact_num'] +=$ret[$i][3];
-                        $group_array[$names[$j]]['loc']        +=$ret[$i][4];
+                        $group_array[$names[$j]]['file_num']   += 1;
+                        $group_array[$names[$j]]['defact_num'] += $ret[$i][3];
+                        $group_array[$names[$j]]['loc']        += $ret[$i][4];
                     }
                 }
                 
             }
 
-            $time = date('Y-m-d', time());
+            $time = date('Y-m-d', strtotime("-1 day"));
             $data = array();
             foreach ($group_array as $key => $value)
             {
@@ -60,11 +60,6 @@ class GroupData extends AppModel
                                 'date'       =>$time
                                 );
             }
-                echo '<pre>';
-                    //print_r($data);
-                echo '</pre>';
-
-
 
             if (!$this->saveAll($data)) 
             {

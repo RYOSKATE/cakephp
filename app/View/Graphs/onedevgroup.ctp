@@ -3,11 +3,10 @@
 
 <?php
 //デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    print_r($data1);
-    print_r($data2);
-    echo '</pre>';
+    // echo 'デバッグ用表示';
+    // echo '<pre>';
+    // print_r($model);
+    // echo '</pre>';
 ?>
 <script type="text/javascript">
 	//data[0][0]["GroupData"]   ["defact_num"]/[group_name]/ [file_num]/[file_num]/[loc]/[date] ;
@@ -18,6 +17,7 @@
 	data.push(JSON.parse('<?=json_encode($data3);?>'));
 	data.push(JSON.parse('<?=json_encode($data4);?>'));
 
+	var modelName = JSON.parse('<?=json_encode($model);?>');
 	AmCharts.ready(function () 
 	{
 		generateChartData();
@@ -49,15 +49,14 @@
 	function createStockChart() 
 	{
 		var chart = new AmCharts.AmStockChart();
-		chart.pathToImages = "/img/amcharts/";
-
+		chart.pathToImages = "/img/amcharts/";///ファイルパスの設定要確認
 		// DATASETS //////////////////////////////////////////
 		// create data sets first
 		var dataSet = new Array();
 		for(var i =0;i<chartData.length;++i)
 		{
 			var dataSetTemp = new AmCharts.DataSet();
-			dataSetTemp.title = "first data set";//選択されたモデル名に変更する必要あり
+			dataSetTemp.title = modelName[i+1];//選択されたモデル名に変更する必要あり
 			dataSetTemp.fieldMappings = [{
 					fromField: "value",
 					toField: "value"
@@ -103,6 +102,8 @@
 
 
 		// second stock panel
+		//棒グラフ株のストックグラフ(描画対象データがないため非表示)
+		/*
 		var stockPanel2 = new AmCharts.StockPanel();
 		stockPanel2.title = "Volume";
 		stockPanel2.percentHeight = 30;
@@ -117,8 +118,12 @@
 		stockLegend2.periodValueTextRegular = "[[value.close]]";
 		stockPanel2.stockLegend = stockLegend2;
 
-		// set panels to the chart
+		
 		chart.panels = [stockPanel1, stockPanel2];
+		*/
+
+		// set panels to the chart
+		chart.panels = [stockPanel1];
 
 
 		// OTHER SETTINGS ////////////////////////////////////
@@ -162,7 +167,6 @@
 		var dataSetSelector = new AmCharts.DataSetSelector();
 		dataSetSelector.position = "left";
 		chart.dataSetSelector = dataSetSelector;
-
 		chart.write('chartdiv');
 	}
 </script>
@@ -180,31 +184,15 @@
                                         'class' => 'well form-inline',
                                         )
                             );
-
-	echo $this->Form->input('モデル1',array
-	(
-	    'type'=>'select',
-	    'options'=>$modelName,
-	    'class' => 'form-control'
-	 ));
-	echo $this->Form->input('モデル2',array
-	(
-	    'type'=>'select',
-	    'options'=>$modelName,
-	    'class' => 'form-control'
-	 ));
-	echo $this->Form->input('モデル3',array
-	(
-	    'type'=>'select',
-	    'options'=>$modelName,
-	    'class' => 'form-control'
-	 ));
-	echo $this->Form->input('モデル4',array
-	(
-	    'type'=>'select',
-	    'options'=>$modelName,
-	    'class' => 'form-control'
-	 ));
+    for($i=1;$i<=4;++$i)
+    {
+    	echo $this->Form->input('モデル'.$i,array
+		(
+		    'type'=>'select',
+		    'options'=>$modelName,
+		    'class' => 'form-control'
+		 ));
+    }
     echo $this->element('selectGroup',$groupName); 
     echo $this->Form->end('セット', array
     (

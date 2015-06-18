@@ -101,7 +101,10 @@
                                         );
     echo $this->element('selectModel',$modelName);
     echo $this->element('selectGroup',$groupName); 
-    echo $this->Form->end();
+    echo $this->Form->end('セット', array
+    (
+    'class' => 'form-control'
+    ));
 ?>
 </div>
 
