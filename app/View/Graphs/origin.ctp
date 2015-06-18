@@ -1,11 +1,11 @@
 
 <?php
 //デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    //print_r($model1);
-    //print_r($model2);
-    echo '</pre>';
+    // echo 'デバッグ用表示';
+    // echo '<pre>';
+    // print_r($model1);
+    // print_r($model2);
+    // echo '</pre>';
 ?>
 <?php $this->Html->script('amcharts/pie', array('inline' => false));?>
 
@@ -162,12 +162,12 @@ origin(実際の由来は+1する)
         'options'=>$modelName,
         'class' => 'form-control'
      ));
-
+    echo $this->element('selectGroup',$groupName); 
     echo $this->Form->end('セット', array
     (
     'class' => 'form-control'
     ));
-    echo $this->element('selectGroup',$groupName); 
+
 ?>
 </div>
 <!-- Nav tabs -->
@@ -209,7 +209,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
+                    <div class="panel-title"><?php echo $leftModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="leftChart5" style="height:500px;"></div>
@@ -219,7 +219,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
+                    <div class="panel-title"><?php echo $rightModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="rightChart5" style="height:500px;"></div>
@@ -233,7 +233,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
+                    <div class="panel-title"><?php echo $leftModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="leftChart6" style="height:500px;"></div>
@@ -243,7 +243,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
+                    <div class="panel-title"><?php echo $rightModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="rightChart6" style="height:500px;"></div>
@@ -257,7 +257,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">XXXモデル</div>
+                    <div class="panel-title"><?php echo $leftModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="leftChart7" style="height:500px;"></div>
@@ -267,7 +267,7 @@ origin(実際の由来は+1する)
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <div class="panel-title">YYYモデル</div>
+                    <div class="panel-title"><?php echo $rightModelName?></div>
                 </div>
                 <div class="panel-body">
                     <div id="rightChart7" style="height:500px;"></div>
