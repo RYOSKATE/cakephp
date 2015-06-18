@@ -1,7 +1,23 @@
 <?php $this->Html->script('amcharts/serial', array('inline' => false));?>
 <?php $this->Html->script('amcharts/amstock', array('inline' => false));?>
 
+<?php
+//デバッグ用表示
+    echo 'デバッグ用表示';
+    echo '<pre>';
+    print_r($data1);
+    print_r($data2);
+    echo '</pre>';
+?>
 <script type="text/javascript">
+	//data[0][0]["GroupData"] ["defact_num"]/[group_name]/ [defact_num]/[file_num]/[loc]/[date] ;
+	//	  1-4[日付分]
+	var data = new Array();
+	data.push(JSON.parse('<?=json_encode($data1);?>'));
+	data.push(JSON.parse('<?=json_encode($data2);?>'));
+	data.push(JSON.parse('<?=json_encode($data3);?>'));
+	data.push(JSON.parse('<?=json_encode($data4);?>'));
+
 	AmCharts.ready(function () 
 	{
 		generateChartData();
@@ -16,7 +32,7 @@
 	function generateChartData() 
 	{
 		var firstDate = new Date();
-		firstDate.setDate(firstDate.getDate() - 500);
+		firstDate.setDate(firstDate.getDate() - 499);//1-31の日
 		firstDate.setHours(0, 0, 0, 0);
 
 		for (var i = 0; i < 500; i++)
@@ -251,12 +267,12 @@
 	    'options'=>$modelName,
 	    'class' => 'form-control'
 	 ));
-
+    echo $this->element('selectGroup',$groupName); 
     echo $this->Form->end('セット', array
     (
     'class' => 'form-control'
     ));
-    echo $this->element('selectGroup',$groupName); 
+
 
 ?>
 </div>

@@ -44,29 +44,21 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
+        $selectModelName = array('dummy',$modelNameData[1],$modelNameData[1],$modelNameData[1],$modelNameData[1]);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if (!empty($this->data)) 
         {    
-           /* echo '<pre>';
-                print_r($this);roo
-            echo '</pre>';
-
-            $selectGraphName = $this->request->data['Graph']['開発グループ'];//追加するモデル名がテキストフィールドに入力されていた場合。
-            if($selectModelName==null)//ここの動作は未確認
+            for($i=1;$i<count($selectModelName);++$i)
             {
-                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
-            }*/
-            //$selectGroupName = $this->data['Graph'] ['開発グループ'];
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル1']];
+                $selectModelName[$i] = $modelNameData[$this->data['Graph'] ['モデル'.$i]];
+            }
+            $selectGroupName    = $groupNameData[$this->data['Graph'] ['開発グループ']];         
         }
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
-        $data = $this->GroupData->find('all',$conditions);
-
-        $this->set('data',$data);
-                echo '<pre>';
-            //print_r($data);
-        echo '</pre>';
+        for($i=1;$i<count($selectModelName);++$i)
+        {
+            $data = $this->GroupData->find('all',array('conditions' => array('GroupData.model' => $selectModelName[$i],'GroupData.group_name' => $selectGroupName)));
+            $this->set('data'.$i,$data);
+        }
     }
 
     public function alldevgroup() 
@@ -79,16 +71,6 @@ class GraphsController extends AppController
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
-           /* echo '<pre>';
-                print_r($this);roo
-            echo '</pre>';
-
-            $selectGraphName = $this->request->data['Graph']['開発グループ'];//追加するモデル名がテキストフィールドに入力されていた場合。
-            if($selectModelName==null)//ここの動作は未確認
-            {
-                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
-            }*/
-            //$selectGroupName = $this->data['Graph'] ['開発グループ'];
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
         $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
@@ -105,7 +87,7 @@ class GraphsController extends AppController
 
         $selectGroupName = $groupNameData[1];
         $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[2];
+        $selectModelName2 = $modelNameData[1];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
