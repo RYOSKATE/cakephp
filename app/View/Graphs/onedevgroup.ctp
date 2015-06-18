@@ -220,6 +220,7 @@
 </ol>
 
 <div class="page-header">
+<?php echo $this->element('selectModel',$modelName); ?>
 <?php echo $this->element('selectGroup',$groupName); ?>
 </div>
 

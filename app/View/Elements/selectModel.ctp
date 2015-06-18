@@ -1,9 +1,9 @@
 <div>
 	<?php 
-		echo $this->Form->input('開発グループ',array
+		echo $this->Form->input('モデル',array
 		(
 		    'type'=>'select',
-		    'options'=>$groupName,
+		    'options'=>$modelName,
 		    // 'style' => 'width: 200px',
 		     'onchange' => 'submit(this.form)',
 		    //'selected' => $selected,  // 規定値をvalueで指定

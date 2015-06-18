@@ -17,6 +17,12 @@ class GraphsController extends AppController
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$groupNameData);
     }
+    public function setModelName()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('modelName',$modelNameData);
+    }
     public function index()
     {
     }
@@ -33,6 +39,7 @@ class GraphsController extends AppController
     public function onedevgroup() 
     {
         $this->setGroupName();
+        $this->setModelName();
         //開発グループテーブルを作成し、upload時に重複チェック→新規登録、id付きで、を実装後にそれらを取得しここで有効にする。
         //$data = $this->GroupData->find('list', array('conditions' => array('GroupData.group_name' => 'pending')));
         //$this->set('groupName',$data);
@@ -44,8 +51,16 @@ class GraphsController extends AppController
     public function alldevgroup() 
     {
         $this->setGroupName();
+        $this->setModelName();
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        //$this->set('data',$this->OriginChart->find('all'));
+        if ($this->request->is('post')) 
+        {
+            $selectModelName = $this->request->data['Graph']['addModelName'];//追加するモデル名がテキストフィールドに入力されていた場合。
+            if($selectModelName==null)//ここの動作は未確認
+            {
+                $selectModelName = $modelNameData[$this->request->data['Graph']['modelName']];
+            }
+        }
         $conditions = array('conditions' => array('GroupData.model' => 'testA'));
         $data = $this->GroupData->find('all',$conditions);
 
@@ -85,15 +100,20 @@ class GraphsController extends AppController
         //すでに存在するモデル名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         array_splice($modelNameData,0,0,'');//先頭に空欄を追加
-        $this->set('modelName',$modelNameData);//コンボボックスに使われる
+        $this->set('modelName',$modelNameData);
 
         if (!empty($this->data)) 
         {
             //コンボボックスで選ばれたグループ名を取得
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル名']];
-            if($selectModelName=='')
+            if($selectModelName=='')//空欄の場合はテキストフィールドをチェック、新規モデル名が入力されていれば採用
             {
                 $selectModelName = $this->data['Graph'] ['新規モデル名'];
+                if($selectModelName=='')
+                {
+                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                    return;
+                }
             }
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
