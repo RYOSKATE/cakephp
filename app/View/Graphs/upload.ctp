@@ -24,11 +24,10 @@
         <legend>データのアップロード</legend>
     <?php
         echo $this->Form->text('addModelName');
-        echo $this->Form->input('modelName',array
+        echo $this->Form->input('モデル名',array
         (
             'type'=>'select',
             'options'=>$modelName,
-             'style' => 'width: 200px',
              'onchange' => 'submit(this.form)'
             //'style' => 'width:200px;',
             //'selected' => $selected,  // 規定値をvalueで指定

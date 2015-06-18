@@ -74,9 +74,26 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	        <div class="col-md-3 col-sm-3">
 		        <div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 				  <div class="list-group-item active">開発グループ</div>
+
 				  <?php echo $this->Html->link('ALL',			array('controller' => 'graphs', 'action' => 'alldevgroup'),array('class' =>'list-group-item'));?>
 				  <?php echo $this->Html->link('各開発グループ',array('controller' => 'graphs', 'action' => 'onedevgroup'),array('class' =>'list-group-item'));?>
+				  <?php 
+				  echo $this->Form->input('',array
+			        (
+			            'type'=>'select',
+			            'options'=>array("グループA","グループB"),
+			            // 'style' => 'width: 200px',
+			             'onchange' => 'submit(this.form)',
+			            //'selected' => $selected,  // 規定値をvalueで指定
+			            // 'div' => false           // div親要素の有無(true/false)
+			            // 'size' => 1,          // 高さ設定(リストボックスとして表示)
+			            //'empty' => false,          // 空白を許可
+			            //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
+			            'class' => 'form-control'
+			            ));
+	             	?> 
 				</div>
+
 				<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 				  <div class="list-group-item active">モデル</div>
 				  <?php echo $this->Html->link('由来比較',		array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
