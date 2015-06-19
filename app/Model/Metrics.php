@@ -3,6 +3,12 @@ class Metrics extends AppModel
 {
     function getLayer($filePath)
     {
+    	$firstDir = strstr($filePath, '/', true);//先頭フォルダ名
+    	$left = strstr($filePath, '/');//先頭フォルダ名
+echo '<pre>';
+print_r($left);
+echo '</pre>';
+		die();
     	return mt_rand(0, 5);
     }
     function getMetricsTable($data) 
