@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','Metrics','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
     /*
     CSV入力      Graph
     メトリクス   ModelLayer
@@ -106,18 +106,43 @@ class GraphsController extends AppController
         $this->set('rightModelName',$selectModelName2);
     }
 
-    public function metrics($model = NULL)
+    public function metrics()
     {
-        $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
-        $data = $this->ModelLayer->find('all',$conditions);
-        $this->set('data',$data);
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
 
-        if($model !=NULL)
-        {
-            $conditions = array('conditions' => array('ModelLayer.model' => $model));
-            $data2 = $this->ModelLayer->find('all',$conditions);
-            $this->set('data2',$data2);
+        $selectGroupName = $groupNameData[1];
+        $selectModelName1 = $modelNameData[1];
+        $selectModelName2 = $modelNameData[1];
+
+        if ($this->request->is('post')) 
+        {    
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
         }
+
+        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
+        //$data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
+echo '<pre>';
+print_r($data1[0]);
+echo '</pre>';        
+
+        $data11 = $this->Metrics->getMetricsTable($data1);
+echo '<pre>';
+print_r($data11);
+echo '</pre>';  
+        //$this->set('data1',$data1);
+        //$this->set('data2',$data2);
+
+        $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
+        $data1 = $this->ModelLayer->find('all',$conditions);
+        $this->set('data1',$data11);
+echo '<pre>';
+print_r($data1);
+echo '</pre>';
+        // $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
+        // $data2 = $this->ModelLayer->find('all',$conditions);
+        // $this->set('data2',$data2);
     }
 
     public function upload()
