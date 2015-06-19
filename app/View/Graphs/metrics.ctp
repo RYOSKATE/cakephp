@@ -9,36 +9,43 @@ echo '</pre>';*/
 <!-- Radar chart-->
 <script type="text/javascript">
 
-var radarChartData = {
-    labels: ["アプリケーション", "アプリケーションフレームワーク", "ライブラリ(外部OSS)", "Android Runtime", "HWライブラリ", "Kernel/ドライバ/ブートローダー"],
-    datasets: [
-        {
-            label:<?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
-            fillColor: "rgba(255,102,0,0.2)",
-            strokeColor: "rgba(255,102,0,1)",
-            pointColor: "rgba(255,102,0,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(255,102,0,1)",
-            data: [65,59,90,81,56,55]
-        },
-        {
-            label: <?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
-            fillColor: "rgba(252,210,2,0.2)",
-            strokeColor: "rgba(252,210,2,1)",
-            pointColor: "rgba(252,210,2,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(252,210,2,1)",
-            data: [28,48,40,19,96,27]
-        }
-    ]
-};
+	var dataset1 = JSON.parse('<?=json_encode($data1);?>');
+	var dataset2 = JSON.parse('<?=json_encode($data2);?>');
+	for( var i  = 0; i < dataset1.length; ++i )
+	{
+		dataset1[i]=dataset1[i]['ModelLayer']['all_file_num'];
+		dataset2[i]=dataset2[i]['ModelLayer']['all_file_num'];
+	}
+	var radarChartData = {
+	    labels: ["アプリケーション", "アプリケーションフレームワーク", "ライブラリ(外部OSS)", "Android Runtime", "HWライブラリ", "Kernel/ドライバ/ブートローダー"],
+	    datasets: [
+	        {
+	            label:<?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
+	            fillColor: "rgba(255,102,0,0.2)",
+	            strokeColor: "rgba(255,102,0,1)",
+	            pointColor: "rgba(255,102,0,1)",
+	            pointStrokeColor: "#fff",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "rgba(255,102,0,1)",
+	            data: dataset1
+	        },
+	        {
+	            label: <?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
+	            fillColor: "rgba(252,210,2,0.2)",
+	            strokeColor: "rgba(252,210,2,1)",
+	            pointColor: "rgba(252,210,2,1)",
+	            pointStrokeColor: "#fff",
+	            pointHighlightFill: "#fff",
+	            pointHighlightStroke: "rgba(252,210,2,1)",
+	            data: dataset2
+	        }
+	    ]
+	};
 
-window.onload = function(){
-    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
-        responsive: true
-    });
+	window.onload = function(){
+	    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
+	        responsive: true
+	    });
 }
 </script>
 
@@ -49,15 +56,41 @@ window.onload = function(){
 </ol>
 
 <div class="page-header">
-  <h1><small>メトリクス比較</small></h1><p><?php echo $data1[0]['ModelLayer']['model'];?></p>
+  <h1><small>メトリクス比較</small></h1>
+    <?php 
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                        array('div' => 'form-group',),
+                                        'class' => 'well form-inline',
+                                        )
+                            );
+
+    echo $this->Form->input('モデル1',array
+    (
+        'type'=>'select',
+        'options'=>$modelName,
+        'class' => 'form-control'
+     ));
+    echo $this->Form->input('モデル2',array
+    (
+        'type'=>'select',
+        'options'=>$modelName,
+        'class' => 'form-control'
+     ));
+    echo $this->element('selectGroup',$groupName); 
+    echo $this->Form->end('セット', array
+    (
+    'class' => 'form-control'
+    ));
+
+?>
 </div>
 
 <div class="row">
-    <div class="col-md-6 col-sm-6">
-        <canvas id="canvas" height="450" width="450"></canvas>
+    <div class="col-md-8 col-sm-8">
+        <canvas id="canvas" height="200" width="450"></canvas>
     </div>
-    <div class="col-md-6 col-sm-6" >
-	<h4><?php echo $data1[0]['ModelLayer']['model'];?></h4>
+    <div class="col-md-9 col-sm-9" >
+	<h4><?php echo $name1;?></h4>
 	<table class="table table-hover table-condensed">
 		<thead>
 		<tr>
@@ -69,7 +102,7 @@ window.onload = function(){
 		</tr>
 		</thead>
 		<tbody>
-		<?php $layer = array( 0=> 'アプリケーション',
+		<?php $layer = array( 0=>'アプリケーション',
 							  1=>'アプリケーションフレームワーク',
 							  2=>'ライブラリ(外部OSS)',
 							  3=>'Android Runtinme', 
@@ -92,10 +125,8 @@ window.onload = function(){
 		</tbody>
 	</table>
 
-
-
-	<?php if(isset($data2) && $data2 !=NULL) { ?>
-	<h4><?php echo $data2[0]['ModelLayer']['model'];?></h4>
+	<?php if(isset($data2) && $data2 != NULL) { ?>
+	<h4><?php echo $name2;?></h4>
 	<table class="table table-hover table-condensed">
 		<thead>
 		<tr>

@@ -122,27 +122,20 @@ class GraphsController extends AppController
         }
 
         $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
-        //$data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
-echo '<pre>';
-print_r($data1[0]);
-echo '</pre>';        
+        $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
+// echo '<pre>';
+// //print_r($data1[0]);
+// echo '</pre>';        
 
-        $data11 = $this->Metrics->getMetricsTable($data1);
-echo '<pre>';
-print_r($data11);
-echo '</pre>';  
-        //$this->set('data1',$data1);
-        //$this->set('data2',$data2);
-
-        $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
-        $data1 = $this->ModelLayer->find('all',$conditions);
-        $this->set('data1',$data11);
-echo '<pre>';
-print_r($data1);
-echo '</pre>';
-        // $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
-        // $data2 = $this->ModelLayer->find('all',$conditions);
-        // $this->set('data2',$data2);
+        $data1 = $this->Metrics->getMetricsTable($data1);
+        $data2 = $this->Metrics->getMetricsTable($data2);
+// echo '<pre>';
+//     print_r($data1);
+// echo '</pre>';  
+        $this->set('data1',$data1);
+        $this->set('data2',$data2);
+        $this->set('name1',$selectModelName1);
+        $this->set('name2',$selectModelName2);
     }
 
     public function upload()
