@@ -22,10 +22,11 @@ class Metrics extends AppModel
     							array(
 									'model'           =>$modelName,
 									'layer'           =>$i,
-									'all_file_num'    =>1,//欠陥ファイル率計算時の0除算を防ぐため
+									'all_file_num'    =>0,
 									'defect_file_num' =>0,
-									'defect_num'      =>0
-    								  )
+									'defect_per_file' =>0,
+									'defect_num'      =>0,
+    								 )
     							);
     	}
 
@@ -45,7 +46,13 @@ class Metrics extends AppModel
 				$newData[$layer]['ModelLayer']['defect_num'] += $defact;
 			}
 		}
-
+		//最後にファイル率を求める
+		for ($i = 0; $i < count($newData); ++$i)
+		{
+			$temp = $newData[$i]['ModelLayer'];
+			$newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
+		}
+		//ファイル率計算時の0除算を防ぐため
     	return $newData;
     }
 

@@ -9,44 +9,77 @@ echo '</pre>';*/
 <!-- Radar chart-->
 <script type="text/javascript">
 
-	var dataset1 = JSON.parse('<?=json_encode($data1);?>');
-	var dataset2 = JSON.parse('<?=json_encode($data2);?>');
-	for( var i  = 0; i < dataset1.length; ++i )
+	var radarChartData;
+
+	function setdata(showParam)
 	{
-		dataset1[i]=dataset1[i]['ModelLayer']['all_file_num'];
-		dataset2[i]=dataset2[i]['ModelLayer']['all_file_num'];
+		var dataset1 = JSON.parse('<?=json_encode($data1);?>');
+		var dataset2 = JSON.parse('<?=json_encode($data2);?>');
+		for( var i  = 0; i < dataset1.length; ++i )
+		{
+			dataset1[i]=dataset1[i]['ModelLayer'][showParam];
+			dataset2[i]=dataset2[i]['ModelLayer'][showParam];
+		}
+		var radarChartData = {
+		    labels: [
+		    		 "アプリケーション", 
+				     "アプリケーションフレームワーク",
+				     "ライブラリ(外部OSS)", 
+				     "Android Runtime", 
+				     "HWライブラリ", 
+				     "Kernel/ドライバ/ブートローダー"
+			],
+		    datasets: [
+		        {
+		            label:<?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
+		            fillColor: "rgba(255,102,0,0.2)",
+		            strokeColor: "rgba(255,102,0,1)",
+		            pointColor: "rgba(255,102,0,1)",
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "rgba(255,102,0,1)",
+		            data: dataset1
+		        },
+		        {
+		            label: <?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
+		            fillColor: "rgba(252,210,2,0.2)",
+		            strokeColor: "rgba(252,210,2,1)",
+		            pointColor: "rgba(252,210,2,1)",
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "rgba(252,210,2,1)",
+		            data: dataset2
+		        }
+		    ]
+		};
+		return radarChartData;
 	}
-	var radarChartData = {
-	    labels: ["アプリケーション", "アプリケーションフレームワーク", "ライブラリ(外部OSS)", "Android Runtime", "HWライブラリ", "Kernel/ドライバ/ブートローダー"],
-	    datasets: [
-	        {
-	            label:<?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
-	            fillColor: "rgba(255,102,0,0.2)",
-	            strokeColor: "rgba(255,102,0,1)",
-	            pointColor: "rgba(255,102,0,1)",
-	            pointStrokeColor: "#fff",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "rgba(255,102,0,1)",
-	            data: dataset1
-	        },
-	        {
-	            label: <?php echo "'".$data1[0]['ModelLayer']['model']."'";?>,
-	            fillColor: "rgba(252,210,2,0.2)",
-	            strokeColor: "rgba(252,210,2,1)",
-	            pointColor: "rgba(252,210,2,1)",
-	            pointStrokeColor: "#fff",
-	            pointHighlightFill: "#fff",
-	            pointHighlightStroke: "rgba(252,210,2,1)",
-	            data: dataset2
-	        }
-	    ]
-	};
+	
+	radarChartData = setdata('all_file_num');
 
 	window.onload = function(){
-	    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
-	        responsive: true
-	    });
-}
+	    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
+	}
+
+	// JavaScript
+	//  イベントハンドラ
+	$('#table td').live('click',function(){
+	  var $cur_td = $(this)[0]; // (1):セルのHTML表現 [0]をつける点に留意のこと。  
+	  var $cur_tr = $(this).parent()[0]; // (2):行のHTML表現
+	  // $cur_tr = $(this).closest('tr')[0]; // このほうが確実
+	  var $select = $cur_td.cellIndex;
+	  var $param = 'all_file_num';
+	  switch($select)
+	  {
+	      case 1 : $param = 'all_file_num'; break;
+	      case 2 : $param = 'defect_file_num'; break;
+	      case 3 : $param = 'defect_per_file'; break;
+	      case 4 : $param = 'defect_num'; break;
+	      default :
+	  }
+	  radarChartData = setdata($param);
+	  window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
+	});
 </script>
 
 <ol class="breadcrumb">
@@ -91,7 +124,7 @@ echo '</pre>';*/
     </div>
     <div class="col-md-9 col-sm-9" >
 	<h4><?php echo $name1;?></h4>
-	<table class="table table-hover table-condensed">
+	<table class="table table-hover table-condensed" id ="table">
 		<thead>
 		<tr>
 			<th>機能レイヤ</th>
@@ -114,10 +147,10 @@ echo '</pre>';*/
 			$val = $value['ModelLayer']
 		?>
 		<tr>
-			<td><?php echo $layer[$val['layer']];?></td>
+			<td id="a"><?php echo $layer[$val['layer']];?></td>
 			<td><?php echo $val['all_file_num'];?></td>
 			<td><?php echo $val['defect_file_num'];?></td>
-			<td><?php echo sprintf("%.2f",$val['defect_file_num']/$val['all_file_num']*100);?></td>
+			<td><?php echo sprintf("%.2f",$val['defect_per_file']);?></td>
 			<td><?php echo $val['defect_num'];?></td>
 		</tr>
 		<?php 
@@ -127,7 +160,7 @@ echo '</pre>';*/
 
 	<?php if(isset($data2) && $data2 != NULL) { ?>
 	<h4><?php echo $name2;?></h4>
-	<table class="table table-hover table-condensed">
+	<table class="table table-hover table-condensed" id ="table">
 		<thead>
 		<tr>
 			<th>機能レイヤ</th>
@@ -144,7 +177,7 @@ echo '</pre>';*/
 			<td><?php echo $layer[$val['layer']];?></td>
 			<td><?php echo $val['all_file_num'];?></td>
 			<td><?php echo $val['defect_file_num'];?></td>
-			<td><?php echo sprintf("%.2f",$val['defect_file_num']/$val['all_file_num']*100);?></td>
+			<td><?php echo sprintf("%.2f",$val['defect_per_file']);?></td>
 			<td><?php echo $val['defect_num'];?></td>
 		</tr>
 		<?php }?>
