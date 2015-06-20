@@ -60,8 +60,13 @@ class GraphsController extends AppController
             $this->set('data'.$i,$data);
         }
         $this->set('model',$selectModelName);
-
-
+    }
+    public function onedevgroup2() 
+    {
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
+        $selectGroupName = $groupNameData[1];
+        $selectModelName = $modelNameData[1];
         $tree = array(
                         "name"=>"Sample data",
                         "children"=> array(
@@ -96,14 +101,13 @@ class GraphsController extends AppController
                                     )
                                 ))
                         );
-    echo '<pre>';
-    print_r($tree);
-    echo '</pre>';
+        echo '<pre>';
+        //print_r($tree);
+        echo '</pre>';
         $tree=json_encode($tree);
 
         $this->set('tree',$tree);
     }
-
     public function alldevgroup() 
     {
         $groupNameData = $this->setGroupName();

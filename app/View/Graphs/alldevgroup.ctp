@@ -117,8 +117,8 @@
 
 <ol class="breadcrumb">
   <li><?php echo $this->Html->link('Home',array('controller' => 'graphs', 'action' => 'index'));?></li>
-  <li class="active">開発グループ</a></li>
-  <li class="active">ALL</li>
+  <li class="active">全開発グループ</a></li>
+  <li class="active">欠陥数散布図</li>
 </ol>
 
 <div class="page-header">
