@@ -4,21 +4,21 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','Metrics','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','Metrics','FileMetrics','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
     /*
     CSV入力      Graph
     メトリクス   ModelLayer
     由来比較     OriginChart
     */
     //$groupNameに開発グループ名一覧をセットする
-    public function setGroupName()
+    private function setGroupName()
     {
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
-    public function setModelName()
+    private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
@@ -63,44 +63,21 @@ class GraphsController extends AppController
     }
     public function onedevgroup2() 
     {
-        $groupNameData = $this->setGroupName();
+$groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
+
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
-        $tree = array(
-                        "name"=>"Sample data",
-                        "children"=> array(
-                            array(
-                                   "name"=>"Title 1",
-                                   "size"=>1,
-                                   "children"=>array(
-                                     array
-                                     (
-                                         "name"=> "Title 1-1", "size"=>1,
-                                         "children"=> array(
-                                            array("name"=> "1-1-1", "size"=> 1),
-                                            array("name"=> "1-1-2", "size"=> 1),
-                                            array("name"=> "1-1-3", "size"=> 1),
-                                            array("name"=> "1-1-4", "size"=> 1)
-                                          )
-                                      ),  
-                                      array(
-                                         "name"=> "Title 1-2", "size"=>1,
-                                         "children"=> array(
-                                            array("name"=> "1-2-1", "size"=> 1),
-                                            array("name"=> "1-2-2", "size"=> 1),
-                                            array("name"=> "1-2-3", "size"=> 1)
-                                          )
-                                      ),  
-                                      array(
-                                         "name"=> "Title 1-3", "size"=>1,
-                                         "children"=> array(
-                                            array("name"=> "1-3-1", "size"=> 1)
-                                          )
-                                      )
-                                    )
-                                ))
-                        );
+        $selectModelName1 = $modelNameData[1];
+        $selectModelName2 = $modelNameData[1];
+
+        if ($this->request->is('post')) 
+        {    
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+        }
+
+        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName1)));
+        $tree = $this->FileMetrics->getMetricsTable($data);
         echo '<pre>';
         //print_r($tree);
         echo '</pre>';
