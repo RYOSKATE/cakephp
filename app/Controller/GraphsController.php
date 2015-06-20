@@ -60,6 +60,16 @@ class GraphsController extends AppController
             $this->set('data'.$i,$data);
         }
         $this->set('model',$selectModelName);
+
+
+        $tree = array(
+         "name"=>"たけのこの里",
+         "種類"=>array(
+          array("name"=> "マカダミアクッキー", "好き度"=> 10),
+          array("name"=> "焼き栗", "好き度"=> 2)
+          )
+        );
+        $this->set('tree',$tree);
     }
 
     public function alldevgroup() 
