@@ -2,7 +2,29 @@
 
 <script type="text/javascript">
 
-    var testAData = JSON.parse('<?=json_encode($data);?>');
+    function calc(data,maxFile)
+    {
+        var N = data.length;
+        
+        var sum_xy = 0, sum_x = 0, sum_y = 0, sum_xx = 0;
+
+        for (i=0; i<N; i++) 
+        {
+            var x = data[i]['x'];
+            var y = data[i]['y'];
+            sum_xy += x * y;
+            sum_x += x;
+            sum_y += y;
+            sum_xx += x*x
+        }
+      
+        var a = (N * sum_xy - sum_x * sum_y) / (N * sum_xx - sum_x*sum_x);
+        var b = (sum_xx * sum_y - sum_xy * sum_x) / (N * sum_xx - sum_x*sum_x);
+
+        var d = [b,a*maxFile+b];
+        return d;
+    }
+    var getData = JSON.parse('<?=json_encode($data);?>');
     /*
       $data[] = array('model'=>$modelname,
                 'group_name' =>$key,
@@ -11,46 +33,62 @@
                 'loc'        =>$value['loc'],
                 'date'       =>$time);
     */
-    var testArray = new Array();
-    var value1 = testAData[0];
-    var value2 = testAData[0]["GroupData"]["defact_num"];
-    var value3 = Number(testAData[0]['GroupData']["file_num"]);
+    var data = new Array();
+    // var value1 = getData[0];
+    // var value2 = getData[0]["GroupData"]["defact_num"];
+    // var value3 = Number(getData[0]['GroupData']["file_num"]);
 
     var totalDefact = new Array();
     var defactPerFile = new Array();
     var defactPerLoc = new Array();
-    for( var i  = 0; i < testAData.length; ++i )
+    var maxFile=0;
+    var maxDefact=0;
+    for( var i  = 0; i < getData.length; ++i )
     {
-        var temp = testAData[i]['GroupData'];
+        var temp = getData[i]['GroupData'];
         var y = Number(temp['defact_num']);
         var x = Number(temp['file_num']);
         var kloc = Number(temp['loc']);
         var name = temp['group_name'];
-        var dist = Math.abs(y-x)/Math.sqrt(2);
-        var value = parseInt(Math.round(dist));
-        testArray.push({"group":name ,"y": y,"x": x ,"value": value} );
+
+        if(maxFile<x)
+        {
+            maxFile=x;
+        }
+        if(maxDefact<y)
+        {
+            maxDefact=y;
+        }
+        //バブルサイズの計算式
+        //var dist = (y-x)/Math.sqrt(2);
+        //var value = parseInt(Math.round(dist));
+        value = y;
+        
+        data.push({"group":name ,"y": y,"x": x ,"value": value} );
         totalDefact.push({"group":name ,"v": y} );
         defactPerFile.push({"group":name ,"v": y/x} );
         defactPerLoc.push({"group":name ,"v": (1000*y/kloc).toFixed(3)} );
     }
-    testArray.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
+    data.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
     defactPerFile.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
     defactPerLoc.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
 
+    var xy = calc(data,maxFile);
 	AmCharts.themes.none = {}; 
 
 	var chart = AmCharts.makeChart("chartdiv", {
     "type": "xy",
     "pathToImages": "http://www.amcharts.com/lib/3/images/",
     "theme": "none",
-    "dataProvider":testArray,
+    "dataProvider":data,
     "valueAxes": [{
-        "position":"bottom",
-        "axisAlpha": 0
-    }, {
-        "minMaxMultiplier": 1.2,
         "axisAlpha": 0,
-        "position": "left"
+        "position":"bottom",
+        "title": "ファイル数"
+    }, {
+        "axisAlpha": 0,
+        "position": "left",
+        "title": "欠陥数"
     }],
     "startDuration": 1.5,
     "graphs": [{
@@ -64,20 +102,16 @@
         "xField": "x",
         "yField": "y",
         "maxBulletSize": 100
-    }, {
-        "balloonText": "x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>",
-        "bullet": "diamond",
-        "bulletBorderAlpha": 0.2,
-		"bulletAlpha": 0.8,
-        "lineAlpha": 0,
-        "fillAlphas": 0,
-        "valueField": "value2",
-        "xField": "x2",
-        "yField": "y2",
-        "maxBulletSize": 100
     }],
-    "marginLeft": 46,
-    "marginBottom": 35
+    "trendLines": [{
+        "finalValue": xy[1],
+        "finalXValue": maxFile,
+        "initialValue": xy[0],
+        "initialXValue": 0,
+        "lineColor": "#FF6600"
+    }],
+    "chartScrollbar": {},
+    "chartCursor": {},
     });
 </script>
 

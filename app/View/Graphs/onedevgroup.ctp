@@ -49,7 +49,7 @@
 	function createStockChart() 
 	{
 		var chart = new AmCharts.AmStockChart();
-		chart.pathToImages = "/img/amcharts/";///ファイルパスの設定要確認
+		chart.pathToImages = "http://www.amcharts.com/lib/3/images/";///ファイルパスの設定要確認
 		// DATASETS //////////////////////////////////////////
 		// create data sets first
 		var dataSet = new Array();
