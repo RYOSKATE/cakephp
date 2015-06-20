@@ -63,12 +63,44 @@ class GraphsController extends AppController
 
 
         $tree = array(
-         "name"=>"たけのこの里",
-         "種類"=>array(
-          array("name"=> "マカダミアクッキー", "好き度"=> 10),
-          array("name"=> "焼き栗", "好き度"=> 2)
-          )
-        );
+                        "name"=>"Sample data",
+                        "children"=> array(
+                            array(
+                                   "name"=>"Title 1",
+                                   "size"=>1,
+                                   "children"=>array(
+                                     array
+                                     (
+                                         "name"=> "Title 1-1", "size"=>1,
+                                         "children"=> array(
+                                            array("name"=> "1-1-1", "size"=> 1),
+                                            array("name"=> "1-1-2", "size"=> 1),
+                                            array("name"=> "1-1-3", "size"=> 1),
+                                            array("name"=> "1-1-4", "size"=> 1)
+                                          )
+                                      ),  
+                                      array(
+                                         "name"=> "Title 1-2", "size"=>1,
+                                         "children"=> array(
+                                            array("name"=> "1-2-1", "size"=> 1),
+                                            array("name"=> "1-2-2", "size"=> 1),
+                                            array("name"=> "1-2-3", "size"=> 1)
+                                          )
+                                      ),  
+                                      array(
+                                         "name"=> "Title 1-3", "size"=>1,
+                                         "children"=> array(
+                                            array("name"=> "1-3-1", "size"=> 1)
+                                          )
+                                      )
+                                    )
+                                ))
+                        );
+    echo '<pre>';
+    print_r($tree);
+    echo '</pre>';
+        $tree=json_encode($tree);
+
         $this->set('tree',$tree);
     }
 

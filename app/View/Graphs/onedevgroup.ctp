@@ -3,167 +3,176 @@
 <?php $this->Html->script('d3/d3.min', array('inline' => false));?>
 <?php
 //デバッグ用表示
-    // echo 'デバッグ用表示';
-    // echo '<pre>';
-    // print_r($model);
-    // echo '</pre>';
+    echo 'デバッグ用表示';
+    echo '<pre>';
+    //print_r($tree);
+    echo '</pre>';
 ?>
-<style>
+<head>
+    <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+    <style type="text/css">
 
-path {
-  stroke: #fff;
-}
+		rect {
+		  fill: none;
+		  stroke: #fff;
+		}
+		
+		rect:hover{
+			opacity: 0.5;
+		}
 
-path:first-child {
-  fill: yellow !important;
-}
+		text {
+			font-family:"Times New Roman",Times,serif;
+			font-size: 12px;
+		}
 
-circle {
-  fill: #000;
-  pointer-events: none;
-}
+    </style>
+  </head>
+  <body>
+  <div id="body"></body>
+    <script type="text/javascript">
 
-.q0-9 { fill: rgb(197,27,125); }
-.q1-9 { fill: rgb(222,119,174); }
-.q2-9 { fill: rgb(241,182,218); }
-.q3-9 { fill: rgb(253,224,239); }
-.q4-9 { fill: rgb(247,247,247); }
-.q5-9 { fill: rgb(230,245,208); }
-.q6-9 { fill: rgb(184,225,134); }
-.q7-9 { fill: rgb(127,188,65); }
-.q8-9 { fill: rgb(77,146,33); }
 
-/*body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
+    //var pathjson = JSON.parse('<?=json_encode($tree);?>');
+	var pathJson = {
+ 	"name": "Sample data",
+ 	"children": [
+        {
+           "name": "Title 1",
+           "size":1,
+           "children": [
+                    {
+                     "name": "Title 1-1",
+                     "size":1,
+                     "children": [
+                        {"name": "1-1-1", "size": 1},
+                        {"name": "1-1-2", "size": 1},
+                        {"name": "1-1-3", "size": 1},
+                        {"name": "1-1-4", "size": 1}
+                      ]
+                  },  
+                  {
+                     "name": "Title 1-2",
+                     "size":1,
+                     "children": [
+                        {"name": "1-2-1", "size": 1},
+                        {"name": "1-2-2", "size": 1},
+                        {"name": "1-2-3", "size": 1}
+                      ]
+                  },  
+                  {
+                     "name": "Title 1-3",
+                     "size":1,
+                     "children": [
+                        {"name": "1-3-1", "size": 1}
+                      ]
+                  }
+               ]
+        }
+     ]
+	}
 
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
 
-.node {
-  border: solid 1px white;
-  font: 10px sans-serif;
-  line-height: 12px;
-  overflow: hidden;
-  position: absolute;
-  text-indent: 2px;*/
-}
-</style>
-<form>
-  <label><input type="radio" name="mode" value="size" checked> Size</label>
-  <label><input type="radio" name="mode" value="count"> Count</label>
-</form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
-<script>
-    var width = 700;
-    var height = 600;
- 
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("transform","translate(50,50)");
- 
-    var color10 = d3.scale.category10();
- 
-    // ツリーマップの設定。
-    var treemap = d3.layout.treemap()
-    .size([width, height - 100])
-    .value(value) // 値の名前を指定。
-    .children(children); // 入れ子の名前を指定。
- 
-    function value(d) {
-      return d["好き度"];
-    }
- 
-    function children(d) {
-      return d["種類"];
-    }
- 
- 	var data =JSON.parse('<?=json_encode($tree);?>');
-    // d3.json("kinoko_takenoko.json", function(data) {
- 
-// x,y,dx,dy,area,depthが出る。
-	//data = data.slice();
-var areas = treemap.nodes(data);
- 
-    //console.log(areas);
- 
-    var cells = svg.selectAll(".cell")
-    .data(areas)
-    .enter()
-    .append("g")
-    .attr("class","cell");
- 
-    cells.append("rect")
-    .attr("x", function(d){ return d.x; })
-    .attr("y", function(d){ return d.y; })
-    .attr("width", function(d){ return d.dx; })
-    .attr("height", function(d){ return d.dy; })
-    .attr("fill",function(d){ return d.children ? null : color10(d.parent.name); }) // 一番下の子だけ親に合わせて色を変える。
-    .attr("stroke", "white")
-    .attr("stroke-width",2)
-    .attr("opacity", 1); // 重なった円が見えるように透明度をつける。
- 
-    cells.append("text")
-    .attr("x", function(d){ return d.x + (d.dx/2); }) // 各rectの真ん中に配置。
-    .attr("y", function(d){ return d.y + (d.dy/2); }) // 各rectの真ん中に配置。
-    .attr("text-anchor","middle")
-    .text(function(d){ return d.children ? "" : d.name; }) // 一番下の子の名前だけ表示。
-    .attr("stroke", "black");
- 
-    //});
- 
+	pathJson = {
+				"name": "Sample data",
+ 				"children": [{
+           					"name": "Title 1",
+          					 "size":1
+          					}]
+          		}
+    pathJson = JSON.parse('<?php echo  $tree; ?>');
+var w = 1280 - 80,
+        h = 800 - 180,
+        x = d3.scale.linear().range([0, w]),
+        y = d3.scale.linear().range([0, h]),
+        color = d3.scale.category10(),
+        root,
+        node;
+
+        var treemap = d3.layout.treemap()
+            .round(false)
+            .size([w, h])
+            .sticky(true)
+            .padding([10, 0, 0, 0])
+            .value(function(d) { return d.size; });
+
+        var svg = d3.select("#body").append("div")
+            .attr("class", "chart")
+            .style("width", w + "px")
+            .style("height", h + "px")
+          .append("svg:svg")
+            .attr("width", w)
+            .attr("height", h)
+          .append("svg:g")
+            .attr("transform", "translate(.5,.5)");
+
+        
+          node = root = pathJson;
+          
+          var nodes = treemap.nodes(root)
+              .filter(function(d) { return !d.children; });
+
+          var cell = svg.selectAll("g")
+              .data(nodes)
+              .enter().append("svg:g")
+              .attr("class", "cell")
+              .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+              .on("click", function(d) { return zoom(node == d.parent ? root : d.parent); });
+
+          cell.append("svg:rect")
+              .attr("width", function(d) { return d.dx - 1; })
+              .attr("height", function(d) { return d.dy - 1; })
+              .style("fill", function(d) { return color(d.parent.name); });
+
+          cell.append("svg:text")
+              .attr("x", function(d) { return d.dx / 2; })
+              .attr("y", function(d) { return d.dy / 2; })
+              .attr("dy", ".35em")
+              .attr("text-anchor", "middle")
+              .text(function(d) { return d.name; })
+              .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
+
+          d3.select(window).on("click", function() { zoom(root); });
+
+          d3.select("select").on("change", function() {
+            treemap.value(this.value == "size" ? size : count).nodes(root);
+            zoom(node);
+          });
+        
+        
+        function size(d) {
+          return d.size;
+        }
+
+        function count(d) {
+          return 1;
+        }
+
+        function zoom(d) {
+          //alert(d.name);
+          var kx = w / d.dx, ky = h / d.dy;
+          x.domain([d.x, d.x + d.dx]);
+          y.domain([d.y, d.y + d.dy]);
+
+          var t = svg.selectAll("g.cell").transition()
+              .duration(d3.event.altKey ? 7500 : 750)
+              .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+          t.select("rect")
+              .attr("width", function(d) { return kx * d.dx - 1; })
+              .attr("height", function(d) { return ky * d.dy - 1; })
+
+          t.select("text")
+              .attr("x", function(d) { return kx * d.dx / 2; })
+              .attr("y", function(d) { return ky * d.dy / 2; })
+              .style("opacity", function(d) { return kx * d.dx > d.w ? 1 : 0; });
+              //.style("font-size", function(d) { return kx * d.dx > d.w ? "20px" : "12px";});
+
+          node = d;
+          d3.event.stopPropagation();
+        }
     </script>
-<script type="text/javascript">
-	
-	var width = 960,
-    height = 500;
-var vertices = d3.range(100).map(function(d) {
-  return [Math.random() * width, Math.random() * height];
-});
-
-var voronoi = d3.geom.voronoi()
-    .clipExtent([[0, 0], [width, height]]);
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("mousemove", function() { vertices[0] = d3.mouse(this); redraw(); });
-
-var path = svg.append("g").selectAll("path");
-
-svg.selectAll("circle")
-    .data(vertices.slice(1))
-  .enter().append("circle")
-    .attr("transform", function(d) { return "translate(" + d + ")"; })
-    .attr("r", 1.5);
-
-redraw();
-
-function redraw() {
-  path = path
-      .data(voronoi(vertices), polygon);
-
-  path.exit().remove();
-
-  path.enter().append("path")
-      .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
-      .attr("d", polygon);
-
-  path.order();
-}
-
-function polygon(d) {
-  return "M" + d.join("L") + "Z";
-}
-
-</script>
+  </body>
 <script type="text/javascript">
 	//data[0][0]["GroupData"]   ["defact_num"]/[group_name]/ [file_num]/[file_num]/[loc]/[date] ;
 	//	  1-4[日付分]
@@ -337,4 +346,4 @@ function polygon(d) {
 ?>
 </div>
 
-<!-- <div id="chartdiv" style="height:600px;"></div> -->
+<div id="chartdiv" style="height:600px;"></div>
