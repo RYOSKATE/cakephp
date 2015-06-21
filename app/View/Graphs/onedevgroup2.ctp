@@ -53,11 +53,21 @@
 	</div>
 	<div id="body">
 	</div>
+		<div id="footer">
+        d3.layout.treemap
+        <div class="hint">click or option-click to descend or ascend</div>
+        <div>
+	        <select id = "select">
+	          <option value="size">Size</option>
+	          <option value="count">Count</option>
+	        </select>
+        </div>
+      </div>
 </body>
 <script type="text/javascript">
     var pathJson = JSON.parse('<?php echo $tree; ?>');
 
-	var w = 1280 - 80,
+	var w = 930 - 80,
         h = 800 - 180,
         x = d3.scale.linear().range([0, w]),
         y = d3.scale.linear().range([0, h]),
@@ -83,38 +93,44 @@
             .attr("transform", "translate(.5,.5)");
 
         
+        function set(layer)
+        {
           node = root = pathJson;
           
           var nodes = treemap.nodes(root)
-              .filter(function(d) { return !d.children; });
+              .filter(function(d) { return (d.layer==layer); });
 
           var cell = svg.selectAll("g")
               .data(nodes)
               .enter().append("svg:g")
               .attr("class", "cell")
               .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+              //.on("click", function(d) { return zoom(d); });
               .on("click", function(d) { return zoom(node == d.parent ? root : d.parent); });
 
           cell.append("svg:rect")
               .attr("width", function(d) { return d.dx - 1; })
               .attr("height", function(d) { return d.dy - 1; })
-              .style("fill", function(d) { return color(d.parent.name); });
+              .style("fill", function(d) { return color(d.size); });
 
           cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
               .attr("dy", ".35em")
               .attr("text-anchor", "middle")
-              .text(function(d) { return d.name; })
+              .text(function(d) { return d.name+"("+d.size+")"; })
               .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
           d3.select(window).on("click", function() { zoom(root); });
 
-          d3.select("select").on("change", function() {
+          d3.select("#select").on("change", function() 
+          {
             treemap.value(this.value == "size" ? size : count).nodes(root);
             zoom(node);
+
           });
-        
+        }
+        set(3);
         
         function size(d) {
           return d.size;

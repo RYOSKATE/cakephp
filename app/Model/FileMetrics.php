@@ -17,42 +17,48 @@ class FileMetrics extends AppModel
 		//         )
 
 		// )
-		$tree = array("name"=>"root","size"=>1,"children"=> array());
-		for ($i = 0; $i < count($data)/10000; ++$i)
+		$tree = array("name"=>"root","size"=>1,"layer"=>0,"children"=> array());
+		$dataSize = count($data)/10;
+		for ($i = 0; $i < $dataSize; ++$i)
 		{
 			$filepath = $data[$i]['Graph']['file_path'];
 			$path = explode('/',$filepath);
 			$path[0] = trim($path[0]);
-			$next = &$tree["children"];
+			$parent = &$tree;
+			$children = &$tree["children"];
+			$defact= $data[$i]['Graph'][3];
 	        for($j = 0; $j < count($path); ++$j)
 	        {
-				$node = array("name"=>$path[$j],"size"=>1);
-				$is = false;
-				for ($k = 0; $k < count($next); ++$k)
+				$isTheDir = false;
+				for ($k = 0; $k < count($children); ++$k)
 				{
-					$is = $next[$k]["name"] == $path[$j];
-					if($is)
+					$isTheDir = $children[$k]["name"] == $path[$j];
+					if($isTheDir)//そのディレクトリが存在した
 					{
-						$next[$k] += array("children"=> array());
-						$next = &$next[$k]["children"];
+						$parent["size"] += $defact;
+						$parent = &$children[$k];
+						$children[$k] += array("children"=> array());
+						$children = &$children[$k]["children"];
 						break;
 					}
 				}
 
-				if(!$is)
+				if(!$isTheDir)//そのディレクトリが初めて登場した
 				{
-					$next[] = $node;
+					$node = array("name"=>$path[$j],"size"=>$defact,"layer"=> ($j+1));
+					$children[] = $node;
 					if($j+1 < count($path))
 					{
-						$next = &$next[0]["children"];
+						$children = &$children[count($children) - 1]["children"];
 					}
+
 				}
 			}
 		}
-		      //   echo '<pre>';
-        //     print_r($tree);
-        //     //die();
-        // echo '</pre>';
+		// echo '<pre>';
+  //           print_r($tree);
+  //           //die();
+  //       echo '</pre>';
 
         // $tree = array(
         //         "name"=>"root",
