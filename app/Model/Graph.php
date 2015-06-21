@@ -22,12 +22,18 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-        		  $ret[] = array('model'=>$modelname) +$col;
+        		  $ret[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
                 }
         	}
         echo '<pre>';
             //print_r($ret[0]);
         echo '</pre>';
+
+            if (!$this->deleteAll(array('model' => $modelname))) 
+            {
+                throw new Exception();
+            }
+
             if (!$this->saveAll($ret)) 
             {
                 throw new Exception();

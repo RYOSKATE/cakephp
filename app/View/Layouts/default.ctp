@@ -72,11 +72,16 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
    		<div class="row">
    			<!-- 3列をサイドメニューに割り当て -->
 	        <div class="col-md-3 col-sm-3">
-		        <div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
-				  <div class="list-group-item active">開発グループ</div>
+	        	<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
+				  <div class="list-group-item active">全開発グループ</div>
+				  <?php echo $this->Html->link('欠陥数散布図',array('controller' => 'graphs', 'action' => 'alldevgroup'),array('class' =>'list-group-item'));?>
+				</div>
 
-				  <?php echo $this->Html->link('ALL',			array('controller' => 'graphs', 'action' => 'alldevgroup'),array('class' =>'list-group-item'));?>
-				  <?php echo $this->Html->link('各開発グループ',array('controller' => 'graphs', 'action' => 'onedevgroup'),array('class' =>'list-group-item'));?>
+		        <div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
+				  <div class="list-group-item active">各開発グループ</div>
+				  
+				  <?php echo $this->Html->link('メトリクス遷移',array('controller' => 'graphs', 'action' => 'onedevgroup'),array('class' =>'list-group-item'));?>
+				  <?php echo $this->Html->link('ファイルメトリクス',array('controller' => 'graphs', 'action' => 'onedevgroup2'),array('class' =>'list-group-item'));?>
 				</div>
 
 				<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">

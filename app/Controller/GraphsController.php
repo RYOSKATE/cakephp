@@ -4,21 +4,21 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','Metrics','FileMetrics','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
     /*
     CSV入力      Graph
     メトリクス   ModelLayer
     由来比較     OriginChart
     */
     //$groupNameに開発グループ名一覧をセットする
-    public function setGroupName()
+    private function setGroupName()
     {
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
-    public function setModelName()
+    private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
@@ -44,7 +44,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = array('dummy',$modelNameData[1],$modelNameData[1],$modelNameData[1],$modelNameData[1]);
+        $selectModelName = array('dummy',$modelNameData[0],$modelNameData[0],$modelNameData[0],$modelNameData[0]);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if (!empty($this->data)) 
         {    
@@ -52,7 +52,7 @@ class GraphsController extends AppController
             {
                 $selectModelName[$i] = $modelNameData[$this->data['Graph'] ['モデル'.$i]];
             }
-            $selectGroupName    = $groupNameData[$this->data['Graph'] ['開発グループ']];         
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];         
         }
         for($i=1;$i<count($selectModelName);++$i)
         {
@@ -61,14 +61,33 @@ class GraphsController extends AppController
         }
         $this->set('model',$selectModelName);
     }
+    public function onedevgroup2() 
+    {
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
 
+        $selectGroupName = $groupNameData[1];
+        $selectModelName = $modelNameData[0];
+
+        if ($this->request->is('post')) 
+        {    
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+        }
+
+        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName)));
+        $tree = $this->FileMetrics->getMetricsTable($data);
+        
+        $tree=json_encode($tree);
+
+        $this->set('tree',$tree);
+    }
     public function alldevgroup() 
     {
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
+        $selectModelName = $modelNameData[0];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -87,8 +106,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectModelName1 = $modelNameData[0];
+        $selectModelName2 = $modelNameData[0];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -106,18 +125,36 @@ class GraphsController extends AppController
         $this->set('rightModelName',$selectModelName2);
     }
 
-    public function metrics($model = NULL)
+    public function metrics()
     {
-        $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
-        $data = $this->ModelLayer->find('all',$conditions);
-        $this->set('data',$data);
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
 
-        if($model !=NULL)
-        {
-            $conditions = array('conditions' => array('ModelLayer.model' => $model));
-            $data2 = $this->ModelLayer->find('all',$conditions);
-            $this->set('data2',$data2);
+        $selectGroupName = $groupNameData[1];
+        $selectModelName1 = $modelNameData[0];
+        $selectModelName2 = $modelNameData[0];
+
+        if ($this->request->is('post')) 
+        {    
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
         }
+
+        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
+        $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
+echo '<pre>';
+print_r($selectModelName1);
+echo '</pre>';        
+
+        $data1 = $this->Metrics->getMetricsTable($data1);
+        $data2 = $this->Metrics->getMetricsTable($data2);
+// echo '<pre>';
+//     print_r($data1);
+// echo '</pre>';  
+        $this->set('data1',$data1);
+        $this->set('data2',$data2);
+        $this->set('name1',$selectModelName1);
+        $this->set('name2',$selectModelName2);
     }
 
     public function upload()
@@ -135,7 +172,7 @@ class GraphsController extends AppController
                 $selectModelName = $this->data['Graph'] ['新規モデル名'];
                 if($selectModelName=='')
                 {
-                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                     $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                     return;
                 }
             }
@@ -151,21 +188,24 @@ class GraphsController extends AppController
             {
                 move_uploaded_file($up_file, $fileName);
                 //まずCSVを全体をアップロードする
-                $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
                 if($success)
-                {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
-                    //すでに存在する開発グループ名一覧を取得
-                    $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                    $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
+                {
+                    $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
                     if($success)
-                    {   //最後にグループ名を追加する
-                        $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                    {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
+                        //すでに存在する開発グループ名一覧を取得
+                        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+                        $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
                         if($success)
                         {   //最後にグループ名を追加する
-                           if(!in_array($selectModelName,$modelNameData))
-                           {
-                                $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
-                           }
+                            $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                            if($success)
+                            {  //最後にグループ名を追加する
+                               if(!in_array($selectModelName,$modelNameData))
+                               {
+                                    $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
+                               }
+                            }
                         }
                     }
                 }

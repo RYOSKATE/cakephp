@@ -1,12 +1,11 @@
 <?php $this->Html->script('amcharts/serial', array('inline' => false));?>
 <?php $this->Html->script('amcharts/amstock', array('inline' => false));?>
-
 <?php
 //デバッグ用表示
-    // echo 'デバッグ用表示';
-    // echo '<pre>';
-    // print_r($model);
-    // echo '</pre>';
+    echo 'デバッグ用表示';
+    echo '<pre>';
+    //print_r($tree);
+    echo '</pre>';
 ?>
 <script type="text/javascript">
 	//data[0][0]["GroupData"]   ["defact_num"]/[group_name]/ [file_num]/[file_num]/[loc]/[date] ;
@@ -49,7 +48,7 @@
 	function createStockChart() 
 	{
 		var chart = new AmCharts.AmStockChart();
-		chart.pathToImages = "/img/amcharts/";///ファイルパスの設定要確認
+		chart.pathToImages = "http://www.amcharts.com/lib/3/images/";///ファイルパスの設定要確認
 		// DATASETS //////////////////////////////////////////
 		// create data sets first
 		var dataSet = new Array();
@@ -99,28 +98,6 @@
 		stockLegend1.periodValueTextComparing = "[[percents.value.close]]%";
 		stockLegend1.periodValueTextRegular = "[[value.close]]";
 		stockPanel1.stockLegend = stockLegend1;
-
-
-		// second stock panel
-		//棒グラフ株のストックグラフ(描画対象データがないため非表示)
-		/*
-		var stockPanel2 = new AmCharts.StockPanel();
-		stockPanel2.title = "Volume";
-		stockPanel2.percentHeight = 30;
-		var graph2 = new AmCharts.StockGraph();
-		graph2.valueField = "volume";
-		graph2.type = "column";
-		graph2.showBalloon = false;
-		graph2.fillAlphas = 1;
-		stockPanel2.addStockGraph(graph2);
-
-		var stockLegend2 = new AmCharts.StockLegend();
-		stockLegend2.periodValueTextRegular = "[[value.close]]";
-		stockPanel2.stockLegend = stockLegend2;
-
-		
-		chart.panels = [stockPanel1, stockPanel2];
-		*/
 
 		// set panels to the chart
 		chart.panels = [stockPanel1];
@@ -173,8 +150,8 @@
 
 <ol class="breadcrumb">
   <li><?php echo $this->Html->link('Home',array('controller' => 'graphs', 'action' => 'index'));?></li>
-  <li class="active">開発グループ</a></li>
-  <li class="active">各開発グループ</li>
+  <li class="active">各開発グループ</a></li>
+  <li class="active">メトリクス遷移</li>
 </ol>
 
 <div class="page-header">
