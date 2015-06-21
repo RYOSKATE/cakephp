@@ -52,7 +52,7 @@ class GraphsController extends AppController
             {
                 $selectModelName[$i] = $modelNameData[$this->data['Graph'] ['モデル'.$i]];
             }
-            $selectGroupName    = $groupNameData[$this->data['Graph'] ['開発グループ']];         
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];         
         }
         for($i=1;$i<count($selectModelName);++$i)
         {
@@ -63,24 +63,22 @@ class GraphsController extends AppController
     }
     public function onedevgroup2() 
     {
-$groupNameData = $this->setGroupName();
+        $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectModelName = $modelNameData[1];
 
         if ($this->request->is('post')) 
         {    
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
 
-        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName1)));
+        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName)));
         $tree = $this->FileMetrics->getMetricsTable($data);
-        echo '<pre>';
-        //print_r($tree);
-        echo '</pre>';
+        // echo '<pre>';
+        //     print_r($tree);
+        // echo '</pre>';
         $tree=json_encode($tree);
 
         $this->set('tree',$tree);

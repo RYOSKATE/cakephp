@@ -17,82 +17,85 @@ class FileMetrics extends AppModel
 		//         )
 
 		// )
-		// $modelName = $data[0]['Graph']['model'];
-  //   	$newData = array();
-  //   	for ($i = 0; $i < 6; ++$i)
-  //   	{
-  //   		$newData[$i]=array('ModelLayer'=>
-  //   							array(
-		// 							'model'           =>$modelName,
-		// 							'layer'           =>$i,
-		// 							'all_file_num'    =>0,
-		// 							'defect_file_num' =>0,
-		// 							'defect_per_file' =>0,
-		// 							'defect_num'      =>0,
-  //   								 )
-  //   							);
-  //   	}
+		$tree = array("name"=>"root","size"=>1,"children"=> array());
+		for ($i = 0; $i < count($data)/100; ++$i)
+		{
+			$filepath = $data[$i]['Graph']['file_path'];
+			$path = explode('/',$filepath);
+			$path[0] = trim($path[0]);
+			$next = &$tree["children"];
+	        for($j = 0; $j < count($path); ++$j)
+	        {
+				$node = array("name"=>$path[$j],"size"=>1);
+				$is = false;
+				for ($k = 0; $k < count($next); ++$k)
+				{
+					$is = $next[$k]["name"] == $path[$j];
+					if($is)
+					{
+						$next[$k] += array("children"=> array());
+						$next = &$next[$k]["children"];
+						break;
+					}
+				}
 
-  //   	for ($i = 0; $i < count($data); ++$i)
-	 //   	{
-	 //   		$defact = $data[$i]['Graph'][3];
-		// 	$filePath = $data[$i]['Graph']['file_path'];
-		// 	$layer = $this->getLayer($filePath);
-		// 	if($layer < 0 ||5 < $layer)
-		// 	{
-		// 		continue;
-		// 	}
-		// 	++$newData[$layer]['ModelLayer']['all_file_num'];
-		// 	if(0<$defact)
-		// 	{
-		// 		++$newData[$layer]['ModelLayer']['defect_file_num'] ;
-		// 		$newData[$layer]['ModelLayer']['defect_num'] += $defact;
-		// 	}
-		// }
-		// //最後にファイル率を求める
-		// for ($i = 0; $i < count($newData); ++$i)
-		// {
-		// 	$temp = $newData[$i]['ModelLayer'];
-		// 	$newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
-		// }
-		//ファイル率計算時の0除算を防ぐため
-        $tree = array(
-                "name"=>"Sample data",
-                "children"=> array(
-                    array(
-                           "name"=>"Title 1",
-                           "size"=>1,
-                           "children"=>array(
-                             array
-                             (
-                                 "name"=> "Title 1-1", "size"=>1,
-                                 "children"=> array(
-                                    array("name"=> "1-1-1", "size"=> 1),
-                                    array("name"=> "1-1-2", "size"=> 1),
-                                    array("name"=> "1-1-3", "size"=> 1),
-                                    array("name"=> "1-1-4", "size"=> 1)
-                                  )
-                              ),  
-                              array(
-                                 "name"=> "Title 1-2", "size"=>1,
-                                 "children"=> array(
-                                    array("name"=> "1-2-1", "size"=> 1),
-                                    array("name"=> "1-2-2", "size"=> 1),
-                                    array("name"=> "1-2-3", "size"=> 1)
-                                  )
-                              ),  
-                              array(
-                                 "name"=> "Title 1-3", "size"=>1,
-                                 "children"=> array(
-                                    array("name"=> "1-3-1", "size"=> 1)
-                                  )
-                              )
-                            )
-                        ))
-                );
+				if(!$is)
+				{
+					$next[] = $node;
+					if($j+1 < count($path))
+					{
+						$next = &$next[0]["children"];
+					}
+				}
+			}
+		}
+		      //   echo '<pre>';
+        //     print_r($tree);
+        //     //die();
+        // echo '</pre>';
 
+        // $tree = array(
+        //         "name"=>"root",
+        //         "children"=> array(
+        //             array(
+        //                    "name"=>"Title 1",
+        //                    "size"=>1,
+        //                    "children"=>array(
+        //                      array
+        //                      (
+        //                          "name"=> "Title 1-1",
+        //                          "size"=>1,
+        //                          "children"=> array(
+        //                             array("name"=> "1-1-1", "size"=> 1),
+        //                             // array("name"=> "1-1-2", "size"=> 1),
+        //                             // array("name"=> "1-1-3", "size"=> 1),
+        //                             // array("name"=> "1-1-4", "size"=> 1)
+        //                           )
+        //                       ),  
+        //                       // array(
+        //                       //    "name"=> "Title 1-2", 
+        //                       //    "size"=>1,
+        //                       //    "children"=> array(
+        //                       //       array("name"=> "1-2-1", "size"=> 1),
+        //                       //       array("name"=> "1-2-2", "size"=> 1),
+        //                       //       array("name"=> "1-2-3", "size"=> 1)
+        //                       //     )
+        //                       // ),  
+        //                       // array(
+        //                       //    "name"=> "Title 1-3", "size"=>1,
+        //                       //    "children"=> array(
+        //                       //       array("name"=> "1-3-1", "size"=> 1)
+        //                       //     )
+        //                       // )
+        //                     )
+        //                 ))
+        //         );
+        // echo '<pre>';
+        //     print_r($tree);
+        // echo '</pre>';
     	return $tree;
     }
+
 
     function getLayer($filePath)
     {
