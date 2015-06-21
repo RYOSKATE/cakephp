@@ -57,8 +57,8 @@
 <script type="text/javascript">
     var pathJson = JSON.parse('<?php echo $tree; ?>');
 
-	var w = 1280,//820,
-        h = 720,//420,
+	var w = 1280 - 80,
+        h = 800 - 180,
         x = d3.scale.linear().range([0, w]),
         y = d3.scale.linear().range([0, h]),
         color = d3.scale.category20(),
