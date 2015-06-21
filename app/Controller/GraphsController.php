@@ -108,24 +108,16 @@ class GraphsController extends AppController
 
     public function metrics($model = NULL)
     {
-        $groupNameData = $this->setGroupName();
-        $modelNameData = $this->setModelName();
-        $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
-        if ($this->request->is('post')) 
-        {    
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+        $conditions = array('conditions' => array('ModelLayer.model' => 'model1'));
+        $data = $this->ModelLayer->find('all',$conditions);
+        $this->set('data',$data);
+
+        if($model !=NULL)
+        {
+            $conditions = array('conditions' => array('ModelLayer.model' => $model));
+            $data2 = $this->ModelLayer->find('all',$conditions);
+            $this->set('data2',$data2);
         }
-        $conditions = array('conditions' => array('Graph.model' => $selectModelName1));
-        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),$conditions));
-        $this->set('data',$data1);
-       // $conditions = array('conditions' => array('Graph.model' => $selectModelName2));
-        //$data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),$conditions);
-        //$this->set('data2',$data2);
-        $this->set('modelName1',$selectModelName1);
-        $this->set('modelName2',$selectModelName2);
     }
 
     public function upload()
