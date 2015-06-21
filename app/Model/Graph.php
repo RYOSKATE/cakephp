@@ -2,30 +2,6 @@
 class Graph extends AppModel 
 {
 
-
-
-
-    function deletePreMode($modelname)
-    {
-        try
-        {
-
-
-            if (!$this->deleteAll(array('model' => $modelname))) 
-            {
-                throw new Exception();
-            }
-
-            $this->commit();
-        }
-        catch(Exception $e) 
-        {
-            $this->rollback();
-            return false;
-        }
-        return true;
-    }
-
     function uploadFromCSV($fileName,$modelname) 
     {
 
@@ -46,7 +22,7 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-        		  $ret[] = array('model'=>$modelname) +$col;
+        		  $ret[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
                 }
         	}
         echo '<pre>';

@@ -44,7 +44,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = array('dummy',$modelNameData[1],$modelNameData[1],$modelNameData[1],$modelNameData[1]);
+        $selectModelName = array('dummy',$modelNameData[0],$modelNameData[0],$modelNameData[0],$modelNameData[0]);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if (!empty($this->data)) 
         {    
@@ -67,7 +67,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[2];
+        $selectModelName = $modelNameData[0];
 
         if ($this->request->is('post')) 
         {    
@@ -87,7 +87,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
+        $selectModelName = $modelNameData[0];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -106,8 +106,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectModelName1 = $modelNameData[0];
+        $selectModelName2 = $modelNameData[0];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -131,8 +131,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectModelName1 = $modelNameData[0];
+        $selectModelName2 = $modelNameData[0];
 
         if ($this->request->is('post')) 
         {    
@@ -142,9 +142,9 @@ class GraphsController extends AppController
 
         $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
         $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
-// echo '<pre>';
-// //print_r($data1[0]);
-// echo '</pre>';        
+echo '<pre>';
+print_r($selectModelName1);
+echo '</pre>';        
 
         $data1 = $this->Metrics->getMetricsTable($data1);
         $data2 = $this->Metrics->getMetricsTable($data2);
@@ -186,33 +186,23 @@ class GraphsController extends AppController
             $success = is_uploaded_file($up_file);//C:\xampp\tmp\php7F8D.tmp
             if ($success)
             {
-                print_r(0);
                 move_uploaded_file($up_file, $fileName);
                 //まずCSVを全体をアップロードする
-                        
-//             $conditions = array('Graph.model'=>$selectModelName);
-// if ($this->Graph->deleteAll($conditions)) {
-//     $this->Session->setFlash('削除しました');
-// } else {
-//     $this->Session->setFlash('削除に失敗しました');
-// }
-                //$success = $this->Graph->deletePreMode($selectModelName);
                 if($success)
                 {
-                      print_r(1);
                     $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
                     if($success)
-                    {     print_r(2);//次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
+                    {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
                         //すでに存在する開発グループ名一覧を取得
                         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
                         $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
                         if($success)
-                        {    print_r(3); //最後にグループ名を追加する
+                        {   //最後にグループ名を追加する
                             $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
                             if($success)
-                            {    print_r(4); //最後にグループ名を追加する
+                            {  //最後にグループ名を追加する
                                if(!in_array($selectModelName,$modelNameData))
-                               {  print_r(5);
+                               {
                                     $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
                                }
                             }
