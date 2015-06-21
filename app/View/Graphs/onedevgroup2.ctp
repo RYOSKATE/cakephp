@@ -69,7 +69,7 @@
             .round(false)
             .size([w, h])
             .sticky(true)
-            .padding([10, 0, 0, 0])
+            .padding([0, 0, 0, 0])
             .value(function(d) { return d.size; });
 
         var svg = d3.select("#body").append("div")
@@ -100,7 +100,7 @@
               .attr("height", function(d) { return d.dy - 1; })
               .style("fill", function(d) { return color(d.parent.name); });
 
-          cell.append("svg:text")
+          cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
               .attr("dy", ".35em")
