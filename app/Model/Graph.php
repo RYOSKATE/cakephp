@@ -2,6 +2,30 @@
 class Graph extends AppModel 
 {
 
+
+
+
+    function deletePreMode($modelname)
+    {
+        try
+        {
+
+
+            if (!$this->deleteAll(array('model' => $modelname))) 
+            {
+                throw new Exception();
+            }
+
+            $this->commit();
+        }
+        catch(Exception $e) 
+        {
+            $this->rollback();
+            return false;
+        }
+        return true;
+    }
+
     function uploadFromCSV($fileName,$modelname) 
     {
 
@@ -28,6 +52,12 @@ class Graph extends AppModel
         echo '<pre>';
             //print_r($ret[0]);
         echo '</pre>';
+
+            if (!$this->deleteAll(array('model' => $modelname))) 
+            {
+                throw new Exception();
+            }
+
             if (!$this->saveAll($ret)) 
             {
                 throw new Exception();

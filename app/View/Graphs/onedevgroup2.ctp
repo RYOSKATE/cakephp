@@ -37,6 +37,7 @@
 
 
 	<div class="page-header">
+
 	<?php 
 	    echo $this->Form->create('Graph',array('inputDefaults' => 
 	                                        array('div' => 'form-group',),
@@ -45,17 +46,34 @@
 	                            );
 		echo $this->element('selectModel',$groupName); 
 	    echo $this->element('selectGroup',$groupName); 
-	    echo $this->Form->end('セット', array
+	    echo $this->Form->input('セット', array
 	    (
-	    'class' => 'form-control'
+	    	'label'=>false,
+	    	'type'=>'submit',
+	    	'onchange' => 'submit(this.form)',
+	    	'class' => 'form-control'
 	    ));
+	    	    echo $this->Form->input('レイヤー',array
+		(
+			'id'=>'test',
+		    'type'=>'number',
+		    'class' => 'form-control',
+		    'step'=>1,
+		    'min'=>0,
+		    'max'=>15,
+		    'value'=>1,
+		    'list'=>array(1,2,3),
+		 ));
+	     echo $this->Form->end();
+
+
+	?>
+	<?php 
 	?>
 	</div>
 	<div id="body">
 	</div>
 		<div id="footer">
-        d3.layout.treemap
-        <div class="hint">click or option-click to descend or ascend</div>
         <div>
 	        <select id = "select">
 	          <option value="size">Size</option>
@@ -65,9 +83,13 @@
       </div>
 </body>
 <script type="text/javascript">
-    var pathJson = JSON.parse('<?php echo $tree; ?>');
 
-	var w = 930 - 80,
+    function set(layer)
+    {
+    	$("#body").empty();
+    	var pathJson = JSON.parse('<?php echo $tree; ?>');
+
+		var w = 930 - 80,
         h = 800 - 180,
         x = d3.scale.linear().range([0, w]),
         y = d3.scale.linear().range([0, h]),
@@ -92,13 +114,9 @@
           .append("svg:g")
             .attr("transform", "translate(.5,.5)");
 
-        
-        function set(layer)
-        {
           node = root = pathJson;
           
-          var nodes = treemap.nodes(root)
-              .filter(function(d) { return (d.layer==layer); });
+          var nodes = treemap.nodes(root).filter(function(d) { return (d.layer==layer ||(d.layer<layer && !d.children)); });
 
           var cell = svg.selectAll("g")
               .data(nodes)
@@ -127,10 +145,13 @@
           {
             treemap.value(this.value == "size" ? size : count).nodes(root);
             zoom(node);
-
           });
-        }
-        set(3);
+
+          d3.select("#test").on("change", function() 
+          {
+            set(this.value)
+          });
+
         
         function size(d) {
           return d.size;
@@ -163,4 +184,8 @@
           node = d;
           d3.event.stopPropagation();
         }
+    }
+
+    set(1);
+
 </script>

@@ -1,6 +1,8 @@
 <?php
 class FileMetrics extends AppModel 
 {
+	private $layerMax = 0;
+
     function getMetricsTable($data) 
     {
     	//model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
@@ -55,11 +57,6 @@ class FileMetrics extends AppModel
 				}
 			}
 		}
-		// echo '<pre>';
-  //           print_r($tree);
-  //           //die();
-  //       echo '</pre>';
-
         // $tree = array(
         //         "name"=>"root",
         //         "children"=> array(

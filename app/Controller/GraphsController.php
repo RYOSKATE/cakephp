@@ -67,7 +67,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
+        $selectModelName = $modelNameData[2];
 
         if ($this->request->is('post')) 
         {    
@@ -76,9 +76,7 @@ class GraphsController extends AppController
 
         $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName)));
         $tree = $this->FileMetrics->getMetricsTable($data);
-        // echo '<pre>';
-        //     print_r($tree);
-        // echo '</pre>';
+        
         $tree=json_encode($tree);
 
         $this->set('tree',$tree);
@@ -174,7 +172,7 @@ class GraphsController extends AppController
                 $selectModelName = $this->data['Graph'] ['新規モデル名'];
                 if($selectModelName=='')
                 {
-                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                     $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                     return;
                 }
             }
@@ -188,23 +186,36 @@ class GraphsController extends AppController
             $success = is_uploaded_file($up_file);//C:\xampp\tmp\php7F8D.tmp
             if ($success)
             {
+                print_r(0);
                 move_uploaded_file($up_file, $fileName);
                 //まずCSVを全体をアップロードする
-                $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
+                        
+//             $conditions = array('Graph.model'=>$selectModelName);
+// if ($this->Graph->deleteAll($conditions)) {
+//     $this->Session->setFlash('削除しました');
+// } else {
+//     $this->Session->setFlash('削除に失敗しました');
+// }
+                //$success = $this->Graph->deletePreMode($selectModelName);
                 if($success)
-                {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
-                    //すでに存在する開発グループ名一覧を取得
-                    $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                    $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
+                {
+                      print_r(1);
+                    $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
                     if($success)
-                    {   //最後にグループ名を追加する
-                        $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                    {     print_r(2);//次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
+                        //すでに存在する開発グループ名一覧を取得
+                        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+                        $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
                         if($success)
-                        {   //最後にグループ名を追加する
-                           if(!in_array($selectModelName,$modelNameData))
-                           {
-                                $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
-                           }
+                        {    print_r(3); //最後にグループ名を追加する
+                            $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                            if($success)
+                            {    print_r(4); //最後にグループ名を追加する
+                               if(!in_array($selectModelName,$modelNameData))
+                               {  print_r(5);
+                                    $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
+                               }
+                            }
                         }
                     }
                 }
