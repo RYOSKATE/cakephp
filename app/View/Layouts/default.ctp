@@ -61,6 +61,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		          <ul class="nav navbar-nav navbar-right">
 		            <li class="active"><?php echo $this->Html->link('Upload',array('controller' => 'graphs', 'action' => 'upload'));?></li>
 		            <li class="active"><?php echo $this->Html->link('Logout',array('controller' => 'users',  'action' => 'logout'));?></li>
+		            <li class="active"><?php echo $this->Html->link('Delete',array('controller' => 'users',  'action' => 'delete'));?></li>
 		          </ul>
 		        </div><!--/.nav-collapse -->
 			  </div>
