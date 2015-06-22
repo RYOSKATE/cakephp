@@ -25,7 +25,7 @@ class FileMetrics extends AppModel
 
 		// )
 		$tree = array("name"=>"root","size"=>1,"layer"=>0,"children"=> array());
-		$dataSize = count($data)/10;
+		$dataSize = count($data);
 		for ($i = 0; $i < $dataSize; ++$i)
 		{
 			$filepath = $data[$i]['Graph']['file_path'];

@@ -89,8 +89,7 @@
             .size([w, h])
             .sticky(true)
             .padding([0, 0, 0, 0])
-            .value(function(d) { return d.size; });
-
+            .value(function(d) { return document.getElementById("select").options[0].selected ? d.size : 1; });//selectの0番目はsizeなのでそちらが選択されていればsize,そうでなければcountなので1
         var svg = d3.select("#body").append("div")
             .attr("class", "chart")
             .style("width", w + "px")
@@ -102,8 +101,15 @@
             .attr("transform", "translate(.5,.5)");
 
           node = root = pathJson;
-          
-          var nodes = treemap.nodes(root).filter(function(d) { return (d.layer==layer ||(d.layer<layer && !d.children)); });
+          var max=0;
+          var nodes = treemap.nodes(root).filter(function(d) {
+              var isIn = (d.layer==layer ||(d.layer<layer && !d.children));
+              if(isIn && max<d.size)
+              {
+                max = d.size;
+              }
+              return isIn;
+            });
 
           var cell = svg.selectAll("g")
               .data(nodes)
@@ -116,8 +122,7 @@
           cell.append("svg:rect")
               .attr("width", function(d) { return d.dx - 1; })
               .attr("height", function(d) { return d.dy - 1; })
-              .style("fill", function(d) { return color(d.size); });
-
+              .style("fill", function(d) { return getColor(d.size)/*color(d.size)*/; });
           cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
@@ -146,6 +151,35 @@
 
         function count(d) {
           return 1;
+        }
+
+        function getColor(size)
+        {
+          // cb_palette <- c("SS" = "#C869FF","S" = "#6BCDFF","M" = "#71FD5E", "L" = "#FECA61", "LL" = "#FA6565")
+
+          var color = "#FA6565";
+          var step = max/5;
+          if(size == 0)
+          {
+            color="#DDDDDD"
+          }
+          else if(size < step)
+          {
+            color="#C869FF";
+          }
+          else if(size < step*2)
+          {
+            color="#6BCDFF";
+          }
+          else if(size < step*3)
+          {
+            color="#71FD5E";
+          }
+          else if(size < step*4)
+          {
+            color="#FECA61";
+          }
+          return  color;
         }
 
         function zoom(d) {
