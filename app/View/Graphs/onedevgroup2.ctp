@@ -63,8 +63,14 @@
 		    'max'=>15,
 		    'value'=>1,
 		    'list'=>array(1,2,3),
-		 ));
-	     echo $this->Form->end();
+		 ));	
+	?>
+
+	    <select id = "select" class = "form-control">
+	    	<option value="size">Size</option>
+	        <option value="count">Count</option>
+	    </select>
+	  	<?php echo $this->Form->end();
 
 
 	?>
@@ -75,10 +81,7 @@
 	</div>
 		<div id="footer">
         <div>
-	        <select id = "select">
-	          <option value="size">Size</option>
-	          <option value="count">Count</option>
-	        </select>
+
         </div>
       </div>
 </body>

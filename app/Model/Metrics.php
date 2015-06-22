@@ -3,6 +3,7 @@ class Metrics extends AppModel
 {
     function getMetricsTable($data) 
     {
+
     	//model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
 //data[0]=Array
 		// (
@@ -69,8 +70,9 @@ class Metrics extends AppModel
     	{
     		$layer = 0;
     	}
-    	else if($path[0]=='framework'/* || $path[0]=='frameworks'*/)//frameworksを含めていいのか要検討
+    	else if($path[0]=='frameworks'/* || $path[0]=='frameworks'*/)//frameworksを含めていいのか要検討
     	{
+
     		if($path[1]=='ex' || $path[1]=='opt')
     		{
     			$layer = 1;
@@ -106,7 +108,7 @@ class Metrics extends AppModel
 				    case 'wifi':
 				    	$layer = 1;
 				    case 'libs':
-				    	$layer = 2;
+				    	$layer = 3;
 				    default:
 				}
 			}
@@ -117,7 +119,7 @@ class Metrics extends AppModel
     	}
     	else if($path[0]=='dalvik' || $path[0]=='libcore' || $path[0]=='system')
     	{
-    		$layer = 2;
+    		$layer = 3;
     	}
     	else if($path[0]=='hardware' || ($path[0]=='vendor' && $path[1]=='qcom' && $path[2]=='proprietary'))
     	{
@@ -156,14 +158,15 @@ class Metrics extends AppModel
 
 		if($layer == -1)
 		{
+
 			// echo '<pre>';
 			// print_r($filePath);
 			// echo '</pre>';
 			//デバッグ用に今はランダムな値を入れる
-			if(mt_rand(0,1))
-				$layer = 1;
-			else
-				$layer = 3;
+			// if(mt_rand(0,1))
+			// 	$layer = 1;
+			// else
+			// 	$layer = 3;
 		}
     	return $layer;
     }

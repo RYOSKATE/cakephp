@@ -44,7 +44,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = array('dummy',$modelNameData[0],$modelNameData[0],$modelNameData[0],$modelNameData[0]);
+        $selectModelName = array('dummy',$modelNameData[1],$modelNameData[1],$modelNameData[1],$modelNameData[1]);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if (!empty($this->data)) 
         {    
@@ -63,18 +63,25 @@ class GraphsController extends AppController
     }
     public function onedevgroup2() 
     {
-        $groupNameData = $this->setGroupName();
+        $groupNameData = array(0=>"ALL") + $this->setGroupName();
+        $this->set('groupName',$groupNameData);
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[0];
+        $selectModelName = $modelNameData[1];
 
         if ($this->request->is('post')) 
         {    
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+            $selectGrouplName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => array('model' => $selectModelName)));
+        $conditions = array('Graph.model' => $selectModelName);
+        if($selectGrouplName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGrouplName);
+        }
+        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => $conditions));
         $tree = $this->FileMetrics->getMetricsTable($data);
         
         $tree=json_encode($tree);
@@ -87,7 +94,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[0];
+        $selectModelName = $modelNameData[1];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -106,8 +113,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[0];
-        $selectModelName2 = $modelNameData[0];
+        $selectModelName1 = $modelNameData[1];
+        $selectModelName2 = $modelNameData[1];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -131,8 +138,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
-        $selectModelName1 = $modelNameData[0];
-        $selectModelName2 = $modelNameData[0];
+        $selectModelName1 = $modelNameData[1];
+        $selectModelName2 = $modelNameData[1];
 
         if ($this->request->is('post')) 
         {    
@@ -142,10 +149,7 @@ class GraphsController extends AppController
 
         $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
         $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
-echo '<pre>';
-print_r($selectModelName1);
-echo '</pre>';        
-
+    
         $data1 = $this->Metrics->getMetricsTable($data1);
         $data2 = $this->Metrics->getMetricsTable($data2);
 // echo '<pre>';
