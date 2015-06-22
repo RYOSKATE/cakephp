@@ -73,7 +73,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[1];
+        $selectGroupName = $groupNameData[0];//ALLは0に追加されている
         $selectModelName = $modelNameData[1];
 
         if ($this->request->is('post')) 
@@ -83,6 +83,7 @@ class GraphsController extends AppController
         }
 
         $conditions = array('Graph.model' => $selectModelName);
+
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
@@ -168,7 +169,6 @@ class GraphsController extends AppController
         $conditions2 = array('Graph.model' => $selectModelName2);
         if($selectGroupName != 'ALL')
         {
-
             $conditions1 += array('Graph.25' => $selectGroupName);
             $conditions2 += array('Graph.25' => $selectGroupName);
         }
