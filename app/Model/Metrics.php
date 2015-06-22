@@ -51,7 +51,10 @@ class Metrics extends AppModel
 		for ($i = 0; $i < count($newData); ++$i)
 		{
 			$temp = $newData[$i]['ModelLayer'];
-			$newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
+			if($temp['all_file_num']!=0)
+			{
+				$newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
+			}
 		}
 		//ファイル率計算時の0除算を防ぐため
     	return $newData;

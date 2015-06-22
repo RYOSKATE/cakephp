@@ -18,6 +18,13 @@ class GraphsController extends AppController
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
+    private function setGroupNameWithAll()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $groupNameData = array(0=>"ALL") + $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+        $this->set('groupName',$groupNameData);
+        return $groupNameData;
+    }
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
@@ -63,8 +70,7 @@ class GraphsController extends AppController
     }
     public function onedevgroup2() 
     {
-        $groupNameData = array(0=>"ALL") + $this->setGroupName();
-        $this->set('groupName',$groupNameData);
+        $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
@@ -109,7 +115,7 @@ class GraphsController extends AppController
     public function origin()
     {
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        $groupNameData = $this->setGroupName();
+        $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
@@ -121,10 +127,20 @@ class GraphsController extends AppController
 
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => $selectModelName1)));
-        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => array('model' => $selectModelName2)));
+        $conditions1 = array('Graph.model' => $selectModelName1);
+        $conditions2 = array('Graph.model' => $selectModelName2);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions1 += array('Graph.25' => $selectGroupName);
+            $conditions2 += array('Graph.25' => $selectGroupName);
+        }
+
+
+        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => $conditions1));
+        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => $conditions2));
 
         $this->set('model1',$this->OriginChart->getOriginTable($data1));
         $this->set('model2',$this->OriginChart->getOriginTable($data2));
@@ -134,7 +150,7 @@ class GraphsController extends AppController
 
     public function metrics()
     {
-        $groupNameData = $this->setGroupName();
+        $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = $groupNameData[1];
@@ -145,10 +161,17 @@ class GraphsController extends AppController
         {    
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
-
-        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName1)));
-        $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => array('model' => $selectModelName2)));
+        $conditions1 = array('Graph.model' => $selectModelName1);
+        $conditions2 = array('Graph.model' => $selectModelName2);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions1 += array('Graph.25' => $selectGroupName);
+            $conditions2 += array('Graph.25' => $selectGroupName);
+        }
+        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions1));
+        $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions2));
     
         $data1 = $this->Metrics->getMetricsTable($data1);
         $data2 = $this->Metrics->getMetricsTable($data2);
