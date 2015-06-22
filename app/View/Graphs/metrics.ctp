@@ -109,11 +109,9 @@ echo '</pre>';*/
         'options'=>$modelName,
         'class' => 'form-control'
      ));
-    echo $this->element('selectGroup',$groupName); 
-    echo $this->Form->end('セット', array
-    (
-    'class' => 'form-control'
-    ));
+    echo $this->element('selectGroup',$groupName);
+    echo $this->element('setButton');
+    echo $this->Form->end();
 
 ?>
 </div>

@@ -79,13 +79,13 @@ class GraphsController extends AppController
         if ($this->request->is('post')) 
         {    
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
-            $selectGrouplName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
         $conditions = array('Graph.model' => $selectModelName);
-        if($selectGrouplName != 'ALL')
+        if($selectGroupName != 'ALL')
         {
-            $conditions += array('Graph.25' => $selectGrouplName);
+            $conditions += array('Graph.25' => $selectGroupName);
         }
         $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => $conditions));
         $tree = $this->FileMetrics->getMetricsTable($data);
@@ -153,7 +153,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[1];
+        $selectGroupName = $groupNameData[0];
         $selectModelName1 = $modelNameData[1];
         $selectModelName2 = $modelNameData[1];
 
@@ -161,12 +161,14 @@ class GraphsController extends AppController
         {    
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+            $selectGroupName =  $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
+
         $conditions1 = array('Graph.model' => $selectModelName1);
         $conditions2 = array('Graph.model' => $selectModelName2);
         if($selectGroupName != 'ALL')
         {
+
             $conditions1 += array('Graph.25' => $selectGroupName);
             $conditions2 += array('Graph.25' => $selectGroupName);
         }
@@ -175,9 +177,7 @@ class GraphsController extends AppController
     
         $data1 = $this->Metrics->getMetricsTable($data1);
         $data2 = $this->Metrics->getMetricsTable($data2);
-// echo '<pre>';
-//     print_r($data1);
-// echo '</pre>';  
+
         $this->set('data1',$data1);
         $this->set('data2',$data2);
         $this->set('name1',$selectModelName1);

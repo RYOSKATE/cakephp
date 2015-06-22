@@ -48,7 +48,7 @@ class GroupData extends AppModel
                 
             }
 
-            $time = date('Y-m-d', strtotime("-1 day"));
+            $time = date('Y-m-d', time());
             $data = array();
             foreach ($group_array as $key => $value)
             {

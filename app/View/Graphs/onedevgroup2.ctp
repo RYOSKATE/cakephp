@@ -1,9 +1,9 @@
 <?php
 //デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    //print_r($tree);
-    echo '</pre>';
+    // echo 'デバッグ用表示';
+    // echo '<pre>';
+    // //print_r($tree);
+    // echo '</pre>';
 ?>
 
 <head>
@@ -27,16 +27,14 @@
     </style>
 </head>
 <body>
-	<div class="page-header">
+
 		<ol class="breadcrumb">
 		  <li><?php echo $this->Html->link('Home',array('controller' => 'graphs', 'action' => 'index'));?></li>
 		  <li class="active">各開発グループ</a></li>
 		  <li class="active">ファイルメトリクス</li>
 		</ol>
-	</div>
+      <div class="page-header">
 
-
-	<div class="page-header">
 
 	<?php 
 	    echo $this->Form->create('Graph',array('inputDefaults' => 
@@ -45,15 +43,10 @@
 	                                        )
 	                            );
 		echo $this->element('selectModel',$groupName); 
-	    echo $this->element('selectGroup',$groupName); 
-	    echo $this->Form->input('セット', array
-	    (
-	    	'label'=>false,
-	    	'type'=>'submit',
-	    	'onchange' => 'submit(this.form)',
-	    	'class' => 'form-control'
-	    ));
-	    	    echo $this->Form->input('レイヤー',array
+	  echo $this->element('selectGroup',$groupName); 
+	  echo $this->element('setButton'); 
+
+	  echo $this->Form->input('レイヤー',array
 		(
 			'id'=>'test',
 		    'type'=>'number',
@@ -67,23 +60,14 @@
 	?>
 
 	    <select id = "select" class = "form-control">
-	    	<option value="size">Size</option>
+	    	  <option value="size">Size</option>
 	        <option value="count">Count</option>
 	    </select>
-	  	<?php echo $this->Form->end();
-
-
-	?>
 	<?php 
-	?>
-	</div>
-	<div id="body">
-	</div>
-		<div id="footer">
-        <div>
-
-        </div>
-      </div>
+    echo $this->Form->end();
+  ?>
+    </div>
+	<div id="body"></div>
 </body>
 <script type="text/javascript">
 

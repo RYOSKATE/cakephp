@@ -2,10 +2,10 @@
 <?php $this->Html->script('amcharts/amstock', array('inline' => false));?>
 <?php
 //デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    //print_r($tree);
-    echo '</pre>';
+    // echo 'デバッグ用表示';
+    // echo '<pre>';
+    // //print_r($tree);
+    // echo '</pre>';
 ?>
 <script type="text/javascript">
 	//data[0][0]["GroupData"]   ["defact_num"]/[group_name]/ [file_num]/[file_num]/[loc]/[date] ;
@@ -170,11 +170,9 @@
 		    'class' => 'form-control'
 		 ));
     }
-    echo $this->element('selectGroup',$groupName); 
-    echo $this->Form->end('セット', array
-    (
-    'class' => 'form-control'
-    ));
+    echo $this->element('selectGroup',$groupName);
+    echo $this->element('setButton');
+    echo $this->Form->end();
 
 
 ?>
