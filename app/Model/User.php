@@ -35,6 +35,15 @@ class User extends AppModel
 
     );
 
+    public function deleteAccount($username,$password)
+    {
+        $param = array('username' => $username);
+        if ($this->Model->deleteAll($param)) 
+        {
+        // 成功
+        }
+    }
+
     public function beforeSave($options = array()) 
     {
         if (isset($this->data[$this->alias]['password'])) 
