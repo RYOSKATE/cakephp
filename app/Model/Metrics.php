@@ -1,9 +1,9 @@
 <?php
 class Metrics extends AppModel 
 {
+
     function getMetricsTable($data) 
     {
-
     	//model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
 //data[0]=Array
 		// (

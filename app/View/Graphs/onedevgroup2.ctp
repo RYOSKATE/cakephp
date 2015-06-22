@@ -53,9 +53,9 @@
 		    'class' => 'form-control',
 		    'step'=>1,
 		    'min'=>0,
-		    'max'=>15,
+		    'max'=>$depth,
 		    'value'=>1,
-		    'list'=>array(1,2,3),
+		    // 'list'=>array(1,2,3),
 		 ));	
 	?>
 

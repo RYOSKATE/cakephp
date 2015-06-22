@@ -94,6 +94,7 @@ class GraphsController extends AppController
         $tree=json_encode($tree);
 
         $this->set('tree',$tree);
+        $this->set('depth',$this->FileMetrics->getDepth());
     }
     public function alldevgroup() 
     {
