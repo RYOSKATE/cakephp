@@ -18,12 +18,15 @@
 	<?php echo $this->Form->input('username', array(
 		'placeholder' => 'username'
 	)); ?>
+	<?php echo $this->Form->input('group', array(
+		'placeholder' => 'group'
+	)); ?>
 	<?php echo $this->Form->input('password', array(
 		'placeholder' => 'Password'
 	)); ?>
 
 	<?php echo $this->Form->input('role', array(
-            'options' => array('admin' => 'Admin', 'author' => 'Author')
+            'options' => array('admin' => 'Admin', 'author' => 'Author','reader' => 'Reader')
         ));
     ?>
 	<div class="form-group">

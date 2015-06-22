@@ -13,6 +13,12 @@ class User extends AppModel
                 'message' => 'A username is required'
             )
         ),
+        'group' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A group is required'
+            )
+        ),
         'password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -21,11 +27,12 @@ class User extends AppModel
         ),
         'role' => array(
             'valid' => array(
-                'rule' => array('inList', array('admin', 'author')),
+                'rule' => array('inList', array('admin', 'author','reader')),
                 'message' => 'Please enter a valid role',
                 'allowEmpty' => false
             )
-        )
+        ),
+
     );
 
     public function beforeSave($options = array()) 
