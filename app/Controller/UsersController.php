@@ -32,6 +32,10 @@ class UsersController extends AppController
         if ($this->request->is('post')) 
         {
             $this->User->create();
+
+            $idArray = $this->User->find('first', array("fields" => "MAX(User.id) as max_id"));
+            $id = $idArray[0]['max_id'] + 1;
+            $this->request->data['User'] += array('id'=>$id);
             if ($this->User->save($this->request->data)) 
             {
                 $this->Session->setFlash(__('The user has been saved<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
@@ -68,21 +72,48 @@ class UsersController extends AppController
 
     public function delete($id = null) 
     {
-        //$this->request->onlyAllow('post');
+   
+        //adminはだれでも削除できる
         if ($this->request->is('post'))
         {
+            $message = 'Invalid username or password, try again.';
             $username = $this->request['data']['User']['username'];
-            $param = array('username' => $username);
-            if ($this->User->hasAny($param)) 
+            $password = $this->request['data']['User']['password'];
+
+            if($this->Auth->user('role') =='admin')
             {
-                if ($this->User->deleteAll($param,false)) 
+                $param = array('username' => $username);
+                if ($this->User->hasAny($param)) 
                 {
-                    $this->Session->setFlash(__('User deleted'));
-                    $this->redirect(array('action' => 'login'));
+                    $rollArray = $this->User->find('all', array("roll" => "admin"));
+                    $numOfAdmin = count($rollArray);
+                    if($numOfAdmin!=1)//ただし自分が最後のadminの場合は削除させない
+                    {
+                        if ($this->User->deleteAll($param,false)) 
+                        {
+                            $this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                            $this->redirect(array('action' => 'delete'));
+                        }
+                    }
+                    $message = 'You are the last administrator.';
                 }
             }
-            $this->Session->setFlash(__('User was not deleted'));
-            //$this->redirect(array('action' => 'index'));
+            //入力された名前とパスがログインユーザーのものと一致すればidで削除
+            else if($username == $this->Auth->user('username'))
+            {
+
+                $id = $this->Auth->user('id');
+                if ($this->User->exists($id)) 
+                {
+                    if ($this->User->delete($id)) 
+                    {
+                        $this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                        $this->redirect(array('action' => 'login'));
+                    }
+                }
+            }
+
+            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
         }
     }
 
