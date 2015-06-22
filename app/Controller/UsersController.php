@@ -69,26 +69,17 @@ class UsersController extends AppController
     public function delete($id = null) 
     {
         //$this->request->onlyAllow('post');
-        // $this->User->id = $id;
-        // echo '<pre>';
-
-        //     print_r($username);
-        // echo '</pre>';  
         if ($this->request->is('post'))
         {
-            // if (!$this->User->exists()) {
-            //     throw new NotFoundException(__('Invalid user'));
-            // }
             $username = $this->request['data']['User']['username'];
-                    echo '<pre>';
-
-            print_r($username);
-        echo '</pre>';  
             $param = array('username' => $username);
-            if ($this->User->deleteAll($param,false)) 
+            if ($this->User->hasAny($param)) 
             {
-                $this->Session->setFlash(__('User deleted'));
-                $this->redirect(array('action' => 'login'));
+                if ($this->User->deleteAll($param,false)) 
+                {
+                    $this->Session->setFlash(__('User deleted'));
+                    $this->redirect(array('action' => 'login'));
+                }
             }
             $this->Session->setFlash(__('User was not deleted'));
             //$this->redirect(array('action' => 'index'));
