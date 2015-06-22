@@ -17,7 +17,7 @@ class Metrics extends AppModel
 		// )
 		$modelName = $data[0]['Graph']['model'];
     	$newData = array();
-    	for ($i = 0; $i < 6; ++$i)
+    	for ($i = 0; $i < 7; ++$i)
     	{
     		$newData[$i]=array('ModelLayer'=>
     							array(
@@ -36,7 +36,7 @@ class Metrics extends AppModel
 	   		$defact = $data[$i]['Graph'][3];
 			$filePath = $data[$i]['Graph']['file_path'];
 			$layer = $this->getLayer($filePath);
-			if($layer < 0 ||5 < $layer)
+			if($layer < 0 ||6 < $layer)
 			{
 				continue;
 			}
@@ -67,15 +67,14 @@ class Metrics extends AppModel
 
     	$path = explode('/',$filePath);//先頭フォルダ名
     	$path[0] = trim($path[0]);
-    	$layer= -1;
+    	$layer= 6;
 
 		if($path[0]=='packages')
     	{
     		$layer = 0;
     	}
-    	else if($path[0]=='frameworks'/* || $path[0]=='frameworks'*/)//frameworksを含めていいのか要検討
+    	else if($path[0]=='frameworks')//frameworksを含めていいのか要検討
     	{
-
     		if($path[1]=='ex' || $path[1]=='opt')
     		{
     			$layer = 1;
@@ -87,32 +86,11 @@ class Metrics extends AppModel
 	    			case 'packages':
 	    				$layer = 0;
 	    				break;
-				    case 'cmds':
-				    case 'core':
-				    case 'data':
-				    case 'docs':
-				    case 'graphics':
-				    case 'keystore':
-				    case 'location':
-				    case 'media':
-				    case 'native':
-				    case 'nfc-extras':
-				    case 'obex':
-				    case 'opengl':
-				    case 'policy':
-				    case 'sax':
-				    case 'services':
-				    case 'telephony':
-				    case 'test-runner':
-				    case 'tests':
-				    case 'tools':
-				    case 'voip':
-				    case 'vpn':
-				    case 'wifi':
-				    	$layer = 1;
-				    case 'libs':
+	    			case 'libs':
 				    	$layer = 3;
+				    	break;
 				    default:
+				    	$layer = 1;
 				}
 			}
     	}
@@ -131,46 +109,13 @@ class Metrics extends AppModel
     	}
 		else if($path[0]=='kernel')
 		{
-    		switch ($path[1]) 
-    		{
-			    case 'arch':
-			    	if($path[2]!='arm')
-			    		break;
-			    case 'block':
-			    case 'crypto':
-			    case 'drivers':
-			    case 'firmware':
-			    case 'fs':
-			    case 'init':
-			    case 'ipc':
-			    case 'kernel':
-			    case 'lib':
-			    case 'mm':
-			    case 'net':
-			    case 'samples':
-			    case 'scripts':
-			    case 'security':
-			    case 'sound':
-			    case 'tools':
-			    case 'usr':
-			    case 'virt':
-			    	$layer = 5;
-			    default:
-			}
+			$layer = 5;
 		}
 
-		if($layer == -1)
-		{
+		// if($layer == 6)
+		// {
 
-			// echo '<pre>';
-			// print_r($filePath);
-			// echo '</pre>';
-			//デバッグ用に今はランダムな値を入れる
-			// if(mt_rand(0,1))
-			// 	$layer = 1;
-			// else
-			// 	$layer = 3;
-		}
+		// }
     	return $layer;
     }
 }

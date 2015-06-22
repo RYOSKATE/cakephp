@@ -22,12 +22,14 @@ echo '</pre>';*/
 		}
 		var radarChartData = {
 		    labels: [
-		    		 "アプリケーション", 
-				     "アプリケーションフレームワーク",
+		    		 "アプリケーション(APP)", 
+				     "アプリケーションフレームワーク(FW)",	
 				     "ライブラリ(外部OSS)", 
-				     "Android Runtime", 
+				     "Android Runtime(SYSTEM)", 
 				     "HWライブラリ", 
-				     "Kernel/ドライバ/ブートローダー"
+				     "Kernel",
+				     //"Kernel/ドライバ/ブートローダー",
+				     "Others"
 			],
 		    datasets: [
 		        {
@@ -133,12 +135,15 @@ echo '</pre>';*/
 		</tr>
 		</thead>
 		<tbody>
-		<?php $layer = array( 0=>'アプリケーション',
-							  1=>'アプリケーションフレームワーク',
+		<?php $layer = array( 0=>'アプリケーション(APP)',
+							  1=>'アプリケーションフレームワーク(FW)',
 							  2=>'ライブラリ(外部OSS)',
-							  3=>'Android Runtinme', 
+							  3=>'Android Runtinme(SYSTEM)', 
 							  4=>'HWライブラリ',
-							  5=>'Kernel/ドライバ/ブードローダー');
+							  5=>'Kernel',
+							  //5=>'Kernel/ドライバ/ブードローダー',
+							  6=>'Others',
+							 );
 		?>
 		<?php foreach($data1 as $key => $value)
 		{
