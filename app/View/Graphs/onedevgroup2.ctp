@@ -48,7 +48,7 @@
 
 	  echo $this->Form->input('レイヤー',array
 		(
-			'id'=>'test',
+			'id'=>'layer',
 		    'type'=>'number',
 		    'class' => 'form-control',
 		    'step'=>1,
@@ -80,9 +80,7 @@
         h = 800 - 180,
         x = d3.scale.linear().range([0, w]),
         y = d3.scale.linear().range([0, h]),
-        color = d3.scale.category20(),
-        root,
-        node;
+        root,node;
 
         var treemap = d3.layout.treemap()
             .round(false)
@@ -106,7 +104,7 @@
               var isIn = (d.layer==layer ||(d.layer<layer && !d.children));
               if(isIn && max<d.size)
               {
-                max = d.size;
+                max = d.size;//色分け用にその表示レイヤーでの最大欠陥数を計算する
               }
               return isIn;
             });
@@ -117,12 +115,25 @@
               .attr("class", "cell")
               .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
               //.on("click", function(d) { return zoom(d); });
-              .on("click", function(d) { return zoom(node == d.parent ? root : d.parent); });
+              .on("click", function(d) { 
+                if(node == d.parent)//残対表示中ならば
+                {
+                  //そのファイル内で拡大
+                  //zoom(d);
+                  return zoom(d);
+                }
+                else
+                {
+                  //ここをズーム維持でレイヤーを深くするようにしたい
+                  //つまりdがparentになるようなノードだけにフィルタする
+                  return zoom(d.parent);//全体に戻る
+                }
+              });
 
           cell.append("svg:rect")
               .attr("width", function(d) { return d.dx - 1; })
               .attr("height", function(d) { return d.dy - 1; })
-              .style("fill", function(d) { return getColor(d.size)/*color(d.size)*/; });
+              .style("fill", function(d) { return getColor(d.size); });
           cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
@@ -131,15 +142,18 @@
               .text(function(d) { return d.name+"("+d.size+")"; })
               .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
+          //ツリーマップ外のクリックで全体表示
           d3.select(window).on("click", function() { zoom(root); });
 
+          //セレクトボックスの切り替え
           d3.select("#select").on("change", function() 
           {
             treemap.value(this.value == "size" ? size : count).nodes(root);
             zoom(node);
           });
 
-          d3.select("#test").on("change", function() 
+          //レイヤースピンボックス
+          d3.select("#layer").on("change", function() 
           {
             set(this.value)
           });
@@ -189,7 +203,7 @@
           y.domain([d.y, d.y + d.dy]);
 
           var t = svg.selectAll("g.cell").transition()
-              .duration(d3.event.altKey ? 7500 : 750)
+              .duration(d3.event.altKey ? 7500 : 750)//ズーム速度
               .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
           t.select("rect")
