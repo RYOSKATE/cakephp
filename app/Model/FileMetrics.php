@@ -35,16 +35,16 @@ class FileMetrics extends AppModel
 			$children = &$tree["children"];
 			$defact= $data[$i]['Graph'][3];
 			$pathDepth=count($path);
-			if($this->depth<$pathDepth)
+			if($this->depth < $pathDepth)
 			{
-				$this->depth = $pathDepth;
+				$this->depth = $pathDepth;//ビューのレイヤー切り替えの最大値用に最深度を記録しておく
 			}
-	        for($j = 0; $j < $pathDepth; ++$j)
+	        for($j = 0; $j < $pathDepth-1; ++$j)
 	        {
 				$isTheDir = false;
 				for ($k = 0; $k < count($children); ++$k)
 				{
-					$isTheDir = $children[$k]["name"] == $path[$j];
+					$isTheDir = ($children[$k]["name"] == $path[$j]);
 					if($isTheDir)//そのディレクトリが存在した
 					{
 						$parent["size"] += $defact;
@@ -59,14 +59,16 @@ class FileMetrics extends AppModel
 				{
 					$node = array("name"=>$path[$j],"size"=>$defact,"layer"=> ($j+1));
 					$children[] = $node;
-					if($j+1 < $pathDepth)
-					{
-						$children = &$children[count($children) - 1]["children"];
-					}
-
+					$children = &$children[count($children) - 1]["children"];
 				}
 			}
+			$parent["size"] += $defact;
+			$children[] = array("name"=>$path[$pathDepth-1],"size"=>$defact,"layer"=> ($pathDepth));
 		}
+echo '<pre>';
+print_r($tree);
+echo '</pre>';
+
     	return $tree;
     }
 }

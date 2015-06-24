@@ -45,7 +45,12 @@
 		echo $this->element('selectModel',$groupName); 
 	  echo $this->element('selectGroup',$groupName); 
 	  echo $this->element('setButton'); 
-
+    echo $this->Form->end();
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                          array('div' => 'form-group',),
+                                          'class' => 'well form-inline',
+                                          )
+                              );
 	  echo $this->Form->input('レイヤー',array
 		(
 			'id'=>'layer',
