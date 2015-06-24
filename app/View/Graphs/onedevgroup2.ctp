@@ -71,7 +71,7 @@
 </body>
 <script type="text/javascript">
 
-    function set(layer)
+    function set(layer,zoomNode)
     {
     	$("#body").empty();
     	var pathJson = JSON.parse('<?php echo $tree; ?>');
@@ -114,9 +114,8 @@
               .enter().append("svg:g")
               .attr("class", "cell")
               .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-              //.on("click", function(d) { return zoom(d); });
               .on("click", function(d) { 
-                if(node == d.parent)//残対表示中ならば
+                if(node == d.parent)//全体表示中ならば
                 {
                   //そのファイル内で拡大
                   //zoom(d);
@@ -143,7 +142,7 @@
               .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
           //ツリーマップ外のクリックで全体表示
-          d3.select(window).on("click", function() { zoom(root); });
+          //d3.select(window).on("click", function() { zoom(root); });
 
           //セレクトボックスの切り替え
           d3.select("#select").on("change", function() 
@@ -155,17 +154,13 @@
           //レイヤースピンボックス
           d3.select("#layer").on("change", function() 
           {
-            set(this.value)
+            set(this.value,node);
           });
 
         
-        function size(d) {
-          return d.size;
-        }
+        function size(d) {return d.size;}
 
-        function count(d) {
-          return 1;
-        }
+        function count(d) {return 1;}
 
         function getColor(size)
         {
@@ -196,8 +191,9 @@
           return  color;
         }
 
-        function zoom(d) {
-          //alert(d.name);
+        function zoom(d)
+        {
+          //alert('zoomBegin  '+d.name);  
           var kx = w / d.dx, ky = h / d.dy;
           x.domain([d.x, d.x + d.dx]);
           y.domain([d.y, d.y + d.dy]);
@@ -213,12 +209,19 @@
           t.select("text")
               .attr("x", function(d) { return kx * d.dx / 2; })
               .attr("y", function(d) { return ky * d.dy / 2; })
-              .style("opacity", function(d) { return kx * d.dx > d.w ? 1 : 0; });
-              //.style("font-size", function(d) { return kx * d.dx > d.w ? "20px" : "12px";});
+              .style("opacity", function(d) { return kx * d.dx > d.w ? 1 : 0; })
+              .style("font-size", function(d) { return kx * d.dx > d.w ? "20px" : "12px";});
 
           node = d;
           d3.event.stopPropagation();
+          //alert('zoomBegin:  '+node);  
         }
+
+        if(zoomNode)
+        {
+          zoom(zoomNode);
+        }
+        
     }
 
     set(1);
