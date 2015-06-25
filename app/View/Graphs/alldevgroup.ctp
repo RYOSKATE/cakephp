@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
 
+    //最小二乗法による傾きと切片を求める
     function calc(data,maxFile)
     {
         var N = data.length;

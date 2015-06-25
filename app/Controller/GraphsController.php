@@ -4,10 +4,10 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','Metrics','FileMetrics','GroupData','ModelName','GroupName','ModelLayer','OriginChart');//GraphとModelLayerという複数のモデルを利用する宣言
+    public $uses = array('Graph','GroupData','ModelName','GroupName');
     /*
     CSV入力      Graph
-    メトリクス   ModelLayer
+    メトリクス   
     由来比較     OriginChart
     */
     //$groupNameに開発グループ名一覧をセットする
@@ -82,19 +82,10 @@ class GraphsController extends AppController
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $conditions = array('Graph.model' => $selectModelName);
-
-        if($selectGroupName != 'ALL')
-        {
-            $conditions += array('Graph.25' => $selectGroupName);
-        }
-        $data = $this->Graph->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => $conditions));
-        $tree = $this->FileMetrics->getMetricsTable($data);
-        
-        $tree=json_encode($tree);
+        $tree = $this->Graph->getFileMetricsTable($selectModelName,$selectGroupName);
 
         $this->set('tree',$tree);
-        $this->set('depth',$this->FileMetrics->getDepth());
+        $this->set('depth',$this->Graph->getDepth());
     }
     public function alldevgroup() 
     {
@@ -120,7 +111,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[1];
+        $selectGroupName = $groupNameData[0];//ALLは0に追加されている
         $selectModelName1 = $modelNameData[1];
         $selectModelName2 = $modelNameData[1];
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
@@ -132,20 +123,8 @@ class GraphsController extends AppController
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $conditions1 = array('Graph.model' => $selectModelName1);
-        $conditions2 = array('Graph.model' => $selectModelName2);
-        if($selectGroupName != 'ALL')
-        {
-            $conditions1 += array('Graph.25' => $selectGroupName);
-            $conditions2 += array('Graph.25' => $selectGroupName);
-        }
-
-
-        $data1 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => $conditions1));
-        $data2 = $this->Graph->find('all',array('fields' => array('1','3'),'conditions' => $conditions2));
-
-        $this->set('model1',$this->OriginChart->getOriginTable($data1));
-        $this->set('model2',$this->OriginChart->getOriginTable($data2));
+        $this->set('model1',$this->Graph->getOriginTable($selectModelName1,$selectGroupName));
+        $this->set('model2',$this->Graph->getOriginTable($selectModelName2,$selectGroupName));
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
     }
@@ -166,18 +145,8 @@ class GraphsController extends AppController
             $selectGroupName =  $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $conditions1 = array('Graph.model' => $selectModelName1);
-        $conditions2 = array('Graph.model' => $selectModelName2);
-        if($selectGroupName != 'ALL')
-        {
-            $conditions1 += array('Graph.25' => $selectGroupName);
-            $conditions2 += array('Graph.25' => $selectGroupName);
-        }
-        $data1 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions1));
-        $data2 = $this->Graph->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions2));
-    
-        $data1 = $this->Metrics->getMetricsTable($data1);
-        $data2 = $this->Metrics->getMetricsTable($data2);
+        $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);
+        $data2 = $this->Graph->getCompareMetricsTable($selectModelName2,$selectGroupName);
 
         $this->set('data1',$data1);
         $this->set('data2',$data2);

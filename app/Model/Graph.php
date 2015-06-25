@@ -2,6 +2,7 @@
 class Graph extends AppModel 
 {
 
+    ///////csvのアップロード用///////
     function uploadFromCSV($fileName,$modelname) 
     {
 
@@ -51,5 +52,269 @@ class Graph extends AppModel
         echo '</pre>';
         return true;
     }
+    ///////csvのアップロード用///////
 
+    ///////ファイルメトリクス用///////
+    private $depth = 0;
+
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+    function getFileMetricsTable($selectModelName,$selectGroupName) 
+    {
+
+        $conditions = array('Graph.model' => $selectModelName);
+
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        $data = $this->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => $conditions));
+        
+        $this->depth=0;
+        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
+//data[0]=Array
+        // (
+        //     [Graph] => Array
+        //         (
+        //             [model] => testA
+        //             [file_path] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [3] => 1//欠陥数
+        //             [8] => 呼び出す他クラスの関数種類数
+        //             [9] => メソッドの凝集度の欠如(LCOM)
+        //             [10] =>Public メソッド数
+        //             [11] =>Public 属性数
+        //             [18] => 呼び出す他ファイルの関数の種類数
+        //         )
+
+        // )
+        $tree = array("name"=>"root","size"=>1,"layer"=>0,"children"=> array());
+        $dataSize = count($data);
+        for ($i = 0; $i < $dataSize; ++$i)
+        {
+            $filepath = $data[$i]['Graph']['file_path'];
+            $path = explode('/',$filepath);
+            $path[0] = trim($path[0]);
+            $parent = &$tree;
+            $children = &$tree["children"];
+            $defact= $data[$i]['Graph'][3];
+            $pathDepth=count($path);
+            if($this->depth < $pathDepth)
+            {
+                $this->depth = $pathDepth;//ビューのレイヤー切り替えの最大値用に最深度を記録しておく
+            }
+            for($j = 0; $j < $pathDepth-1; ++$j)
+            {
+                $isTheDir = false;
+                for ($k = 0; $k < count($children); ++$k)
+                {
+                    $isTheDir = ($children[$k]["name"] == $path[$j]);
+                    if($isTheDir)//そのディレクトリが存在した
+                    {
+                        $parent["size"] += $defact;
+                        $parent = &$children[$k];
+                        $children[$k] += array("children"=> array());
+                        $children = &$children[$k]["children"];
+                        break;
+                    }
+                }
+
+                if(!$isTheDir)//そのディレクトリが初めて登場した
+                {
+                    $node = array("name"=>$path[$j],"size"=>$defact,"layer"=> ($j+1));
+                    $children[] = $node;
+                    $children = &$children[count($children) - 1]["children"];
+                }
+            }
+            $parent["size"] += $defact;
+            $children[] = array("name"=>$path[$pathDepth-1],"size"=>$defact,"layer"=> ($pathDepth));
+        }
+// echo '<pre>';
+// print_r($tree);
+// echo '</pre>';
+        $tree=json_encode($tree);
+        return $tree;
+    }
+    ///////ファイルメトリクス用///////
+
+
+    ///////メトリクス比較用///////
+    function getCompareMetricsTable($selectModelName,$selectGroupName) 
+    {
+        $conditions = array('Graph.model' => $selectModelName);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        $data = $this->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions));
+        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
+//data[0]=Array
+        // (
+        //     [Graph] => Array
+        //         (
+        //             [model] => testA
+        //             [file_path] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [3] => 1
+        //         )
+
+        // )
+        $modelName = $data[0]['Graph']['model'];
+        $newData = array();
+        for ($i = 0; $i < 7; ++$i)
+        {
+            $newData[$i]=array('ModelLayer'=>
+                                array(
+                                    'model'           =>$modelName,
+                                    'layer'           =>$i,
+                                    'all_file_num'    =>0,
+                                    'defect_file_num' =>0,
+                                    'defect_per_file' =>0,
+                                    'defect_num'      =>0,
+                                     )
+                                );
+        }
+
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $defact = $data[$i]['Graph'][3];
+            $filePath = $data[$i]['Graph']['file_path'];
+            $layer = $this->getLayer($filePath);
+            if($layer < 0 ||6 < $layer)
+            {
+                continue;
+            }
+            ++$newData[$layer]['ModelLayer']['all_file_num'];
+            if(0<$defact)
+            {
+                ++$newData[$layer]['ModelLayer']['defect_file_num'] ;
+                $newData[$layer]['ModelLayer']['defect_num'] += $defact;
+            }
+        }
+        //最後にファイル率を求める
+        for ($i = 0; $i < count($newData); ++$i)
+        {
+            $temp = $newData[$i]['ModelLayer'];
+            if($temp['all_file_num']!=0)
+            {
+                $newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
+            }
+        }
+        //ファイル率計算時の0除算を防ぐため
+        return $newData;
+    }
+
+    function getLayer($filePath)
+    {
+        //frameworksを含めていいのか要検討
+        //vendor/fujitsu/やbootable/bootloaderなども
+
+        $path = explode('/',$filePath);//先頭フォルダ名
+        $path[0] = trim($path[0]);
+        $layer= 6;
+
+        if($path[0]=='packages')
+        {
+            $layer = 0;
+        }
+        else if($path[0]=='frameworks')//frameworksを含めていいのか要検討
+        {
+            if($path[1]=='ex' || $path[1]=='opt')
+            {
+                $layer = 1;
+            }
+            else if($path[1]=='base')
+            {
+                switch ($path[2]) 
+                {
+                    case 'packages':
+                        $layer = 0;
+                        break;
+                    case 'libs':
+                        $layer = 3;
+                        break;
+                    default:
+                        $layer = 1;
+                }
+            }
+        }
+        else if($path[0]=='external')
+        {
+            $layer = 2;
+        }
+        else if($path[0]=='dalvik' || $path[0]=='libcore' || $path[0]=='system')
+        {
+            $layer = 3;
+        }
+        else if($path[0]=='hardware' || ($path[0]=='vendor' && $path[1]=='qcom' && $path[2]=='proprietary'))
+        {
+            //vendorのときはチップベンダー、製品リリースならば
+            $layer = 4;
+        }
+        else if($path[0]=='kernel')
+        {
+            $layer = 5;
+        }
+
+        // if($layer == 6)
+        // {
+
+        // }
+        return $layer;
+    }
+    ///////メトリクス比較用///////
+
+
+    ///////由来比較用///////
+    //model[由来0～7][欠陥数] = その欠陥数のファイル数
+    function getOriginTable($selectModelName,$selectGroupName) 
+    {
+        $conditions = array('Graph.model' => $selectModelName);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        $data = $this->find('all',array('fields' => array('1','3'),'conditions' => $conditions));
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $data[$i] = $data[$i]['Graph'];
+        }
+        //print_r($data);
+
+        //全ての由来で最大の欠陥数を求める。
+        $maxDefact = array(0,0,0,0,0,0,0,0);
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $origin = $data[$i]['1'];
+            $defact = $data[$i]['3'];
+            $maxDefact[$origin] = max($maxDefact[$origin],$defact);
+        }
+        
+        //それぞれの由来の欠陥数のテーブルを用意する
+        $model = array(array(),array(),array(),array(),array(),array(),array(),array());
+        for ($i = 0; $i < count($model); ++$i)
+        {
+            $table = array();
+            $model[$i] = array_pad($table,$maxDefact[$i]+1,0);
+        }
+
+
+        //欠陥数のテーブルを更新していく
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $origin = $data[$i]['1'];
+            $defact = $data[$i]['3'];
+
+            ++$model[$origin][$defact];
+        }
+       //       echo '<pre>';
+    // print_r($model);
+    // //print_r($model2);
+    //             // die();
+    // echo '</pre>';
+
+        //print_r($model);
+        return $model;
+    }
+    ///////由来比較用///////
 }
