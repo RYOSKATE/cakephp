@@ -1,5 +1,4 @@
 <?php $this->Html->script('amcharts/xy', array('inline' => false));?>
-
 <script type="text/javascript">
 
     //最小二乗法による傾きと切片を求める
@@ -70,7 +69,7 @@
         defactPerFile.push({"group":name ,"v": y/x} );
         defactPerLoc.push({"group":name ,"v": (1000*y/kloc).toFixed(3)} );
     }
-    data.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
+    totalDefact.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
     defactPerFile.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
     defactPerLoc.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
 
@@ -119,7 +118,7 @@
 
     var tableText=[["順位","合計欠陥数","ファイルあたりの欠陥数","欠陥密度(LOC)"]];
     // 表に表示するテキストデータをまとめる
-    for(i=0;i<10;++i)
+    for(i=0;i<getData.length;++i)
     {
         var l = totalDefact[i]['group'] +":"+totalDefact[i]['v'];
         var m = defactPerFile[i]['group'] +":"+defactPerFile[i]['v'];
@@ -141,13 +140,31 @@
                                         'class' => 'well form-inline')
                                         );
     echo $this->element('selectModel',$modelName);
-    echo $this->element('selectGroup',$groupName); 
+    //echo $this->element('selectGroup',$groupName); 
     echo $this->element('setButton'); 
     echo $this->Form->end();
-?>
+    ?>
 </div>
 
 <div id="chartdiv" style="height:500px;"></div>
+
+<div class="col-md-3 col-sm-3 pull-right">
+<?php 
+    echo $this->Form->input('順位表示数',array
+    (
+        'id'=>'dispNum',
+        'type'=>'number',
+        'class' => 'form-control',
+        'onchange' => 'set(this.value)',
+        'step'=>1,
+        'min'=>0,
+        'max'=>count($data),
+        'value'=>10,
+        // 'list'=>array(1,2,3),
+     ));
+?>
+</div>
+
 
 <div class="row">
     <div class="col-md-12 col-sm-12" >
@@ -160,17 +177,25 @@
             <th>欠陥密度(LOC)</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id = "rankTable">
 <script>
-    for(i=1;i<11;++i)
+    function set() 
     {
-        document.write("<tr>");
-        for(j=0;j<4;++j)
+        $("#rankTable").empty();
+        var num = Number(document.getElementById("dispNum").value);
+        for(i=1;i<num+1;++i)
         {
-            document.write("<td>"+tableText[i][j]+"</td>");
+            document.all.rankTable.innerHTML = document.all.rankTable.innerHTML
+                                           + '<tr>'
+                                           + '<td>'+ tableText[i][0] +'</td>'
+                                           + '<td>'+ tableText[i][1] +'</td>'
+                                           + '<td>'+ tableText[i][2] +'</td>'
+                                           + '<td>'+ tableText[i][3] +'</td>'
+                                           + '</tr>';
         }
-        document.write("</tr>");
+ 
     }
+    set(10);
 </script>
         </tbody>
     </table>

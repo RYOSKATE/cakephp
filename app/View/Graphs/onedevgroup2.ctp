@@ -37,7 +37,7 @@
 
 
 	<?php 
-	    echo $this->Form->create('Graph',array('inputDefaults' => 
+	  echo $this->Form->create('Graph',array('inputDefaults' => 
 	                                        array('div' => 'form-group',),
 	                                        'class' => 'well form-inline',
 	                                        )
