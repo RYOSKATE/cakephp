@@ -68,11 +68,20 @@
 	    	  <option value="size">Size</option>
 	        <option value="count">Count</option>
 	    </select>
+      <input id = "zoomreset" class = 'form-control' type="button" value="全体を表示">
 	<?php 
     echo $this->Form->end();
   ?>
     </div>
 	<div id="body"></div>
+  <div id="footer">
+    <div>
+    ○操作方法<br>
+    ・レイヤースピンボックスでファイル階層を切り替え<br>
+    ・size:欠陥の数  count:ディレクトリ以下のファイル数<br>
+    ・ディレクトリブロックをクリックでズーム(alt:低速ズーム)<br>
+    </div>
+  </div>
 </body>
 <script type="text/javascript">
 
@@ -149,17 +158,25 @@
           //ツリーマップ外のクリックで全体表示
           //d3.select(window).on("click", function() { zoom(root); });
 
-          //セレクトボックスの切り替え
+          //size/countセレクトボックスの切り替え
           d3.select("#select").on("change", function() 
           {
             treemap.value(this.value == "size" ? size : count).nodes(root);
-            zoom(node);
+            var n = node;
+            zoom(root);
+            zoom(n);
           });
 
           //レイヤースピンボックス
           d3.select("#layer").on("change", function() 
           {
             set(this.value,node);
+          });
+
+          //全体を表示ボタン
+          d3.select("#zoomreset").on("click", function() 
+          {
+            zoom(root);
           });
 
         
@@ -169,8 +186,6 @@
 
         function getColor(size)
         {
-          // cb_palette <- c("SS" = "#C869FF","S" = "#6BCDFF","M" = "#71FD5E", "L" = "#FECA61", "LL" = "#FA6565")
-
           var color = "#FA6565";
           var step = max/5;
           if(size == 0)

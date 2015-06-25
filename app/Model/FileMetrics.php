@@ -65,9 +65,9 @@ class FileMetrics extends AppModel
 			$parent["size"] += $defact;
 			$children[] = array("name"=>$path[$pathDepth-1],"size"=>$defact,"layer"=> ($pathDepth));
 		}
-echo '<pre>';
-print_r($tree);
-echo '</pre>';
+// echo '<pre>';
+// print_r($tree);
+// echo '</pre>';
 
     	return $tree;
     }
