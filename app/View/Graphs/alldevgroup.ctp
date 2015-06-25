@@ -114,6 +114,18 @@
     "chartScrollbar": {},
     "chartCursor": {},
     });
+
+
+
+    var tableText=[["順位","合計欠陥数","ファイルあたりの欠陥数","欠陥密度(LOC)"]];
+    // 表に表示するテキストデータをまとめる
+    for(i=0;i<10;++i)
+    {
+        var l = totalDefact[i]['group'] +":"+totalDefact[i]['v'];
+        var m = defactPerFile[i]['group'] +":"+defactPerFile[i]['v'];
+        var r = defactPerLoc[i]['group'] +":"+defactPerLoc[i]['v'];
+        tableText.push([i+1,l,m,r]);
+    }
 </script>
 
 <ol class="breadcrumb">
@@ -137,48 +149,30 @@
 
 <div id="chartdiv" style="height:500px;"></div>
 
-<div id ="table"></div>
-<script type="text/javascript">
-    // 表をつくる関数
-    function makeTable(totalDefact,defactPerFile,defactPerLoc,divname)
+<div class="row">
+    <div class="col-md-12 col-sm-12" >
+    <table class="table table-hover table-condensed" id ="table">
+        <thead>
+        <tr>
+            <th>順位</th>
+            <th>合計欠陥数</th>
+            <th>ファイルあたりの欠陥数</th>
+            <th>欠陥密度(LOC)</th>
+        </tr>
+        </thead>
+        <tbody>
+<script>
+    for(i=1;i<11;++i)
     {
-        var tableText=[["順位","合計欠陥数","ファイルあたりの欠陥数","欠陥密度(LOC)"]];
-        // 表に表示するテキストデータをまとめる
-        for(i=0;i<10;i++)
+        document.write("<tr>");
+        for(j=0;j<4;++j)
         {
-            var l = totalDefact[i]['group'] +":"+totalDefact[i]['v'];
-            var m = defactPerFile[i]['group'] +":"+defactPerFile[i]['v'];
-            var r = defactPerLoc[i]['group'] +":"+defactPerLoc[i]['v'];
-            tableText.push([i+1,l,m,r]);
+            document.write("<td>"+tableText[i][j]+"</td>");
         }
-
-        // 表の作成開始
-        var rows=[];
-        var colorCode=["#B0C4DE","#FFDAB9"];
-        var table = document.createElement("table");
-        for(i=0;i<tableText.length;i++)
-        {
-            // 行の追加
-            rows.push(table.insertRow(-1));
-            for(j=0;j<4;j++)
-            {
-                // 追加した行にセルを追加してテキストを書き込む
-                cell=rows[i].insertCell(-1);
-                cell.appendChild(document.createTextNode(tableText[i][j]));
-                // 背景色の設定
-                if(i==0)
-                {
-                    cell.style.backgroundColor=colorCode[0];
-                }else if(i>tableText.length-3)
-                {
-                    cell.style.backgroundColor=colorCode[1];
-                }
-            }
-        }
-        // 指定したdiv要素に表を加える
-        document.getElementById(divname).appendChild(table);
+        document.write("</tr>");
     }
-
-    // 関数呼び出し
-    makeTable(totalDefact,defactPerFile,defactPerLoc,"table");
 </script>
+        </tbody>
+    </table>
+    </div>
+</div>

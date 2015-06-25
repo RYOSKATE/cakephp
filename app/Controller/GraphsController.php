@@ -44,7 +44,24 @@ class GraphsController extends AppController
         }
 
     }*/
+    public function alldevgroup() 
+    {
+        $groupNameData = $this->setGroupName();
+        $modelNameData = $this->setModelName();
 
+        $selectGroupName = $groupNameData[1];
+        $selectModelName = $modelNameData[1];
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        if ($this->request->is('post')) 
+        {    
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+        }
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
+        $data = $this->GroupData->find('all',$conditions);
+
+        $this->set('data',$data);
+    }
+    
     public function onedevgroup() 
     {
         $groupNameData = $this->setGroupName();
@@ -86,23 +103,6 @@ class GraphsController extends AppController
 
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
-    }
-    public function alldevgroup() 
-    {
-        $groupNameData = $this->setGroupName();
-        $modelNameData = $this->setModelName();
-
-        $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
-        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        if ($this->request->is('post')) 
-        {    
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
-        }
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
-        $data = $this->GroupData->find('all',$conditions);
-
-        $this->set('data',$data);
     }
 
     public function origin()

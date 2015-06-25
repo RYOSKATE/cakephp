@@ -119,10 +119,12 @@ echo '</pre>';*/
 </div>
 
 <div class="row">
-    <div class="col-md-8 col-sm-8">
-        <canvas id="canvas" height="200" width="450"></canvas>
+    <div class="col-md-12 col-sm-12">
+        <!-- <canvas id="canvas" height="200" width="450"></canvas> -->
+        <canvas id="canvas"></canvas>
     </div>
-    <div class="col-md-9 col-sm-9" >
+
+    <div class="col-md-12 col-sm-12" >
 	<h4><?php echo $name1;?></h4>
 	<table class="table table-hover table-condensed" id ="table">
 		<thead>
