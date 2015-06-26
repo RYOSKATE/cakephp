@@ -45,9 +45,17 @@ class GraphsController extends AppController
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $selectGroupName*/));
-        $data = $this->GroupData->find('all',$conditions);
 
+        $time = date('Y-m-d',time());
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
+        $data = $this->GroupData->find('all',$conditions);
+        if($data)
+        {
+
+        }
+        else
+        {   
+        }
         $this->set('data',$data);
     }
     
@@ -181,7 +189,7 @@ class GraphsController extends AppController
                     {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
                         //すでに存在する開発グループ名一覧を取得
                         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                        $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName);
+                        $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName,$this->data['Graph']['date']);
                         if($success)
                         {   //最後にグループ名を追加する
                             $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);

@@ -66,6 +66,7 @@ class AppController extends Controller
     $this->Auth->loginAction    = array('controller' => 'users' , 'action' => 'login');
     $this->Auth->logoutRedirect = array('controller' => 'users' , 'action' => 'login');
     $this->Auth->loginRedirect  = array('controller' => 'graphs', 'action' => 'index');
+    $this->set('userData', $this->Auth->user());
   }
 
    public $uses = array('GroupName');

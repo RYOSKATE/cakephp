@@ -1,3 +1,4 @@
+<?php if($userData!='reader'){?>
 <div class="row">
 
 <ol class="breadcrumb">
@@ -38,7 +39,16 @@
             //'class' => 'btn btn-lg btn-primary',
             )
         );//モデル名コンボボックス
-        echo $this->Form->input('新規モデル名', array('placeholder' => 'new Model Name')); 
+        echo $this->Form->input('新規モデル名', array('placeholder' => 'New Model Name'));
+
+        echo $this->Form->input('date', array(
+            'type'=>'date',
+            'dateFormat' => 'YMD',
+            'monthNames' => false,
+            'maxYear' => date('Y'),
+            'minYear' => date('Y') - 100,
+            )
+        ); 
         //echo $this->Form->text('addModelName');
          //echo $this->Form->end();
         echo $this->Form->file('選択ファイル');//ファイル選択
@@ -56,3 +66,12 @@
 </div>
 
 </div>
+<?php
+}else
+{
+    //ここを何とか表示したい
+    echo $this->Session->flash('good');
+}
+     echo $this->Session->Flash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+
+?>

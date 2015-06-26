@@ -3,7 +3,7 @@
 // app/Controller/UsersController.php
 class UsersController extends AppController 
 {
-    public $layout = "for_user";//for_user.ctpのレイアウトああああああああああああああああああ設定を読み込む
+    public $layout = "for_user";//for_user.ctpのレイアウト設定を読み込む
 
     public function beforeFilter() 
     {

@@ -2,7 +2,7 @@
 class GroupData extends AppModel 
 {
     public $useTable = 'group_data';
-    function uploadFromCSV($fileName,$modelname) 
+    function uploadFromCSV($fileName,$modelname,$dateData) 
     {
 
     // php.iniの変更点
@@ -48,7 +48,7 @@ class GroupData extends AppModel
                 
             }
 
-            $time = date('Y-m-d', time());
+            $time = date('Y-m-d', mktime(0, 0, 0,$dateData['month'], $dateData['day'],$dateData['year']));
             $data = array();
             foreach ($group_array as $key => $value)
             {

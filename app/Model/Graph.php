@@ -26,9 +26,9 @@ class Graph extends AppModel
         		  $ret[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
                 }
         	}
-        echo '<pre>';
-            //print_r($ret[0]);
-        echo '</pre>';
+        // echo '<pre>';
+        //     //print_r($ret[0]);
+        // echo '</pre>';
 
             if (!$this->deleteAll(array('model' => $modelname))) 
             {
@@ -47,9 +47,9 @@ class Graph extends AppModel
             $this->rollback();
             return false;
         }
-        echo '<pre>';
-            //print_r($ret[0]);
-        echo '</pre>';
+        // echo '<pre>';
+        //     //print_r($ret[0]);
+        // echo '</pre>';
         return true;
     }
     ///////csvのアップロード用///////
