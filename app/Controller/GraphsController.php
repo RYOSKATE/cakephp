@@ -34,6 +34,11 @@ class GraphsController extends AppController
         }
 
     }*/
+    function getDay($day)
+    {
+        $now = time();
+        return mktime(date("H",$now),date("i",$now),date("s",$now),date("m",$now),date("d",$now)+$day,date("Y",$now));
+    }
     public function alldevgroup() 
     {
         $groupNameData = $this->setGroupName();
@@ -45,17 +50,18 @@ class GraphsController extends AppController
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
-
-        $time = date('Y-m-d',time());
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
-        $data = $this->GroupData->find('all',$conditions);
-        if($data)
+        
+        for($i = 0;!$data;--$i)
         {
+            $time = date('Y-m-d',$this->getDay($i));
+            $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
+            $this->GroupData->deleteAll(array('GroupData.model' => $selectModelName,'GroupData.date =' => $time));
+            $data = $this->GroupData->find('all',$conditions);
+        echo '<pre>';
+            print_r($time);
+        echo '</pre>';
+        }
 
-        }
-        else
-        {   
-        }
         $this->set('data',$data);
     }
     

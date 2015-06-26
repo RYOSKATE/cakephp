@@ -48,17 +48,29 @@ class GroupData extends AppModel
                 
             }
 
+            $idArray = $this->find('first', array("fields" => "MAX(GroupData.id) as max_id"));
+            $id = reset($idArray)['max_id'];
             $time = date('Y-m-d', mktime(0, 0, 0,$dateData['month'], $dateData['day'],$dateData['year']));
             $data = array();
             foreach ($group_array as $key => $value)
             {
-                $data[]      = array('model'=>$modelname,
+                $data[]      = array(
+                                'id' => ++$id,
+                                'model'=>$modelname,
                                 'group_name' =>$key,
                                 'file_num'   =>$value['file_num'],
                                 'defact_num' =>$value['defact_num'],
                                 'loc'        =>$value['loc'],
-                                'date'       =>$time
+                                'date'       =>$time,
                                 );
+            }
+
+            //このコンディションで取得してそのidで削除に変更する
+            //$conditions["GroupData.date"] = date('Y-m-d',time());
+            //$conditions["GroupData.model"] = $modelname;
+            if (!$this->deleteAll($conditions)) 
+            {
+                throw new Exception();
             }
 
             if (!$this->saveAll($data)) 
