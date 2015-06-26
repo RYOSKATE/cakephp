@@ -140,7 +140,7 @@
                                         'class' => 'well form-inline')
                                         );
     echo $this->element('selectModel',$modelName);
-    //echo $this->element('selectGroup',$groupName); 
+    echo $this->element('selectGroup',$groupName); 
     echo $this->element('setButton'); 
     echo $this->Form->end();
     ?>
@@ -160,7 +160,6 @@
         'min'=>0,
         'max'=>count($data),
         'value'=>10,
-        // 'list'=>array(1,2,3),
      ));
 ?>
 </div>

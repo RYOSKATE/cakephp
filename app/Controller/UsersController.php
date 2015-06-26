@@ -18,7 +18,7 @@ class UsersController extends AppController
     }
 
     public function view($id = null) 
-    {
+    {                
         $this->User->id = $id;
         if (!$this->User->exists()) 
         {
@@ -72,7 +72,6 @@ class UsersController extends AppController
 
     public function delete($id = null) 
     {
-   
         //adminはだれでも削除できる
         if ($this->request->is('post'))
         {

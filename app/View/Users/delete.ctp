@@ -2,7 +2,8 @@
 <div class="row">
 <div class="col-md-8 col-md-offset-2">
 
-<?php echo $this->Form->create('User', array(
+<?php
+ echo $this->Form->create('User', array(
 	'inputDefaults' => array(
 		'div' => 'form-group',
 		'label' => array(

@@ -15,13 +15,20 @@ class GraphsController extends AppController
     {
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+
+        if($this->Auth->user('group')!='ALL' && $this->Auth->user('role')!='admin')
+        {
+            $group = $this->Auth->user('group');
+            $group = explode(',',$group);
+            $groupNameData = array_intersect($groupNameData,$group);
+        }
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
     private function setGroupNameWithAll()
     {
         //すでに存在する開発グループ名一覧を取得
-        $groupNameData = array(0=>"ALL") + $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+        $groupNameData = array(0=>"ALL") + $this->setGroupName();
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
@@ -34,6 +41,10 @@ class GraphsController extends AppController
     }
     public function index()
     {
+        //    echo '<pre>';
+        //     print_r($this->Auth->user());
+        //     die();
+        // echo '<pre>';
     }
 
     /*public function view($id) 
@@ -48,15 +59,18 @@ class GraphsController extends AppController
     {
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
-
-        $selectGroupName = $groupNameData[1];
-        $selectModelName = $modelNameData[1];
+           echo '<pre>';
+            print_r($groupNameData);
+            //die();
+        echo '</pre>';
+        $selectGroupName = reset($groupNameData);
+        $selectModelName = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
-        {    
+        {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $groupNameData[1]*/));
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName/*,'GroupData.group_name' => $selectGroupName*/));
         $data = $this->GroupData->find('all',$conditions);
 
         $this->set('data',$data);
@@ -67,8 +81,8 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[1];
-        $selectModelName = array('dummy',$modelNameData[1],$modelNameData[1],$modelNameData[1],$modelNameData[1]);
+        $selectGroupName = reset($groupNameData);
+        $selectModelName = array('dummy',reset($modelNameData),reset($modelNameData),reset($modelNameData),reset($modelNameData));
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if (!empty($this->data)) 
         {    
@@ -90,8 +104,8 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[0];//ALLは0に追加されている
-        $selectModelName = $modelNameData[1];
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelName = reset($modelNameData);
 
         if ($this->request->is('post')) 
         {    
@@ -111,9 +125,9 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[0];//ALLは0に追加されている
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelName1 = reset($modelNameData);
+        $selectModelName2 = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         if ($this->request->is('post')) 
         {    
@@ -134,9 +148,9 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
-        $selectGroupName = $groupNameData[0];
-        $selectModelName1 = $modelNameData[1];
-        $selectModelName2 = $modelNameData[1];
+        $selectGroupName = reset($groupNameData);
+        $selectModelName1 = reset($modelNameData);
+        $selectModelName2 = reset($modelNameData);
 
         if ($this->request->is('post')) 
         {    
