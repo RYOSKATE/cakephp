@@ -18,9 +18,7 @@
 	<?php echo $this->Form->input('username', array(
 		'placeholder' => 'username'
 	)); ?>
-	<?php echo $this->Form->input('group', array(
-		'placeholder' => 'group'
-	)); ?>
+
 	<?php echo $this->Form->input('password', array(
 		'placeholder' => 'Password'
 	)); ?>
@@ -29,8 +27,28 @@
             'options' => array('admin' => 'Admin', 'author' => 'Author','reader' => 'Reader')
         ));
     ?>
+    	<?php 
+	// echo $this->Form->input('group', array(
+	// 	'placeholder' => 'group'
+	// )); 
+	echo $this->Form->input('group',array
+	(
+	    'type'=>'select',
+	    'options'=>$groupName,
+	    'multiple'=> 'checkbox',
+	    // 'style' => 'width: 200px',
+	    // 'onchange' => 'submit(this.form)',
+	    //'selected' => $selected,  // 規定値をvalueで指定
+	    // 'div' => false           // div親要素の有無(true/false)
+	    // 'size' => 1,          // 高さ設定(リストボックスとして表示)
+	    //'empty' => false,          // 空白を許可
+	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
+	    'class' => 'form-control'
+	 ));
+	    //echo $this->element('selectGroup',$groupName);
+	?>
 	<div class="form-group">
-		<?php echo $this->Form->submit('Sign in', array(
+		<?php echo $this->Form->submit('Sign up', array(
 			'div' => 'col col-md-6 col-md-offset-2',
 			'class' => 'btn btn-lg btn-primary',
 			'style' => 'padding:8px 20px;'

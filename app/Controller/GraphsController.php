@@ -10,28 +10,7 @@ class GraphsController extends AppController
     メトリクス   
     由来比較     OriginChart
     */
-    //$groupNameに開発グループ名一覧をセットする
-    private function setGroupName()
-    {
-        //すでに存在する開発グループ名一覧を取得
-        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
 
-        if($this->Auth->user('group')!='ALL' && $this->Auth->user('role')!='admin')
-        {
-            $group = $this->Auth->user('group');
-            $group = explode(',',$group);
-            $groupNameData = array_intersect($groupNameData,$group);
-        }
-        $this->set('groupName',$groupNameData);
-        return $groupNameData;
-    }
-    private function setGroupNameWithAll()
-    {
-        //すでに存在する開発グループ名一覧を取得
-        $groupNameData = array(0=>"ALL") + $this->setGroupName();
-        $this->set('groupName',$groupNameData);
-        return $groupNameData;
-    }
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
@@ -59,10 +38,6 @@ class GraphsController extends AppController
     {
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
-           echo '<pre>';
-            print_r($groupNameData);
-            //die();
-        echo '</pre>';
         $selectGroupName = reset($groupNameData);
         $selectModelName = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする

@@ -68,4 +68,28 @@ class AppController extends Controller
     $this->Auth->loginRedirect  = array('controller' => 'graphs', 'action' => 'index');
   }
 
+   public $uses = array('GroupName');
+    //$groupNameに開発グループ名一覧をセットする
+   protected function setGroupName($state=null)
+   {
+        //すでに存在する開発グループ名一覧を取得
+        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+
+        if($this->Auth->user('group')!='ALL' && $this->Auth->user('role')!='admin' && $state!='add')
+        {
+            $group = $this->Auth->user('group');
+            $group = explode(',',$group);
+            $groupNameData = array_intersect($groupNameData,$group);
+        }
+        $this->set('groupName',$groupNameData);
+        return $groupNameData;
+    }
+    
+    protected function setGroupNameWithAll($state=null)
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $groupNameData = array(0=>"ALL") + $this->setGroupName($state);
+        $this->set('groupName',$groupNameData);
+        return $groupNameData;
+    }
 }

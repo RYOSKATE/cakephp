@@ -29,18 +29,15 @@ class UsersController extends AppController
 
     public function add()
     {
+        $groupNameData = $this->setGroupNameWithAll('add');
         if ($this->request->is('post')) 
         {
-            $this->User->create();
-
-            $idArray = $this->User->find('first', array("fields" => "MAX(User.id) as max_id"));
-            $id = $idArray[0]['max_id'] + 1;
-            $this->request->data['User'] += array('id'=>$id);
-            if ($this->User->save($this->request->data)) 
+            if($this->User->addUser($this->request->data['User'],$groupNameData))
             {
                 $this->Session->setFlash(__('The user has been saved<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
                 $this->redirect(array('action' => 'index'));
-            } else 
+            }
+            else
             {
                 $this->Session->setFlash(__('The user could not be saved. Please, try again.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-warning alert-dismissable'));
             }
