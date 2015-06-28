@@ -65,10 +65,18 @@ class GroupData extends AppModel
                                 );
             }
 
-            //このコンディションで取得してそのidで削除に変更する
-            //$conditions["GroupData.date"] = date('Y-m-d',time());
-            //$conditions["GroupData.model"] = $modelname;
-            if (!$this->deleteAll($conditions)) 
+            //本当は日付て削除したかったができなかった。(なぜか全データが削除されてしまう)
+            //日付で取得はできるので取得したidで既にその日付のデータが存在すれば削除を行う
+
+            $conditions = array('conditions' => array('GroupData.model' => $modelname,'GroupData.date =' => $time));
+            $overlapData = $this->find('all',$conditions);
+            $deleteDataID = array();
+            for ($i = 0; $i< count($overlapData); ++$i)
+            {
+                $deleteDataID[] = $overlapData[$i]['GroupData']['id'];
+            }
+
+            if (!$this->deleteAll(array('GroupData.id' => $deleteDataID)))
             {
                 throw new Exception();
             }
@@ -88,4 +96,17 @@ class GroupData extends AppModel
         return true;
     }
 
+    function getData()
+    {
+        // for($i = 0;!$data;--$i)
+        // {
+        //     $time = date('Y-m-d',$this->getDay($i));
+        //     $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
+        //     $this->GroupData->deleteAll(array('GroupData.model' => $selectModelName,'GroupData.date =' => $time));
+        //     $data = $this->GroupData->find('all',$conditions);
+        // echo '<pre>';
+        //     print_r($time);
+        // echo '</pre>';
+        // }
+    }
 }

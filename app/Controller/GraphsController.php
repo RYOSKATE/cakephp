@@ -51,11 +51,12 @@ class GraphsController extends AppController
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
         }
         
-        for($i = 0;!$data;--$i)
+        //最新のデータを取得する
+        $data=array();
+        for($i = 0;!$data&&-100*365<$i;--$i)//とりえあず100年をチェック範囲
         {
             $time = date('Y-m-d',$this->getDay($i));
-            $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
-            $this->GroupData->deleteAll(array('GroupData.model' => $selectModelName,'GroupData.date =' => $time));
+            $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => '2015-06-26'/*,'GroupData.group_name' => $selectGroupName*/));
             $data = $this->GroupData->find('all',$conditions);
         echo '<pre>';
             print_r($time);
