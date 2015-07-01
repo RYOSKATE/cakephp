@@ -70,7 +70,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array('model','file_path','3','8','9','18'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('model','file_path','3','8','9','10','11','18'),'conditions' => $conditions));
         
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
@@ -89,16 +89,30 @@ class Graph extends AppModel
         //         )
 
         // )
-        $tree = array("name"=>"root","size"=>1,"layer"=>0,"children"=> array());
+                 $tree = array("name"    =>   "root",
+                        "defact"           =>0,
+                        "otherClassFunc" =>0,
+                        "LCOM"           =>0,
+                        "Method"         =>0,
+                        "Field"          =>0,
+                        "otherFileFunc"  =>0,
+                        "layer"          =>0,
+                        "children"       => array());
         $dataSize = count($data);
         for ($i = 0; $i < $dataSize; ++$i)
         {
             $filepath = $data[$i]['Graph']['file_path'];
-            $path = explode('/',$filepath);
-            $path[0] = trim($path[0]);
-            $parent = &$tree;
+            $path     = explode('/',$filepath);
+            $path[0]  = trim($path[0]);
+            $parent   = &$tree;
             $children = &$tree["children"];
-            $defact= $data[$i]['Graph'][3];
+            $defact         = $data[$i]['Graph'][3];
+            $otherClassFunc = $data[$i]['Graph'][8];
+            $LCOM           = $data[$i]['Graph'][9];
+            $Method         = $data[$i]['Graph'][10];
+            $Field          = $data[$i]['Graph'][11];
+            $otherFileFunc  = $data[$i]['Graph'][18];
+
             $pathDepth=count($path);
             if($this->depth < $pathDepth)
             {
@@ -112,7 +126,13 @@ class Graph extends AppModel
                     $isTheDir = ($children[$k]["name"] == $path[$j]);
                     if($isTheDir)//そのディレクトリが存在した
                     {
-                        $parent["size"] += $defact;
+                        $parent["defact"]         += $defact;
+                        $parent["otherClassFunc"] += $otherClassFunc;
+                        $parent["LCOM"]           += $LCOM;
+                        $parent["Method"]         += $Method;
+                        $parent["Field"]          += $Field;
+                        $parent["otherFileFunc"]  += $otherFileFunc;
+
                         $parent = &$children[$k];
                         $children[$k] += array("children"=> array());
                         $children = &$children[$k]["children"];
@@ -122,17 +142,40 @@ class Graph extends AppModel
 
                 if(!$isTheDir)//そのディレクトリが初めて登場した
                 {
-                    $node = array("name"=>$path[$j],"size"=>$defact,"layer"=> ($j+1));
+                    $node = array(
+                                    "name"           =>$path[$j],
+                                    "defact"           =>$defact,
+                                    "otherClassFunc" =>$otherClassFunc,
+                                    "LCOM"           =>$LCOM,
+                                    "Method"         =>$Method,
+                                    "Field"          =>$Field,
+                                    "otherFileFunc"  =>$otherFileFunc,
+                                    "layer"          =>($j+1),
+                                 );
                     $children[] = $node;
                     $children = &$children[count($children) - 1]["children"];
                 }
             }
-            $parent["size"] += $defact;
-            $children[] = array("name"=>$path[$pathDepth-1],"size"=>$defact,"layer"=> ($pathDepth));
+            $parent["defact"]           += $defact;
+            $parent["otherClassFunc"] += $otherClassFunc;
+            $parent["LCOM"]           += $LCOM;
+            $parent["Method"]         += $Method;
+            $parent["Field"]          += $Field;
+            $parent["otherFileFunc"]  += $otherFileFunc;
+            $children[] = array(
+                                "name"           =>$path[$pathDepth-1],
+                                "defact"           =>$defact,
+                                "otherClassFunc" =>$otherClassFunc,
+                                "LCOM"           =>$LCOM,
+                                "Method"         =>$Method,
+                                "Field"          =>$Field,
+                                "otherFileFunc"  =>$otherFileFunc,
+                                "layer"          => ($pathDepth)
+                            );
         }
-// echo '<pre>';
-// print_r($tree);
-// echo '</pre>';
+ // echo '<pre>';
+ // print_r($tree);
+ // echo '</pre>';
         $tree=json_encode($tree);
         return $tree;
     }
@@ -147,7 +190,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array('model','file_path','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('model','file_path','3'),'conditions' => $conditions));
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
 //data[0]=Array
         // (
@@ -274,7 +317,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array('1','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('1','3'),'conditions' => $conditions));
         for ($i = 0; $i < count($data); ++$i)
         {
             $data[$i] = $data[$i]['Graph'];

@@ -6,6 +6,8 @@
     // echo '</pre>';
 ?>
 
+<?php $this->Html->script('amcharts/Chart.Core', array('inline' => false));?>
+<?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 <head>
     <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
     <style type="text/css">
@@ -83,6 +85,10 @@
     (sizeが0で重なりあった複数のブロックを同時にクリックするとレイアウトが崩れる不具合あり)
     </div>
   </div>
+
+        <!-- <canvas id="canvas" height="200" width="450"></canvas> -->
+  <canvas id="canvas"></canvas>
+    
 </body>
 <script type="text/javascript">
 
@@ -102,7 +108,7 @@
             .size([w, h])
             .sticky(true)
             .padding([0, 0, 0, 0])
-            .value(function(d) { return document.getElementById("select").options[0].selected ? d.size : 1; });//selectの0番目はsizeなのでそちらが選択されていればsize,そうでなければcountなので1
+            .value(function(d) { return document.getElementById("select").options[0].selected ? d.defact : 1; });//selectの0番目はsizeなのでそちらが選択されていればsize,そうでなければcountなので1
         var svg = d3.select("#body").append("div")
             .attr("class", "chart")
             .style("width", w + "px")
@@ -117,9 +123,9 @@
           var max=0;
           var nodes = treemap.nodes(root).filter(function(d) {
               var isIn = (d.layer==layer ||(d.layer<layer && !d.children));
-              if(isIn && max<d.size)
+              if(isIn && max<d.defact)
               {
-                max = d.size;//色分け用にその表示レイヤーでの最大欠陥数を計算する
+                max = d.defact;//色分け用にその表示レイヤーでの最大欠陥数を計算する
               }
               return isIn;
             });
@@ -147,13 +153,13 @@
           cell.append("svg:rect")
               .attr("width", function(d) { return d.dx - 1; })
               .attr("height", function(d) { return d.dy - 1; })
-              .style("fill", function(d) { return getColor(d.size); });
+              .style("fill", function(d) { return getColor(d.defact); });
           cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
               .attr("dy", ".35em")
               .attr("text-anchor", "middle")
-              .text(function(d) { return d.name+"("+d.size+")"; })
+              .text(function(d) { return d.name+"("+d.defact+")"; })
               .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
           //ツリーマップ外のクリックで全体表示
@@ -162,7 +168,7 @@
           //size/countセレクトボックスの切り替え
           d3.select("#select").on("change", function() 
           {
-            treemap.value(this.value == "size" ? size : count).nodes(root);
+            treemap.value(this.value == "size" ? defact : count).nodes(root);
             var n = node;
             zoom(root);
             zoom(n);
@@ -181,7 +187,7 @@
           });
 
         
-        function size(d) {return d.size;}
+        function defact(d) {return d.defact;}
 
         function count(d) {return 1;}
 
@@ -235,6 +241,9 @@
 
           node = d;
           d3.event.stopPropagation();
+          var radarChartData = setdata(node);
+          window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
+
           //alert('zoomBegin:  '+node);  
         }
 
@@ -246,5 +255,45 @@
     }
 
     set(1);
+
+  var radarChartData;
+
+  function setdata(node)
+  {
+    //defactは数百でもLCOMは百万オーダー
+    var dataset = [node.defact,
+                   node.otherClassFunc/1000,
+                   node.LCOM/10000,
+                   node.Method/100,
+                   node.Field/10,
+                   node.otherFileFunc/1000
+                  ];
+    var radarChartData = {
+        labels: [
+              "欠陥数",
+              "呼び出す他クラスの関数種類数",
+              "メソッドの凝集度の欠如(LCOM)",
+              "Public メソッド数",
+              "Public 属性数",
+              "呼び出す他ファイルの関数の種類数",
+      ],
+        datasets: [
+            {
+                label:"MetricsData",
+                fillColor: "rgba(255,102,0,0.2)",
+                strokeColor: "rgba(255,102,0,1)",
+                pointColor: "rgba(255,102,0,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(255,102,0,1)",
+                data: dataset
+            }
+        ]
+    };
+    return radarChartData;
+  }
+
+  var radarChartData = setdata(JSON.parse('<?php echo $tree; ?>'));
+  window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
 
 </script>

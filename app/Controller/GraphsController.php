@@ -41,7 +41,7 @@ class GraphsController extends AppController
     }
     public function alldevgroup() 
     {
-        $groupNameData = $this->setGroupName();
+        $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
         $selectModelName = reset($modelNameData);
