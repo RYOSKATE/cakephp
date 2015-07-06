@@ -104,14 +104,24 @@ class GraphsController extends AppController
 
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $selectModelName = reset($modelNameData);
-
-        if ($this->request->is('post')) 
+        $tree=null;
+        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        {
+            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+            $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+        }
+        else if ($this->request->is('post')) 
         {    
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
-        $tree = $this->Graph->getFileMetricsTable($selectModelName,$selectGroupName);
+        if($tree==null)
+        {
+            $tree = $this->Graph->getFileMetricsTable($selectModelName,$selectGroupName);
+        }
 
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());

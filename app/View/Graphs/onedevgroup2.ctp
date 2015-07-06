@@ -1,5 +1,5 @@
 <?php
-//デバッグ用表示
+    //デバッグ用表示
     // echo 'デバッグ用表示';
     // echo '<pre>';
     // //print_r($tree);
@@ -46,8 +46,39 @@
 	                            );
 		echo $this->element('selectModel',$groupName); 
 	  echo $this->element('selectGroup',$groupName); 
-	  echo $this->element('setButton'); 
+	  echo $this->element('setButton');
     echo $this->Form->end();
+?>
+<?php    echo $this->Form->create('Graph', array(
+    'inputDefaults' => array(
+        'div' => 'form-group',
+        'label' => false,//array('class' => 'control-label'),
+        'wrapInput' => false,
+        'class' => 'form-control'
+    ),
+    'class' => 'well form-inline',
+    'enctype' => 'multipart/form-data',
+)); 
+?>    
+    <fieldset>
+        <legend>データのアップロード</legend>
+    <?php
+        echo $this->Form->input('モデル名', array('placeholder' => 'New Model Name'));
+        //echo $this->Form->text('addModelName');
+         //echo $this->Form->end();
+        echo $this->Form->file('選択ファイル');//ファイル選択
+    ?>
+    </fieldset>
+
+    <?php echo $this->Form->end('表示', array
+        (
+        'div'   => 'col col-md-6 col-md-offset-2',
+        'class' => 'btn btn-lg btn-primary',
+        'style' => 'padding:8px 20px;',
+        ));//アップロードボタン
+    ?>
+
+<?php
     echo $this->Form->create('Graph',array('inputDefaults' => 
                                           array('div' => 'form-group',),
                                           'class' => 'well form-inline',

@@ -8,7 +8,7 @@
 
 <div class="options form">
 
-<?php    echo $this->Form->create('Graph', array(
+<?php echo $this->Form->create('Graph', array(
     'inputDefaults' => array(
         'div' => 'form-group',
         'label' => false,//array('class' => 'control-label'),
@@ -18,7 +18,7 @@
     'class' => 'well form-inline',
     'enctype' => 'multipart/form-data',
 )); 
-?>    
+?>
     <fieldset>
         <legend>データのアップロード</legend>
     <?php

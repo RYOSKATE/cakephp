@@ -55,6 +55,129 @@ class Graph extends AppModel
     ///////csvのアップロード用///////
 
     ///////ファイルメトリクス用///////
+    function getFileMetricsTableFromCSV($up_file)
+    {
+        setlocale( LC_ALL, 'ja_JP.UTF-8' );
+        $data = array();
+        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
+        $lines = str_getcsv($buf, "\r\n");
+        foreach ($lines as $line) 
+        {
+            $col = str_getcsv($line);
+            if(4<=$col[1])//由来o3,o13,o23,o123のみ
+            {
+              $data[] = array('model'=>"localCSV",'file_path'=>$col[0]) +$col;
+            }
+        }
+        $this->depth=0;
+        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
+//data[0]=Array
+        // (
+        //     [Graph] => Array
+        //         (
+        //             [model] => testA
+        //             [file_path] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [3] => 1//欠陥数
+        //             [8] => 呼び出す他クラスの関数種類数
+        //             [9] => メソッドの凝集度の欠如(LCOM)
+        //             [10] =>Public メソッド数
+        //             [11] =>Public 属性数
+        //             [18] => 呼び出す他ファイルの関数の種類数
+        //         )
+
+        // )
+         $tree = array("name"    =>   "root",
+                "defact"           =>0,
+                "otherClassFunc" =>0,
+                "LCOM"           =>0,
+                "Method"         =>0,
+                "Field"          =>0,
+                "otherFileFunc"  =>0,
+                "layer"          =>0,
+                "children"       => array());
+        $dataSize = count($data);
+        for ($i = 0; $i < $dataSize; ++$i)
+        {
+            $filepath = $data[$i]['file_path'];
+            $path     = explode('/',$filepath);
+            $path[0]  = trim($path[0]);
+            $parent   = &$tree;
+            $children = &$tree["children"];
+            $defact         = $data[$i][3];
+            $otherClassFunc = $data[$i][8];
+            $LCOM           = $data[$i][9];
+            $Method         = $data[$i][10];
+            $Field          = $data[$i][11];
+            $otherFileFunc  = $data[$i][18];
+
+            $pathDepth=count($path);
+            if($this->depth < $pathDepth)
+            {
+                $this->depth = $pathDepth;//ビューのレイヤー切り替えの最大値用に最深度を記録しておく
+            }
+            for($j = 0; $j < $pathDepth-1; ++$j)
+            {
+                $isTheDir = false;
+                for ($k = 0; $k < count($children); ++$k)
+                {
+                    $isTheDir = ($children[$k]["name"] == $path[$j]);
+                    if($isTheDir)//そのディレクトリが存在した
+                    {
+                        $parent["defact"]         += $defact;
+                        $parent["otherClassFunc"] += $otherClassFunc;
+                        $parent["LCOM"]           += $LCOM;
+                        $parent["Method"]         += $Method;
+                        $parent["Field"]          += $Field;
+                        $parent["otherFileFunc"]  += $otherFileFunc;
+
+                        $parent = &$children[$k];
+                        $children[$k] += array("children"=> array());
+                        $children = &$children[$k]["children"];
+                        break;
+                    }
+                }
+
+                if(!$isTheDir)//そのディレクトリが初めて登場した
+                {
+                    $node = array(
+                                    "name"           =>$path[$j],
+                                    "defact"           =>$defact,
+                                    "otherClassFunc" =>$otherClassFunc,
+                                    "LCOM"           =>$LCOM,
+                                    "Method"         =>$Method,
+                                    "Field"          =>$Field,
+                                    "otherFileFunc"  =>$otherFileFunc,
+                                    "layer"          =>($j+1),
+                                 );
+                    $children[] = $node;
+                    $children = &$children[count($children) - 1]["children"];
+                }
+            }
+            $parent["defact"]           += $defact;
+            $parent["otherClassFunc"] += $otherClassFunc;
+            $parent["LCOM"]           += $LCOM;
+            $parent["Method"]         += $Method;
+            $parent["Field"]          += $Field;
+            $parent["otherFileFunc"]  += $otherFileFunc;
+            $children[] = array(
+                                "name"           =>$path[$pathDepth-1],
+                                "defact"           =>$defact,
+                                "otherClassFunc" =>$otherClassFunc,
+                                "LCOM"           =>$LCOM,
+                                "Method"         =>$Method,
+                                "Field"          =>$Field,
+                                "otherFileFunc"  =>$otherFileFunc,
+                                "layer"          => ($pathDepth)
+                            );
+        }
+ // echo '<pre>';
+ // print_r($tree);
+ // echo '</pre>';
+        $tree=json_encode($tree);
+        return $tree;
+    }
+
+
     private $depth = 0;
 
     public function getDepth()
