@@ -145,7 +145,7 @@
     echo $this->Form->end();
     ?>
 </div>
-
+<?php echo $time;?>
 <div id="chartdiv" style="height:500px;"></div>
 
 <div class="col-md-3 col-sm-3 pull-right">

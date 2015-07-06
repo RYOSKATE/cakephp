@@ -46,21 +46,29 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);
         $selectModelName = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        $conditions = array('conditions' => array('GroupData.model' => $selectModelName));
         if ($this->request->is('post')) 
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+            $conditions['conditions']['GroupData.model'] = $selectModelName;
+            if($selectGroupName!='ALL')
+            {
+                $conditions['conditions']['GroupData.group_name'] = $selectGroupName;
+            }
         }
         
         //最新のデータを取得する
         $data=array();
-        for($i = 0;!$data&&-100*365<$i;--$i)//とりえあず100年をチェック範囲
+        for($i = 0;!$data && -100*365<$i; --$i)//とりえあず100年をチェック範囲
         {
             $time = date('Y-m-d',$this->getDay($i));
-            $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => '2015-06-26'/*,'GroupData.group_name' => $selectGroupName*/));
+            $conditions['conditions']['GroupData.date =']= '2015-06-26';
             $data = $this->GroupData->find('all',$conditions);
-        echo '<pre>';
-            print_r($time);
-        echo '</pre>';
+        // echo '<pre>';
+             $this->set('time',$time);
+        //     print_r($time);
+        // echo '</pre>';
         }
 
         $this->set('data',$data);

@@ -76,6 +76,8 @@
   ?>
     </div>
 	<div id="body"></div>
+    <p id="path">表示パス:root/</p>
+
   <div id="footer">
     <div>
     ○操作方法<br>
@@ -92,6 +94,7 @@
 </body>
 <script type="text/javascript">
 
+    var path;
     function set(layer,zoomNode)
     {
     	$("#body").empty();
@@ -218,8 +221,21 @@
           return  color;
         }
 
+        function makeFilePath(d)
+        {
+          var path = d.name;
+          if(path=="root")
+            return "";
+          while(d.parent.name!="root")
+          {
+            d=d.parent;
+            path = d.name+"/"+path;
+          }
+          return path;
+        }
         function zoom(d)
         {
+          document.getElementById("path").innerHTML="表示パス:root/"+makeFilePath(d);
           //alert('zoomBegin  '+d.name);  
           var kx = w / d.dx, ky = h / d.dy;
           x.domain([d.x, d.x + d.dx]);
