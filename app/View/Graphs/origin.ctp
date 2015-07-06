@@ -133,7 +133,6 @@ origin(実際の由来は+1する)
             rightlegend[origin].validateNow();
         }
     });
-
 </script>
 <ol class="breadcrumb">
   <li><?php echo $this->Html->link('Home',array('controller' => 'graphs', 'action' => 'index'));?></li>
@@ -170,8 +169,8 @@ origin(実際の由来は+1する)
 </div>
 <!-- Nav tabs -->
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->
-<ul class="nav nav-tabs" id = "mytab" role="tablist">
-  <li><a href ="#o13" role="tab" data-toggle="tab">o13</a></li>         
+<ul class="nav nav-tabs nav-justified" id = "mytab" role="tablist">
+  <li id ="firstTab"><a href ="#o13" role="tab" data-toggle="tab">o13</a></li>
   <li><a href ="#o123"role="tab" data-toggle="tab">o123</a></li>        
   <li><a href ="#o23" role="tab" data-toggle="tab">o23</a></li>         
   <li><a href ="#o3"  role="tab" data-toggle="tab">o3</a></li>         
@@ -202,7 +201,7 @@ origin(実際の由来は+1する)
         </div>
     </div>
   </div>
-  <div class="tab-pane fade in active" id="o123">
+  <div class="tab-pane fade  active" id="o123">
     <div class="row">
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
@@ -226,7 +225,7 @@ origin(実際の由来は+1する)
         </div>
     </div>
   </div>
-  <div class="tab-pane fade in active" id="o23">
+  <div class="tab-pane fade  active" id="o23">
     <div class="row">
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">
@@ -250,7 +249,7 @@ origin(実際の由来は+1する)
         </div>
     </div>
   </div>
-  <div class="tab-pane fade in active" id="o3">
+  <div class="tab-pane fade  active" id="o3">
     <div class="row">
         <div class="col-md-6 col-sm-6">
             <div class="panel panel-info">

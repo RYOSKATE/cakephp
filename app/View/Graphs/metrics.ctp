@@ -27,8 +27,7 @@ echo '</pre>';*/
 				     "ライブラリ(外部OSS)", 
 				     "Android Runtime(SYSTEM)", 
 				     "HWライブラリ", 
-				     "Kernel",
-				     //"Kernel/ドライバ/ブートローダー",
+				     "Kernel",//"Kernel/ドライバ/ブートローダー",
 				     "Others"
 			],
 		    datasets: [
