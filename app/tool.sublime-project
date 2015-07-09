@@ -1,2 +1,14 @@
 {
+	"folders":
+	[
+		{
+			"path": "C:\\xampp\\htdocs\\cakephp\\app\\Controller"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\cakephp\\app\\Model"
+		},
+		{
+			"path": "C:\\xampp\\htdocs\\cakephp\\app\\View"
+		}
+	]
 }
