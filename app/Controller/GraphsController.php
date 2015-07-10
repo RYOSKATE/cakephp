@@ -45,7 +45,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
         $selectModelName = reset($modelNameData);
-        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+
         $conditions = array('conditions' => array('GroupData.model' => $selectModelName));
         if ($this->request->is('post')) 
         {
@@ -97,6 +97,7 @@ class GraphsController extends AppController
         }
         $this->set('model',$selectModelName);
     }
+
     public function onedevgroup2() 
     {
         $groupNameData = $this->setGroupNameWithAll();
@@ -137,16 +138,32 @@ class GraphsController extends AppController
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        if ($this->request->is('post')) 
-        {    
+        $data2=null;
+        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        {
 
+            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+
+            $data2 = $this->Graph->getOriginTableFromCSV($fileName);
+            $selectModelName2 = "localCSV";
+        }
+        else if ($this->request->is('post')) 
+        {
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
+        if($data2==null)
+        {
+            $data2 = $this->Graph->getOriginTable($selectModelName2,$selectGroupName);
+
+        }
+
+        $this->set('model2',$data2);
         $this->set('model1',$this->Graph->getOriginTable($selectModelName1,$selectGroupName));
-        $this->set('model2',$this->Graph->getOriginTable($selectModelName2,$selectGroupName));
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
     }

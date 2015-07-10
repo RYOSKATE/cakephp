@@ -47,18 +47,8 @@
 		echo $this->element('selectModel',$groupName); 
 	  echo $this->element('selectGroup',$groupName); 
 	  echo $this->element('setButton');
-    ?>
-
-
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#faq" href="#faqpost_1">
-          ローカルCSVファイルの表示
-        </a>
-      </div>
-       <div id="faqpost_1" class="accordion-body collapse">
-        <div class="accordion-inner">
-
+    echo $this->Form->end();
+?>
 <?php    echo $this->Form->create('Graph', array(
     'inputDefaults' => array(
         'div' => 'form-group',
@@ -71,11 +61,14 @@
 )); 
 ?>    
     <fieldset>
+        <legend>データのアップロード</legend>
     <?php
-        echo $this->Form->input('モデル名', array('placeholder' => 'Model Name'));
+        echo $this->Form->input('モデル名', array('placeholder' => 'New Model Name'));
+        //echo $this->Form->text('addModelName');
+         //echo $this->Form->end();
         echo $this->Form->file('選択ファイル');//ファイル選択
     ?>
-
+    </fieldset>
 
     <?php echo $this->Form->end('表示', array
         (
@@ -84,21 +77,7 @@
         'style' => 'padding:8px 20px;',
         ));//アップロードボタン
     ?>
-        </fieldset>
 
-        </div>
-      </div>
-    </div>  
-
-
-
-
-
-
-
-    <?php
-    echo $this->Form->end();
-?>
 <?php
     echo $this->Form->create('Graph',array('inputDefaults' => 
                                           array('div' => 'form-group',),
@@ -330,11 +309,11 @@
   {
     //defactは数百でもLCOMは百万オーダー
     var dataset = [node.defact,
-                   node.otherClassFunc,
-                   node.LCOM,
-                   node.Method,
-                   node.Field,
-                   node.otherFileFunc
+                   node.otherClassFunc/1000,
+                   node.LCOM/10000,
+                   node.Method/100,
+                   node.Field/10,
+                   node.otherFileFunc/1000
                   ];
     var radarChartData = {
         labels: [
