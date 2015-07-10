@@ -87,7 +87,7 @@ class Graph extends AppModel
 
         // )
          $tree = array("name"    =>   "root",
-                "defact"           =>0,
+                "defact"         =>0,
                 "otherClassFunc" =>0,
                 "LCOM"           =>0,
                 "Method"         =>0,
@@ -141,7 +141,7 @@ class Graph extends AppModel
                 {
                     $node = array(
                                     "name"           =>$path[$j],
-                                    "defact"           =>$defact,
+                                    "defact"         =>$defact,
                                     "otherClassFunc" =>$otherClassFunc,
                                     "LCOM"           =>$LCOM,
                                     "Method"         =>$Method,
@@ -153,7 +153,7 @@ class Graph extends AppModel
                     $children = &$children[count($children) - 1]["children"];
                 }
             }
-            $parent["defact"]           += $defact;
+            $parent["defact"]         += $defact;
             $parent["otherClassFunc"] += $otherClassFunc;
             $parent["LCOM"]           += $LCOM;
             $parent["Method"]         += $Method;
@@ -161,7 +161,7 @@ class Graph extends AppModel
             $parent["otherFileFunc"]  += $otherFileFunc;
             $children[] = array(
                                 "name"           =>$path[$pathDepth-1],
-                                "defact"           =>$defact,
+                                "defact"         =>$defact,
                                 "otherClassFunc" =>$otherClassFunc,
                                 "LCOM"           =>$LCOM,
                                 "Method"         =>$Method,
@@ -267,7 +267,7 @@ class Graph extends AppModel
                 {
                     $node = array(
                                     "name"           =>$path[$j],
-                                    "defact"           =>$defact,
+                                    "defact"         =>$defact,
                                     "otherClassFunc" =>$otherClassFunc,
                                     "LCOM"           =>$LCOM,
                                     "Method"         =>$Method,
@@ -279,7 +279,7 @@ class Graph extends AppModel
                     $children = &$children[count($children) - 1]["children"];
                 }
             }
-            $parent["defact"]           += $defact;
+            $parent["defact"]         += $defact;
             $parent["otherClassFunc"] += $otherClassFunc;
             $parent["LCOM"]           += $LCOM;
             $parent["Method"]         += $Method;
@@ -287,7 +287,7 @@ class Graph extends AppModel
             $parent["otherFileFunc"]  += $otherFileFunc;
             $children[] = array(
                                 "name"           =>$path[$pathDepth-1],
-                                "defact"           =>$defact,
+                                "defact"         =>$defact,
                                 "otherClassFunc" =>$otherClassFunc,
                                 "LCOM"           =>$LCOM,
                                 "Method"         =>$Method,
