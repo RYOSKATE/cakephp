@@ -306,6 +306,66 @@ class Graph extends AppModel
 
 
     ///////メトリクス比較用///////
+    function getCompareMetricsTableFromCSV($up_file)
+    {
+        setlocale( LC_ALL, 'ja_JP.UTF-8' );
+        $data = array();
+        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
+        $lines = str_getcsv($buf, "\r\n");
+        foreach ($lines as $line) 
+        {
+            $col = str_getcsv($line);
+            if(4<=$col[1])//由来o3,o13,o23,o123のみ
+            {
+              $data[] = array('Graph'=>array('model'=>"localCSV",'file_path'=>$col[0]) +$col);
+            }
+        }
+
+        $modelName = $data[0]['Graph']['model'];
+        $newData = array();
+        for ($i = 0; $i < 7; ++$i)
+        {
+            $newData[$i]=array('ModelLayer'=>
+                                array(
+                                    'model'           =>$modelName,
+                                    'layer'           =>$i,
+                                    'all_file_num'    =>0,
+                                    'defect_file_num' =>0,
+                                    'defect_per_file' =>0,
+                                    'defect_num'      =>0,
+                                     )
+                                );
+        }
+
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $defact = $data[$i]['Graph'][3];
+            $filePath = $data[$i]['Graph']['file_path'];
+            $layer = $this->getLayer($filePath);
+            if($layer < 0 ||6 < $layer)
+            {
+                continue;
+            }
+            ++$newData[$layer]['ModelLayer']['all_file_num'];
+            if(0<$defact)
+            {
+                ++$newData[$layer]['ModelLayer']['defect_file_num'] ;
+                $newData[$layer]['ModelLayer']['defect_num'] += $defact;
+            }
+        }
+        //最後にファイル率を求める
+        for ($i = 0; $i < count($newData); ++$i)
+        {
+            $temp = $newData[$i]['ModelLayer'];
+            if($temp['all_file_num']!=0)
+            {
+                $newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
+            }
+        }
+        //ファイル率計算時の0除算を防ぐため
+        return $newData;
+    }
+
     function getCompareMetricsTable($selectModelName,$selectGroupName) 
     {
         $conditions = array('Graph.model' => $selectModelName);

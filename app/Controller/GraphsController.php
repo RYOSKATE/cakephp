@@ -176,8 +176,19 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
+        
+        $data2=null;
+        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        {
 
-        if ($this->request->is('post')) 
+            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+
+            $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
+            $selectModelName2 = "localCSV";
+        }
+        else if ($this->request->is('post')) 
         {    
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
@@ -185,7 +196,11 @@ class GraphsController extends AppController
         }
 
         $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);
-        $data2 = $this->Graph->getCompareMetricsTable($selectModelName2,$selectGroupName);
+
+        if($data2==null)
+        {
+            $data2 = $this->Graph->getCompareMetricsTable($selectModelName2,$selectGroupName);
+        }
 
         $this->set('data1',$data1);
         $this->set('data2',$data2);
