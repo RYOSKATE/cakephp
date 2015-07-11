@@ -13,7 +13,7 @@ $('#notes').stickyNotes();
 </script>
 </head>
 
-<div id="notes" style="width:800px;height:600px;"></div> -->
+<div id="notes" style="width:800px;height:600px;"></div>
 <style>
 .sticky {
   width: 250px;
@@ -99,3 +99,4 @@ $(function() {
 </select>
 <input id="new" type="button" value="new">
 <input id="del" type="button" value="del">
+ -->

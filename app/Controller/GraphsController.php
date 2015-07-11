@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','GroupName');
+    public $uses = array('Graph','GroupData','ModelName','GroupName','Sticky');
     /*
     CSV入力      Graph
     メトリクス   
@@ -18,22 +18,12 @@ class GraphsController extends AppController
         $this->set('modelName',$modelNameData);
         return $modelNameData;
     }
+
     public function index()
     {
-        //    echo '<pre>';
-        //     print_r($this->Auth->user());
-        //     die();
-        // echo '<pre>';
+        $this->operateSticky();
     }
 
-    /*public function view($id) 
-    {
-        if (!$id) 
-        {
-            throw new NotFoundException(__('Invalid post'));
-        }
-
-    }*/
     function getDay($day)
     {
         $now = time();
@@ -41,13 +31,14 @@ class GraphsController extends AppController
     }
     public function alldevgroup() 
     {
+        $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
         $selectModelName = reset($modelNameData);
 
         $conditions = array('conditions' => array('GroupData.model' => $selectModelName));
-        if ($this->request->is('post')) 
+        if (isset($this->request->data['set'])) 
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
@@ -76,19 +67,20 @@ class GraphsController extends AppController
     
     public function onedevgroup() 
     {
+        $this->operateSticky();
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
-
         $selectGroupName = reset($groupNameData);
         $selectModelName = array('dummy',reset($modelNameData),reset($modelNameData),reset($modelNameData),reset($modelNameData));
-        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        if (!empty($this->data)) 
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする。
+
+        if (isset($this->request->data['set'])) 
         {    
             for($i=1;$i<count($selectModelName);++$i)
             {
-                $selectModelName[$i] = $modelNameData[$this->data['Graph'] ['モデル'.$i]];
+                $selectModelName[$i] = $modelNameData[$formData['モデル'.$i]];
             }
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];         
+            $selectGroupName = $groupNameData[$formData['開発グループ']];         
         }
         for($i=1;$i<count($selectModelName);++$i)
         {
@@ -100,23 +92,24 @@ class GraphsController extends AppController
 
     public function onedevgroup2() 
     {
+        $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $selectModelName = reset($modelNameData);
         $tree=null;
-        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        if (isset($this->request->data['set']))
+        {
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+        }
+        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
         {
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
             $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
-        }
-        else if ($this->request->is('post')) 
-        {    
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
         if($tree==null)
@@ -131,6 +124,7 @@ class GraphsController extends AppController
     public function origin()
     {
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
@@ -139,7 +133,14 @@ class GraphsController extends AppController
         $selectModelName2 = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data2=null;
-        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+
+        if (isset($this->request->data['set']))
+        {
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+        }
+        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
         {
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
@@ -149,17 +150,9 @@ class GraphsController extends AppController
             $data2 = $this->Graph->getOriginTableFromCSV($fileName);
             $selectModelName2 = "localCSV";
         }
-        else if ($this->request->is('post')) 
-        {
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-        }
-
         if($data2==null)
         {
             $data2 = $this->Graph->getOriginTable($selectModelName2,$selectGroupName);
-
         }
 
         $this->set('model2',$data2);
@@ -170,6 +163,7 @@ class GraphsController extends AppController
 
     public function metrics()
     {
+        $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
 
@@ -178,7 +172,13 @@ class GraphsController extends AppController
         $selectModelName2 = reset($modelNameData);
         
         $data2=null;
-        if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        if (isset($this->request->data['set']))
+        {
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectGroupName =  $groupNameData[$this->data['Graph'] ['開発グループ']];
+        }
+        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
         {
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
@@ -187,12 +187,6 @@ class GraphsController extends AppController
 
             $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
             $selectModelName2 = "localCSV";
-        }
-        else if ($this->request->is('post')) 
-        {    
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
-            $selectGroupName =  $groupNameData[$this->data['Graph'] ['開発グループ']];
         }
 
         $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);

@@ -32,6 +32,9 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller 
 {
+
+   public $uses = array('GroupName','Sticky');
+
    public $components = array
    (
     'Session',
@@ -69,7 +72,34 @@ class AppController extends Controller
     $this->set('userData', $this->Auth->user());
   }
 
-   public $uses = array('GroupName');
+  public function beforeRender()
+  {
+    $this->set('stickies', $this->Sticky->getStickies($this->action));
+  }
+
+  protected function operateSticky()
+  {
+    if(!empty($this->data['Graph']))
+        {
+            $formData = $this->data['Graph'];
+            $username = $this->Auth->user('username');
+            if(isset($this->request->data['delete']))
+            {
+                $this->Sticky->deleteSticky($this->action,$username,$formData);
+            }
+            else if (trim($formData['textarea'])!="") 
+            {
+                if(isset($this->request->data['add']))
+                {
+                    $this->Sticky->addSticky($this->action,$username,$formData);  
+                }
+                else if(isset($this->request->data['edit']))
+                {
+                    $this->Sticky->editSticky($this->action,$username,$formData);  
+                }
+            }
+        }
+  }
     //$groupNameに開発グループ名一覧をセットする
    protected function setGroupName($state=null)
    {

@@ -90,8 +90,167 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				  <?php echo $this->Html->link('由来比較',		array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
 				  <?php echo $this->Html->link('メトリクス比較',array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
+<!-- 付箋追加削除 -->
+<style>
+.sticky {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  cursor: pointer;
+  border: 1px solid #aaa;
+}
+textarea {
+  width: 100%;
+  height: 100%;
+}
+.selected {border-color: #f44;}
+
+</style>
+<script>
+// forked from naga3's "クッキーに保存できる付箋" http://jsdo.it/naga3/iEvs
+$(function() {
+  $('#add').click(function() {
+    make();
+  });
+
+  $('#del').click(function() {
+
+  });
+
+  function make() {
+    var sticky = $('<div class="sticky"></div>');
+    sticky.appendTo('body')
+      .css('background-color', $('#color').val())
+      .draggable()
+      // .dblclick(function() {
+      //   $(this).html('<textarea>' + $(this).html() + '</textarea>')
+      //     .children()
+      //     .focus()
+      //     .blur(function() {
+      //       $(this).parent().html($(this).val());
+      //     });
+      // })
+      .mousedown(function() {
+        $('.sticky').removeClass('selected');
+        $(this).addClass('selected');
+      });
+    return sticky;
+  }
+
+    function load() {
+    var items = [];
+    var stickies=JSON.parse('<?=json_encode($stickies);?>');
+    for(var i=0;i<stickies.length;++i)
+    {
+    	items.push({
+        css: {
+          backgroundColor: stickies[i].color
+        },
+        html: "No:"+stickies[i].id+" "
+        	 +"User:"+stickies[i].username+"<br>"
+        	 +"Date:"+stickies[i].time+"<br>"
+        		+stickies[i].text,
+        id : stickies[i].id
+      });
+    }
+    if (!(0<items.length))
+    {
+    	return;
+    }
+    $.each(items, function(i, item) {
+      make().css(item.css).html(item.html);
+    });
+  }
+  load();
+});
+
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+
+<?php 
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                        array('div' => 'form-group',),
+                                        'class' => 'well form-inline')
+                                        );
+    echo $this->Form->input('textarea', array
+    (
+    	'id'=> 'textarea',
+    	'label'=>false,
+    	'type'=>'textarea',
+    	'class' => 'form-control',
+    	'value'=>'',
+    ));
+    echo $this->Form->input('color',array
+	(
+		'id'=>'color',
+	    'type'=>'select',
+	    'options'=>array('#C869FF' => '紫色', '#6BCDFF' => '水色', '#71FD5E' => '緑色', '#FECA61' => '黄色', '#FA6565' => '赤色'),
+	    // 'style' => 'width: 200px',
+	    // 'onchange' => 'submit(this.form)',
+	    //'selected' => $selected,  // 規定値をvalueで指定
+	    // 'div' => false           // div親要素の有無(true/false)
+	    // 'size' => 1,          // 高さ設定(リストボックスとして表示)
+	    //'empty' => false,          // 空白を許可
+	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
+	    'class' => 'form-control'
+	 ));
+	echo $this->Form->input('add', array
+    (
+    	'id'=> 'add',
+    	'label'=>false,
+    	'name'=>'add',
+    	'type'=>'button',
+    	'onchange' => 'submit(this.form)',
+    	'class' => 'form-control',
+    	'value'=>'add',
+    ));
+   	echo $this->Form->input('id',array
+	(
+	    'type'=>'number',
+	    'class' => 'form-control',
+	    'step'=>1,
+	    'min'=>0,
+	    'max'=>end($stickies)['id'],
+	    'value'=>0,
+	    // 'list'=>array(1,2,3),
+	 ));	
+    echo $this->Form->input('delete', array
+    (
+    	'id'=> 'delete',
+    	'label'=>false,
+    	'name'=>'delete',
+    	'type'=>'button',
+    	'onchange' => 'submit(this.form)',
+    	'class' => 'form-control',
+    	'value'=>'delete',
+    ));
+    echo $this->Form->input('edit', array
+    (
+    	'id'=> 'edit',
+    	'name'=>'edit',
+    	'label'=>false,
+    	'type'=>'button',
+    	'onchange' => 'submit(this.form)',
+    	'class' => 'form-control',
+    	'value'=>'edit',
+    ));
+    echo $this->Form->end();
+    ?>
+
+<!-- <input id="new" type="button" value="new">
+<input id="del" type="button" value="del"> -->
+<!-- <select id="color">
+<option value="#C869FF">紫色</option>
+<option value="#6BCDFF">水色</option>
+<option value="#71FD5E">緑色</option>
+<option value="#FECA61">黄色</option>
+<option value="#FA6565">赤色</option> -->
+<!-- <input id="save" type="button" value="save">
+<input id="load" type="button" value="load"> -->
+</select>
+<!-- 付箋追加削除 -->
 	        </div>
-	        
 	        <!-- 残り9列はコンテンツ表示部分として使う -->
 	        <div class="col-md-9 col-sm-9">
 	         	<div id="content">

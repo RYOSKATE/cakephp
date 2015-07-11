@@ -1,10 +1,10 @@
 <?php $this->Html->script('amcharts/serial', array('inline' => false));?>
 <?php $this->Html->script('amcharts/amstock', array('inline' => false));?>
 <?php
-//デバッグ用表示
-    // echo 'デバッグ用表示';
+
+    // echo '全てのstickies';
     // echo '<pre>';
-    // //print_r($tree);
+    // print_r($stickies);
     // echo '</pre>';
 ?>
 <script type="text/javascript">
