@@ -1,4 +1,4 @@
-<?php if($userData!='reader'){?>
+<?php if($userData['role']!='reader'){?>
 <div class="row">
 
 <ol class="breadcrumb">

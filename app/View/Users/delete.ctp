@@ -17,7 +17,8 @@
 	<fieldset>
 	<legend><?php echo __('Delete User Account'); ?></legend>
 	<?php echo $this->Form->input('username', array(
-		'placeholder' => 'username'
+		'placeholder' => 'username',
+		'value' => $userData['username']
 	)); ?>
 
 	<?php echo $this->Form->input('password', array(
@@ -25,10 +26,10 @@
 	)); ?>
 
 	<div class="form-group">
-		<?php echo $this->Form->submit('delete', array(
+		<?php echo $this->Form->submit('Delete Account', array(
 			'div' => 'col col-md-6 col-md-offset-2',
 			'class' => 'btn btn-lg btn-primary',
-			'style' => 'padding:8px 20px;'
+			'style' => 'background: #FF0000'
 		)); ?>
 	</div>
 	</fieldset>
