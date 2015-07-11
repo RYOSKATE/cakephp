@@ -27,6 +27,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	</title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 	<?php
 		echo $this->Html->meta('icon');
 
@@ -42,6 +44,25 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
+<style>
+	.sticky {
+	  width: 250px;
+	  height: 250px;
+	  position: absolute;
+	  cursor: pointer;
+	  border: 1px solid #aaa;
+	}
+	textarea {
+	  width: 300px;
+	  height: 300px;
+	}
+
+	#textarea {
+	  height: 100px;
+	  resize: vertical;
+	}
+	.selected {border-color: #000;}
+</style>
 </head>
 <body>
 	<div class="container">
@@ -91,82 +112,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				  <?php echo $this->Html->link('メトリクス比較',array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
 <!-- 付箋追加削除 -->
-<style>
-.sticky {
-  width: 250px;
-  height: 250px;
-  position: absolute;
-  cursor: pointer;
-  border: 1px solid #aaa;
-}
-textarea {
-  width: 100%;
-  height: 100%;
-}
-.selected {border-color: #f44;}
 
-</style>
-<script>
-// forked from naga3's "クッキーに保存できる付箋" http://jsdo.it/naga3/iEvs
-$(function() {
-  $('#add').click(function() {
-    make();
-  });
 
-  $('#del').click(function() {
-
-  });
-
-  function make() {
-    var sticky = $('<div class="sticky"></div>');
-    sticky.appendTo('body')
-      .css('background-color', $('#color').val())
-      .draggable()
-      // .dblclick(function() {
-      //   $(this).html('<textarea>' + $(this).html() + '</textarea>')
-      //     .children()
-      //     .focus()
-      //     .blur(function() {
-      //       $(this).parent().html($(this).val());
-      //     });
-      // })
-      .mousedown(function() {
-        $('.sticky').removeClass('selected');
-        $(this).addClass('selected');
-      });
-    return sticky;
-  }
-
-    function load() {
-    var items = [];
-    var stickies=JSON.parse('<?=json_encode($stickies);?>');
-    for(var i=0;i<stickies.length;++i)
-    {
-    	items.push({
-        css: {
-          backgroundColor: stickies[i].color
-        },
-        html: "No:"+stickies[i].id+" "
-        	 +"User:"+stickies[i].username+"<br>"
-        	 +"Date:"+stickies[i].time+"<br>"
-        		+stickies[i].text,
-        id : stickies[i].id
-      });
-    }
-    if (!(0<items.length))
-    {
-    	return;
-    }
-    $.each(items, function(i, item) {
-      make().css(item.css).html(item.html);
-    });
-  }
-  load();
-});
-
-</script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
 <?php 
     echo $this->Form->create('Graph',array('inputDefaults' => 
@@ -178,24 +125,48 @@ $(function() {
     	'id'=> 'textarea',
     	'label'=>false,
     	'type'=>'textarea',
-    	'class' => 'form-control',
+    	'class' => 'col-md-12 col-sm-12',
     	'value'=>'',
     ));
     echo $this->Form->input('color',array
 	(
 		'id'=>'color',
 	    'type'=>'select',
-	    'options'=>array('#C869FF' => '紫色', '#6BCDFF' => '水色', '#71FD5E' => '緑色', '#FECA61' => '黄色', '#FA6565' => '赤色'),
-	    // 'style' => 'width: 200px',
-	    // 'onchange' => 'submit(this.form)',
-	    //'selected' => $selected,  // 規定値をvalueで指定
-	    // 'div' => false           // div親要素の有無(true/false)
-	    // 'size' => 1,          // 高さ設定(リストボックスとして表示)
-	    //'empty' => false,          // 空白を許可
-	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
+	    'options'=>array('#FFFFFF' => '白','#C869FF' => '紫', '#6BCDFF' => '青', '#71FD5E' => '緑', '#FECA61' => '黄', '#FA6565' => '赤'),
 	    'class' => 'form-control'
 	 ));
-	echo $this->Form->input('add', array
+   	echo $this->Form->input('id',array
+	(
+		'id'=> 'id',
+	    'type'=>'number',
+	    'class' => 'form-control',
+	    'step'=>1,
+	    'min'=>0,
+	    'max'=>end($stickies)['id'],
+	    'value'=>0,
+	    // 'list'=>array(1,2,3),
+	 ));
+   	echo $this->Form->input('x',array
+	(
+		'id'=> 'left',
+	    'type'=>'number',
+	    'class' => 'form-control',
+	    'step'=>1,
+	    'min'=>0,
+	    'value'=>77,
+	    // 'list'=>array(1,2,3),
+	 ));
+   	echo $this->Form->input('y',array
+	(
+		'id'=> 'top',
+	    'type'=>'number',
+	    'class' => 'form-control',
+	    'step'=>1,
+	    'min'=>0,
+	    'value'=>777,
+	    // 'list'=>array(1,2,3),
+	 ));
+   	echo $this->Form->input('add', array
     (
     	'id'=> 'add',
     	'label'=>false,
@@ -205,16 +176,6 @@ $(function() {
     	'class' => 'form-control',
     	'value'=>'add',
     ));
-   	echo $this->Form->input('id',array
-	(
-	    'type'=>'number',
-	    'class' => 'form-control',
-	    'step'=>1,
-	    'min'=>0,
-	    'max'=>end($stickies)['id'],
-	    'value'=>0,
-	    // 'list'=>array(1,2,3),
-	 ));	
     echo $this->Form->input('delete', array
     (
     	'id'=> 'delete',
@@ -237,18 +198,6 @@ $(function() {
     ));
     echo $this->Form->end();
     ?>
-
-<!-- <input id="new" type="button" value="new">
-<input id="del" type="button" value="del"> -->
-<!-- <select id="color">
-<option value="#C869FF">紫色</option>
-<option value="#6BCDFF">水色</option>
-<option value="#71FD5E">緑色</option>
-<option value="#FECA61">黄色</option>
-<option value="#FA6565">赤色</option> -->
-<!-- <input id="save" type="button" value="save">
-<input id="load" type="button" value="load"> -->
-</select>
 <!-- 付箋追加削除 -->
 	        </div>
 	        <!-- 残り9列はコンテンツ表示部分として使う -->
@@ -271,3 +220,57 @@ $(function() {
 
 </body>
 </html>
+<script>
+// forked from naga3's "クッキーに保存できる付箋" http://jsdo.it/naga3/iEvs
+$(function() {
+
+
+  function make(item) {
+    var sticky = $('<div class="sticky"></div>');
+    sticky.appendTo('body')
+      .draggable()
+      .mousedown(function() {
+        $('.sticky').removeClass('selected');
+        $(this).addClass('selected');
+        document.getElementById("textarea").value=item.text;
+        document.getElementById("id").value=item.id;
+        document.getElementById("color").value=item.color;
+      })
+      .mouseup(function() {
+        document.getElementById("left").value=$(this).context.offsetLeft
+        document.getElementById("top").value=$(this).context.offsetTop;
+      });
+    return sticky;
+  }
+
+    function load() {
+    var items = [];
+    var stickies=JSON.parse('<?=json_encode($stickies);?>');
+    for(var i=0;i<stickies.length;++i)
+    {
+    	items.push({
+        css: {
+          left: Number(stickies[i].left),
+    	  top: Number(stickies[i].top),
+          backgroundColor: stickies[i].color,
+        },
+        html: "No:"+stickies[i].id+" "
+        	 +"User:"+stickies[i].username+"<br>"
+        	 +"Date:"+stickies[i].time+"<br>"
+        		+stickies[i].text,
+        id : stickies[i].id,
+        text :stickies[i].text,
+        color:stickies[i].color
+      });
+    }
+    if (!(0<items.length))
+    {
+    	return;
+    }
+    $.each(items, function(i, item) {
+      make(item).css(item.css).html(item.html);
+    });
+  }
+  load();
+});
+</script>

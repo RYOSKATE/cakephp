@@ -23,14 +23,15 @@ class Sticky extends AppModel
             date_default_timezone_set('Asia/Tokyo');
             $idArray = $this->find('first', array("fields" => "MAX(Sticky.id) as max_id"));
             $id = reset($idArray)['max_id']+1;
-
             $data = array(
                 'id'=>$id,
                 'username'=>$username,
                 'text'=>$formData['textarea'],
                 'page'=>$page,
                 'color'=>$formData['color'],
-                'time'=>date('Y-m-d H:i:s',time())
+                'time'=>date('Y-m-d H:i:s',time()),
+                'left'=>$formData['x'],
+                'top'=>$formData['y'],
                 );
             if (!$this->save($data)) 
             {
@@ -64,8 +65,10 @@ class Sticky extends AppModel
                 'text'=>$formData['textarea'],
                 'page'=>$page,
                 'color'=>$formData['color'],
-                'time'=>date('Y-m-d H:i:s',time())
-                );
+                'time'=>date('Y-m-d H:i:s',time()),
+                'left'=>$formData['x'],
+                'top'=>$formData['y'],
+             );
             if (!$this->save($data)) 
             {
                 throw new Exception();
