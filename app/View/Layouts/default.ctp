@@ -114,95 +114,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				  <?php echo $this->Html->link('メトリクス比較',array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
 <!-- 付箋追加削除 -->
-
-
-
-<?php 
-
-if($userData['role']!='reader'){
-    echo $this->Form->create('Graph',array('inputDefaults' => 
-                                        array('div' => 'form-group',),
-                                        'class' => 'well form-inline')
-                                        );
-    echo $this->Form->input('textarea', array
-    (
-    	'id'=> 'textarea',
-    	'label'=>false,
-    	'type'=>'textarea',
-    	'class' => 'col-md-12 col-sm-12',
-    	'value'=>'',
-    ));
-    echo $this->Form->input('color',array
-	(
-		'id'=>'color',
-	    'type'=>'select',
-	    'options'=>array('#FFFFFF' => '白','#C869FF' => '紫', '#6BCDFF' => '青', '#71FD5E' => '緑', '#FECA61' => '黄', '#FA6565' => '赤'),
-	    'class' => 'form-control'
-	 ));
-   	echo $this->Form->input('id',array
-	(
-		'id'=> 'id',
-	    'type'=>'number',
-	    'class' => 'form-control',
-	    'step'=>1,
-	    'min'=>0,
-	    'max'=>end($stickies)['id'],
-	    'value'=>0,
-	    // 'list'=>array(1,2,3),
-	 ));
-   	echo $this->Form->input('x',array
-	(
-		'id'=> 'left',
-	    'type'=>'number',
-	    'class' => 'form-control',
-	    'step'=>1,
-	    'min'=>0,
-	    'value'=>77,
-	    // 'list'=>array(1,2,3),
-	 ));
-   	echo $this->Form->input('y',array
-	(
-		'id'=> 'top',
-	    'type'=>'number',
-	    'class' => 'form-control',
-	    'step'=>1,
-	    'min'=>0,
-	    'value'=>777,
-	    // 'list'=>array(1,2,3),
-	 ));
-   	echo $this->Form->input('add', array
-    (
-    	'id'=> 'add',
-    	'label'=>false,
-    	'name'=>'add',
-    	'type'=>'button',
-    	'onchange' => 'submit(this.form)',
-    	'class' => 'form-control',
-    	'value'=>'add',
-    ));
-    echo $this->Form->input('delete', array
-    (
-    	'id'=> 'delete',
-    	'label'=>false,
-    	'name'=>'delete',
-    	'type'=>'button',
-    	'onchange' => 'submit(this.form)',
-    	'class' => 'form-control',
-    	'value'=>'delete',
-    ));
-    echo $this->Form->input('edit', array
-    (
-    	'id'=> 'edit',
-    	'name'=>'edit',
-    	'label'=>false,
-    	'type'=>'button',
-    	'onchange' => 'submit(this.form)',
-    	'class' => 'form-control',
-    	'value'=>'edit',
-    ));
-    echo $this->Form->end();
-}
-    ?>
+<?php echo $this->element('sticky'); ?>
 <!-- 付箋追加削除 -->
 	        </div>
 	        <!-- 残り9列はコンテンツ表示部分として使う -->
@@ -222,60 +134,7 @@ if($userData['role']!='reader'){
 			</p>
 		</div>
 	</div>
-
+<script type="text/javascript">var stickies = JSON.parse('<?=json_encode($stickies);?>');</script>
+<?php echo $this->Html->script('sticky', array('inline' => true)); ?>
 </body>
 </html>
-<script>
-// forked from naga3's "クッキーに保存できる付箋" http://jsdo.it/naga3/iEvs
-$(function() {
-
-
-  function make(item) {
-    var sticky = $('<div class="sticky"></div>');
-    sticky.appendTo('body')
-      .draggable()
-      .mousedown(function() {
-        $('.sticky').removeClass('selected');
-        $(this).addClass('selected');
-        document.getElementById("textarea").value=item.text;
-        document.getElementById("id").value=item.id;
-        document.getElementById("color").value=item.color;
-      })
-      .mouseup(function() {
-        document.getElementById("left").value=$(this).context.offsetLeft
-        document.getElementById("top").value=$(this).context.offsetTop;
-      });
-    return sticky;
-  }
-
-    function load() {
-    var items = [];
-    var stickies=JSON.parse('<?=json_encode($stickies);?>');
-    for(var i=0;i<stickies.length;++i)
-    {
-    	items.push({
-        css: {
-          left: Number(stickies[i].left),
-    	  top: Number(stickies[i].top),
-          backgroundColor: stickies[i].color,
-        },
-        html: "No:"+stickies[i].id+" "
-        	 +"User:"+stickies[i].username+"<br>"
-        	 +"Date:"+stickies[i].time+"<br>"
-        		+stickies[i].text,
-        id : stickies[i].id,
-        text :stickies[i].text,
-        color:stickies[i].color
-      });
-    }
-    if (!(0<items.length))
-    {
-    	return;
-    }
-    $.each(items, function(i, item) {
-      make(item).css(item.css).html(item.html);
-    });
-  }
-  load();
-});
-</script>
