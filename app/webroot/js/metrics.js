@@ -1,11 +1,12 @@
 var radarChartData;
-
+var data1=new Array();
+var data2= new Array();
     function setdata(showParam)
     {
         for( var i  = 0; i < dataset1.length; ++i )
         {
-            dataset1[i]=dataset1[i]['ModelLayer'][showParam];
-            dataset2[i]=dataset2[i]['ModelLayer'][showParam];
+            data1[i]=dataset1[i]['ModelLayer'][showParam];
+            data2[i]=dataset2[i]['ModelLayer'][showParam];
         }
         var radarChartData = {
             labels: [
@@ -26,7 +27,7 @@ var radarChartData;
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(255,102,0,1)",
-                    data: dataset1
+                    data: data1
                 },
                 {
                     label: label2,
@@ -36,7 +37,7 @@ var radarChartData;
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(252,210,2,1)",
-                    data: dataset2
+                    data: data2
                 }
             ]
         };

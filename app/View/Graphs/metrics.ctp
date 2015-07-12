@@ -6,6 +6,13 @@ echo '</pre>';*/
 <?php $this->Html->script('amcharts/Chart.Core',  array('inline' => false));?>
 <?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 
+<script type="text/javascript">
+    var dataset1 = JSON.parse('<?=json_encode($data1);?>');
+    var dataset2 = JSON.parse('<?=json_encode($data2);?>');
+    var label1 = '<?php echo $name1;?>';
+    var label2 = '<?php echo $name2;?>';
+</script>
+<?php echo $this->Html->script('metrics', array('inline' => true));?>
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "メトリクス比較"));?>
 
 <div class="page-header">
@@ -22,12 +29,3 @@ echo '</pre>';*/
 		<?php echo $this->element('metricstable', array("name" => $name2,"data" => $data2));?>
     </div>
 </div>
-
-<script type="text/javascript">
-	var dataset1 = JSON.parse('<?=json_encode($data1);?>');
-	var dataset2 = JSON.parse('<?=json_encode($data2);?>');
-	var label1 = '<?php echo $name1;?>';
-	var label2 = '<?php echo $name2;?>';
-</script>
-
-<?php echo $this->Html->script('metrics', array('inline' => true));?>
