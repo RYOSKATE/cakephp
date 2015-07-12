@@ -1,11 +1,7 @@
 
 <?php $this->Html->script('amcharts/xy', array('inline' => false));?>
 
-<?php 
-    echo $this->element('pagepath', array(
-                                "secondPath" => "全開発グループ",
-                                "thirdPath" => "欠陥数散布図"));
-?>
+<?php echo $this->element('pagepath', array("secondPath" => "全開発グループ","thirdPath" => "欠陥数散布図"));?>
 
 <div class="page-header">
     <?php echo $this->element('selectForm1'); ?>

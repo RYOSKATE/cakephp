@@ -6,8 +6,6 @@ echo '</pre>';*/
 <?php $this->Html->script('amcharts/Chart.Core',  array('inline' => false));?>
 <?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 
-<!-- Radar chart-->
-
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "メトリクス比較"));?>
 
 <div class="page-header">
@@ -18,7 +16,6 @@ echo '</pre>';*/
 
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <!-- <canvas id="canvas" height="200" width="450"></canvas> -->
         <canvas id="canvas"></canvas>
     </div>
     <div class="col-md-12 col-sm-12" >
