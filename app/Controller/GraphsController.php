@@ -199,26 +199,49 @@ class GraphsController extends AppController
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
         
+        $data1=null;
         $data2=null;
+
         if (isset($this->request->data['set']))
         {
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
-            $selectGroupName =  $groupNameData[$this->data['Graph'] ['開発グループ']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+        
+            if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
+            {
+
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data1 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
+                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
+                if(empty($selectModelName1))
+                {
+                    $selectModelName1 = "local model1";
+                }
+            }
+
+            if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
+            {
+
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル2']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
+                $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
+                if(empty($selectModelName2))
+                {
+                    $selectModelName2 = "local model2";
+                }
+            }
         }
-        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
+        if($data1==null)
         {
-
-            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-            move_uploaded_file($up_file, $fileName);
-            $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
-            $selectModelName2 = "localCSV";
+            $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);
         }
-
-        $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);
-
         if($data2==null)
         {
             $data2 = $this->Graph->getCompareMetricsTable($selectModelName2,$selectGroupName);
