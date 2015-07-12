@@ -13,7 +13,7 @@
 <div class="page-header">
 
   <?php echo $this->element('selectForm1'); ?>
-  <?php echo $this->element('localCSV'); ?>
+
 
   <?php
     echo $this->Form->create('Graph',array('inputDefaults' => 

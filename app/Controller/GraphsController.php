@@ -103,15 +103,15 @@ class GraphsController extends AppController
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+            if (!empty($this->data['Graph'] ['選択ファイル']['name'])) 
+            {
+                $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+            }
         }
-        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
-        {
-            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-            $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
-        }
-
         if($tree==null)
         {
             $tree = $this->Graph->getFileMetricsTable($selectModelName,$selectGroupName);
@@ -119,6 +119,11 @@ class GraphsController extends AppController
 
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
+
+    echo 'デバッグ用表示';
+    echo '<pre>';
+    print_r($this->data['Graph']);
+    echo '</pre>';
     }
 
     public function origin()
@@ -146,7 +151,7 @@ class GraphsController extends AppController
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-
+            move_uploaded_file($up_file, $fileName);
             $data2 = $this->Graph->getOriginTableFromCSV($fileName);
             $selectModelName2 = "localCSV";
         }
@@ -184,7 +189,7 @@ class GraphsController extends AppController
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-
+            move_uploaded_file($up_file, $fileName);
             $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
             $selectModelName2 = "localCSV";
         }
