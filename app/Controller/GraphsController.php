@@ -103,7 +103,7 @@ class GraphsController extends AppController
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-            if (!empty($this->data['Graph'] ['選択ファイル']['name'])) 
+            if (!empty($this->data['Graph']['選択ファイル']['name'])) 
             {
                 $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                 $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -120,10 +120,7 @@ class GraphsController extends AppController
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
 
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    print_r($this->data['Graph']);
-    echo '</pre>';
+        $this->set('useLocalCSV',true);
     }
 
     public function origin()
@@ -137,6 +134,7 @@ class GraphsController extends AppController
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        $data1=null;
         $data2=null;
 
         if (isset($this->request->data['set']))
@@ -144,26 +142,51 @@ class GraphsController extends AppController
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-        }
-        else if (!empty($this->data['Graph'] ['選択ファイル'])) 
-        {
+        
+            if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
+            {
 
-            $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-            $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-            $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-            move_uploaded_file($up_file, $fileName);
-            $data2 = $this->Graph->getOriginTableFromCSV($fileName);
-            $selectModelName2 = "localCSV";
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data1 = $this->Graph->getOriginTableFromCSV($fileName);
+                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
+                if(empty($selectModelName1))
+                {
+                    $selectModelName1 = "local model1";
+                }
+            }
+
+            if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
+            {
+
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル2']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data2 = $this->Graph->getOriginTableFromCSV($fileName);
+                $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
+                if(empty($selectModelName2))
+                {
+                    $selectModelName2 = "local model2";
+                }
+            }
+        }
+        if($data1==null)
+        {
+            $data1 = $this->Graph->getOriginTable($selectModelName1,$selectGroupName);
         }
         if($data2==null)
         {
             $data2 = $this->Graph->getOriginTable($selectModelName2,$selectGroupName);
         }
 
+        $this->set('model1',$data1);
         $this->set('model2',$data2);
-        $this->set('model1',$this->Graph->getOriginTable($selectModelName1,$selectGroupName));
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
+        $this->set('useLocalCSV',true);
     }
 
     public function metrics()
@@ -205,6 +228,7 @@ class GraphsController extends AppController
         $this->set('data2',$data2);
         $this->set('name1',$selectModelName1);
         $this->set('name2',$selectModelName2);
+        $this->set('useLocalCSV',true);
     }
 
     public function upload()

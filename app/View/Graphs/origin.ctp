@@ -20,7 +20,6 @@
 <div class="page-header">
     <h1><small>由来比較</small></h1>
     <?php echo $this->element('selectForm2', array("modelName" => $modelName,"groupName" => $groupName)); ?>
-    <?php echo $this->element('localCSV'); ?>
 </div>
 <!-- Nav tabs -->
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->
