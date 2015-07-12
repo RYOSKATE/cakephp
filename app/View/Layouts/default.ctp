@@ -43,26 +43,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
+		echo $this->Html->css('sticky');
 	?>
-<style>
-	.sticky {
-	  width: 250px;
-	  height: 250px;
-	  position: absolute;
-	  cursor: pointer;
-	  border: 1px solid #aaa;
-	}
-	textarea {
-	  width: 300px;
-	  height: 300px;
-	}
-
-	#textarea {
-	  height: 100px;
-	  resize: vertical;
-	}
-	.selected {border-color: #000;}
-</style>
 </head>
 <body>
 	<div class="container">
@@ -113,9 +95,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				  <?php echo $this->Html->link('由来比較',		array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
 				  <?php echo $this->Html->link('メトリクス比較',array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
-<!-- 付箋追加削除 -->
+<!-- 付箋 -->
 <?php echo $this->element('sticky'); ?>
-<!-- 付箋追加削除 -->
+<!-- 付箋 -->
 	        </div>
 	        <!-- 残り9列はコンテンツ表示部分として使う -->
 	        <div class="col-md-9 col-sm-9">
@@ -134,7 +116,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</p>
 		</div>
 	</div>
+
 <script type="text/javascript">var stickies = JSON.parse('<?=json_encode($stickies);?>');</script>
 <?php echo $this->Html->script('sticky', array('inline' => true)); ?>
+
 </body>
 </html>

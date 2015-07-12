@@ -1,0 +1,12 @@
+rect {
+  fill: none;
+  stroke: #fff;
+}
+
+rect:hover{
+	opacity: 0.5;
+}
+
+text {
+	font-family:"Times New Roman",Times,serif;
+}

@@ -89,7 +89,7 @@ class AppController extends Controller
       {
           $this->Sticky->deleteSticky($this->action,$username,$formData);
       }
-      else if (trim($formData['textarea'])!="") 
+      else if (isset($formData['textarea']) && trim($formData['textarea'])!="") 
       {
           if(isset($this->request->data['add']))
           {
