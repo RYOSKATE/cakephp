@@ -51,27 +51,38 @@ class UsersController extends AppController
             }
         }
     }
-    public function edit($id = null) 
+    
+    public function edit() 
     {
+        $id = $this->Auth->user('id');
         $this->User->id = $id;
-        if (!$this->User->exists()) 
+        if (!$this->User->exists($id)) 
         {
-            throw new NotFoundException(__('Invalid user'));
+            throw new NotFoundException(__('Invalid customer'));
         }
+
         if ($this->request->is('post') || $this->request->is('put'))
         {
-            if ($this->User->save($this->request->data)) 
+ 
+            //パスワードがある場合のみパスワードをDBでUpdate
+            if (!empty($this->request->data['User']['new password'])) 
             {
-                $this->Session->setFlash(__('The user has been saved<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-                $this->redirect(array('action' => 'index'));
-            } else 
-            {
-                $this->Session->setFlash(__('The user could not be saved. Please, try again.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-warning alert-dismissable'));
+                $this->request->data['User']['password'] = $this->request->data['User']['new password'];                
             }
-        } else 
-        {
-            $this->request->data = $this->User->read(null, $id);
-            unset($this->request->data['User']['password']);
+ 
+            if ($this->User->save($this->request->data))
+            {
+                $this->Session->setFlash(__('パスワードを変更しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+            }
+            else 
+            {
+                $this->Session->setFlash(__('パスワードの変更に失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+            }
+        }
+        else
+        {   
+             $this->request->data = $this->User->read(null, $id);
+             unset($this->request->data['User']['password']);
         }
     }
 
