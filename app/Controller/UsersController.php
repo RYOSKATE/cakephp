@@ -15,6 +15,10 @@ class UsersController extends AppController
         }
     }
 
+    public function manage() 
+    {
+    }
+
     public function index() 
     {
         $this->User->recursive = 0;

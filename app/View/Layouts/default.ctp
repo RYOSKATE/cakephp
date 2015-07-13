@@ -62,7 +62,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		        </div>
 		        <div class="navbar-collapse collapse">
 		          <ul class="nav navbar-nav navbar-right">
-		            <li class="active"><?php echo $this->Html->link($userData['username'],array('controller' => 'users',  'action' => 'delete'));?></li>
+		            <li class="active"><?php echo $this->Html->link($userData['username'],array('controller' => 'users',  'action' => 'manage'));?></li>
 		          <?php if($userData['role']!='reader'){?>
 		            <li class="active"><?php echo $this->Html->link('Upload',array('controller' => 'users', 'action' => 'delete'));?></li>
 		            <?php }?>

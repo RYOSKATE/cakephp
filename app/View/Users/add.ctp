@@ -1,7 +1,7 @@
 <div class="container">  
 <div class="row">
 <div class="col-md-8 col-md-offset-2">
-
+<?php if($userData['role']=='admin' || isset($enableAdd)){?>
 <?php echo $this->Form->create('User', array(
 	'inputDefaults' => array(
 		'div' => 'form-group',
@@ -60,3 +60,4 @@
 </div>
 </div>
 </div>
+<?php }?>
