@@ -13,8 +13,8 @@
     var defactsByOrigin1 = JSON.parse('<?=json_encode($model1);?>');
     var defactsByOrigin2 = JSON.parse('<?=json_encode($model2);?>');
 </script>
-
 <?php echo $this->Html->script('origin', array('inline' => true));?>
+
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較"));?>
 
 <div class="page-header">
@@ -33,7 +33,7 @@
 <div class="tab-content">
     <?php 
         $originTag = array(4=>'o13',5=>'o123',6=>'o23',7=>'o3');
-        for($i=4;$i<=7;++$i)
+        for($i=5;$i<=7;++$i)
         {
             echo '<div class="tab-pane fade in active" id="'.$originTag[$i].'">';
             echo $this->element('piechart', array("leftModelName" => $leftModelName,"rightModelName" => $rightModelName,"No"=>$i));
@@ -41,3 +41,4 @@
         }
     ?>
 </div>
+<?php echo $this->Html->script('origin', array('inline' => true));?>
