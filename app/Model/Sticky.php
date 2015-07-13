@@ -1,7 +1,7 @@
 <?php
 class Sticky extends AppModel 
 {
-    public $useTable = 'sticky';
+    public $useTable = 'stickies';
 
     function getStickies($page)
     {
