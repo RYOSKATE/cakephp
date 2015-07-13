@@ -183,12 +183,19 @@
   function setdata(node)
   {
     //defactは数百でもLCOMは百万オーダー
+    // var dataset = [node.defact,
+    //                node.otherClassFunc/1000,
+    //                node.LCOM/10000,
+    //                node.Method/100,
+    //                node.Field/10,
+    //                node.otherFileFunc/1000
+    //               ];
     var dataset = [node.defact,
-                   node.otherClassFunc/1000,
-                   node.LCOM/10000,
-                   node.Method/100,
-                   node.Field/10,
-                   node.otherFileFunc/1000
+                   node.otherClassFunc,
+                   node.LCOM,
+                   node.Method,
+                   node.Field,
+                   node.otherFileFunc
                   ];
     var radarChartData = {
         labels: [

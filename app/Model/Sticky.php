@@ -23,10 +23,11 @@ class Sticky extends AppModel
             date_default_timezone_set('Asia/Tokyo');
             $idArray = $this->find('first', array("fields" => "MAX(Sticky.id) as max_id"));
             $id = reset($idArray)['max_id']+1;
+            $text = str_replace("\r\n","<br>",$formData['textarea']);
             $data = array(
                 'id'=>$id,
                 'username'=>$username,
-                'text'=>$formData['textarea'],
+                'text'=>mb_convert_encoding($text, "utf-8", "auto"),
                 'page'=>$page,
                 'color'=>$formData['color'],
                 'time'=>date('Y-m-d H:i:s',time()),

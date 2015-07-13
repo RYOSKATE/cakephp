@@ -117,8 +117,16 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div>
 	</div>
 
-<script type="text/javascript">var stickies = JSON.parse('<?=json_encode($stickies);?>');</script>
-<?php echo $this->Html->script('sticky', array('inline' => true)); ?>
+<script type="text/javascript">
+	var stickies = JSON.parse('<?=json_encode($stickies);?>');
+	alert(stickies);
+</script>
+<?php 
+                            echo 'デバッグ用表示';
+    echo '<pre>';
+    print_r($stickies);
+    echo '</pre>';
+echo $this->Html->script('sticky', array('inline' => true)); ?>
 
 </body>
 </html>

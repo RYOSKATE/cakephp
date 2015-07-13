@@ -7,9 +7,12 @@
       .mousedown(function() {
         $('.sticky').removeClass('selected');
         $(this).addClass('selected');
-        document.getElementById("textarea").value=item.text;
+        document.getElementById("textarea").value=item.text.replace(/<br>/g,"\n")
         document.getElementById("id").value=item.id;
         document.getElementById("color").value=item.color;
+      })
+      .dblclick(function () {
+
       })
       .mouseup(function() {
         document.getElementById("left").value=$(this).context.offsetLeft
