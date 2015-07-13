@@ -70,7 +70,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => 'root',
-		'database' => 'lab',
+		'database' => 'visualize_tool',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
