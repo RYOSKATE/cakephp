@@ -6,6 +6,8 @@
     // echo '</pre>';
 ?>
 
+<?php $this->Html->script('amcharts/Chart.Core', array('inline' => false));?>
+<?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 <?php $this->Html->script('d3.v2', array('inline' => false));?>
 <?php $this->Html->css('filemetrics', array('inline' => false));?>
 <?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "ファイルメトリクス"));?>
