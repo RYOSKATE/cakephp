@@ -62,4 +62,10 @@ class User extends AppModel
 
         return $this->save($userData);
     }
+
+    public function IsRegisteredNoUser()
+    {
+        $is = $this->find('all');
+        return empty($is);
+    }
 }

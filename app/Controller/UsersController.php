@@ -9,6 +9,10 @@ class UsersController extends AppController
     {
         parent::beforeFilter();
         $this->Auth->allow('add', 'logout');
+        if($this->User->IsRegisteredNoUser())
+        {
+            $this->set('enableAdd', true);
+        }
     }
 
     public function index() 

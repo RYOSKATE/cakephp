@@ -56,7 +56,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		          <ul class="nav navbar-nav navbar-left">
 		            <!--<li class="active"><?php //echo $this->Html->link('Logout',array('controller' => 'users', 'action' => 'logout'));?></li>-->
 		            <li class="divider-vertical"><?php echo $this->Html->link('Login',array('controller' => 'users', 'action' => 'login'));?></li>
+		            <?php if($userData['role']=='admin' || isset($enableAdd)){?>
 		            <li class="divider-vertical"><?php echo $this->Html->link('Add',array('controller' => 'users', 'action' => 'add'));?></li>
+		            <?php }?>
 		          </ul>
 		        </div><!--/.nav-collapse -->
 			  </div>
