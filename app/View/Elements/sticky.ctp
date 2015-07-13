@@ -46,7 +46,7 @@ if($userData['role']!='reader')
 	    'class' => 'form-control',
 	    'step'=>1,
 	    'min'=>0,
-	    'value'=>77,
+	    'value'=>350,
 	    // 'list'=>array(1,2,3),
 	 ));
    	echo $this->Form->input('y',array
@@ -56,7 +56,7 @@ if($userData['role']!='reader')
 	    'class' => 'form-control',
 	    'step'=>1,
 	    'min'=>0,
-	    'value'=>777,
+	    'value'=>490,
 	    // 'list'=>array(1,2,3),
 	 ));
    	echo $this->Form->input('add', array

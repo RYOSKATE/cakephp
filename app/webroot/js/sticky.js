@@ -28,7 +28,7 @@
       items.push({
         css: {
           left: Number(stickies[i].left),
-        top: Number(stickies[i].top),
+          top:  Number(stickies[i].top),
           backgroundColor: stickies[i].color,
         },
         html: "No:"+stickies[i].id+" "
