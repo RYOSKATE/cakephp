@@ -10,7 +10,6 @@ class GraphsController extends AppController
     メトリクス   
     由来比較     OriginChart
     */
-
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
@@ -48,20 +47,13 @@ class GraphsController extends AppController
                 $conditions['conditions']['GroupData.group_name'] = $selectGroupName;
             }
         }
-        
-        //最新のデータを取得する
-        $data=array();
-        for($i = 0;!$data && -100*365<$i; --$i)//とりえあず100年をチェック範囲
-        {
-            $time = date('Y-m-d',$this->getDay($i));
-            $conditions['conditions']['GroupData.date =']= '2015-06-26';
-            $data = $this->GroupData->find('all',$conditions);
-        // echo '<pre>';
-             $this->set('time',$time);
-        //     print_r($time);
-        // echo '</pre>';
-        }
 
+        //最新のデータを取得する
+        $idArray = $this->GroupData->find('first', array("fields" => array("MAX(GroupData.date) as max_date"),"conditions"=>array('model'=>$selectModelName)));
+        $day = reset($idArray)['max_date'];
+        $conditions['conditions']['GroupData.date =']= $day;
+        $data = $this->GroupData->find('all',$conditions);
+        $this->set('time',$day);
         $this->set('data',$data);
     }
     
@@ -78,9 +70,9 @@ class GraphsController extends AppController
         {    
             for($i=1;$i<count($selectModelName);++$i)
             {
-                $selectModelName[$i] = $modelNameData[$formData['モデル'.$i]];
+                $selectModelName[$i] = $modelNameData[$this->data['Graph']['モデル'.$i]];
             }
-            $selectGroupName = $groupNameData[$formData['開発グループ']];         
+            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];         
         }
         for($i=1;$i<count($selectModelName);++$i)
         {
