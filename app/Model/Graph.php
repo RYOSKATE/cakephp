@@ -382,6 +382,10 @@ class Graph extends AppModel
         //         )
 
         // )
+        if(empty($data))
+        {
+            return null;
+        }
         $modelName = $data[0]['Graph']['model'];
         $newData = array();
         for ($i = 0; $i < 7; ++$i)

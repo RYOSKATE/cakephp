@@ -20,18 +20,22 @@
                               6=>'Others',
                              );
         ?>
-        <?php foreach($data as $key => $value)
-        {
-            $val = $value['ModelLayer']
-        ?>
-        <tr>
-            <td id="a"><?php echo $layer[$val['layer']];?></td>
-            <td><?php echo $val['all_file_num'];?></td>
-            <td><?php echo $val['defect_file_num'];?></td>
-            <td><?php echo sprintf("%.2f",$val['defect_per_file']);?></td>
-            <td><?php echo $val['defect_num'];?></td>
-        </tr>
         <?php 
+        if(!empty($data))
+        {
+          foreach($data as $key => $value)
+          {
+              $val = $value['ModelLayer']
+          ?>
+          <tr>
+              <td id="a"><?php echo $layer[$val['layer']];?></td>
+              <td><?php echo $val['all_file_num'];?></td>
+              <td><?php echo $val['defect_file_num'];?></td>
+              <td><?php echo sprintf("%.2f",$val['defect_per_file']);?></td>
+              <td><?php echo $val['defect_num'];?></td>
+          </tr>
+          <?php 
+          }
         }?>
         </tbody>
     </table>
