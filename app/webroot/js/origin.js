@@ -1,16 +1,3 @@
-$(function () {
-$('#myTab a:first').tab('show')
-})
-
-$('#myTab a').click(
-    function (e) 
-    { 
-        e.preventDefault()
-        $(this).tab('show')
-    }
-)
-
-
 
 var chartData1 = [];
 for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
@@ -59,8 +46,16 @@ origin(実際の由来は+1する)
 6:0-39 0が8割くらい
 */
 // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい
+function toggleActive()
+{
+    $('#o123').toggleClass('active');
+    $('#o23').toggleClass('active');
+    $('#o3').toggleClass('active');
+
+}
 AmCharts.ready(function () 
 {
+    toggleActive();
     for (var origin = 4; origin <chartData1.length; ++origin) 
     {   
         // PIE CHART
@@ -116,4 +111,5 @@ AmCharts.ready(function ()
         leftlegend[origin].validateNow();
         rightlegend[origin].validateNow();
     }
+    toggleActive();
 });
