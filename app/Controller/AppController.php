@@ -39,7 +39,7 @@ class AppController extends Controller
    (
     'Session',
     'Cookie',
-    'DebugKit.Toolbar',
+    //'DebugKit.Toolbar',
     'Auth' => array(
                     'loginRedirect'  => array('controller' => 'graphs', 'action' => 'index'),
                     'logoutRedirect' => array('controller' => 'users', 'action'  => 'login'),
