@@ -2,7 +2,7 @@
 class GroupData extends AppModel 
 {
     public $useTable = 'group_data';
-    function uploadFromCSV($fileName,$modelname,$dateData) 
+    function uploadFromCSV($csvData,$modelname,$dateData) 
     {
 
     // php.iniの変更点
@@ -10,39 +10,32 @@ class GroupData extends AppModel
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
     // post_max_size=64M        8万行のデータを(ry
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
+        $group_names = array();
+
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        	$ret = array();
-        	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//sjis-win''
-        	$lines = str_getcsv($buf, "\r\n");
-        	foreach ($lines as $line) 
-            {
-                $col = str_getcsv($line);
-                if(4<=$col[1])//由来o3,o13,o23,o123のみ
-                {
-        		  $ret[] = array('model'=>$modelname) +$col;
-                }
-        	}
             date_default_timezone_set('Asia/Tokyo');
 
             $group_array = array();
-            for ($i = 0; $i< count($ret); ++$i) 
+ 
+            for ($i = 0; $i< count($csvData); ++$i) 
             {
-
-                $names = explode(';',$ret[$i][25]);
+                $names = explode(';',$csvData[$i][25]);
                 for ($j = 0; $j< count($names); ++$j) 
                 {
-                    if(!isset($group_array[$names[$j]]))
+                    $name = trim($names[$j]);
+                    if(!isset($group_array[$name]))
                     {
-                        $group_array += array($names[$j]=>array('file_num'=>1,'defact_num'=>$ret[$i][3],'loc'=>$ret[$i][4]));
+                        $group_names[] = $name;
+                        $group_array += array($name=>array('file_num'=>1,'defact_num'=>$csvData[$i][3],'loc'=>$csvData[$i][4]));
                     }
                     else
                     {
-                        $group_array[$names[$j]]['file_num']   += 1;
-                        $group_array[$names[$j]]['defact_num'] += $ret[$i][3];
-                        $group_array[$names[$j]]['loc']        += $ret[$i][4];
+                        $group_array[$name]['file_num']   += 1;
+                        $group_array[$name]['defact_num'] += $csvData[$i][3];
+                        $group_array[$name]['loc']        += $csvData[$i][4];
                     }
                 }
                 
@@ -91,22 +84,8 @@ class GroupData extends AppModel
         catch(Exception $e) 
         {
             $this->rollback();
-            return false;
+            return null;
         }
-        return true;
-    }
-
-    function getData()
-    {
-        // for($i = 0;!$data;--$i)
-        // {
-        //     $time = date('Y-m-d',$this->getDay($i));
-        //     $conditions = array('conditions' => array('GroupData.model' => $selectModelName,'GroupData.date =' => $time/*,'GroupData.group_name' => $selectGroupName*/));
-        //     $this->GroupData->deleteAll(array('GroupData.model' => $selectModelName,'GroupData.date =' => $time));
-        //     $data = $this->GroupData->find('all',$conditions);
-        // echo '<pre>';
-        //     print_r($time);
-        // echo '</pre>';
-        // }
+        return $group_names;
     }
 }

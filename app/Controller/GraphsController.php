@@ -55,6 +55,7 @@ class GraphsController extends AppController
         $data = $this->GroupData->find('all',$conditions);
         $this->set('time',$day);
         $this->set('data',$data);
+
     }
     
     public function onedevgroup() 
@@ -279,15 +280,17 @@ class GraphsController extends AppController
                 //まずCSVを全体をアップロードする
                 if($success)
                 {
-                    $success = $this->Graph->uploadFromCSV($fileName,$selectModelName);
+                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelName);
+                    $success = ($csvData != null);
                     if($success)
                     {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
                         //すでに存在する開発グループ名一覧を取得
                         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                        $success = $this->GroupData->uploadFromCSV($fileName,$selectModelName,$this->data['Graph']['date']);
+                        $groupNames = $this->GroupData->uploadFromCSV($csvData,$selectModelName,$this->data['Graph']['date']);
+                        $success = ($csvData != null);
                         if($success)
                         {   //最後にグループ名を追加する
-                            $success = $this->GroupName->uploadFromCSV($fileName,$groupNameData);
+                            $success = $this->GroupName->uploadFromCSV($groupNames,$groupNameData);
                             if($success)
                             {  //最後にグループ名を追加する
                                if(!in_array($selectModelName,$modelNameData))

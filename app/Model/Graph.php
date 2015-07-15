@@ -11,11 +11,11 @@ class Graph extends AppModel
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
     // post_max_size=64M        8万行のデータを(ry
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
+        $csvData = array();
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        	$ret = array();
         	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//sjis-win''
         	$lines = str_getcsv($buf, "\r\n");
         	foreach ($lines as $line) 
@@ -23,19 +23,16 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-        		  $ret[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
+        		  $csvData[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
                 }
         	}
-        // echo '<pre>';
-        //     //print_r($ret[0]);
-        // echo '</pre>';
 
             if (!$this->deleteAll(array('model' => $modelname))) 
             {
                 throw new Exception();
             }
 
-            if (!$this->saveAll($ret)) 
+            if (!$this->saveAll($csvData)) 
             {
                 throw new Exception();
             }
@@ -45,12 +42,12 @@ class Graph extends AppModel
         catch(Exception $e) 
         {
             $this->rollback();
-            return false;
+            return null;
         }
         // echo '<pre>';
-        //     //print_r($ret[0]);
+        //     print_r($csvData[0]);
         // echo '</pre>';
-        return true;
+        return $csvData;
     }
     ///////csvのアップロード用///////
 

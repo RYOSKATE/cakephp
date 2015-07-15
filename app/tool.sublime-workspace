@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"remove",
+				"removeClass〔function〕"
+			],
+			[
 				"grou",
 				"group_data"
 			],
@@ -72,6 +76,46 @@
 	"buffers":
 	[
 		{
+			"file": "/C/xampp/htdocs/cakephp/app/Controller/GraphsController.php",
+			"settings":
+			{
+				"buffer_size": 13084,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/cakephp/app/Model/ModelName.php",
+			"settings":
+			{
+				"buffer_size": 816,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/cakephp/app/Model/GroupName.php",
+			"settings":
+			{
+				"buffer_size": 1069,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/cakephp/app/Model/GroupData.php",
+			"settings":
+			{
+				"buffer_size": 3239,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/cakephp/app/Model/Graph.php",
+			"settings":
+			{
+				"buffer_size": 20789,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/User.h",
 			"settings":
 			{
@@ -80,27 +124,27 @@
 			}
 		},
 		{
-			"contents": "#include <string>\n#include <vector>\n#include <iostream>\n#include <unordered_map>\n#include <memory>\n\nstruct Station\n{\n	std::string name;\n	int estimateTime;\n	bool isActive = false;\n	std::vector<std::pair<std::weak_ptr<Station>,int>> nextStation;\n	Station(const std::string n, int time):name(n),estimateTime(time){}\n};\n\n\nint main()\n{\n	std::unordered_map<std::string,std::shared_ptr<Station>> stations;\n	auto add = [&](const std::string& name, int time)\n	{\n		stations[name] = std::make_shared<Station>(name,time);\n	};\n	auto connect = [&](const std::string& name1, const std::string& name2, int time)\n	{\n		stations[name1]->nextStation.emplace_back(std::make_pair(stations[name2], time));\n		stations[name2]->nextStation.emplace_back(std::make_pair(stations[name1], time));\n	};\n	add(\"西早稲田\",30);\n	add(\"高田馬場\", 28);\n	add(\"渋谷\",25);\n	add(\"大手町\", 15);\n	add(\"東京\", 10);\n	add(\"品川\", 25);\n	add(\"菊名\", 3);\n	add(\"横浜\", 15);\n	add(\"新横浜\", 0);\n	connect(\"西早稲田\", \"高田馬場\", 10);\n	connect(\"西早稲田\", \"渋谷\", 15);\n	connect(\"高田馬場\", \"渋谷\", 15);\n	connect(\"高田馬場\", \"大手町\", 15);\n	connect(\"大手町\", \"東京\", 7);\n	connect(\"渋谷\", \"品川\", 15);\n	connect(\"渋谷\", \"菊名\", 25);\n	connect(\"品川\", \"東京\", 15);\n	connect(\"品川\", \"横浜\", 18);\n	connect(\"菊名\", \"横浜\", 6);\n	connect(\"菊名\", \"新横浜\", 5);\n	connect(\"横浜\", \"新横浜\", 15);\n	connect(\"東京\", \"新横浜\", 15);\n	auto start = stations[\"西早稲田\"];\n	auto goal = stations[\"新横浜\"];\n	std::unordered_map<std::string, int> timeList;\n	for (const auto& station : stations)\n	{\n		timeList[station.first] = INT_MAX;\n	}\n\n	start->isActive = true;\n	auto active = start;\n	for (auto& station : active->nextStation)\n	{\n\n	}\n\n}",
-			"file": "/D/一時保存/Source.cpp",
-			"file_size": 1721,
-			"file_write_time": 130802155915836900,
+			"file": "/C/xampp/htdocs/cakephp/app/View/Graphs/origin.ctp",
 			"settings":
 			{
-				"buffer_size": 1558,
-				"line_ending": "Windows",
-				"scratch": true
+				"buffer_size": 1850,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "#EXTM3U\n#EXTINF:217,Bad Apple!!.mp3\nD:\\Dropbox\\PC-鴻掩\\music\\＜障\\Bad Apple!!.mp3\n#EXTINF:254,UNISON SQUARE GARDEN - D:\\Dropbox\\PC-鴻掩\\music\\＜障\\01. 激ャ若純潟違帥若鴻.mp3\n#EXTINF:215,STD:\\Dropbox\\PC-鴻掩\\music\\＜障\\01 LOVE1000_.mp3\n#EXTINF:226,STRISH - }WLOVE2000%\nD:\\Dropbox\\PC-鴻掩\\music\\＜障\\01 LOVE2000_.mp3\n#EXTINF:266,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\01. 激.mp3\n#EXTINF:249,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\01. 宴顪ゃ.mp3\n#EXTINF:310,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\00 Beautiful World -PLANiTb Acoustica Mix-.mp3\n#EXTINF:278,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\00 God knows.mp3\n#EXTINF:285,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\00 笈≪.mp3\n#EXTINF:214,BLUE ENCOUNT D:\\Dropbox\\PC-鴻掩\\music\\＜障\\BLUE ENCOUNT DAYDAY.mp3\n#EXTINF:249,BUMP OF CHICKEND:\\Dropbox\\PC-鴻掩\\music\\＜障\\BUMP OF CHICKENHello,world!.mp3\n#EXTINF:279,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\My soul, Your Beats!.mp3\n#EXTINF:92,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\selector infected WIXOSS -killy killy JOKER- OP.mp3\n#EXTINF:237,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\unravel(fragment) TK from .mp3\n#EXTINF:243,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\≪≪若BRE@TH__LESS.mp3\n#EXTINF:227,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\≪≪若Keep on keeping on.mp3\n#EXTINF:266,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\潟.mp3\n#EXTINF:224,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\違鴻 feat. 絎絎ゅ臂.mp3\n#EXTINF:229,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\絨絅 經 OP ＜帥.mp3\n#EXTINF:274,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\綛吾ゃ腱ャｃ5ゃ号.mp3\n#EXTINF:271,D:\\Dropbox\\PC-鴻掩\\music\\＜障\\鞘算莪欠怨ャャ.mp3\n",
-			"file": "/D/Dropbox/PC-スマホ共有用フォルダ/music/Favorite.m3u",
-			"file_size": 2595,
-			"file_write_time": 130813045620000000,
+			"file": "/C/xampp/htdocs/cakephp/app/webroot/js/origin.js",
 			"settings":
 			{
-				"buffer_size": 1334,
-				"line_ending": "Windows",
-				"scratch": true
+				"buffer_size": 3586,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/cakephp/app/Controller/AppController.php",
+			"settings":
+			{
+				"buffer_size": 4442,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -164,13 +208,21 @@
 		"/C/xampp/htdocs/cakephp/app/Controller",
 		"/C/xampp/htdocs/cakephp/app/Model",
 		"/C/xampp/htdocs/cakephp/app/View",
+		"/C/xampp/htdocs/cakephp/app/View/Elements",
 		"/C/xampp/htdocs/cakephp/app/View/Graphs",
 		"/C/xampp/htdocs/cakephp/app/View/Layouts",
 		"/C/xampp/htdocs/cakephp/app/View/Users"
 	],
 	"file_history":
 	[
+		"/C/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp",
+		"/C/xampp/htdocs/cakephp/app/webroot/js/onedevgroup.js",
+		"/C/xampp/htdocs/cakephp/app/Controller/GraphsController.php",
+		"/C/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup.ctp",
+		"/C/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp",
+		"/C/xampp/htdocs/cakephp/app/View/Elements/piechart.ctp",
 		"/D/一時保存/Source.cpp",
+		"/D/Dropbox/PC-スマホ共有用フォルダ/music/Favorite.m3u",
 		"/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/User.cpp",
 		"/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/Ticket.h",
 		"/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/Bar.h",
@@ -192,14 +244,10 @@
 		"/C/xampp/htdocs/cakephp/app/View/Layouts/default.ctp",
 		"/C/xampp/htdocs/cakephp/app/Controller/AppController.php",
 		"/C/xampp/htdocs/cakephp/app/View/Graphs/metrics.ctp",
-		"/C/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp",
-		"/C/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup.ctp",
-		"/C/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp",
 		"/C/xampp/htdocs/cakephp/app/View/Graphs/origin.ctp",
 		"/C/xampp/htdocs/cakephp/app/View/Elements/localCSV.ctp",
 		"/C/xampp/htdocs/cakephp/app/View/Elements/selectForm2.ctp",
 		"/C/xampp/htdocs/cakephp/app/View/Elements/selectForm1.ctp",
-		"/C/xampp/htdocs/cakephp/app/Controller/GraphsController.php",
 		"/C/xampp/htdocs/cakephp/app/View/Users/delete.ctp",
 		"/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/User.h",
 		"/C/xampp/htdocs/cakephp/app/View/Graphs/index.ctp",
@@ -214,9 +262,7 @@
 		"/C/Users/RYOSUKE/AppData/Local/Temp/tmp954B.tmp.ctp",
 		"/C/xampp/htdocs/cakephp/app/View/Elements/metricschart.ctp",
 		"/C/xampp/htdocs/cakephp/app/webroot/js/amcharts/xy.js",
-		"/C/xampp/htdocs/cakephp/app/webroot/js/onedevgroup.js",
 		"/C/xampp/htdocs/cakephp/app/webroot/js/origin.js",
-		"/C/xampp/htdocs/cakephp/app/View/Elements/piechart.ctp",
 		"/C/xampp/htdocs/cakephp/app/webroot/js/filemetrics.js",
 		"/C/xampp/htdocs/cakephp/app/Model/GroupData.php",
 		"/C/xampp/htdocs/cakephp/app/Model/ModelName.php",
@@ -296,8 +342,7 @@
 		"/c/users/ryosuke/appdata/local/temp/tmph3w_fe.html",
 		"/C/Program Files NO REGISTRY/Sublime Text Build 3083 x64/Data/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Program Files NO REGISTRY/Sublime Text Build 3083 x64/Data/Packages/ExportHtml/ExportHtml.sublime-settings",
-		"/C/Program Files NO REGISTRY/Sublime Text Build 3083 x64/Data/Packages/User/ExportHtml.sublime-settings",
-		"/C/Program Files NO REGISTRY/Sublime Text Build 3083 x64/Data/Packages/Default/Default (Windows).sublime-keymap"
+		"/C/Program Files NO REGISTRY/Sublime Text Build 3083 x64/Data/Packages/User/ExportHtml.sublime-settings"
 	],
 	"find":
 	{
@@ -321,6 +366,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ret",
+			"$('",
+			"$('#",
+			"fields",
+			"first",
+			"fields",
+			"max",
+			"formData",
 			"        $this->operateSticky();",
 			"<?php echo $this->element('localCSV'); ?>",
 			"local",
@@ -440,15 +493,7 @@
 			"function_list_top",
 			"create_parameter",
 			"ParameterList",
-			"FunctionDefinition",
-			"delete",
-			"new",
-			"ParameterList",
-			"]",
-			"ParameterList",
-			"create_parameter",
-			"alloc_expression",
-			"yylval.character = "
+			"FunctionDefinition"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -456,6 +501,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"csvData",
 			"sticky",
 			"\"",
 			"Field",
@@ -494,11 +540,465 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "/C/xampp/htdocs/cakephp/app/Controller/GraphsController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13084,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1534,
+								1534
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 871.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/xampp/htdocs/cakephp/app/Model/ModelName.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 816,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/xampp/htdocs/cakephp/app/Model/GroupName.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1069,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								510,
+								510
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 69.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/xampp/htdocs/cakephp/app/Model/GroupData.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3239,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1491,
+								1491
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 552.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/xampp/htdocs/cakephp/app/Model/Graph.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 20789,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								932,
+								932
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 345.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "/D/OneDrive/ドキュメント/W-学校関係/3-基幹/授業-3年 2015年度 春期/授業-ソフトウェア工学/総合演習2/自動改札(実装)/ソースコード/User.h",
 					"semi_transient": false,
 					"settings":
@@ -526,31 +1026,46 @@
 							},
 							"bh_regions":
 							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
@@ -565,22 +1080,7 @@
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
+								"bh_tag_content"
 							],
 							"origin_encoding": "ASCII",
 							"syntax": "Packages/C++/C++.tmLanguage",
@@ -590,24 +1090,206 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "/D/一時保存/Source.cpp",
+					"buffer": 6,
+					"file": "/C/xampp/htdocs/cakephp/app/View/Graphs/origin.ctp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1558,
+						"buffer_size": 1850,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								837,
-								837
+								899,
+								899
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 467.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/xampp/htdocs/cakephp/app/webroot/js/origin.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3586,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1103,
+								1103
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "UTF-8",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 782.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/xampp/htdocs/cakephp/app/Controller/AppController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3328,
+								3328
 							]
 						],
 						"settings":
@@ -615,162 +1297,72 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content"
 							],
-							"in_converting": true,
-							"origin_encoding": "Shift_JIS",
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1125.0,
+						"translation.y": 1765.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/D/Dropbox/PC-スマホ共有用フォルダ/music/Favorite.m3u",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1334,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								458,
-								458
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"in_converting": true,
-							"origin_encoding": "EUC-JP",
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -873,7 +1465,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 379.0,
+	"side_bar_width": 222.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

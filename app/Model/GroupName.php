@@ -2,7 +2,7 @@
 class GroupName extends AppModel 
 {
     public $useTable = 'group_names';
-    function uploadFromCSV($fileName,$groupNameData) 
+    function uploadFromCSV($groupNames,$groupNameData) 
     {
 
     // php.iniの変更点
@@ -14,29 +14,7 @@ class GroupName extends AppModel
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        	$ret = array();
-        	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//sjis-win''
-        	$lines = str_getcsv($buf, "\r\n");
-        	foreach ($lines as $line) 
-            {
-                $col = str_getcsv($line);
-                if(4<=$col[1])//由来o3,o13,o23,o123のみ
-                {
-        		  $ret[] = $col;
-                }
-        	}
-
-            $group_array = array();
-            for ($i = 0; $i< count($ret); ++$i) 
-            {
-
-                $names = explode(';',$ret[$i][25]);
-                for ($j = 0; $j< count($names); ++$j) 
-                {
-                	$group_array[] = trim($names[$j]);//念のため両端の空白文字の削除
-                }
-            }
-            $result = array_unique($group_array);
+            $result = array_unique($groupNames);
             sort($result);
 
  			$data = array();
