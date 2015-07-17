@@ -303,9 +303,16 @@ class GraphsController extends AppController
                 }
             }
             if($success)
+            {
                 $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+            }
             else
+            {
                 $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+            }
+        
+            $file = new File($fileName);
+            $file->delete();
         }
     }
 

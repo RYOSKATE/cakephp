@@ -61,7 +61,7 @@
         //バブルサイズの計算式
         //var dist = (y-x)/Math.sqrt(2);
         //var value = parseInt(Math.round(dist));
-        value = y;
+        value = kloc;
         
         data.push({"group":name ,"y": y,"x": x ,"value": value} );
         totalDefact.push({"group":name ,"v": y} );
