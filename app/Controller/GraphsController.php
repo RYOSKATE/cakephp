@@ -181,7 +181,73 @@ class GraphsController extends AppController
         $this->set('rightModelName',$selectModelName2);
         $this->set('useLocalCSV',true);
     }
+    
+    public function originCity()
+    {
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        $this->operateSticky();
+        $groupNameData = $this->setGroupNameWithAll();
+        $modelNameData = $this->setModelName();
 
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelName1 = reset($modelNameData);
+        $selectModelName2 = reset($modelNameData);
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
+        $data1=null;
+        $data2=null;
+
+        if (isset($this->request->data['set']))
+        {
+            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+        
+            if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
+            {
+
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data1 = $this->Graph->getOriginCityFromCSV($fileName);
+                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
+                if(empty($selectModelName1))
+                {
+                    $selectModelName1 = "local model1";
+                }
+            }
+
+            if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
+            {
+
+                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                $up_file = $this->data['Graph']['選択ファイル2']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
+                move_uploaded_file($up_file, $fileName);
+                $data2 = $this->Graph->getOriginCityFromCSV($fileName);
+                $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
+                if(empty($selectModelName2))
+                {
+                    $selectModelName2 = "local model2";
+                }
+            }
+        }
+        if($data1==null)
+        {
+            $data1 = $this->Graph->getOriginCity($selectModelName1,$selectGroupName);
+        }
+        if($data2==null)
+        {
+            $data2 = $this->Graph->getOriginCity($selectModelName2,$selectGroupName);
+        }
+
+        $this->set('model1',$data1);
+        $this->set('model2',$data2);
+        $this->set('leftModelName',$selectModelName1);
+        $this->set('rightModelName',$selectModelName2);
+        $this->set('useLocalCSV',true);
+    }
+    
     public function metrics()
     {
         $this->operateSticky();

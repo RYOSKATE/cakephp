@@ -597,4 +597,75 @@ class Graph extends AppModel
         return $model;
     }
     ///////由来比較用///////
+    
+    
+     function getOriginCityFromCSV($up_file)
+    {
+        setlocale( LC_ALL, 'ja_JP.UTF-8' );
+        $data = array();
+        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
+        $lines = str_getcsv($buf, "\r\n");
+        foreach ($lines as $line) 
+        {
+            $col = str_getcsv($line);
+            //7由来全て用いる
+            $data[] = array('model'=>"localCSV",'file_path'=>$col[0]) +$col;
+            
+            //if(4<=$col[1])//由来o3,o13,o23,o123のみ
+            //{
+            //  $data[] = array('model'=>"localCSV",'file_path'=>$col[0]) +$col;
+            //}
+        }
+        
+        //由来ごとのメトリクスの総数を調べる
+        $valueByOrigin = array(0,0,0,0,0,0,0,0);
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $origin = $data[$i]['1'];
+            $defact = $data[$i]['3'];
+            //$valueByOrigin[$origin] += $defact;
+            ++$valueByOrigin[$origin];
+        }
+
+        // echo '<pre>';
+        // print_r($valueByOrigin);
+        // die();
+        // echo '</pre>';
+        // print_r($valueByOrigin);
+        return $valueByOrigin;
+    }
+    
+    //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
+    function getOriginCity($selectModelName,$selectGroupName) 
+    {
+        $conditions = array('Graph.model' => $selectModelName);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        //1は由来,3は欠陥数
+        $data = $this->find('all',array('Fields' => array('1','3'),'conditions' => $conditions));
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $data[$i] = $data[$i]['Graph'];
+        }
+        //print_r($data);
+
+        //由来ごとのメトリクスの総数を調べる
+        $valueByOrigin = array(0,0,0,0,0,0,0,0);
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $origin = $data[$i]['1'];
+            $defact = $data[$i]['3'];
+            $valueByOrigin[$origin] += $defact;
+        }
+
+        // echo '<pre>';
+        // print_r($valueByOrigin);
+        // die();
+        // echo '</pre>';
+        // print_r($valueByOrigin);
+        return $valueByOrigin;
+    }
+    ///////由来比較用///////
 }

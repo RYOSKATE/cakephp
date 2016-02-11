@@ -38,6 +38,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->css('bootstrap.min');
 		//echo $this->Html->script('bootstrap.min');
 		echo $this->Html->script('amcharts/amcharts');
+        echo $this->Html->script('fabric.min');
 		//echo $this->Html->script('amcharts/serial');
 		//echo $this->Html->script('amcharts/amstock');
 		echo $this->fetch('meta');
@@ -92,8 +93,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 				<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 				  <div class="list-group-item active">モデル</div>
-				  <?php echo $this->Html->link('由来比較',		array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
-				  <?php echo $this->Html->link('メトリクス比較',array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
+				  <?php echo $this->Html->link('由来比較(円グラフ)',    array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
+				  <?php echo $this->Html->link('由来比較(領域グラフ)',  array('controller' => 'graphs', 'action' => 'originCity'), array('class' =>'list-group-item'));?>
+                  <?php echo $this->Html->link('メトリクス比較',        array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
 <!-- 付箋 -->
 <?php echo $this->element('sticky'); ?>
