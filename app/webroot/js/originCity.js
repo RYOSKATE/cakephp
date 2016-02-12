@@ -5,10 +5,10 @@ function makeRegionGraph(originsum, num)
 	//var originSum1 = new Array(0, 8, 2, 2, 153, 183, 27, 334);
 	var sum = originsum;//ここは関数の引数にする
 
-	var width = 600;
-	var height = 600;
-	var WindowSize = new Vec2(width, height);
-	var WindowCenter = new Vec2(width / 2, height / 2);
+	//var WIDTH = 485;.ctp側で定義
+	//var HEIGHT = 485;
+	var WindowSize = new Vec2(WIDTH, HEIGHT);
+	var WindowCenter = new Vec2(WIDTH / 2, HEIGHT / 2);
 
 	// 連想配列を生成する
 	var o = { 0: 0, 1 : 1, 12 : 2, 2 : 3, 13 : 4, 123 : 5, 23 : 6, 3 : 7 };
@@ -22,7 +22,7 @@ function makeRegionGraph(originsum, num)
 
 	var maxSum = Math.max(sum1, sum2, sum3);
 	var maxR = radiusFromArea(maxSum);
-	var scale = (height / 4.0) / maxR;//直径が画面の縦の半分程度になるようスケール調整
+	var scale = (HEIGHT / 4.0) / maxR;//直径が画面の縦の半分程度になるようスケール調整
 	sum = sum.map(function(value, index, array) { return value*scale*scale; });
 
 	sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
@@ -33,9 +33,9 @@ function makeRegionGraph(originsum, num)
 	var r2 = radiusFromArea(sum2);
 	var r3 = radiusFromArea(sum3);
 
-	var e1 = new Circle(width / 2 - r1, height / 2, r1);
-	var e2 = new Circle(width / 2 + r2, height / 2, r2);
-	var e3 = new Circle(width / 2, height / 3, r3);
+	var e1 = new Circle(WIDTH / 2 - r1, HEIGHT / 2, r1);
+	var e2 = new Circle(WIDTH / 2 + r2, HEIGHT / 2, r2);
+	var e3 = new Circle(WIDTH / 2, HEIGHT / 3, r3);
 
 	var preError = Number.MAX_VALUE;
 
@@ -90,10 +90,10 @@ function makeRegionGraph(originsum, num)
 	var areas = new Array(0, 0, 0, 0, 0, 0, 0, 0);
 	//その画素の由来
 	var origin = new Array();
-	for (var y = 0; y < height; ++y)
+	for (var y = 0; y < HEIGHT; ++y)
 	{
-		var ow = new Array(width);
-		for (var x = 0; x < width; ++x)
+		var ow = new Array(WIDTH);
+		for (var x = 0; x < WIDTH; ++x)
 		{
 			var pos = new Vec2(x, y);
 			var ei1 = e1.contains(pos);
@@ -117,7 +117,7 @@ function makeRegionGraph(originsum, num)
 		origin.push(ow);
 	}
 
-	var rec = new Array(width*height);
+	var rec = new Array(WIDTH*HEIGHT);
 
 
 	function crossPoint(a, b)
@@ -212,7 +212,7 @@ function makeRegionGraph(originsum, num)
 		{
 			function isIn(pp)
 			{
-				return 0 <= pp.x && pp.x < width && 0 <= pp.y && pp.y < height;
+				return 0 <= pp.x && pp.x < WIDTH && 0 <= pp.y && pp.y < HEIGHT;
 			};
 			for (var i = 0; i<serchPoints.length; ++i)
 			{
@@ -293,12 +293,12 @@ function makeRegionGraph(originsum, num)
 	var minPos = new Array();
 	for (var i = 0; i<8; ++i)
 	{
-		minPos.push(new Vec2(width, height));
+		minPos.push(new Vec2(WIDTH, HEIGHT));
 		drawPoints.push(new Array());
 	}
-	for (var h = 0; h < height; ++h)
+	for (var h = 0; h < HEIGHT; ++h)
 	{
-		for (var w = 0; w < width; ++w)
+		for (var w = 0; w < WIDTH; ++w)
 		{
 			var ori = origin[h][w];
 			if (ori != 0)
@@ -320,7 +320,7 @@ function makeRegionGraph(originsum, num)
 			 left : minPos[i].x,
 			fill : originColor[i],
 			stroke : originColor[i],
-			strokeWidth : 1,
+			strokeWIDTH : 1,
 			selectable : false
 		});
 

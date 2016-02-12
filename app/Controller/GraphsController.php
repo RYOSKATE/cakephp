@@ -281,6 +281,7 @@ class GraphsController extends AppController
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
 		$this->set('selectMetrics',$selectMetrics);
+		$this->set('selectMetricsStr',$metricsListData[$selectMetrics]);
         $this->set('useLocalCSV',true);
     }
     
