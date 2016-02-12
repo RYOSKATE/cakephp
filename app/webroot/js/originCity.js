@@ -190,7 +190,7 @@ function makeRegionGraph(originsum, num)
 	// 		return 1;
 	// 	return 0;
 	// });
-	// serchPoints.pop();
+	// serchPoints.shift();
 
 
 	var queue = new Queue();//Vec2を格納する

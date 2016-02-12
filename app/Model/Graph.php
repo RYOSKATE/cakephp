@@ -11,7 +11,8 @@ class Graph extends AppModel
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
     // post_max_size=64M        8万行のデータを(ry
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
-        $csvData = array();
+        $allcsvData = array();
+		$fujicsvData = array();
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
@@ -23,8 +24,9 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-        		  $csvData[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
+					$fujicsvData[] = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
                 }
+				$allcsvData[]  = array('model'=>$modelname,'file_path'=>$col[0]) +$col;
         	}
 
             if (!$this->deleteAll(array('model' => $modelname))) 
@@ -32,7 +34,7 @@ class Graph extends AppModel
                 throw new Exception();
             }
 
-            if (!$this->saveAll($csvData)) 
+            if (!$this->saveAll($allcsvData))
             {
                 throw new Exception();
             }
@@ -47,7 +49,7 @@ class Graph extends AppModel
         // echo '<pre>';
         //     print_r($csvData[0]);
         // echo '</pre>';
-        return $csvData;
+        return $fujicsvData;
     }
     ///////csvのアップロード用///////
 
@@ -185,7 +187,7 @@ class Graph extends AppModel
     {
 
         $conditions = array('Graph.model' => $selectModelName);
-
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
@@ -366,12 +368,13 @@ class Graph extends AppModel
     function getCompareMetricsTable($selectModelName,$selectGroupName) 
     {
         $conditions = array('Graph.model' => $selectModelName);
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
         $data = $this->find('all',array('Fields' => array('model','file_path','3'),'conditions' => $conditions));
-        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
+        //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
         // (
         //     [Graph] => Array
@@ -550,6 +553,7 @@ class Graph extends AppModel
     function getOriginTable($selectModelName,$selectGroupName) 
     {
         $conditions = array('Graph.model' => $selectModelName);
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
@@ -599,7 +603,7 @@ class Graph extends AppModel
     ///////由来比較用///////
     
     
-     function getOriginCityFromCSV($up_file)
+    function getOriginCityFromCSV($up_file,$metricsNumber)
     {
         setlocale( LC_ALL, 'ja_JP.UTF-8' );
         $data = array();
@@ -617,14 +621,18 @@ class Graph extends AppModel
             //}
         }
         
+		//1は由来,3は欠陥数
+		//$metricsNumber==0の時はファイルサイズなのでなんでもいい
+		$metricsNumber += 2;
         //由来ごとのメトリクスの総数を調べる
         $valueByOrigin = array(0,0,0,0,0,0,0,0);
         for ($i = 0; $i < count($data); ++$i)
         {
             $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
-            //$valueByOrigin[$origin] += $defact;
-            ++$valueByOrigin[$origin];
+            $metrics = 1;//0の時はファイル数なので1
+			if(2<$metricsNumber)//3～欠陥数
+				$metrics = $data[$i][$metricsNumber];
+            $valueByOrigin[$origin] += $metrics;
         }
 
         // echo '<pre>';
@@ -636,7 +644,7 @@ class Graph extends AppModel
     }
     
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity($selectModelName,$selectGroupName) 
+    function getOriginCity($selectModelName,$selectGroupName,$metricsNumber) 
     {
         $conditions = array('Graph.model' => $selectModelName);
         if($selectGroupName != 'ALL')
@@ -644,7 +652,9 @@ class Graph extends AppModel
             $conditions += array('Graph.25' => $selectGroupName);
         }
         //1は由来,3は欠陥数
-        $data = $this->find('all',array('Fields' => array('1','3'),'conditions' => $conditions));
+		//$metricsNumber==0の時はファイルサイズなのでなんでもいい
+		$metricsNumber += 2;
+        $data = $this->find('all',array('Fields' => array('1',$metricsNumber),'conditions' => $conditions));
         for ($i = 0; $i < count($data); ++$i)
         {
             $data[$i] = $data[$i]['Graph'];
@@ -656,8 +666,10 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
-            $valueByOrigin[$origin] += $defact;
+            $metrics = 1;//0の時はファイル数なので1
+			if(2<$metricsNumber)//3～欠陥数
+				$metrics = $data[$i][$metricsNumber];
+            $valueByOrigin[$origin] += $metrics;
         }
 
         // echo '<pre>';

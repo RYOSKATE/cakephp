@@ -1,5 +1,5 @@
 <?php 
-	echo $this->Form->input('セット', array
+	echo $this->Form->input('表示を更新', array
     (
     	'label'=>false,
     	'name'=>'set',

@@ -17,6 +17,38 @@ class GraphsController extends AppController
         $this->set('modelName',$modelNameData);
         return $modelNameData;
     }
+	
+	private function setMetricsList()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $metricsList = array(
+			"(1) ファイル数",
+			"(4) 欠陥の数",
+			"(5) 物理行数",
+			"(6) 一行に複数の宣言や文がある数",
+			"(7) 継承木における深さ",
+			"(8) 他クラスの関数を呼び出す関数の率",
+			"(9) 呼び出す他クラスの関数の種類数",
+			"(10) メソッドの凝集度の欠如(COM)",
+			"(11) Pubic メソッド数",
+			"(12) Pubic 属性数",
+			"(13) 他ファイルから使用される自ファイルの外部結合グローバル変数の種類数",
+			"(14) 他ファイルから使用される自ファイルの外部結合グローバル変数の種類数(OO)",
+			"(15) 他ファイルの外部結合グローバル変数を使用する関数の種類数",
+			"(16) 他ファイルの外部結合グローバル変数を使用する関数の種類数(OO)",
+			"(17) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数",
+			"(18) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数(OO)",
+			"(19) 呼び出す他ファイルの関数の種類数",
+			"(20) 使用する他ファイルの外部結合グローバル変数の種類数",
+			"(21) 自ファイルの関数を呼び出す他ファイルの関数の種類数",
+			"(22) 外部結合グローバル変数の定義数",
+			"(23) 外部結合グローバル変数の定義数(OO)",
+			"(24) 明示的に初期化していない静的記憶域期間のオブジェクト数",
+			"(25) 手を加えた組織の数"
+		);
+        $this->set('metricsList',$metricsList);
+        return $metricsList;
+    }
 
     public function index()
     {
@@ -188,10 +220,12 @@ class GraphsController extends AppController
         $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
-
+		$metricsListData = $this->setMetricsList();
+		
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
+		$selectMetrics = 1;//BUGの数
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
         $data2=null;
@@ -201,7 +235,8 @@ class GraphsController extends AppController
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-        
+			$selectMetrics = $this->data['Graph'] ['Metrics'];
+
             if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
             {
 
@@ -209,7 +244,7 @@ class GraphsController extends AppController
                 $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
-                $data1 = $this->Graph->getOriginCityFromCSV($fileName);
+                $data1 = $this->Graph->getOriginCityFromCSV($fileName,$selectMetrics);
                 $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
                 if(empty($selectModelName1))
                 {
@@ -224,7 +259,7 @@ class GraphsController extends AppController
                 $up_file = $this->data['Graph']['選択ファイル2']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
-                $data2 = $this->Graph->getOriginCityFromCSV($fileName);
+                $data2 = $this->Graph->getOriginCityFromCSV($fileName,$selectMetrics);
                 $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
                 if(empty($selectModelName2))
                 {
@@ -234,17 +269,18 @@ class GraphsController extends AppController
         }
         if($data1==null)
         {
-            $data1 = $this->Graph->getOriginCity($selectModelName1,$selectGroupName);
+            $data1 = $this->Graph->getOriginCity($selectModelName1,$selectGroupName,$selectMetrics);
         }
         if($data2==null)
         {
-            $data2 = $this->Graph->getOriginCity($selectModelName2,$selectGroupName);
+            $data2 = $this->Graph->getOriginCity($selectModelName2,$selectGroupName,$selectMetrics);
         }
 
         $this->set('model1',$data1);
         $this->set('model2',$data2);
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
+		$this->set('selectMetrics',$selectMetrics);
         $this->set('useLocalCSV',true);
     }
     
