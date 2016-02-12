@@ -637,7 +637,8 @@ class Graph extends AppModel
 			}
 			else if(2<$metricsNumber)//3～欠陥数
 				$metrics = $data[$i][$metricsNumber];
-            $valueByOrigin[$origin] += $metrics;
+            if(0<$metrics)//-1が無効値の物がある
+            	$valueByOrigin[$origin] += $metrics;
         }
 
         // echo '<pre>';
@@ -679,7 +680,8 @@ class Graph extends AppModel
 			}
 			else if(2<$metricsNumber)//3～欠陥数
 				$metrics = $data[$i][$metricsNumber];
-            $valueByOrigin[$origin] += $metrics;
+			if(0<$metrics)//-1が無効値の物がある
+            	$valueByOrigin[$origin] += $metrics;
         }
 
         // echo '<pre>';

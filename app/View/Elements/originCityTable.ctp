@@ -30,22 +30,20 @@
         );
         ?>
         <?php 
-        if(!empty($data))
-        {
-			foreach($data as $key => $value)
+		for($i=1;$i<8;++$i)
+		{
+			$value = $data[$i];
 			{
-				if(0<$value)
-				{
         ?>
 		<tr>
-			<td id="a" bgcolor=<?php echo $oriColor[$key];?>></td>
-			<td><?php echo $ori[$key];?></td>
+			<td id="a" bgcolor=<?php echo $oriColor[$i];?>></td>
+			<td><?php echo $ori[$i];?></td>
             <td><?php echo $value;?></td>
         </tr>
         <?php 
-				}
 			}
-        }?>
+		}
+        ?>
         </tbody>
     </table>
 <table class="table table-condensed" id ="table">
