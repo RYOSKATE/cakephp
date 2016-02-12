@@ -326,23 +326,7 @@ function makeRegionGraph(originsum, num)
 		});
 
 		canvas.add(polygon);
-	}
-
-
-	//最後にマウスイベントを作成する
-	canvas.on('mouse:move', function(options) {
-		var mousePos = canvas.getPointer(options.e);
-		var interCircle = new fabric.Circle({
-		originX: 'center',
-				 originY : 'center',
-			left : mousePos.x,//x
-			top : mousePos.y,//y
-			radius : 1,
-		});
-		canvas.forEachObject(function(obj) {
-			obj.setOpacity(interCircle.intersectsWithObject(obj) ? 0.5 : 1);
-		});
-	});
+	}	
 }
 makeRegionGraph(originalSum1, 1);
 makeRegionGraph(originalSum2, 2);

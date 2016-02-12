@@ -43,7 +43,5 @@
 	<div class="col-md-5 col-sm-5">
 		<?php echo $this->element('originCityTable', array("name" => $rightModelName,"data" => $model2,"metricsName"=>$selectMetricsStr));?>
     </div>
-
-
 </div>
 <?php echo $this->Html->script('originCity', array('inline' => true));?>
