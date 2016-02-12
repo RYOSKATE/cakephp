@@ -23,9 +23,8 @@
         'class' => 'form-control'
      ));
     echo $this->element('selectGroup',$groupName);
+	echo $this->element('setButton');
 	echo $this->element('selectMetrics',array($metricsList,$selectMetrics));
-	?><br><?php
-    echo $this->element('setButton');
     if(isset($useLocalCSV))
     {
     ?><br><?php
