@@ -251,15 +251,16 @@ function makeRegionGraph(originsum, num)
 			}
 		}
 	}
+	
 	var originColor = {
-		0: 'black',
-		1 : 'rgb(255,0,0)',
-		2 : 'rgb(255,255,0)',
-		3 : 'rgb(0,255,0)',
-		4 : 'rgb(85,0,255)',
-		5 : 'rgb(85,85,255)',
-		6 : 'rgb(0,85,255)',
-		7 : 'rgb(0,0,255)'
+		0: 	'#FFFFFF',//不使用
+		1 : '#FA6565',//赤
+		2 : '#FECA61',//黄
+		3 : '#71FD5E',//緑
+		4 : '#7869FF',//紫
+		5 : '#DDDDDD',//灰
+		6 : '#6BCDFF',//水
+		7 : '#0055FF'//青
 	};
 	var canvas;
     if(num==1)

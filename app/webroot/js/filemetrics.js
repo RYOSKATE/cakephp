@@ -102,27 +102,27 @@
 
         function getColor(size)
         {
-          var color = "#FA6565";
+          var color = "#FA6565";//赤
           var step = max/5;
           if(size == 0)
           {
-            color="#DDDDDD"
+            color="#DDDDDD"//灰色
           }
           else if(size < step)
           {
-            color="#C869FF";
+            color="#C869FF";//紫
           }
           else if(size < step*2)
           {
-            color="#6BCDFF";
+            color="#6BCDFF";//水色
           }
           else if(size < step*3)
           {
-            color="#71FD5E";
+            color="#71FD5E";//緑
           }
           else if(size < step*4)
           {
-            color="#FECA61";
+            color="#FECA61";//黄色
           }
           return  color;
         }

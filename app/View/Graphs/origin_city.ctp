@@ -1,11 +1,11 @@
 
 <?php
 //デバッグ用表示
-    echo 'デバッグ用表示';
-    echo '<pre>';
-    print_r($model1);
-    print_r($model2);
-    echo '</pre>';
+    // echo 'デバッグ用表示';
+    // echo '<pre>';
+    // print_r($model1);
+    // print_r($model2);
+    // echo '</pre>';
 ?>
 
 
