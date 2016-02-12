@@ -605,6 +605,9 @@ class Graph extends AppModel
     
     function getOriginCityFromCSV($up_file,$metricsNumber)
     {
+		if($metricsNumber==2)//未使用
+			return array(0,0,0,0,0,0,0,0);
+			
         setlocale( LC_ALL, 'ja_JP.UTF-8' );
         $data = array();
         $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
@@ -621,16 +624,18 @@ class Graph extends AppModel
             //}
         }
         
-		//1は由来,3は欠陥数
-		//$metricsNumber==0の時はファイルサイズなのでなんでもいい
-		$metricsNumber += 2;
+        //1は由来,2はファイル数,3は欠陥数
         //由来ごとのメトリクスの総数を調べる
         $valueByOrigin = array(0,0,0,0,0,0,0,0);
         for ($i = 0; $i < count($data); ++$i)
         {
             $origin = $data[$i]['1'];
             $metrics = 1;//0の時はファイル数なので1
-			if(2<$metricsNumber)//3～欠陥数
+			if($metricsNumber==1 && $data[$i]['3']==0)
+			{
+				$metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
+			}
+			else if(2<$metricsNumber)//3～欠陥数
 				$metrics = $data[$i][$metricsNumber];
             $valueByOrigin[$origin] += $metrics;
         }
@@ -646,14 +651,15 @@ class Graph extends AppModel
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
     function getOriginCity($selectModelName,$selectGroupName,$metricsNumber) 
     {
+		if($metricsNumber==2)//未使用
+			return array(0,0,0,0,0,0,0,0);
+			
         $conditions = array('Graph.model' => $selectModelName);
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        //1は由来,3は欠陥数
-		//$metricsNumber==0の時はファイルサイズなのでなんでもいい
-		$metricsNumber += 2;
+        //1は由来,2はファイル数,3は欠陥数
         $data = $this->find('all',array('Fields' => array('1',$metricsNumber),'conditions' => $conditions));
         for ($i = 0; $i < count($data); ++$i)
         {
@@ -667,7 +673,11 @@ class Graph extends AppModel
         {
             $origin = $data[$i]['1'];
             $metrics = 1;//0の時はファイル数なので1
-			if(2<$metricsNumber)//3～欠陥数
+			if($metricsNumber==1 && $data[$i]['3']==0)
+			{
+				$metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
+			}
+			else if(2<$metricsNumber)//3～欠陥数
 				$metrics = $data[$i][$metricsNumber];
             $valueByOrigin[$origin] += $metrics;
         }

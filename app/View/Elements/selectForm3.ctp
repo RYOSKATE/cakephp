@@ -24,6 +24,7 @@
      ));
     echo $this->element('selectGroup',$groupName);
 	echo $this->element('selectMetrics',array($metricsList,$selectMetrics));
+	?><br><?php
     echo $this->element('setButton');
     if(isset($useLocalCSV))
     {

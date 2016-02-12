@@ -23,6 +23,8 @@ class GraphsController extends AppController
         //すでに存在する開発グループ名一覧を取得
         $metricsList = array(
 			"(1) ファイル数",
+			"(2) 欠陥ファイル数",
+			"(3) 未使用",
 			"(4) 欠陥の数",
 			"(5) 物理行数",
 			"(6) 一行に複数の宣言や文がある数",
@@ -225,7 +227,7 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
-		$selectMetrics = 1;//BUGの数
+		$selectMetrics = 2;//未使用
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
         $data2=null;
