@@ -1,5 +1,5 @@
 <h4>モデル名:<?php echo $name;?></h4>
-<h6>メトリクス(領域面積):<?php echo $metricsName;?></h6>
+<h6>メトリクス(面積要素):<?php echo $metricsName;?></h6>
         <?php $ori = array(
 			1=>'o1',
 			2=>'o12',
@@ -22,12 +22,9 @@
         );
         
 		$oriStr = array(
-			// 1=>'o1+o12+o13+o123',
-			// 2=>'o2+o12+o23+o123',
-			// 3=>'o3+o13+o23+o123',
-			1=>'Google',
-			2=>'Qualcomm',
-			3=>'Fujitsu',
+			1=>'1:Google',
+			2=>'2:Qualcomm',
+			3=>'3:Fujitsu',
 		);
 		$oriNumStr = array(
 			1=>'G',
@@ -121,7 +118,7 @@
 			for($j=1;$j<=3;++$j)
 			{
 				?><td><?php
-				if($oriSum[$j]!=0)
+				if(in_array($i,$oriNums[$j]) && $oriSum[$j]!=0)
 					echo sprintf("%.4f",$value/$oriSum[$j]);
 				else
 					echo "-";
