@@ -6,7 +6,8 @@
 }
 -->
 </STYLE>
-<h4><?php echo $name;?></h4>
+<h4>モデル名:<?php echo $name;?></h4>
+<h6>メトリクス(領域面積):<?php echo $metricsName;?></h6>
         <?php $ori = array(
 			1=>'o1',
 			2=>'o12',
@@ -43,8 +44,8 @@
 		);
         $oriNums= array(
 			1=>array(1,2,4,5),
-			2=>array(2,3,5,6),
-			3=>array(4,5,6,7)
+			2=>array(3,2,6,5),
+			3=>array(7,4,6,5)
 		);
         $oriSum= array(
 			1=>$data[1]+$data[2]+$data[4]+$data[5],
@@ -57,7 +58,7 @@
         <tr>
 			<th></th><th></th><th></th><th></th>
             <th>関連領域</th>
-            <th><?php echo $metricsName;?></th>
+            <th>面積</th>
 			<?php 
 			for($i=1;$i<=3;++$i)
 			{?>
@@ -76,7 +77,7 @@
 			$value = $oriSum[$i];
 			for($j=0;$j<4;++$j)
 			{?>
-				<td bgcolor=<?php echo $oriColor[$oriNums[$i][$j]];?>></td>
+				<td id="a" bgcolor=<?php echo $oriColor[$oriNums[$i][$j]];?>></td>
 			<?php
 			}?>
 			<td><?php echo $oriStr[$i];?></td>
@@ -85,13 +86,13 @@
 			for($j=1;$j<=3;++$j)
 			{
 				?><td><?php
-				$distValue = 0;
 				if($oriSum[$j]!=0)
-					$distValue = $value/$oriSum[$j];
-				echo sprintf("%.4f", $distValue);
+					echo sprintf("%.4f",$value/$oriSum[$j]);
+				else
+					echo "-";
 				?>
 				</td>
-			<?php
+				<?php
 			}
 			?>
         </tr>
@@ -104,7 +105,7 @@
         <tr>
 			<th> 　　 </th>
             <th>由来</th>
-            <th><?php echo $metricsName;?></th>
+            <th>面積</th>
 			<?php 
 			for($i=1;$i<=3;++$i)
 			{?>
@@ -114,7 +115,6 @@
         </tr>
         </thead>
         <tbody>
-
         <?php 
 		for($i=1;$i<8;++$i)
 		{
@@ -129,13 +129,13 @@
 			for($j=1;$j<=3;++$j)
 			{
 				?><td><?php
-				$distValue = 0;
 				if($oriSum[$j]!=0)
-					$distValue = $value/$oriSum[$j];
-				echo sprintf("%.4f", $distValue);
+					echo sprintf("%.4f",$value/$oriSum[$j]);
+				else
+					echo "-";
 				?>
 				</td>
-			<?php
+				<?php
 			}
 			?>
         </tr>
