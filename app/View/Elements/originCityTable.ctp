@@ -1,11 +1,3 @@
-<STYLE type="text/css">
-<!--
-#S1
-{
-	filter:alpha(opacity=50);
-}
--->
-</STYLE>
 <h4>モデル名:<?php echo $name;?></h4>
 <h6>メトリクス(領域面積):<?php echo $metricsName;?></h6>
         <?php $ori = array(
