@@ -287,6 +287,11 @@ class GraphsController extends AppController
         $this->set('useLocalCSV',true);
     }
     
+    public function originCity2()
+    {
+        //$this->originCity();
+    }
+    
     public function metrics()
     {
         $this->operateSticky();

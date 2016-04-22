@@ -10,7 +10,7 @@
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
+ * @since         CakePHP(tm) v 0.10.0.1076metrics.js
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
@@ -39,6 +39,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		//echo $this->Html->script('bootstrap.min');
 		echo $this->Html->script('amcharts/amcharts');
         echo $this->Html->script('fabric.min');
+		echo $this->Html->script('three.min');
 		//echo $this->Html->script('amcharts/serial');
 		//echo $this->Html->script('amcharts/amstock');
 		echo $this->fetch('meta');
@@ -95,7 +96,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				  <div class="list-group-item active">モデル</div>
 				  <?php echo $this->Html->link('由来比較(円グラフ)',    array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
 				  <?php echo $this->Html->link('由来比較(領域グラフ)',  array('controller' => 'graphs', 'action' => 'originCity'), array('class' =>'list-group-item'));?>
-                  <?php echo $this->Html->link('メトリクス比較',        array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
+                  <?php echo $this->Html->link('由来比較(OriginCity)',array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
+				  <?php echo $this->Html->link('メトリクス比較',         array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
 				</div>
 <!-- 付箋 -->
 <?php echo $this->element('sticky'); ?>
