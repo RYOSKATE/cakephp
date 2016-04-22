@@ -40,6 +40,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->script('amcharts/amcharts');
         echo $this->Html->script('fabric.min');
 		echo $this->Html->script('three.min');
+		echo $this->Html->script('OrbitControls');
 		//echo $this->Html->script('amcharts/serial');
 		//echo $this->Html->script('amcharts/amstock');
 		echo $this->fetch('meta');
