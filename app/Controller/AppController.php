@@ -82,22 +82,22 @@ class AppController extends Controller
     if(!empty($this->data['Graph']))
     {
       $formData = $this->data['Graph'];
-      $username = $this->Auth->user('username');
+      $user_id = $this->Auth->user('id');
 
 
       if(isset($this->request->data['delete']))
       {
-          $this->Sticky->deleteSticky($this->action,$username,$formData);
+          $this->Sticky->deleteSticky($formData['id']);
       }
       else if (isset($formData['textarea']) && trim($formData['textarea'])!="") 
       {
           if(isset($this->request->data['add']))
           {
-              $this->Sticky->addSticky($this->action,$username,$formData);  
+              $this->Sticky->addSticky($this->action,$user_id,$formData);  
           }
           else if(isset($this->request->data['edit']))
           {
-              $this->Sticky->editSticky($this->action,$username,$formData);  
+              $this->Sticky->editSticky($this->action,$user_id,$formData);  
           }
       }
     }

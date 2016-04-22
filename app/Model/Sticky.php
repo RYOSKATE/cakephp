@@ -1,32 +1,43 @@
 <?php
+
 class Sticky extends AppModel 
 {
     public $useTable = 'stickies';
-
+    
+    public $belongsTo = array(
+            'User' => array(
+                'className' => 'User',
+                'foreignKey' => 'user_id',
+            )
+        );
+        
     function getStickies($page)
     {
-
         $data = $this->find('all',array('conditions' => array('Sticky.page'=>$page)));
- 
+
         for ($i = 0; $i < count($data); ++$i)
         {
+            $data[$i]['Sticky']['username']=$data[$i]['User']['username'];
             $data[$i]=$data[$i]['Sticky'];
         }
+        echo '<pre>';
+            print_r($data);
+        echo '</pre>';
         return $data;
     }
 
-    function addSticky($page,$username,$formData)
+    function addSticky($page,$user_id,$formData)
     {
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             date_default_timezone_set('Asia/Tokyo');
-            $idArray = $this->find('first', array("fields" => "MAX(Sticky.id) as max_id"));
-            $id = reset($idArray)['max_id']+1;
+            // $idArray = $this->find('first', array("fields" => "MAX(Sticky.id) as max_id"));
+            // $id = reset($idArray)['max_id']+1;
             $text = str_replace("\r\n","<br>",$formData['textarea']);
             $data = array(
-                'id'=>$id,
-                'username'=>$username,
+                //'id'=>$id,
+                'user_id'=>$user_id,
                 'text'=>mb_convert_encoding($text, "utf-8", "auto"),
                 'page'=>$page,
                 'color'=>$formData['color'],
@@ -49,20 +60,20 @@ class Sticky extends AppModel
         return true;
     }
 
-    function editSticky($page,$username,$formData)
+    function editSticky($page,$user_id,$formData)
     {
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             date_default_timezone_set('Asia/Tokyo');
-            $id_data = $this->find('all', array('conditions' => array('id' => $formData['id'],'username'=>$username)));
-            if(empty($id_data))
-            {
-                throw new Exception();
-            }
+            // $id_data = $this->find('all', array('conditions' => array('id' => $formData['id'],'username'=>$username)));
+            // if(empty($id_data))
+            // {
+            //     throw new Exception();
+            // }
             $data = array(
                 'id'=>$formData['id'],
-                'username'=>$username,
+                'user_id'=>$user_id,
                 'text'=>$formData['textarea'],
                 'page'=>$page,
                 'color'=>$formData['color'],
@@ -85,23 +96,14 @@ class Sticky extends AppModel
         return true;
     }
 
-    function deleteSticky($page,$username,$formData)
+    function deleteSticky($id)
     {
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
-            $id = $formData['id'];
-            $id_data = $this->find('all', array('conditions' => array('id' => $id,'username'=>$username)));
-            if(empty($id_data))
+            if(!$this->delete($id))
             {
                 throw new Exception();
-            }
-            if (0 < $id)
-            {
-                if(!$this->delete($id))
-                {
-                    throw new Exception();
-                }
             }
             $this->commit();
         }
