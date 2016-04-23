@@ -51,7 +51,7 @@
 		<th><?php echo __('Id'); ?></th>
 		<th><?php echo __('Upload Data Id'); ?></th>
 		<th><?php echo __('Model'); ?></th>
-		<th><?php echo __('0'); ?></th>
+		<th><?php echo __('filepath'); ?></th>
 		<th><?php echo __('1'); ?></th>
 		<th><?php echo __('2'); ?></th>
 		<th><?php echo __('3'); ?></th>
@@ -84,7 +84,7 @@
 			<td><?php echo $graph['id']; ?></td>
 			<td><?php echo $graph['upload_data_id']; ?></td>
 			<td><?php echo $graph['model']; ?></td>
-			<td><?php echo $graph['0']; ?></td>
+			<td><?php echo $graph['filepath']; ?></td>
 			<td><?php echo $graph['1']; ?></td>
 			<td><?php echo $graph['2']; ?></td>
 			<td><?php echo $graph['3']; ?></td>

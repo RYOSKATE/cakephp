@@ -101,7 +101,10 @@ class UploadDataController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->UploadData->delete()) {
-			$this->Session->setFlash(__('The upload data has been deleted.'));
+			$this->loadModel('Graph');
+			if ($this->Graph->deleteAll(array('upload_data_id' => $id))) {
+  				$this->Session->setFlash(__('The upload data has been deleted.'));
+			}
 		} else {
 			$this->Session->setFlash(__('The upload data could not be deleted. Please, try again.'));
 		}

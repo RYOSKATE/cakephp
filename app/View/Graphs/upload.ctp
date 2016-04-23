@@ -64,7 +64,7 @@
     ?>
 
 </div>
-
+<h1><?php echo $this->Html->link('Upload History',array('controller' => 'upload_data', 'action' => 'index'));?></h1>
 </div>
 <?php
 }else
