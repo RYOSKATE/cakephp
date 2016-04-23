@@ -3,7 +3,7 @@ class Graph extends AppModel
 {
 
     ///////csvのアップロード用///////
-    function uploadFromCSV($fileName,$modelname) 
+    function uploadFromCSV($fileName,$modelname,$upload_id) 
     {
 
     // php.iniの変更点
@@ -22,11 +22,12 @@ class Graph extends AppModel
         	foreach ($lines as $line) 
             {
                 $col = str_getcsv($line);
+                $data = array('model'=>$modelname,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
-					$fujicsvData[] = array('model'=>$modelname) +$col;
+					$fujicsvData[] = $data;
                 }
-				$allcsvData[]  = array('model'=>$modelname) +$col;
+				$allcsvData[]  = $data;
         	}
 
             if (!$this->deleteAll(array('model' => $modelname))) 
@@ -46,9 +47,7 @@ class Graph extends AppModel
             $this->rollback();
             return null;
         }
-        // echo '<pre>';
-        //     print_r($csvData[0]);
-        // echo '</pre>';
+
         return $fujicsvData;
     }
     ///////csvのアップロード用///////
@@ -65,7 +64,7 @@ class Graph extends AppModel
             $col = str_getcsv($line);
             if(4<=$col[1])//由来o3,o13,o23,o123のみ
             {
-              $data[] = array('model'=>"localCSV") +$col;
+              $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
             }
         }
         $this->depth=0;
@@ -75,7 +74,7 @@ class Graph extends AppModel
         //     [Graph] => Array
         //         (
         //             [model] => testA
-        //             [0] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
         //             [3] => 1//欠陥数
         //             [8] => 呼び出す他クラスの関数種類数
         //             [9] => メソッドの凝集度の欠如(LCOM)
@@ -97,7 +96,7 @@ class Graph extends AppModel
         $dataSize = count($data);
         for ($i = 0; $i < $dataSize; ++$i)
         {
-            $filepath = $data[$i][0];
+            $filepath = $data[$i]['filepath'];
             $path     = explode('/',$filepath);
             $path[0]  = trim($path[0]);
             $parent   = &$tree;
@@ -192,16 +191,16 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('model','0','3','8','9','10','11','18'),'conditions' => $conditions));
-        
+        $data = $this->find('all',array('fields' => array('model','filepath','3','8','9','10','11','18'),'conditions' => $conditions));
+
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
-//data[0]=Array
+        //data[0]=Array
         // (
         //     [Graph] => Array
         //         (
         //             [model] => testA
-        //             [0] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
         //             [3] => 1//欠陥数
         //             [8] => 呼び出す他クラスの関数種類数
         //             [9] => メソッドの凝集度の欠如(LCOM)
@@ -221,9 +220,10 @@ class Graph extends AppModel
                         "layer"          =>0,
                         "children"       => array());
         $dataSize = count($data);
+
         for ($i = 0; $i < $dataSize; ++$i)
         {
-            $filepath = $data[$i]['Graph'][0];
+            $filepath = $data[$i]['Graph']['filepath'];
             $path     = explode('/',$filepath);
             $path[0]  = trim($path[0]);
             $parent   = &$tree;
@@ -316,7 +316,7 @@ class Graph extends AppModel
             $col = str_getcsv($line);
             if(4<=$col[1])//由来o3,o13,o23,o123のみ
             {
-              $data[] = array('Graph'=>array('model'=>"localCSV") +$col);
+              $data[] = array('Graph'=>array('model'=>"localCSV",'filepath'=>$col[0]) +$col);
             }
         }
 
@@ -339,7 +339,7 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $defact = $data[$i]['Graph'][3];
-            $filePath = $data[$i]['Graph'][0];
+            $filePath = $data[$i]['Graph']['filepath'];
             $layer = $this->getLayer($filePath);
             if($layer < 0 ||6 < $layer)
             {
@@ -373,14 +373,14 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('model','0','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('model','filepath','3'),'conditions' => $conditions));
         //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
         // (
         //     [Graph] => Array
         //         (
         //             [model] => testA
-        //             [0] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
+        //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
         //             [3] => 1
         //         )
 
@@ -408,7 +408,7 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $defact = $data[$i]['Graph'][3];
-            $filePath = $data[$i]['Graph'][0];
+            $filePath = $data[$i]['Graph']['filepath'];
             $layer = $this->getLayer($filePath);
             if($layer < 0 ||6 < $layer)
             {
@@ -508,7 +508,7 @@ class Graph extends AppModel
             $col = str_getcsv($line);
             if(4<=$col[1])//由来o3,o13,o23,o123のみ
             {
-              $data[] = array('model'=>"localCSV") +$col;
+              $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
             }
         }
         //print_r($data);
@@ -616,11 +616,11 @@ class Graph extends AppModel
         {
             $col = str_getcsv($line);
             //7由来全て用いる
-            $data[] = array('model'=>"localCSV") +$col;
+            $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
             
             //if(4<=$col[1])//由来o3,o13,o23,o123のみ
             //{
-            //  $data[] = array('model'=>"localCSV") +$col;
+            //  $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
             //}
         }
         

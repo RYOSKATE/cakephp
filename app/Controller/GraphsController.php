@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','GroupName','Sticky');
+    public $uses = array('Graph','GroupData','ModelName','GroupName','Sticky','UploadData');
     /*
     CSV入力      Graph
     メトリクス   
@@ -365,32 +365,39 @@ class GraphsController extends AppController
         $this->set('modelName',$modelNameData);
         if (!empty($this->data)) 
         {
+// echo '<pre>';
+// print_r($this->data['Graph']);
+// echo '</pre>';
+// die();
             //コンボボックスで選ばれたグループ名を取得
+            $selectModelId = $this->data['Graph'] ['モデル名'];
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル名']];
-            if($selectModelName=='')//空欄の場合はテキストフィールドをチェック、新規モデル名が入力されていれば採用
+            if($selectModelId < 1)//空欄の場合はテキストフィールドをチェック、新規モデル名が入力されていれば採用
             {
                 $selectModelName = $this->data['Graph'] ['新規モデル名'];
                 if($selectModelName=='')
                 {
-                     $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
                     return;
                 }
+                $selectModelId = $this->ModelName->uploadFromCSV($selectModelName);
             }
-
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
- 
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
             //まずgraphテーブルに由来に3が含まれる全てのデータを送信する
             $success = is_uploaded_file($up_file);//C:\xampp\tmp\php7F8D.tmp
             if ($success)
             {
                 move_uploaded_file($up_file, $fileName);
+                $upload_date = $this->data['Graph']['date'];
+                $user_id = $this->Auth->user('id');
+                $upload_id = $this->UploadData->upload($upload_date,$selectModelId,$user_id);
+                $success = (0<$upload_id);
                 //まずCSVを全体をアップロードする
                 if($success)
                 {
-                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelName);
+                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelName,$upload_id);
                     $success = ($csvData != null);
                     if($success)
                     {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
@@ -401,13 +408,13 @@ class GraphsController extends AppController
                         if($success)
                         {   //最後にグループ名を追加する
                             $success = $this->GroupName->uploadFromCSV($groupNames,$groupNameData);
-                            if($success)
-                            {  //最後にグループ名を追加する
-                               if(!in_array($selectModelName,$modelNameData))
-                               {
-                                    $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
-                               }
-                            }
+                            // if($success)
+                            // {  //最後にグループ名を追加する
+                            //    if(!in_array($selectModelName,$modelNameData))
+                            //    {
+                            //         $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
+                            //    }
+                            // }
                         }
                     }
                 }

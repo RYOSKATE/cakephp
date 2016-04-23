@@ -101,5 +101,31 @@ class UploadData extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+    function upload($upload_date,$selectModelId,$user_id) 
+     {
+        $group_names = array();
+        try
+        {
+            $this->begin();//トランザクション(永続的な接続処理の開始)
+            setlocale( LC_ALL, 'ja_JP.UTF-8' );
+            date_default_timezone_set('Asia/Tokyo');
 
+            $time = date('Y-m-d', mktime(0, 0, 0,$upload_date['month'], $upload_date['day'],$upload_date['year']));
+            $data = array('date'=>$time,'modelname_id' =>$selectModelId,'user_id'=>$user_id,);
+
+            if (!$this->saveAll($data)) 
+            {
+                throw new Exception();
+            }
+
+            $this->commit();
+        }
+        catch(Exception $e) 
+        {
+            $this->rollback();
+            return 0;
+        }
+		$id = $this->getLastInsertID();
+        return $id;
+    }
 }
