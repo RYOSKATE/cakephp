@@ -20,9 +20,6 @@ class Sticky extends AppModel
             $data[$i]['Sticky']['username']=$data[$i]['User']['username'];
             $data[$i]=$data[$i]['Sticky'];
         }
-        echo '<pre>';
-            print_r($data);
-        echo '</pre>';
         return $data;
     }
 
