@@ -6,14 +6,15 @@ $(function()
     camera.position.set(-100, 50, 100);
  
     renderer = new THREE.WebGLRenderer();
+    //var width = document.getElementById('canvas-wrapper').clientWidth;
+    //var height =  document.getElementById('canvas-wrapper').clientHeight;
+    //renderer.setSize(width, height);
+
     renderer.setSize(655, 437);
  	document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
 
     var lightPos = [
-        [0,10,10],
-        [0,10,-10],
-        [10,10,0],
-        [-10,10,0],
+        [-100, 50, 100]
     ];
     
     for (var i = 0; i < lightPos.length; i++) {
@@ -21,6 +22,8 @@ $(function()
         directionalLight.position.set(lightPos[i][0],  lightPos[i][1], lightPos[i][2]);
         scene.add(directionalLight);
     }
+    
+    scene.add(new THREE.AmbientLight(0x333333));  
     //var geometry = new THREE.BoxGeometry(15, 15, 15);
     //var material = new THREE.MeshPhongMaterial({color: 'white'});
  
