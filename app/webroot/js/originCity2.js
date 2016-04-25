@@ -12,7 +12,12 @@ $(function()
 
     renderer.setSize(655, 437);
  	document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
-
+     
+     //x,y,z軸表示
+     var  axis = new THREE.AxisHelper(1000);          
+     axis.position.set(0,0,1);        
+     scene.add(axis);                              
+     
     var lightPos = [
         [-100, 50, 100]
     ];
@@ -186,16 +191,13 @@ $(function()
  
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
  
-    function render() {
-        requestAnimationFrame(render);
- 
-        for (var i = 0; i < cube.length; i++) {
-            //cube[i].rotation.x += 0.01; // 追加
-            //cube[i].rotation.y += 0.01; // 追加
-        };
- 
+    function renderLoop() {
+        //OrbitControlsを使う場合必須
+        window.requestAnimationFrame(renderLoop);
         controls.update();
+        
+        //実際に描画
         renderer.render(scene, camera);
     }
-    render();
+    renderLoop();
 });
