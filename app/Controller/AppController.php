@@ -33,7 +33,7 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller 
 {
 
-   public $uses = array('GroupName','Sticky');
+   public $uses = array('GroupName','Sticky','UploadData');
 
    public $components = array
    (
@@ -124,5 +124,18 @@ class AppController extends Controller
         $groupNameData = array(0=>"ALL") + $this->setGroupName($state);
         $this->set('groupName',$groupNameData);
         return $groupNameData;
+    }
+    
+    protected function setUploadList($state=null)
+    {
+        $this->UploadData->unbindModel(array('hasMany' => array('Graph')));
+        $uploadList = $this->UploadData->find('all', array('fields' => array( 'id', 'date','modelname_id')));
+        $this->set('uploadList',$uploadList);
+// echo '<pre>';
+// print_r($uploadList);
+// echo '</pre>';
+// die();
+        return $uploadList;
+
     }
 }

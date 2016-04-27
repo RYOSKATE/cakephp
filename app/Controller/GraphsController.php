@@ -15,6 +15,7 @@ class GraphsController extends AppController
         //すでに存在する開発グループ名一覧を取得
         $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
         $this->set('modelName',$modelNameData);
+
         return $modelNameData;
     }
 	
@@ -51,7 +52,40 @@ class GraphsController extends AppController
         $this->set('metricsList',$metricsList);
         return $metricsList;
     }
-
+	
+	private function setMetricsList2()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $metricsList = array(
+			"(1) 未使用(ファイルパス)",
+			"(2) 未使用(由来)",
+			"(3) 未使用(空欄)",
+			"(4) 欠陥の数",
+			"(5) 物理行数",
+			"(6) 一行に複数の宣言や文がある数",
+			"(7) 継承木における深さ",
+			"(8) 未使用(他クラスの関数を呼び出す関数の率)",
+			"(9) 呼び出す他クラスの関数の種類数",
+			"(10) メソッドの凝集度の欠如(COM)",
+			"(11) Pubic メソッド数",
+			"(12) Pubic 属性数",
+			"(13) 他ファイルから使用される自ファイルの外部結合グローバル変数の種類数",
+			"(14) 他ファイルから使用される自ファイルの外部結合グローバル変数の種類数(OO)",
+			"(15) 他ファイルの外部結合グローバル変数を使用する関数の種類数",
+			"(16) 他ファイルの外部結合グローバル変数を使用する関数の種類数(OO)",
+			"(17) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数",
+			"(18) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数(OO)",
+			"(19) 呼び出す他ファイルの関数の種類数",
+			"(20) 使用する他ファイルの外部結合グローバル変数の種類数",
+			"(21) 自ファイルの関数を呼び出す他ファイルの関数の種類数",
+			"(22) 外部結合グローバル変数の定義数",
+			"(23) 外部結合グローバル変数の定義数(OO)",
+			"(24) 明示的に初期化していない静的記憶域期間のオブジェクト数",
+			"(25) 手を加えた組織の数"
+		);
+        $this->set('metricsList',$metricsList);
+        return $metricsList;
+    }
     public function index()
     {
         $this->operateSticky();
@@ -65,6 +99,8 @@ class GraphsController extends AppController
     public function alldevgroup() 
     {
         $this->operateSticky();
+        // ここで hasMany を削除してみます
+        $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
@@ -72,7 +108,8 @@ class GraphsController extends AppController
 
         $conditions = array('conditions' => array('GroupData.model' => $selectModelName));
         if (isset($this->request->data['set'])) 
-        {
+        {        
+
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             $conditions['conditions']['GroupData.model'] = $selectModelName;
@@ -288,8 +325,36 @@ class GraphsController extends AppController
     }
     
     public function originCity2()
-    {
-        //$this->originCity();
+    {        
+        $this->operateSticky();
+        $groupNameData = $this->setGroupNameWithAll();
+        $modelNameData = $this->setModelName();
+		$metricsListData = $this->setMetricsList2();
+		
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelName = reset($modelNameData);
+        $selectMetrics = 2;
+        $data = null;
+        if (isset($this->request->data['set']))
+        {
+            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+			$selectMetrics = $this->data['Graph'] ['Metrics'];
+            $data = $this->Graph->getOriginCity2($selectModelName,$selectGroupName,$selectMetrics);
+        echo '<pre>';
+            foreach ($data as $key => $val)
+            {
+                if($val['originHeight'])
+                {
+                    print_r($key);print_r('<br>');
+                    print_r($val);
+                }
+            }
+        echo '</pre>';
+        //die();
+        }
+        $this->set('selectMetrics',$selectMetrics);
+        $this->set('data',$data);
     }
     
     public function metrics()

@@ -51,7 +51,7 @@ class Graph extends AppModel
         return $fujicsvData;
     }
     ///////csvのアップロード用///////
-
+    
     ///////ファイルメトリクス用///////
     function getFileMetricsTableFromCSV($up_file)
     {
@@ -692,4 +692,42 @@ class Graph extends AppModel
         return $valueByOrigin;
     }
     ///////由来比較用///////
+        //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
+    function getOriginCity2($selectModelName,$selectGroupName,$metricsNumber) 
+    {	
+    // 0L"(1) フォルダ／ファイル名",
+	// 1L"(2) 由来(1 - 7 = 2,12,1,13,123,23,3)",
+	// 2L"(3) 未使用",
+	// 3L"(4) 欠陥の数",
+	// 4L"(5) 物理行数",
+    // 5L"(25) 手を加えた組織の数",
+        if($metricsNumber<=2 || $metricsNumber==7)//未使用
+			return array(0,0,0,0,0,0,0,0);
+            
+        $conditions = array('Graph.model' => $selectModelName);
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        
+        //1は由来,2はファイル数,3は欠陥数
+        $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
+        for($i = 1;$i<=7;++$i)
+        {
+            $ori_cond = $conditions + array('Graph.1' => $i);
+            $tmp_data = $this->find('all',array('fields' => array('filepath',$metricsNumber),'conditions' => $ori_cond));
+            $layers = array('originHeight'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
+            foreach ($tmp_data as $line) 
+            {
+                $value = $line['Graph'][$metricsNumber];
+                if($value<0)
+                    $value=0;
+                $layer =  $this->getLayer($line['Graph']['filepath']);
+                $layers['originHeight']+=$value;
+                $layers['layerHeight'][$layer]+=$value;
+            }
+            $data[$i] = $layers;
+        }
+        return $data;
+    }
 }
