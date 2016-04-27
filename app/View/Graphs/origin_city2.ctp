@@ -2,8 +2,7 @@
 //デバッグ用表示
     // echo 'デバッグ用表示';
     // echo '<pre>';
-    // print_r($model1);
-    // print_r($model2);
+    // print_r($data);
     // echo '</pre>';
 ?>
 
@@ -19,6 +18,10 @@
 <div class="row">
     <div class="col-md-6 col-sm-6">
  		<div id="canvas-wrapper"></div>
- 		<?php echo $this->Html->script('originCity2', array('inline' => true));?>
     </div>
 </div>
+
+<script>
+    var data = JSON.parse('<?=json_encode($data);?>');
+</script>
+<?php echo $this->Html->script('originCity2', array('inline' => true));?>
