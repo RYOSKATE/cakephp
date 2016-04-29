@@ -344,7 +344,7 @@ class GraphsController extends AppController
         echo '<pre>';
             foreach ($data as $key => $val)
             {
-                if($val['originHeight'])
+                if($val['numOfFiles'])
                 {
                     print_r($key);print_r('<br>');
                     print_r($val);

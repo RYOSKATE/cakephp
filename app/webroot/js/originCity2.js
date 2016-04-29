@@ -2,21 +2,22 @@ $(function()
 {   
     function calcBuildingPos(data)
     {
-        //(2) �R��(1-7 = 1,12,2,13,123,23,3)
+        //(2) 由来(1-7 = 1,12,2,13,123,23,3)
         var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
-        var numOfBuilding = Object.keys(data).length;
+        var numOfBuilding = Object.keys(data).length;//7
         var areas = new Array();
         for(var i=1;i<=numOfBuilding;++i)
         {
             areas[i] = new building(0,0,0,0,0,0);
         }
-        areas[t[1]].w = Math.sqrt(data[t[1]].originHeight);
-	    areas[t[1]].h = Math.sqrt(data[t[1]].originHeight);
-	    areas[t[2]].w = Math.sqrt(data[t[2]].originHeight);
-	    areas[t[2]].h = Math.sqrt(data[t[2]].originHeight);
-	    areas[t[3]].w = Math.sqrt(data[t[3]].originHeight);
-	    areas[t[3]].h = Math.sqrt(data[t[3]].originHeight);
-        var o123wh = Math.sqrt(data[t[123]].originHeight);
+        areas[t[1]].w = Math.sqrt(data[t[1]].numOfFiles);
+	    areas[t[1]].h = areas[t[1]].w;
+	    areas[t[2]].w = Math.sqrt(data[t[2]].numOfFiles);
+	    areas[t[2]].h = areas[t[2]].w;
+	    areas[t[3]].w = Math.sqrt(data[t[3]].numOfFiles);
+	    areas[t[3]].h = areas[t[3]].w;
+        
+        var o123wh = Math.sqrt(data[t[123]].numOfFiles);
   
         areas[t[123]].w = o123wh;
 	    areas[t[123]].h = o123wh; 
@@ -32,9 +33,9 @@ $(function()
 			    areas[i].w = 1;
 	    } 
 
-    	areas[t[12]].w = data[t[12]].originHeight / areas[t[12]].h;
-	    areas[t[23]].h = data[t[23]].originHeight / areas[t[23]].w;
-	    areas[t[13]].h = data[t[13]].originHeight / areas[t[13]].w;
+    	areas[t[12]].w = data[t[12]].numOfFiles / areas[t[12]].h;
+	    areas[t[23]].h = data[t[23]].numOfFiles / areas[t[23]].w;
+	    areas[t[13]].h = data[t[13]].numOfFiles / areas[t[13]].w;
         for(var i=1;i<=numOfBuilding;++i)
 	    {
 		    if (areas[i].h < 1)
@@ -43,24 +44,25 @@ $(function()
 			    areas[i].w = 1;
 	    }
         var offset = 20;
-	    areas[t[123]].x = 0;areas[t[123]].y = 0;
-	    areas[t[2]].x = areas[t[123]].x - areas[t[2]].w - offset;
-        areas[t[2]].y = areas[t[123]].y - areas[t[2]].h - offset;
+        
 
-	    areas[t[12]].x = areas[t[123]].x - areas[t[12]].w - offset;
+	    areas[t[12]].x = -(areas[t[123]].w + areas[t[12]].w)/2 - offset;
         areas[t[12]].y = areas[t[123]].y;
 
 	    areas[t[13]].x = areas[t[123]].x;
-        areas[t[13]].y = areas[t[123]].y + o123wh + offset;
+        areas[t[13]].y = -(areas[t[123]].h + o123wh)/2 - offset;
 
 	    areas[t[23]].x = areas[t[123]].x;
-        areas[t[23]].y = areas[t[123]].y - areas[t[23]].h - offset;
+        areas[t[23]].y = (areas[t[123]].h + areas[t[23]].h)/2 + offset;
 
-	    areas[t[1]].x = areas[t[13]].x - areas[t[1]].w - offset;
-        areas[t[1]].y = areas[t[13]].y;
+	    areas[t[1]].x = -(areas[t[123]].w + areas[t[1]].w)/2 - offset;
+        areas[t[1]].y = -(areas[t[123]].h + areas[t[1]].h)/2 - offset;
 
-	    areas[t[3]].x = areas[t[123]].x + o123wh + offset;
-        areas[t[3]].y = areas[t[123]].y - Math.abs(o123wh - areas[t[3]].h) / 2.0 - offset;    
+	    areas[t[2]].x = -(areas[t[123]].w + areas[t[2]].w)/2 - offset;
+        areas[t[2]].y = (areas[t[123]].h + areas[t[2]].h)/2 + offset;
+
+	    areas[t[3]].x = (areas[t[123]].w + areas[t[3]].w)/2 + offset;
+        areas[t[3]].y = areas[t[123]].y;    
 	    
         return areas;
     }
@@ -68,6 +70,7 @@ $(function()
     function calcBuildingHeight(areas,data)
     {
         var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
+        var layerMap = [5,4,3,2,1,0,6];
         var boxes = new Array();
         var numOfBuilding = Object.keys(data).length;
         var numOfLayer = Object.keys(data[t[1]].layerHeight).length;
@@ -80,7 +83,7 @@ $(function()
                 var y = areas[i].y;
                 var w = areas[i].w;
                 var h = areas[i].h;
-                var d = data[i].layerHeight[j];
+                var d = data[i].layerHeight[layerMap[j]];
                 var z = d/2;
                 if(0<j)
                 {
@@ -128,11 +131,11 @@ $(function()
     
         var colors = [
             '#111111',//黒
-            '#C869FF',//紫
-            '#6BCDFF',//水色
-            '#71FD5E',//緑
-            '#FECA61',//黄色
             '#FA6565',//赤
+            '#FECA61',//黄色
+            '#71FD5E',//緑
+            '#6BCDFF',//水色
+            '#C869FF',//紫
             '#DDDDDD',//灰色
         ];
         

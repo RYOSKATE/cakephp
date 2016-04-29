@@ -486,9 +486,12 @@ class Graph extends AppModel
             $layer = 5;
         }
 
-        // if($layer == 6)
+        // if($layer == 0)
         // {
-
+        // echo '<pre>';
+        // print_r($filePath);
+        // print_r($path);
+        // echo '</pre>';
         // }
         return $layer;
     }
@@ -716,14 +719,14 @@ class Graph extends AppModel
         {
             $ori_cond = $conditions + array('Graph.1' => $i);
             $tmp_data = $this->find('all',array('fields' => array('filepath',$metricsNumber),'conditions' => $ori_cond));
-            $layers = array('originHeight'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
+            $layers = array('numOfFiles'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
             foreach ($tmp_data as $line) 
             {
                 $value = $line['Graph'][$metricsNumber];
                 if($value<0)
                     $value=0;
                 $layer =  $this->getLayer($line['Graph']['filepath']);
-                $layers['originHeight']+=$value;
+                ++$layers['numOfFiles'];
                 $layers['layerHeight'][$layer]+=$value;
             }
             $data[$i] = $layers;
