@@ -1,9 +1,10 @@
 $(function()
 {   
+    //(2) 由来(1-7 = 1,12,2,13,123,23,3)    
+    var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
+
     function calcBuildingPos(data)
     {
-        //(2) 由来(1-7 = 1,12,2,13,123,23,3)
-        var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
         var numOfBuilding = Object.keys(data).length;//7
         var areas = new Array();
         for(var i=1;i<=numOfBuilding;++i)
@@ -69,7 +70,6 @@ $(function()
     
     function calcBuildingHeight(areas,data)
     {
-        var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
         var layerMap = [5,4,3,2,1,0,6];
         var boxes = new Array();
         var numOfBuilding = Object.keys(data).length;
@@ -100,23 +100,39 @@ $(function()
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 1000);
     
-        camera.position.set(-100, 50, 100);
-    
+        var maxZ = 0;
+        for (var i = 1; i < boxes.length; i++)
+        {
+            var j = boxes[i].length-1;
+            var p = boxes[i][j].z+boxes[i][j].d;
+            if(maxZ < p)
+                maxZ = p;
+        }
+        camera.position.set(-boxes[t[2]][2].w, -boxes[t[2]][2].w, maxZ);
+        camera.up.set(0,0,1);   
+        
         var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(655, 437);
         //var width = document.getElementById('canvas-wrapper').clientWidth;
         //var height =  document.getElementById('canvas-wrapper').clientHeight;
         //renderer.setSize(width, height);
 
-        renderer.setSize(655, 437);
+        //平面追加
         document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
-        
+        var plane =  new THREE.Mesh(                                      
+             new THREE.PlaneGeometry(10000, 10000, 1, 1),
+              new THREE.MeshLambertMaterial({ 
+                color: 'white'             
+                }));                      
+        scene.add(plane);
+              
         //x,y,z軸表示
         var  axis = new THREE.AxisHelper(1000);          
         axis.position.set(0,0,1);        
         scene.add(axis);                              
         
         var lightPos = [
-            [-100, 50, 100]
+            [-10000, -10000, 10000],
         ];
         
         for (var i = 0; i < lightPos.length; i++) {
