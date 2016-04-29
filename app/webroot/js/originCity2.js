@@ -2,89 +2,104 @@ $(function()
 {   
     function calcBuildingPos(data)
     {
-        //(2) �R��(1-7 = 2,12,1,13,123,23,3)
-        var o = { 2: 0 , 12: 1 ,1: 2 , 13: 3 ,123: 4 , 23: 5 ,3: 6  };
-        var boxes = new Array();
+        //(2) �R��(1-7 = 1,12,2,13,123,23,3)
+        var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
         var numOfBuilding = Object.keys(data).length;
-        
+        var areas = new Array();
         for(var i=1;i<=numOfBuilding;++i)
         {
-            var box = new Array();
-            var numOfLayer = Object.keys(data[i].layerHeight).length;
-            var w = 0;
-            var h = 0;
-            if(i==o[1] || i==o[2] || i==o[3])
-            {
-                w = Math.sqrt(data[i].originHeight);
-                h = w;
-            }
-            else if(i==o[1] || i==o[2] || i==o[3])
-            {
-                
-                
-            }
-            for(var j = 0;j<numOfLayer;++j)
-            {
-                box[j] = new building(0,0,0,v,v,0);
-            }
-            boxes[i] =box;
+            areas[i] = new building(0,0,0,0,0,0);
         }
-	// Array<RectF> originRects(8);
+        areas[t[1]].w = Math.sqrt(data[t[1]].originHeight);
+	    areas[t[1]].h = Math.sqrt(data[t[1]].originHeight);
+	    areas[t[2]].w = Math.sqrt(data[t[2]].originHeight);
+	    areas[t[2]].h = Math.sqrt(data[t[2]].originHeight);
+	    areas[t[3]].w = Math.sqrt(data[t[3]].originHeight);
+	    areas[t[3]].h = Math.sqrt(data[t[3]].originHeight);
+        var o123wh = Math.sqrt(data[t[123]].originHeight);
+  
+        areas[t[123]].w = o123wh;
+	    areas[t[123]].h = o123wh; 
+        
+        areas[t[12]].h = o123wh;
+	    areas[t[23]].w = o123wh;
+	    areas[t[13]].w = o123wh;
+        for(var i=1;i<=numOfBuilding;++i)
+	    {
+		    if (areas[i].h < 1)
+			    areas[i].h = 1;
+		    if (areas[i].w < 1)
+			    areas[i].w = 1;
+	    } 
 
-	// auto& t = originNumMap;
-	// originRects[t[1]].w = sqrt(count[t[1]]);
-	// originRects[t[1]].h = sqrt(count[t[1]]);
-	// originRects[t[2]].w = sqrt(count[t[2]]);
-	// originRects[t[2]].h = sqrt(count[t[2]]);
-	// originRects[t[3]].w = sqrt(count[t[3]]);
-	// originRects[t[3]].h = sqrt(count[t[3]]);
-	// double o123wh = sqrt(count[t[123]]);
+    	areas[t[12]].w = data[t[12]].originHeight / areas[t[12]].h;
+	    areas[t[23]].h = data[t[23]].originHeight / areas[t[23]].w;
+	    areas[t[13]].h = data[t[13]].originHeight / areas[t[13]].w;
+        for(var i=1;i<=numOfBuilding;++i)
+	    {
+		    if (areas[i].h < 1)
+			    areas[i].h = 1;
+		    if (areas[i].w < 1)
+			    areas[i].w = 1;
+	    }
+        var offset = 20;
+	    areas[t[123]].x = 0;areas[t[123]].y = 0;
+	    areas[t[2]].x = areas[t[123]].x - areas[t[2]].w - offset;
+        areas[t[2]].y = areas[t[123]].y - areas[t[2]].h - offset;
 
-	// originRects[t[123]].w = o123wh;
-	// originRects[t[123]].h = o123wh;
+	    areas[t[12]].x = areas[t[123]].x - areas[t[12]].w - offset;
+        areas[t[12]].y = areas[t[123]].y;
 
-	// originRects[t[12]].h = o123wh;
-	// originRects[t[23]].w = o123wh;
-	// originRects[t[13]].w = o123wh;
+	    areas[t[13]].x = areas[t[123]].x;
+        areas[t[13]].y = areas[t[123]].y + o123wh + offset;
 
-	// for (auto & r : originRects)
-	// {
-	// 	if (r.h < 1)
-	// 		r.h = 1;
-	// 	if (r.w < 1)
-	// 		r.w = 1;
-	// }
+	    areas[t[23]].x = areas[t[123]].x;
+        areas[t[23]].y = areas[t[123]].y - areas[t[23]].h - offset;
 
-	// originRects[t[12]].w = count[t[12]] / originRects[t[12]].h;
-	// originRects[t[23]].h = count[t[23]] / originRects[t[23]].w;
-	// originRects[t[13]].h = count[t[13]] / originRects[t[13]].w;
-	// for (auto & r : originRects)
-	// {
-	// 	if (r.h < 1)
-	// 		r.h = 1;
-	// 	if (r.w < 1)
-	// 		r.w = 1;
-	// }
-	// constexpr int offset = 20;
-	// originRects[t[123]].pos = Vec2::Zero;
-	// originRects[t[2]].pos = originRects[t[123]].pos.movedBy(-originRects[t[2]].size).movedBy(-offset,-offset);
-	// originRects[t[12]].pos = originRects[t[123]].pos.movedBy(-originRects[t[12]].w, 0).movedBy(-offset, 0);
-	// originRects[t[13]].pos = originRects[t[123]].pos.movedBy(0, o123wh).movedBy(0, offset);
-	// originRects[t[23]].pos = originRects[t[123]].pos.movedBy(0, -originRects[t[23]].h).movedBy(0, -offset);
-	// originRects[t[1]].pos = originRects[t[13]].pos.movedBy(-originRects[t[1]].w, 0).movedBy(-offset, 0);
-	// originRects[t[3]].pos = originRects[t[123]].pos.movedBy(o123wh, -Abs(o123wh - originRects[t[3]].h) / 2).movedBy(offset, -offset);
+	    areas[t[1]].x = areas[t[13]].x - areas[t[1]].w - offset;
+        areas[t[1]].y = areas[t[13]].y;
 
-	// return originRects;
-       
+	    areas[t[3]].x = areas[t[123]].x + o123wh + offset;
+        areas[t[3]].y = areas[t[123]].y - Math.abs(o123wh - areas[t[3]].h) / 2.0 - offset;    
+	    
+        return areas;
     }
-    function drawBuilding(data)
+    
+    function calcBuildingHeight(areas,data)
+    {
+        var t = { 1:1, 12:2, 2:3, 13:4, 123:5, 23:6, 3:7 };
+        var boxes = new Array();
+        var numOfBuilding = Object.keys(data).length;
+        var numOfLayer = Object.keys(data[t[1]].layerHeight).length;
+        for(var i=1;i<=numOfBuilding;++i)
+        {
+            var layers = new Array();
+            for(var j=0;j<numOfLayer;++j)
+            {
+                var x = areas[i].x;
+                var y = areas[i].y;
+                var w = areas[i].w;
+                var h = areas[i].h;
+                var d = data[i].layerHeight[j];
+                var z = d/2;
+                if(0<j)
+                {
+                    z += layers[j-1].z + layers[j-1].d/2;
+                }
+                layers[j] = new building(x,y,z,w,h,d);
+            }
+            boxes[i]=layers;
+        }        
+        return boxes
+    }
+    function drawBuilding(boxes)
     {
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 1000);
     
         camera.position.set(-100, 50, 100);
     
-        renderer = new THREE.WebGLRenderer();
+        var renderer = new THREE.WebGLRenderer();
         //var width = document.getElementById('canvas-wrapper').clientWidth;
         //var height =  document.getElementById('canvas-wrapper').clientHeight;
         //renderer.setSize(width, height);
@@ -111,7 +126,6 @@ $(function()
         //var geometry = new THREE.BoxGeometry(15, 15, 15);
         //var material = new THREE.MeshPhongMaterial({color: 'white'});
     
-        var cube = [];
         var colors = [
             '#111111',//黒
             '#C869FF',//紫
@@ -121,151 +135,24 @@ $(function()
             '#FA6565',//赤
             '#DDDDDD',//灰色
         ];
-        var geometries = [
-                //画面上方向に+y
-                //画面右方向に+x
-                //手前方向に+z
-                //L
-                [100, 3, 100],
-                [100, 12, 100],
-                [100, 5, 100],
-                [100, 2, 100],
-                [100, 5, 100],
-                [100, 7, 100],
-                [100, 3, 100],
-                
-                [15, 6, 15],
-                [15, 6, 15],
-                [15, 6, 15],
-                [15, 6, 15],
-                [15, 6, 15],
-                [15, 6, 15],
-                [15, 6, 15],
-                
-                [50, 1, 50],
-                [50, 1, 50],
-                [50, 1, 50],
-                [50, 1, 50],
-                [50, 1, 50],
-                [50, 1, 50],
-                [50, 1, 50],
-                
-                [15, 9, 15],
-                [15, 9, 15],
-                [15, 9, 15],
-                [15, 9, 15],
-                [15, 9, 15],
-                [15, 9, 15],
-                [15, 9, 15],
-                
-                [15, 1, 15],
-                [15, 2, 15],
-                [15, 3, 15],
-                [15, 4, 15],
-                [15, 5, 15],
-                [15, 6, 15],
-                [15, 1, 15],
-
-                [15, 6, 15],
-                [15, 5, 15],
-                [15, 3, 15],
-                [15, 1, 15],
-                [15, 4, 15],
-                [15, 2, 15],
-                [15, 1, 15],
-                
-                [15, 1, 15],
-                [15, 1, 15],
-                [15, 2, 15],
-                [15, 3, 15],
-                [15, 5, 15],
-                [15, 8, 15],
-                [15, 13, 15],
-                
-                [15, 0, 15],
-                [15, 1, 15],
-                [15, 1, 15],
-                [15, 1, 15],
-                [15, 3, 15],
-                [15, 20, 15],
-                [15, 15, 15],     
-        ];
-        var position = [
-                
-                //画面上方向に+y
-                //画面右方向に+x
-                //手前方向に+z
-                //L
-                [-50,0,-50],
-                [-50,15,-50],
-                [-50,30,-50],
-                [-50,45,-50],
-                [-50,60,-50],
-                [-50,75,-50],
-                [-50,90,-50],
-                
-                [-15,0,15],
-                [-15,15,15],
-                [-15,30,15],
-                [-15,45,15],
-                [-15,60,15],
-                [-15,75,15],
-                [-15,90,15],
-                
-                [-35,0,45],
-                [-35,50,45],
-                [-35,45,45],
-                [-35,45,45],
-                [-35,60,45],
-                [-35,75,45],
-                [-35,90,45],
-                
-                [0,0,0],
-                [0,15,0],
-                [0,30,0],
-                [0,45,0],
-                [0,60,0],
-                [0,75,0],
-                [0,90,0],
-
-                [0,0,15],
-                [0,15,15],
-                [0,30,15],
-                [0,45,15],
-                [0,60,15],
-                [0,75,15],
-                [0,90,15],
-
-                [0,0,30],
-                [0,15,30],
-                [0,30,30],
-                [0,45,30],
-                [0,60,30],
-                [0,75,30],
-                [0,90,30],
-
-                [15,0,15],
-                [15,15,15],
-                [15,30,15],
-                [15,45,15],
-                [15,60,15],
-                [15,75,15],
-                [15,90,15],
-            ];
+        
+        //画面上方向に+y
+        //画面右方向に+x
+        //手前方向に+z
     
-        for (var i = 0; i < position.length; i++) {
-            var material = new THREE.MeshPhongMaterial({color: colors[i%7]});
-            var geometry = new THREE.BoxGeometry(geometries[i][0],geometries[i][1],geometries[i][2]);
-            cube[i] = new THREE.Mesh(geometry, material);
-            if(i%7==0)
+        for (var i = 1; i < boxes.length; i++)
+        {
+            for(var j=0;j<boxes[i].length;++j)
             {
-                cube[i].position.set(position[i][0],0,position[i][2]);
+                if(0<boxes[i][j].d)
+                {
+                    var material = new THREE.MeshPhongMaterial({color: colors[j]});
+                    var geometry = new THREE.BoxGeometry(boxes[i][j].w,boxes[i][j].h,boxes[i][j].d);
+                    var cube = new THREE.Mesh(geometry, material);
+                    cube.position.set(boxes[i][j].x,boxes[i][j].y,boxes[i][j].z);
+                    scene.add(cube);
+                }
             }
-            else
-            {
-                cube[i].position.set(position[i][0],cube[i-1].position.y+geometries[i][1],position[i][2]);            
-            }
-            scene.add(cube[i]);
         };
     
         var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -281,8 +168,9 @@ $(function()
         renderLoop();
     }
     
-    calcBuildingPos(data);
-    drawBuilding(data);
+    var areas = calcBuildingPos(data);
+    var boxes = calcBuildingHeight(areas,data);
+    drawBuilding(boxes);
     
     function building(x,y,z,w,h,d)
     {
