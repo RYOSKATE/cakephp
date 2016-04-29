@@ -87,7 +87,7 @@ $(function()
                 var z = d/2;
                 if(0<j)
                 {
-                    z += layers[j-1].z + layers[j-1].d/2;
+                    z += layers[j-1].z;
                 }
                 layers[j] = new building(x,y,z,w,h,d);
             }

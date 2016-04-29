@@ -9,9 +9,10 @@ if($userData['role']!='reader')
                                         array('div' => 'form-group',),
                                         'class' => 'well form-inline')
                                         );
-                                        ?>
-                                        <fieldset>
-        <legend>付箋</legend><?php 
+?>
+	<fieldset>
+        <legend>付箋</legend>
+<?php 
 
     echo $this->Form->input('textarea', array
     (
@@ -89,7 +90,9 @@ if($userData['role']!='reader')
     	'class' => 'form-control',
     	'value'=>'edit',
     ));
+?>
+ </fieldset>
+<?php 
     echo $this->Form->end();
 }
     ?>
- </fieldset>
