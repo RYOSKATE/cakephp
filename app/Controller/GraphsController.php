@@ -341,16 +341,16 @@ class GraphsController extends AppController
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
 			$selectMetrics = $this->data['Graph'] ['Metrics'];
             $data = $this->Graph->getOriginCity2($selectModelName,$selectGroupName,$selectMetrics);
-        echo '<pre>';
-            foreach ($data as $key => $val)
-            {
-                if($val['numOfFiles'])
-                {
-                    print_r($key);print_r('<br>');
-                    print_r($val);
-                }
-            }
-        echo '</pre>';
+        // echo '<pre>';
+        //     foreach ($data as $key => $val)
+        //     {
+        //         if($val['numOfFiles'])
+        //         {
+        //             print_r($key);print_r('<br>');
+        //             print_r($val);
+        //         }
+        //     }
+        // echo '</pre>';
         //die();
         }
         $this->set('selectMetrics',$selectMetrics);

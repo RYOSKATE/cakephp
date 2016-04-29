@@ -87,7 +87,7 @@ $(function()
                 var z = d/2;
                 if(0<j)
                 {
-                    z += layers[j-1].z;
+                    z += layers[j-1].z + layers[j-1].d/2;
                 }
                 layers[j] = new building(x,y,z,w,h,d);
             }
@@ -104,7 +104,7 @@ $(function()
         for (var i = 1; i < boxes.length; i++)
         {
             var j = boxes[i].length-1;
-            var p = boxes[i][j].z+boxes[i][j].d;
+            var p = boxes[i][j].z;
             if(maxZ < p)
                 maxZ = p;
         }
