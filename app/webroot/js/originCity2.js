@@ -57,10 +57,10 @@ $(function()
         areas[t[23]].y = (areas[t[123]].h + areas[t[23]].h)/2 + offset;
 
 	    areas[t[1]].x = -(areas[t[123]].w + areas[t[1]].w)/2 - offset;
-        areas[t[1]].y = -(areas[t[123]].h + areas[t[1]].h)/2 - offset;
+        areas[t[1]].y = (areas[t[123]].h + areas[t[1]].h)/2 + offset;
 
 	    areas[t[2]].x = -(areas[t[123]].w + areas[t[2]].w)/2 - offset;
-        areas[t[2]].y = (areas[t[123]].h + areas[t[2]].h)/2 + offset;
+        areas[t[2]].y = -(areas[t[123]].h + areas[t[2]].h)/2 - offset;
 
 	    areas[t[3]].x = (areas[t[123]].w + areas[t[3]].w)/2 + offset;
         areas[t[3]].y = areas[t[123]].y;    
@@ -108,7 +108,9 @@ $(function()
             if(maxZ < p)
                 maxZ = p;
         }
-        camera.position.set(-boxes[t[2]][2].w, -boxes[t[2]][2].w, maxZ);
+        //var scale = 0.0000001;
+        var scale = 300.0 / maxZ;
+        camera.position.set(-boxes[t[2]][2].w*2, -boxes[t[2]][2].w*2, maxZ*scale*2);
         camera.up.set(0,0,1);   
         
         var renderer = new THREE.WebGLRenderer();
@@ -166,9 +168,9 @@ $(function()
                 if(0<boxes[i][j].d)
                 {
                     var material = new THREE.MeshPhongMaterial({color: colors[j]});
-                    var geometry = new THREE.BoxGeometry(boxes[i][j].w,boxes[i][j].h,boxes[i][j].d);
+                    var geometry = new THREE.BoxGeometry(boxes[i][j].w,boxes[i][j].h,boxes[i][j].d*scale);
                     var cube = new THREE.Mesh(geometry, material);
-                    cube.position.set(boxes[i][j].x,boxes[i][j].y,boxes[i][j].z);
+                    cube.position.set(boxes[i][j].x,boxes[i][j].y,boxes[i][j].z*scale);
                     scene.add(cube);
                 }
             }
