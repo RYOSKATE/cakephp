@@ -57,14 +57,14 @@ class GraphsController extends AppController
     {
         //すでに存在する開発グループ名一覧を取得
         $metricsList = array(
-			"(1) 未使用(ファイルパス)",
-			"(2) 未使用(由来)",
-			"(3) 未使用(空欄)",
+			"(1) ファイルパス",
+			"(2) 由来",
+			"(3) 未使用",
 			"(4) 欠陥の数",
 			"(5) 物理行数",
 			"(6) 一行に複数の宣言や文がある数",
 			"(7) 継承木における深さ",
-			"(8) 未使用(他クラスの関数を呼び出す関数の率)",
+			"(8) 他クラスの関数を呼び出す関数の率",
 			"(9) 呼び出す他クラスの関数の種類数",
 			"(10) メソッドの凝集度の欠如(COM)",
 			"(11) Pubic メソッド数",
@@ -351,8 +351,10 @@ class GraphsController extends AppController
         //         }
         //     }
         // echo '</pre>';
-        //die();
+        // die();
         }
+        $this->set('selectModelName',$selectModelName);
+        $this->set('selectMetricsName',$metricsListData[$selectMetrics]);
         $this->set('selectMetrics',$selectMetrics);
         $this->set('data',$data);
     }

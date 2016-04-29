@@ -19,6 +19,9 @@
     <div class="col-md-6 col-sm-6">
  		<div id="canvas-wrapper"></div>
     </div>
+    <div class="col-md-12 col-sm-12">
+		<?php echo $this->element('originCityTable2', array("name" => $selectModelName,"data" => $data,"metricsName"=>$selectMetricsName));?>
+    </div>
 </div>
 
 <script>
