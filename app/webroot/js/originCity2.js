@@ -209,9 +209,105 @@ $(function()
                     var cube = new THREE.Mesh(geometry, material);
                     cube.position.set(boxes[i][j].x,boxes[i][j].y,boxes[i][j].z*scale);
                     scene.add(cube);
+                    if(j==boxes[i].length-1)
+                    {
+                        var x = boxes[i][j].x;
+                        var y = boxes[i][j].y;
+                        var z = boxes[i][j].z*scale+boxes[i][j].d*scale/2;
+
+                        if(i==t[1]/* ||i==t[12] || i==t[13] || i==t[123]*/)
+                        {
+                            var y = drawO(scene,x,y,z)
+                            y = draw1(scene,x,y,z)
+                        }
+                        if(i==t[2] /* ||i==t[12] || i==t[23] || i==t[123]*/)
+                        {
+                            var y = drawO(scene,x,y,z)
+                            y = draw2(scene,x,y,z)
+                        }
+                        if(i==t[3]/*  ||i==t[13] || i==t[23] || i==t[123]*/)
+                        {
+                            var y = drawO(scene,x,y,z)
+                            y = draw3(scene,x,y,z)
+                        }
+                    }
                 }
             }
         };
+    }    
+    function drawO(scene,x,y,z)
+    {
+        var material = new THREE.MeshLambertMaterial( { color: 0x008866, wireframe:false } );
+        //半径、輪の幅、輪の分割、円の分割、描画範囲角度
+        var r = 20;
+        var mesh = new THREE.Mesh( new THREE.TorusGeometry( r, 3, 20, 20, 2.0*Math.PI ), material );
+        mesh.rotation.set(0,Math.PI /2,0);
+        mesh.position.set(x,y+r,z+r);
+        scene.add( mesh );
+        return y-r;
+    }
+    function draw1(scene,x,y,z)
+    {
+        //マテリアルはMeshPhongMaterial, color: 0x00FF7F
+        // 上面半径,下面半径,高さ40,円周分割数50
+        var h = 40;
+        var mesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(3,3,h,50),
+            new THREE.MeshPhongMaterial({
+                color: 0x008866
+                }));
+        mesh.rotation.set(Math.PI /2,0,0);
+        mesh.position.set(x,y,z+h/2);    //sceneオブジェクトに追加
+        scene.add(mesh);    
+     }
+    function draw2(scene,x,y,z)
+    {
+        var material = new THREE.MeshLambertMaterial( { color: 0x008866, wireframe:false } );
+        //半径、輪の幅、輪の分割、円の分割、描画範囲角度
+        var r = 20;
+        var mesh = new THREE.Mesh( new THREE.TorusGeometry( r, 3, 20, 20, Math.PI*3/4 ), material );
+        mesh.rotation.set(0,Math.PI /2,Math.PI*2/3);
+        mesh.position.set(x,y,z+r);
+        scene.add( mesh );
+        
+        var h = 40;
+        mesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(3,3,h,50),
+            new THREE.MeshPhongMaterial({
+                color: 0x008866
+                }));
+        mesh.rotation.set(Math.PI*9/12,0,0);
+        mesh.position.set(x,y-2,z+h/2-5);    //sceneオブジェクトに追加
+        scene.add(mesh);
+        
+        mesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(3,3,h,50),
+            new THREE.MeshPhongMaterial({
+                color: 0x008866
+                }));
+        mesh.rotation.set(Math.PI,0,0);
+        mesh.position.set(x,y-5,z);    //sceneオブジェクトに追加
+        scene.add(mesh);
+        return y;
+    }
+    function draw3(scene,x,y,z)
+    {
+        var material = new THREE.MeshLambertMaterial( { color: 0x008866, wireframe:false } );
+        //半径、輪の幅、輪の分割、円の分割、描画範囲角度
+        var r = 10;
+        var mesh = new THREE.Mesh( new THREE.TorusGeometry( r, 3, 20, 20, Math.PI*1.5 ), material );
+        mesh.rotation.set(0,Math.PI /2,Math.PI/2);
+        mesh.position.set(x,y,z+r*3);
+        scene.add( mesh );
+        
+        material = new THREE.MeshLambertMaterial( { color: 0x008866, wireframe:false } );
+        //半径、輪の幅、輪の分割、円の分割、描画範囲角度
+        var r = 10;
+        var mesh = new THREE.Mesh( new THREE.TorusGeometry( r, 3, 20, 20, Math.PI*1.5 ), material );
+        mesh.rotation.set(0,Math.PI /2,Math.PI);
+        mesh.position.set(x,y,z+r);
+        scene.add( mesh );
+    
     }
     //ここまではdrawBuilding()内などで使われる描画処理
 
@@ -269,7 +365,7 @@ $(function()
         
         //環境光、平行光追加
         addLight(scene);
-    
+
         //描画処理追加
         addRenderControl(scene,camera,renderer);    
     }
