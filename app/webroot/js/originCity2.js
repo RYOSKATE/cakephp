@@ -198,7 +198,7 @@ $(function()
         //画面右方向に+x
         //手前方向に+z
     
-        var topLayers = [0,0,0,0,0,0,0,0];
+        var topLayers = [-1,-1,-1,-1,-1,-1,-1,-1];
         for (var i = 1; i < boxes.length; i++)
         {
             for(var j=0;j<boxes[i].length;++j)
@@ -217,6 +217,8 @@ $(function()
         for (var i = 1; i < boxes.length; i++)
         {
             var j = topLayers[i];
+            if(j == -1)
+                continue;
             var x = boxes[i][j].x;
             var y = boxes[i][j].y;
             var z = boxes[i][j].z*scale+boxes[i][j].d*scale/2;
