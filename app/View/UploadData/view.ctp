@@ -18,14 +18,14 @@
 		</dd>
 		<dt><?php echo __('User'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($uploadData['User']['id'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
+			<?php echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Comment'); ?></dt>
 		<dd>
 			<?php echo h($uploadData['UploadData']['comment']); ?>
 			&nbsp;
-		</dd>
+		</dd>	
 	</dl>
 </div>
 	
@@ -35,8 +35,6 @@
 	<table cellpadding = "0" cellspacing = "0" class="table table-hover table-condensed">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Upload Data Id'); ?></th>
-		<th><?php echo __('Model'); ?></th>
 		<th><?php echo __('filepath'); ?></th>
 		<th><?php echo __('1'); ?></th>
 		<th><?php echo __('2'); ?></th>
@@ -68,8 +66,6 @@
 	<?php foreach ($uploadData['Graph'] as $graph): ?>
 		<tr>
 			<td><?php echo $graph['id']; ?></td>
-			<td><?php echo $graph['upload_data_id']; ?></td>
-			<td><?php echo $graph['model']; ?></td>
 			<td><?php echo $graph['filepath']; ?></td>
 			<td><?php echo $graph['1']; ?></td>
 			<td><?php echo $graph['2']; ?></td>
