@@ -236,7 +236,7 @@ class GraphsController extends AppController
         $data1=null;
         $data2=null;
 
-        if (isset($this->request->data['set']))
+        if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
         {
             $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
@@ -305,23 +305,13 @@ class GraphsController extends AppController
         $selectModelName = reset($modelNameData);
         $selectMetrics = 2;
         $data = null;
-        if (isset($this->request->data['set']))
+        
+        if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
         {
             $selectModelName = $modelNameData[$this->data['Graph'] ['モデル1']];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
 			$selectMetrics = $this->data['Graph'] ['Metrics'];
             $data = $this->Graph->getOriginCity2($selectModelName,$selectGroupName,$selectMetrics);
-        // echo '<pre>';
-        //     foreach ($data as $key => $val)
-        //     {
-        //         if($val['numOfFiles'])
-        //         {
-        //             print_r($key);print_r('<br>');
-        //             print_r($val);
-        //         }
-        //     }
-        // echo '</pre>';
-        // die();
         }
         $this->set('selectModelName',$selectModelName);
         if(0<$selectMetrics)

@@ -95,13 +95,40 @@ $(function()
         }        
         return boxes
     }
+    
+    //以下はdrawBuilding()内などで使われる描画処理
+    function makeCamera(x,y,z)
+    {
+        var fov    = 60;
+        var aspect = 19 / 9;
+        var near   = 1;
+        var far    = 10000;
+        var camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+        camera.position.set(x,y,z);
+        camera.up.set(0,0,1);   
+        return camera;
+    }
+    
+    function makeRenderer()
+    {
+        var renderer = new THREE.WebGLRenderer();
+        var canvas_wrapper = document.getElementById('canvas-wrapper');
+        canvas_wrapper.appendChild(renderer.domElement);
+        
+        var width = canvas_wrapper.clientWidth;
+        var height =  width*9/16;
+        renderer.setSize(width, height);
+        renderer.setClearColor( 0xffffff, 1);
+        return renderer;
+    }
+    
     function addPlane(renderer,scene)
     {
         //平面追加
         var plane =  new THREE.Mesh(                                      
-             new THREE.PlaneGeometry(10000, 10000, 1, 1),
+             new THREE.PlaneGeometry(1000, 1000, 1, 1),
               new THREE.MeshLambertMaterial({ 
-                color: 'white'             
+                color: 0xAAAAAA            
                 }));                      
         scene.add(plane);
     }
@@ -115,16 +142,17 @@ $(function()
     function addLight(scene)
     {
         var lightPos = [
-            [-10000, -10000, 10000],
+            [-1000, -1000, 1000],
+            [1000, 1000, 1000],
         ];
         
         for (var i = 0; i < lightPos.length; i++) {
-            var directionalLight = new THREE.DirectionalLight('#FFFFFF', 1);
+            var directionalLight = new THREE.DirectionalLight('#FFFFFF', 1/(i+1));
             directionalLight.position.set(lightPos[i][0],  lightPos[i][1], lightPos[i][2]);
             scene.add(directionalLight);
         }
         
-        scene.add(new THREE.AmbientLight(0x333333));  
+        scene.add(new THREE.AmbientLight(0x333333));
     }
     
     function addRenderControl(scene,camera,renderer)
@@ -138,6 +166,7 @@ $(function()
             
             //実際に描画
             renderer.render(scene, camera);
+            
         }
         renderLoop();
         
@@ -152,41 +181,9 @@ $(function()
             camera.updateProjectionMatrix();
         }
     }
-    function drawBuilding(boxes)
+    
+    function addBoxes(scene,boxes,scale)
     {
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 1000);
-    
-        var maxZ = 0;
-        for (var i = 1; i < boxes.length; i++)
-        {
-            var j = boxes[i].length-1;
-            var p = boxes[i][j].z;
-            if(maxZ < p)
-                maxZ = p;
-        }
-        //var scale = 0.0000001;
-        var scale = 300.0 / maxZ;
-        camera.position.set(-boxes[t[2]][2].w*2, -boxes[t[2]][2].w*2, maxZ*scale*2);
-        camera.up.set(0,0,1);   
-        
-        var renderer = new THREE.WebGLRenderer();
-        var canvas_wrapper = document.getElementById('canvas-wrapper');
-        canvas_wrapper.appendChild(renderer.domElement);
-        
-        var width = canvas_wrapper.clientWidth;
-        var height =  width*9/16;
-        renderer.setSize(width, height);
-
-        //平面追加
-        addPlane(renderer,scene);
-
-        //x,y,z軸表示
-        addAxisLine(scene);                          
-        
-        //環境光、平行光追加
-        addLight(scene);
-    
         var colors = [
             '#111111',//黒
             '#FA6565',//赤
@@ -215,7 +212,39 @@ $(function()
                 }
             }
         };
+    }
+    //ここまではdrawBuilding()内などで使われる描画処理
+
+    function drawBuilding(boxes)
+    {
+        var scene = new THREE.Scene();
     
+        var maxZ = 0;
+        for (var i = 1; i < boxes.length; i++)
+        {
+            var j = boxes[i].length-1;
+            var p = boxes[i][j].z;
+            if(maxZ < p)
+                maxZ = p;
+        }
+        //var scale = 0.0000001;
+        var scale = 300.0 / maxZ;
+        var camera = makeCamera(-boxes[t[2]][2].w*2, -boxes[t[2]][2].w*2, maxZ*scale*2);    
+        var renderer = makeRenderer();
+        
+        //平面追加
+        addPlane(renderer,scene);
+
+        //x,y,z軸表示
+        addAxisLine(scene);                          
+        
+        //環境光、平行光追加
+        addLight(scene);
+    
+        //建物追加
+        addBoxes(scene,boxes,scale);
+    
+        //描画処理追加
         addRenderControl(scene,camera,renderer);
     }
     
@@ -229,17 +258,8 @@ $(function()
     else
     {
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 1000);
-        camera.position.set(-100, -100, 100);
-        camera.up.set(0,0,1);   
-        
-        var renderer = new THREE.WebGLRenderer();
-        var canvas_wrapper = document.getElementById('canvas-wrapper');
-        canvas_wrapper.appendChild(renderer.domElement);
-        
-        var width = canvas_wrapper.clientWidth;
-        var height =  width*9/16;
-        renderer.setSize(width, height);
+        var camera = makeCamera(-100, -100, 100);
+        var renderer = makeRenderer();
 
         //平面追加
         addPlane(renderer,scene);
@@ -250,6 +270,7 @@ $(function()
         //環境光、平行光追加
         addLight(scene);
     
+        //描画処理追加
         addRenderControl(scene,camera,renderer);    
     }
     function building(x,y,z,w,h,d)
