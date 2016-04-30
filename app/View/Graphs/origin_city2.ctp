@@ -16,8 +16,8 @@
     <?php echo $this->element('selectForm4', array("modelName" => $modelName,"groupName" => $groupName)); ?>
 </div>
 <div class="row">
-    <div class="col-md-6 col-sm-6">
- 		<div id="canvas-wrapper"></div>
+    <div class="col-md-12 col-sm-12">
+         <div id="canvas-wrapper"></div>
     </div>
     <div class="col-md-12 col-sm-12">
 		<?php echo $this->element('originCityTable2', array("name" => $selectModelName,"data" => $data,"metricsName"=>$selectMetricsName));?>

@@ -320,7 +320,10 @@ class GraphsController extends AppController
         $this->set('leftModelName',$selectModelName1);
         $this->set('rightModelName',$selectModelName2);
 		$this->set('selectMetrics',$selectMetrics);
-		$this->set('selectMetricsStr',$metricsListData[$selectMetrics]);
+        if(0<$selectMetrics)
+		    $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);
+        else
+		    $this->set('selectMetricsStr',"");
         $this->set('useLocalCSV',true);
     }
     
@@ -354,7 +357,10 @@ class GraphsController extends AppController
         // die();
         }
         $this->set('selectModelName',$selectModelName);
-        $this->set('selectMetricsName',$metricsListData[$selectMetrics]);
+        if(0<$selectMetrics)
+            $this->set('selectMetricsName',$metricsListData[$selectMetrics]);
+        else
+            $this->set('selectMetricsName',"");
         $this->set('selectMetrics',$selectMetrics);
         $this->set('data',$data);
     }

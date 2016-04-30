@@ -95,6 +95,63 @@ $(function()
         }        
         return boxes
     }
+    function addPlane(renderer,scene)
+    {
+        //平面追加
+        var plane =  new THREE.Mesh(                                      
+             new THREE.PlaneGeometry(10000, 10000, 1, 1),
+              new THREE.MeshLambertMaterial({ 
+                color: 'white'             
+                }));                      
+        scene.add(plane);
+    }
+    function addAxisLine(scene)
+    {
+        var  axis = new THREE.AxisHelper(1000);          
+        axis.position.set(0,0,1);        
+        scene.add(axis);      
+    }
+    
+    function addLight(scene)
+    {
+        var lightPos = [
+            [-10000, -10000, 10000],
+        ];
+        
+        for (var i = 0; i < lightPos.length; i++) {
+            var directionalLight = new THREE.DirectionalLight('#FFFFFF', 1);
+            directionalLight.position.set(lightPos[i][0],  lightPos[i][1], lightPos[i][2]);
+            scene.add(directionalLight);
+        }
+        
+        scene.add(new THREE.AmbientLight(0x333333));  
+    }
+    
+    function addRenderControl(scene,camera,renderer)
+    {
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    
+        function renderLoop() {
+            //OrbitControlsを使う場合必須
+            window.requestAnimationFrame(renderLoop);
+            controls.update();
+            
+            //実際に描画
+            renderer.render(scene, camera);
+        }
+        renderLoop();
+        
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        function onWindowResize(){
+            var canvas_wrapper = document.getElementById('canvas-wrapper');
+            var width = canvas_wrapper.clientWidth;
+            var height =  width*9/16;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+    }
     function drawBuilding(boxes)
     {
         var scene = new THREE.Scene();
@@ -114,38 +171,21 @@ $(function()
         camera.up.set(0,0,1);   
         
         var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(655, 437);
-        //var width = document.getElementById('canvas-wrapper').clientWidth;
-        //var height =  document.getElementById('canvas-wrapper').clientHeight;
-        //renderer.setSize(width, height);
+        var canvas_wrapper = document.getElementById('canvas-wrapper');
+        canvas_wrapper.appendChild(renderer.domElement);
+        
+        var width = canvas_wrapper.clientWidth;
+        var height =  width*9/16;
+        renderer.setSize(width, height);
 
         //平面追加
-        document.getElementById('canvas-wrapper').appendChild(renderer.domElement);
-        var plane =  new THREE.Mesh(                                      
-             new THREE.PlaneGeometry(10000, 10000, 1, 1),
-              new THREE.MeshLambertMaterial({ 
-                color: 'white'             
-                }));                      
-        scene.add(plane);
-              
+        addPlane(renderer,scene);
+
         //x,y,z軸表示
-        var  axis = new THREE.AxisHelper(1000);          
-        axis.position.set(0,0,1);        
-        scene.add(axis);                              
+        addAxisLine(scene);                          
         
-        var lightPos = [
-            [-10000, -10000, 10000],
-        ];
-        
-        for (var i = 0; i < lightPos.length; i++) {
-            var directionalLight = new THREE.DirectionalLight('#FFFFFF', 1);
-            directionalLight.position.set(lightPos[i][0],  lightPos[i][1], lightPos[i][2]);
-            scene.add(directionalLight);
-        }
-        
-        scene.add(new THREE.AmbientLight(0x333333));  
-        //var geometry = new THREE.BoxGeometry(15, 15, 15);
-        //var material = new THREE.MeshPhongMaterial({color: 'white'});
+        //環境光、平行光追加
+        addLight(scene);
     
         var colors = [
             '#111111',//黒
@@ -176,23 +216,41 @@ $(function()
             }
         };
     
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
-    
-        function renderLoop() {
-            //OrbitControlsを使う場合必須
-            window.requestAnimationFrame(renderLoop);
-            controls.update();
-            
-            //実際に描画
-            renderer.render(scene, camera);
-        }
-        renderLoop();
+        addRenderControl(scene,camera,renderer);
     }
     
-    var areas = calcBuildingPos(data);
-    var boxes = calcBuildingHeight(areas,data);
-    drawBuilding(boxes);
+    if(data[0]!=0)
+    {
+        var areas = calcBuildingPos(data);
+        var boxes = calcBuildingHeight(areas,data);
+        drawBuilding(boxes);
+    }
+    else
+    {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, 600 / 400, 1, 1000);
+        camera.position.set(-100, -100, 100);
+        camera.up.set(0,0,1);   
+        
+        var renderer = new THREE.WebGLRenderer();
+        var canvas_wrapper = document.getElementById('canvas-wrapper');
+        canvas_wrapper.appendChild(renderer.domElement);
+        
+        var width = canvas_wrapper.clientWidth;
+        var height =  width*9/16;
+        renderer.setSize(width, height);
+
+        //平面追加
+        addPlane(renderer,scene);
+
+        //x,y,z軸表示
+        addAxisLine(scene);                          
+        
+        //環境光、平行光追加
+        addLight(scene);
     
+        addRenderControl(scene,camera,renderer);    
+    }
     function building(x,y,z,w,h,d)
     {
 	    //コンストラクタとメンバ変数
