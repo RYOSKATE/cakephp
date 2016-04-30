@@ -65,6 +65,9 @@
     ?>
 
 </div>
+注)同じ日付のデータはアップロードできません。
+<br>
+上書きが必要な場合は以下の履歴ページから削除してください。
 <h1><?php echo $this->Html->link('Upload History',array('controller' => 'upload_data', 'action' => 'index'));?></h1>
 </div>
 <?php
