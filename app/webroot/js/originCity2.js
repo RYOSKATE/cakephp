@@ -219,7 +219,8 @@ $(function()
         addRenderControl(scene,camera,renderer);
     }
     
-    if(data[0]!=0)
+    //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
+    if(data!=null && data[0]!=0)
     {
         var areas = calcBuildingPos(data);
         var boxes = calcBuildingHeight(areas,data);
