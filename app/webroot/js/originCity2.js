@@ -134,7 +134,7 @@ $(function()
     }
     function addAxisLine(scene)
     {
-        var  axis = new THREE.AxisHelper(1000);          
+        var  axis = new THREE.AxisHelper(500);          
         axis.position.set(0,0,1);        
         scene.add(axis);      
     }
