@@ -1,3 +1,8 @@
+<?php 
+echo '<pre>';
+print_r($uploadData);
+echo '</pre>';
+?>    
 <div class="uploadData index">
 	<h2><?php echo __('Upload Data'); ?></h2>
 	<table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
@@ -17,10 +22,12 @@
 		<td><?php echo h($uploadData['UploadData']['id']); ?>&nbsp;</td>
 		<td><?php echo h($uploadData['UploadData']['date']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($uploadData['Modelname']['name'], array('controller' => 'modelnames', 'action' => 'view', $uploadData['Modelname']['id'])); ?>
+			<?php //echo $this->Html->link($uploadData['Modelname']['name'], array('controller' => 'modelnames', 'action' => 'view', $uploadData['Modelname']['id'])); ?>
+			<?php echo h($uploadData['Modelname']['name']); ?>&nbsp;
 		</td>
 		<td>
-			<?php echo $this->Html->link($uploadData['User']['id'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
+			<?php //echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
+			<?php echo h($uploadData['User']['username']); ?>&nbsp;
 		</td>
 		<td><?php echo h($uploadData['UploadData']['comment']); ?>&nbsp;</td>
 		<td class="actions">
