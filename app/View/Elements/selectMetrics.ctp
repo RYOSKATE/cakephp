@@ -13,6 +13,6 @@
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
 		'empty' => true,
-		'disabled' => array(0,1,2,7)
+		'disabled' => array(2,7)
 	 ));
 ?> 
