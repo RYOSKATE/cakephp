@@ -320,6 +320,9 @@ class GraphsController extends AppController
             $this->set('selectMetricsName',"");
         $this->set('selectMetrics',$selectMetrics);
         $this->set('data',$data);
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
     }
     
     public function metrics()

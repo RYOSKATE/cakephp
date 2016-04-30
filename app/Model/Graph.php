@@ -719,7 +719,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        
+
         //1は由来,2はファイル数,3は欠陥数
         $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
         for($i = 1;$i<=7;++$i)
@@ -744,6 +744,17 @@ class Graph extends AppModel
             }
             $data[$i] = $layers;
         }
+        
+        $sumOfValue=0;
+        for($i = 1;$i<=7;++$i)
+        {
+            for($j = 0;$j<=6;++$j)
+            {
+                $sumOfValue = $data[$i]['layerHeight'][$j];
+            }
+        }
+        if($sumOfValue==0)
+            $data[0]=0;
         return $data;
     }
 }

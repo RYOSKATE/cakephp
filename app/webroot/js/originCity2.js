@@ -198,6 +198,7 @@ $(function()
         //画面右方向に+x
         //手前方向に+z
     
+        var topLayers = [0,0,0,0,0,0,0,0];
         for (var i = 1; i < boxes.length; i++)
         {
             for(var j=0;j<boxes[i].length;++j)
@@ -209,31 +210,33 @@ $(function()
                     var cube = new THREE.Mesh(geometry, material);
                     cube.position.set(boxes[i][j].x,boxes[i][j].y,boxes[i][j].z*scale);
                     scene.add(cube);
-                    if(j==boxes[i].length-1)
-                    {
-                        var x = boxes[i][j].x;
-                        var y = boxes[i][j].y;
-                        var z = boxes[i][j].z*scale+boxes[i][j].d*scale/2;
-
-                        if(i==t[1]/* ||i==t[12] || i==t[13] || i==t[123]*/)
-                        {
-                            var y = drawO(scene,x,y,z)
-                            y = draw1(scene,x,y,z)
-                        }
-                        if(i==t[2] /* ||i==t[12] || i==t[23] || i==t[123]*/)
-                        {
-                            var y = drawO(scene,x,y,z)
-                            y = draw2(scene,x,y,z)
-                        }
-                        if(i==t[3]/*  ||i==t[13] || i==t[23] || i==t[123]*/)
-                        {
-                            var y = drawO(scene,x,y,z)
-                            y = draw3(scene,x,y,z)
-                        }
-                    }
+                    topLayers[i]=j;
                 }
             }
-        };
+        }
+        for (var i = 1; i < boxes.length; i++)
+        {
+            var j = topLayers[i];
+            var x = boxes[i][j].x;
+            var y = boxes[i][j].y;
+            var z = boxes[i][j].z*scale+boxes[i][j].d*scale/2;
+
+            if(i==t[1]/* ||i==t[12] || i==t[13] || i==t[123]*/)
+            {
+                var y = drawO(scene,x,y,z)
+                y = draw1(scene,x,y,z)
+            }
+            if(i==t[2] /* ||i==t[12] || i==t[23] || i==t[123]*/)
+            {
+                var y = drawO(scene,x,y,z)
+                y = draw2(scene,x,y,z)
+            }
+            if(i==t[3]/*  ||i==t[13] || i==t[23] || i==t[123]*/)
+            {
+                var y = drawO(scene,x,y,z)
+                y = draw3(scene,x,y,z)
+            }        
+        }
     }    
     function drawO(scene,x,y,z)
     {
