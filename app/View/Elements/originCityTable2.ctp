@@ -35,15 +35,6 @@ th {text-align: right;}
 			6=>'Others',
 		);
 		
-		$layerMap = array(
-			0=>5,
-			1=>4,
-			2=>3,
-			3=>2,
-			4=>1, 
-			5=>0,
-			6=>6,
-		);
 		$metricsSum = array(0,0,0,0,0,0,0,0);
         ?>
 <table class="table table-condensed" id ="table">
@@ -79,7 +70,7 @@ th {text-align: right;}
 			for($j=1;$j<=7;++$j)//由来
 			{
 				?><td align="right"><?php
-				$value = $data[$j]['layerHeight'][$layerMap[$i]];
+				$value = $data[$j]['layerHeight'][$i];
 				$metricsSum[$j] += $value;
 				$leyarSum += $value;
 				echo $value;

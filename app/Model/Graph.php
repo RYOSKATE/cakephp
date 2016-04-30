@@ -438,7 +438,16 @@ class Graph extends AppModel
     {
         //frameworksを含めていいのか要検討
         //vendor/fujitsu/やbootable/bootloaderなども
-
+        
+			// 0=>'アプリケーション(APP)',
+			// 1=>'アプリケーションフレームワーク(FW)',
+			// 2=>'ライブラリ(外部OSS)',
+			// 3=>'Android Runtinme(SYSTEM)', 
+			// 4=>'HWライブラリ',
+			// 5=>'Kernel',
+			// //5=>'Kernel/ドライバ/ブードローダー',
+			// 6=>'Others',
+            
         $path = explode('/',$filePath);//先頭フォルダ名
         $path[0] = trim($path[0]);
         $layer= 6;
