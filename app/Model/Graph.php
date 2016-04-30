@@ -1,9 +1,18 @@
 <?php
 class Graph extends AppModel 
 {
+    public $belongsTo = array(
+		'Modelname' => array(
+			'className' => 'Modelname',
+			'foreignKey' => 'modelname_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
 
     ///////csvのアップロード用///////
-    function uploadFromCSV($fileName,$modelname,$upload_id) 
+    function uploadFromCSV($fileName,$selectModelId,$upload_id) 
     {
 
     // php.iniの変更点
@@ -22,7 +31,7 @@ class Graph extends AppModel
         	foreach ($lines as $line) 
             {
                 $col = str_getcsv($line);
-                $data = array('model'=>$modelname,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
+                $data = array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
                 if(4<=$col[1])//由来o3,o13,o23,o123のみ
                 {
 					$fujicsvData[] = $data;
@@ -30,7 +39,7 @@ class Graph extends AppModel
 				$allcsvData[]  = $data;
         	}
 
-            if (!$this->deleteAll(array('model' => $modelname))) 
+            if (!$this->deleteAll(array('modelname_id' => $selectModelId))) 
             {
                 throw new Exception();
             }
@@ -64,7 +73,7 @@ class Graph extends AppModel
             $col = str_getcsv($line);
             if(4<=$col[1])//由来o3,o13,o23,o123のみ
             {
-              $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
+              $data[] = array('modelname_id'=> -1,'filepath'=>$col[0]) +$col;
             }
         }
         $this->depth=0;
@@ -182,16 +191,16 @@ class Graph extends AppModel
     {
         return $this->depth;
     }
-    function getFileMetricsTable($selectModelName,$selectGroupName) 
+    function getFileMetricsTable($selectModelId,$selectGroupName) 
     {
 
-        $conditions = array('Graph.model' => $selectModelName);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array('model','filepath','3','8','9','10','11','18'),'conditions' => $conditions));
+        $data = $this->find('all',array('fields' => array('modelname_id','filepath','3','8','9','10','11','18'),'conditions' => $conditions));
 
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
@@ -199,7 +208,7 @@ class Graph extends AppModel
         // (
         //     [Graph] => Array
         //         (
-        //             [model] => testA
+        //             [modelname_id] => 2
         //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
         //             [3] => 1//欠陥数
         //             [8] => 呼び出す他クラスの関数種類数
@@ -365,15 +374,16 @@ class Graph extends AppModel
         return $newData;
     }
 
-    function getCompareMetricsTable($selectModelName,$selectGroupName) 
+    function getCompareMetricsTable($selectModelId,$selectGroupName) 
     {
-        $conditions = array('Graph.model' => $selectModelName);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('model','filepath','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('modelname_id','filepath','3'),'conditions' => $conditions));
+
         //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
         // (
@@ -389,7 +399,7 @@ class Graph extends AppModel
         {
             return null;
         }
-        $modelName = $data[0]['Graph']['model'];
+        $modelName = $data[0]['Modelname']['name'];
         $newData = array();
         for ($i = 0; $i < 7; ++$i)
         {
@@ -562,9 +572,9 @@ class Graph extends AppModel
     }
 
     //model[由来0～7][欠陥数] = その欠陥数のファイル数
-    function getOriginTable($selectModelName,$selectGroupName) 
+    function getOriginTable($selectModelId,$selectGroupName) 
     {
-        $conditions = array('Graph.model' => $selectModelName);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
@@ -662,12 +672,12 @@ class Graph extends AppModel
     }
     
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity($selectModelName,$selectGroupName,$metricsNumber) 
+    function getOriginCity($selectModelId,$selectGroupName,$metricsNumber) 
     {
 		if($metricsNumber==2)//未使用
 			return array(0,0,0,0,0,0,0,0);
 			
-        $conditions = array('Graph.model' => $selectModelName);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
@@ -705,7 +715,7 @@ class Graph extends AppModel
     }
     ///////由来比較用///////
         //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity2($selectModelName,$selectGroupName,$metricsNumber) 
+    function getOriginCity2($selectModelId,$selectGroupName,$metricsNumber) 
     {	
     // 0L"(1) フォルダ／ファイル名",
 	// 1L"(2) 由来(1 - 7 = 2,12,1,13,123,23,3)",
@@ -714,7 +724,7 @@ class Graph extends AppModel
 	// 4L"(5) 物理行数",
     // 5L"(25) 手を加えた組織の数",
             
-        $conditions = array('Graph.model' => $selectModelName);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);

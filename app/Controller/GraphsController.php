@@ -13,7 +13,7 @@ class GraphsController extends AppController
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
-        $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
+        $modelNameData = $this->ModelName->find('list');
         $this->set('modelName',$modelNameData);
 
         return $modelNameData;
@@ -128,11 +128,12 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        $selectModelName = reset($modelNameData);
+        $selectModelId=null;
         $tree=null;
+
         if (isset($this->request->data['set']))
         {
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
+            $selectModelId = $this->data['Graph'] ['モデル'];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             if (!empty($this->data['Graph']['選択ファイル']['name'])) 
             {
@@ -142,10 +143,10 @@ class GraphsController extends AppController
                 move_uploaded_file($up_file, $fileName);
                 $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
             }
-        }
-        if($tree==null)
-        {
-            $tree = $this->Graph->getFileMetricsTable($selectModelName,$selectGroupName);
+            else 
+            {
+                $tree = $this->Graph->getFileMetricsTable($selectModelId,$selectGroupName);
+            }
         }
 
         $this->set('tree',$tree);
@@ -156,6 +157,7 @@ class GraphsController extends AppController
 
     public function origin()
     {
+        
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $this->operateSticky();
         $groupNameData = $this->setGroupNameWithAll();
@@ -164,14 +166,20 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
+        $selectModelId1 = array_keys($modelNameData)[0];
+        $selectModelId2 = array_keys($modelNameData)[0];
+
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
         $data2=null;
 
         if (isset($this->request->data['set']))
         {
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectModelId1 = $this->data['Graph'] ['モデル1'];
+            $selectModelId2 = $this->data['Graph'] ['モデル2'];
+            
+            $selectModelName1 = $modelNameData[$selectModelId1];
+            $selectModelName2 = $modelNameData[$selectModelId2];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         
             if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
@@ -206,11 +214,11 @@ class GraphsController extends AppController
         }
         if($data1==null)
         {
-            $data1 = $this->Graph->getOriginTable($selectModelName1,$selectGroupName);
+            $data1 = $this->Graph->getOriginTable($selectModelId1,$selectGroupName);
         }
         if($data2==null)
         {
-            $data2 = $this->Graph->getOriginTable($selectModelName2,$selectGroupName);
+            $data2 = $this->Graph->getOriginTable($selectModelId2,$selectGroupName);
         }
 
         $this->set('model1',$data1);
@@ -229,17 +237,27 @@ class GraphsController extends AppController
 		$metricsListData = $this->setMetricsList();
 		
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelId1 = array_keys($modelNameData)[0];
+        $selectModelId2 = array_keys($modelNameData)[0];
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);
 		$selectMetrics = 2;//未使用
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
         $data2=null;
-
+echo '<pre>';
+print_r($modelNameData);
+print_r($selectModelName1);
+print_r($this->data);
+echo '</pre>';
         if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
         {
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectModelId1 = $this->data['Graph'] ['モデル1'];
+            $selectModelId2 = $this->data['Graph'] ['モデル2'];
+            
+            $selectModelName1 = $modelNameData[$selectModelId1];
+            $selectModelName2 = $modelNameData[$selectModelId2];
+            
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
 			$selectMetrics = $this->data['Graph'] ['Metrics'];
 
@@ -275,11 +293,11 @@ class GraphsController extends AppController
         }
         if($data1==null)
         {
-            $data1 = $this->Graph->getOriginCity($selectModelName1,$selectGroupName,$selectMetrics);
+            $data1 = $this->Graph->getOriginCity($selectModelId1,$selectGroupName,$selectMetrics);
         }
         if($data2==null)
         {
-            $data2 = $this->Graph->getOriginCity($selectModelName2,$selectGroupName,$selectMetrics);
+            $data2 = $this->Graph->getOriginCity($selectModelId2,$selectGroupName,$selectMetrics);
         }
 
         $this->set('model1',$data1);
@@ -302,16 +320,18 @@ class GraphsController extends AppController
 		$metricsListData = $this->setMetricsList();
 		
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $selectModelId = array_keys($modelNameData)[0];
         $selectModelName = reset($modelNameData);
         $selectMetrics = 2;
         $data = null;
         
         if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
         {
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル1']];
+            $selectModelId = $this->data['Graph'] ['モデル1'];
+            $selectModelName = $modelNameData[$selectModelId];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
 			$selectMetrics = $this->data['Graph'] ['Metrics'];
-            $data = $this->Graph->getOriginCity2($selectModelName,$selectGroupName,$selectMetrics);
+            $data = $this->Graph->getOriginCity2($selectModelId,$selectGroupName,$selectMetrics);
         }
         $this->set('selectModelName',$selectModelName);
         if(0<$selectMetrics)
@@ -332,16 +352,21 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = reset($groupNameData);
+        $selectModelId1 = array_keys($modelNameData)[0];
+        $selectModelId2 = array_keys($modelNameData)[0];
         $selectModelName1 = reset($modelNameData);
-        $selectModelName2 = reset($modelNameData);
-        
+        $selectModelName2 = reset($modelNameData);        
         $data1=null;
         $data2=null;
 
         if (isset($this->request->data['set']))
         {
-            $selectModelName1 = $modelNameData[$this->data['Graph'] ['モデル1']];
-            $selectModelName2 = $modelNameData[$this->data['Graph'] ['モデル2']];
+            $selectModelId1 = $this->data['Graph'] ['モデル1'];
+            $selectModelId2 = $this->data['Graph'] ['モデル2'];
+            
+            $selectModelName1 = $modelNameData[$selectModelId1];
+            $selectModelName2 = $modelNameData[$selectModelId2];
+            
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         
             if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
@@ -376,11 +401,11 @@ class GraphsController extends AppController
         }
         if($data1==null)
         {
-            $data1 = $this->Graph->getCompareMetricsTable($selectModelName1,$selectGroupName);
+            $data1 = $this->Graph->getCompareMetricsTable($selectModelId1,$selectGroupName);
         }
         if($data2==null)
         {
-            $data2 = $this->Graph->getCompareMetricsTable($selectModelName2,$selectGroupName);
+            $data2 = $this->Graph->getCompareMetricsTable($selectModelId2,$selectGroupName);
         }
 
         $this->set('data1',$data1);
@@ -447,7 +472,7 @@ class GraphsController extends AppController
                 //まずCSVを全体をアップロードする
                 if($success)
                 {
-                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelName,$upload_id);
+                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelId,$upload_id);
                     $success = ($csvData != null);
                     if($success)
                     {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。

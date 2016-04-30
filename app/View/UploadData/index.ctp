@@ -1,8 +1,3 @@
-<?php 
-echo '<pre>';
-print_r($uploadData);
-echo '</pre>';
-?>    
 <div class="uploadData index">
 	<h2><?php echo __('Upload Data'); ?></h2>
 	<table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
