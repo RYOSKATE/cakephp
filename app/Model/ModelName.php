@@ -2,7 +2,7 @@
 class ModelName extends AppModel 
 {
     public $useTable = 'model_names';
-    function uploadFromCSV($selectModelName)
+    function addNewModelName($newModelName)
     {
 
     // php.iniの変更点
@@ -14,7 +14,7 @@ class ModelName extends AppModel
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
            
-            $data['name'] = $selectModelName;
+            $data['name'] = $newModelName;
 
             if (!$this->saveAll($data)) 
             {

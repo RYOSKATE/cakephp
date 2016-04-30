@@ -28,6 +28,7 @@
         (
             'type'=>'select',
             'options'=>$modelName,
+            'empty' => true,
             // 'onchange' => 'submit(this.form)',
              'label'=>array('class' => 'control-label'),
             //'style' => 'width:200px;',

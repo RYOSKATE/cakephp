@@ -393,28 +393,17 @@ class GraphsController extends AppController
     public function upload()
     { 
         //すでに存在するモデル名一覧を取得
-        $modelNameData = $this->ModelName->find('list', array('fields' => array( 'id', 'name')));
-        array_splice($modelNameData,0,0,'');//先頭に空欄を追加
-        $this->set('modelName',$modelNameData);
+        $modelNames = $this->ModelName->find('list');
+        //array_splice($modelNames,0,0,'');//先頭に空欄を追加
+        $this->set('modelName',$modelNames);
+        
         if (!empty($this->data)) 
         {
 // echo '<pre>';
+// print_r($modelNames);
 // print_r($this->data['Graph']);
 // echo '</pre>';
-// die();
-            //コンボボックスで選ばれたグループ名を取得
-            $selectModelId = $this->data['Graph'] ['モデル名'];
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル名']];
-            if($selectModelId < 1)//空欄の場合はテキストフィールドをチェック、新規モデル名が入力されていれば採用
-            {
-                $selectModelName = $this->data['Graph'] ['新規モデル名'];
-                if($selectModelName=='')
-                {
-                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-                    return;
-                }
-                $selectModelId = $this->ModelName->uploadFromCSV($selectModelName);
-            }
+
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
             $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
@@ -422,6 +411,34 @@ class GraphsController extends AppController
             $success = is_uploaded_file($up_file);//C:\xampp\tmp\php7F8D.tmp
             if ($success)
             {
+                //コンボボックスで選ばれたグループ名を取得
+                $selectModelId = $this->data['Graph'] ['モデル名'];
+                $newModelName = $this->data['Graph'] ['新規モデル名'];
+                $selectModelName;
+                if(empty($newModelName) && empty($selectModelId))
+                {   //両方空
+                    $this->Session->setFlash(__('モデル名が入力されていません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                    return;
+                }
+                else if(empty($selectModelId))
+                {   //新規モデル名入力
+                    $is = $this->ModelName->find('first', array('conditions' => array('name' => $newModelName)));
+                    if(empty($is))
+                    {
+                        $selectModelId = $this->ModelName->addNewModelName($newModelName);
+                    }
+                    else 
+                    {
+                        $selectModelId = $is['ModelName']['id'];
+                    }
+                    $selectModelName = $newModelName;                    
+                }
+                else 
+                {
+                    //モデル名選択済み(新規入力は無視)
+                    $selectModelName = $modelNames[$selectModelId];
+                }
+            
                 move_uploaded_file($up_file, $fileName);
                 $upload_date = $this->data['Graph']['date'];
                 $user_id = $this->Auth->user('id');
@@ -443,9 +460,9 @@ class GraphsController extends AppController
                             $success = $this->GroupName->uploadFromCSV($groupNames,$groupNameData);
                             // if($success)
                             // {  //最後にグループ名を追加する
-                            //    if(!in_array($selectModelName,$modelNameData))
+                            //    if(!in_array($selectModelName,$modelNames))
                             //    {
-                            //         $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNameData));
+                            //         $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNames));
                             //    }
                             // }
                         }
