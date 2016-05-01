@@ -13,6 +13,7 @@
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
 		'empty' => true,
+		'style'=>"width:100%;",
 		'disabled' => array(2,7)
 	 ));
 ?> 

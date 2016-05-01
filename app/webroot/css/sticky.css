@@ -1,17 +1,17 @@
 .sticky {
-  width: 250px;
-  height: 250px;
-  position: absolute;
+  /*width: 250px;
+  height: 250px;*/
+  /*position: absolute;*/
   cursor: pointer;
   border: 1px solid #aaa;
 }
-textarea {
+/*textarea {
   width: 300px;
   height: 300px;
-}
+}*/
 
 #textarea {
-  height: 100px;
+  /*height: 100px;*/
   resize: vertical;
 }
 .selected {border-color: #000;}

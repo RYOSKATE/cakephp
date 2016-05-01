@@ -12,16 +12,22 @@ if($userData['role']!='reader')
 ?>
 	<fieldset>
         <legend>付箋</legend>
-<?php 
+<div class="row">
 
+<?php
+	echo '<div class="col-md-12 col-sm-12">';
     echo $this->Form->input('textarea', array
     (
     	'id'=> 'textarea',
     	'label'=>false,
     	'type'=>'textarea',
-    	'class' => 'col-md-12 col-sm-12',
+    	//'class' => 'col-md-12 col-sm-12',
+				'style'=>"width:100%;",
+
     	'value'=>'',
-    ));
+    ));     
+	echo '</div>';
+    echo '<div class="col-md-6 col-sm-6">';    
     echo $this->Form->input('color',array
 	(
 		'id'=>'color',
@@ -29,7 +35,9 @@ if($userData['role']!='reader')
 	    'options'=>array('#FFFFFF' => '白','#C869FF' => '紫', '#6BCDFF' => '青', '#71FD5E' => '緑', '#FECA61' => '黄', '#FA6565' => '赤'),
 	    'class' => 'form-control'
 	 ));
-   	echo $this->Form->input('id',array
+     echo '</div>';
+     echo '<div class="col-md-6 col-sm-6">';       
+	 echo $this->Form->input('id',array
 	(
 		'id'=> 'id',
 	    'type'=>'number',
@@ -38,8 +46,11 @@ if($userData['role']!='reader')
 	    'min'=>0,
 	    'max'=>end($stickies)['id'],
 	    'value'=>0,
+		'style'=>"width:100%;",
 	    // 'list'=>array(1,2,3),
 	 ));
+	 echo '</div>';
+     echo '<div class="col-md-6 col-sm-6">';    
    	echo $this->Form->input('x',array
 	(
 		'id'=> 'left',
@@ -48,8 +59,11 @@ if($userData['role']!='reader')
 	    'step'=>1,
 	    'min'=>0,
 	    'value'=>350,
+		'style'=>"width:100%;",
 	    // 'list'=>array(1,2,3),
-	 ));
+	 ));    
+	 echo '</div>';
+     echo '<div class="col-md-6 col-sm-6">';    
    	echo $this->Form->input('y',array
 	(
 		'id'=> 'top',
@@ -58,8 +72,11 @@ if($userData['role']!='reader')
 	    'step'=>1,
 	    'min'=>0,
 	    'value'=>490,
+		'style'=>"width:100%;",
 	    // 'list'=>array(1,2,3),
-	 ));
+	 ));     
+	 echo '</div>';
+     echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
    	echo $this->Form->input('add', array
     (
     	'id'=> 'add',
@@ -69,17 +86,10 @@ if($userData['role']!='reader')
     	'onchange' => 'submit(this.form)',
     	'class' => 'form-control',
     	'value'=>'add',
-    ));
-    echo $this->Form->input('delete', array
-    (
-    	'id'=> 'delete',
-    	'label'=>false,
-    	'name'=>'delete',
-    	'type'=>'button',
-    	'onchange' => 'submit(this.form)',
-    	'class' => 'form-control',
-    	'value'=>'delete',
-    ));
+		'style'=>"width:100%;",
+    ));    
+	 echo '</div>';
+     echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
     echo $this->Form->input('edit', array
     (
     	'id'=> 'edit',
@@ -89,8 +99,24 @@ if($userData['role']!='reader')
     	'onchange' => 'submit(this.form)',
     	'class' => 'form-control',
     	'value'=>'edit',
-    ));
+		'style'=>"width:100%;",
+    ));     
+	echo '</div>';
+	echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
+    echo $this->Form->input('delete', array
+    (
+    	'id'=> 'delete',
+    	'label'=>false,
+    	'name'=>'delete',
+    	'type'=>'button',
+    	'onchange' => 'submit(this.form)',
+    	'class' => 'form-control',
+    	'value'=>'delete',
+		'style'=>"width:100%;",
+    ));    
+	echo '</div>';
 ?>
+</div>
  </fieldset>
 <?php 
     echo $this->Form->end();
