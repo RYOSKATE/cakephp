@@ -28,7 +28,7 @@ class Graph extends AppModel
     // post_max_size=64M        8万行のデータを(ry
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
         $allcsvData = array();
-		$fujicsvData = array();
+		$groupNameData = array();
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
@@ -39,19 +39,18 @@ class Graph extends AppModel
             {
                 $col = str_getcsv($line);
                 $data = array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
-                if(4<=$col[1])//由来o3,o13,o23,o123のみ
-                {
-					$fujicsvData[] = $data;
-                }
 				$allcsvData[]  = $data;
+                $names = explode(';',$col[25]);
+                for ($j = 0; $j< count($names); ++$j)
+                {
+                    $name = trim($names[$j]);
+                    if(!in_array($name, $groupNameData))
+                    {
+                        $groupNameData[]=$name;
+                    }
+                }
         	}
-
-            if (!$this->deleteAll(array('modelname_id' => $selectModelId))) 
-            {
-                throw new Exception();
-            }
-
-            if (!$this->saveAll($allcsvData))
+            if (!$this->saveAll($allcsvData, array('validate' => 'first')))
             {
                 throw new Exception();
             }
@@ -64,7 +63,7 @@ class Graph extends AppModel
             return null;
         }
 
-        return $fujicsvData;
+        return $groupNameData;
     }
     ///////csvのアップロード用///////
     

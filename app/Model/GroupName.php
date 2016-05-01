@@ -2,7 +2,7 @@
 class GroupName extends AppModel 
 {
     public $useTable = 'group_names';
-    function uploadFromCSV($groupNames,$groupNameData) 
+    function uploadFromCSV($groupNames) 
     {
 
     // php.iniの変更点
@@ -15,19 +15,22 @@ class GroupName extends AppModel
             $this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
             $result = array_unique($groupNames);
-            sort($result);
-
+            $databaseData = $this->find('list',array('fields' => 'name'));
  			$data = array();
-            for ($i = 1; $i< count($result); ++$i) //何故か空白文字のグループ名が毎回追加されてしまうため1から
+
+            foreach($result as $name)//何故か空白文字のグループ名が毎回追加されてしまうため1から
             {
-                $data[] = array('id'=>$i,'name'=> $result[$i]);
+                if(!in_array($name, $databaseData))
+                    $data[] = array('name'=> $name);
             }
 
-            if (!$this->saveAll($data)) 
+            if($data)
             {
-                throw new Exception();
+                if (!$this->saveAll($data)) 
+                {
+                    throw new Exception();
+                }
             }
-
             $this->commit();
         }
         catch(Exception $e) 

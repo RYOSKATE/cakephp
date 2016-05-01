@@ -433,10 +433,6 @@ class GraphsController extends AppController
         
         if (!empty($this->data)) 
         {
-// echo '<pre>';
-// print_r($modelNames);
-// print_r($this->data['Graph']);
-// echo '</pre>';
 
             $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
             $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -472,25 +468,23 @@ class GraphsController extends AppController
                     //モデル名選択済み(新規入力は無視)
                     $selectModelName = $modelNames[$selectModelId];
                 }
-            
+
                 move_uploaded_file($up_file, $fileName);
                 $upload_date = $this->data['Graph']['date'];
                 $user_id = $this->Auth->user('id');
                 $upload_id = $this->UploadData->upload($upload_date,$selectModelId,$user_id);
                 $success = (0<$upload_id);
+
                 //まずCSVを全体をアップロードする
                 if($success)
                 {
-                    $csvData = $this->Graph->uploadFromCSV($fileName,$selectModelId,$upload_id);
-                    $success = ($csvData != null);
+                    $groupNames = $this->Graph->uploadFromCSV($fileName,$selectModelId,$upload_id);
+                    $success = ($groupNames != null);
                     if($success)
-                    {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
-                        //すでに存在する開発グループ名一覧を取得
-                        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                        $success = ($csvData != null);
+                    {
                         if($success)
                         {   //最後にグループ名を追加する
-                            $success = $this->GroupName->uploadFromCSV($groupNames,$groupNameData);
+                            $success = $this->GroupName->uploadFromCSV($groupNames);
                         }
                     }
                 }
@@ -501,6 +495,11 @@ class GraphsController extends AppController
             }
             else
             {
+                if($upload_id)
+                {
+                    $this->UploadData->delete($upload_id);
+                    $this->Graph->deleteAll(array('upload_data_id' => $upload_id));
+                }
                 $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
             }
         

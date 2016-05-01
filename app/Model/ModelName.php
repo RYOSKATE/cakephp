@@ -26,7 +26,7 @@ class ModelName extends AppModel
         catch(Exception $e) 
         {
             $this->rollback();
-            return false;
+            return 0;
         }
         $id = $this->getLastInsertID();
         return $id;
