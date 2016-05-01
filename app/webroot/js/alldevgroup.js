@@ -1,4 +1,6 @@
-//全開初グループのバルーングラフ作成
+$(function()
+{
+    //全開初グループのバルーングラフ作成
 
     //最小二乗法による傾きと切片を求める
     function calc(data,maxFile)
@@ -34,8 +36,8 @@
     */
     var data = new Array();
     // var value1 = getData[0];
-    // var value2 = getData[0]["GroupData"]["defact_num"];
-    // var value3 = Number(getData[0]['GroupData']["file_num"]);
+    // var value2 = getData[0]["defact_num"];
+    // var value3 = Number(getData[0]["file_num"]);
 
     var totalDefact = new Array();
     var defactPerFile = new Array();
@@ -44,7 +46,7 @@
     var maxDefact=0;
     for( var i  = 0; i < getData.length; ++i )
     {
-        var temp = getData[i]['GroupData'];
+        var temp = getData[i];
         var y = Number(temp['defact_num']);
         var x = Number(temp['file_num']);
         var kloc = Number(temp['loc']);
@@ -73,6 +75,12 @@
     defactPerLoc.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
 
     var xy = calc(data,maxFile);
+    if(data.length==0)
+    {
+        xy[0]=0;
+        xy[1]=0;
+        data.push({"group":"" ,"y": 0,"x": x ,"value": 0} );
+    }
 	AmCharts.themes.none = {}; 
 
 	var chart = AmCharts.makeChart("chartdiv", {
@@ -125,21 +133,17 @@
         tableText.push([i+1,l,m,r]);
     }
 
-
-    function set() 
+    $("#rankTable").empty();
+    //var num = Number(document.getElementById("dispNum").value);
+    var num = getData.length;
+    for(i=1;i<num+1;++i)
     {
-        $("#rankTable").empty();
-        var num = Number(document.getElementById("dispNum").value);
-        for(i=1;i<num+1;++i)
-        {
-            document.all.rankTable.innerHTML = document.all.rankTable.innerHTML
-                                           + '<tr>'
-                                           + '<td>'+ tableText[i][0] +'</td>'
-                                           + '<td>'+ tableText[i][1] +'</td>'
-                                           + '<td>'+ tableText[i][2] +'</td>'
-                                           + '<td>'+ tableText[i][3] +'</td>'
-                                           + '</tr>';
-        }
- 
+        document.all.rankTable.innerHTML = document.all.rankTable.innerHTML
+                                        + '<tr>'
+                                        + '<td>'+ tableText[i][0] +'</td>'
+                                        + '<td>'+ tableText[i][1] +'</td>'
+                                        + '<td>'+ tableText[i][2] +'</td>'
+                                        + '<td>'+ tableText[i][3] +'</td>'
+                                        + '</tr>';
     }
-    set(10);
+ });

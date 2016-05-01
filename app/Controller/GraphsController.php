@@ -4,7 +4,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session');
 
-    public $uses = array('Graph','GroupData','ModelName','GroupName','Sticky','UploadData');
+    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData');
     /*
     CSV入力      Graph
     メトリクス   
@@ -66,34 +66,27 @@ class GraphsController extends AppController
     public function alldevgroup() 
     {
         $this->operateSticky();
-        // ここで hasMany を削除してみます
-        $this->setUploadList();
-        $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
-        $selectGroupName = reset($groupNameData);
-        $selectModelName = reset($modelNameData);
-
-        $conditions = array('conditions' => array('GroupData.model' => $selectModelName));
-        if (isset($this->request->data['set'])) 
-        {        
-
-            $selectModelName = $modelNameData[$this->data['Graph'] ['モデル']];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-            $conditions['conditions']['GroupData.model'] = $selectModelName;
-            if($selectGroupName!='ALL')
-            {
-                $conditions['conditions']['GroupData.group_name'] = $selectGroupName;
-            }
+        $uploadList = $this->UploadData->find('list', array('fields' => array('date'),'order' => array('date DESC'), ));
+        $uploadModelList = $this->UploadData->find('list', array('fields' => array('modelname_id')));
+        $modelnameList = $this->ModelName->find('list');
+        foreach($uploadList as $key => $value)
+        {
+            $uploadList[$key]=strval($value)."(".$modelnameList[$uploadModelList[$key]] .")";
         }
+    
+        $this->set('uploadList',$uploadList);
 
-        //最新のデータを取得する
-        $idArray = $this->GroupData->find('first', array("fields" => array("MAX(GroupData.date) as max_date"),"conditions"=>array('model'=>$selectModelName)));
-        $day = reset($idArray)['max_date'];
-        $conditions['conditions']['GroupData.date =']= $day;
-        $data = $this->GroupData->find('all',$conditions);
-        $this->set('time',$day);
+        $groupNameData = $this->setGroupNameWithAll();
+        $selectGroupName = reset($groupNameData);
+        $selectUploadDataId=reset($uploadList);
+        $data=[];
+        if (isset($this->request->data['set'])) 
+        {
+            $selectUploadDataId = $this->data['Graph']['CSV_ID'];
+            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+        }
+        $data = $this->Graph->getGroupData($selectGroupName, $selectUploadDataId);
         $this->set('data',$data);
-
     }
     
     public function onedevgroup() 
@@ -102,20 +95,33 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
-        $selectModelName = array('dummy',reset($modelNameData),reset($modelNameData),reset($modelNameData),reset($modelNameData));
-        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする。
 
+        $id=key($modelNameData);
+        $name = $modelNameData[$id];
+        $selectModelId = array($id,$id,$id,$id,$id);
+        $selectModelName = array($name,$name,$name,$name,$name);
+        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする。
         if (isset($this->request->data['set'])) 
         {    
             for($i=1;$i<count($selectModelName);++$i)
             {
-                $selectModelName[$i] = $modelNameData[$this->data['Graph']['モデル'.$i]];
+                $selectModelId[$i] = $this->data['Graph']['モデル'.$i];
+                $selectModelName[$i] = $modelNameData[$selectModelId[$i]];
             }
             $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];         
         }
         for($i=1;$i<count($selectModelName);++$i)
         {
-            $data = $this->GroupData->find('all',array('conditions' => array('GroupData.model' => $selectModelName[$i],'GroupData.group_name' => $selectGroupName)));
+            //モデル名Aのidのデータのidを全て取得
+            $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId[$i])));
+            $data  = array();
+            foreach($dataIdByModel as $id=>$date)
+            {
+                $groupdata = $this->Graph->getGroupData($selectGroupName, $id)[0];
+                $groupdata['date'] = $date;
+                $data[] = $groupdata;
+            }
+
             $this->set('data'.$i,$data);
         }
         $this->set('model',$selectModelName);
@@ -128,7 +134,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        $selectModelId=null;
+        $selectModelId=key($modelNameData);
         $tree=null;
 
         if (isset($this->request->data['set']))
@@ -148,6 +154,9 @@ class GraphsController extends AppController
                 $tree = $this->Graph->getFileMetricsTable($selectModelId,$selectGroupName);
             }
         }
+        else
+            $tree = $this->Graph->getFileMetricsTable($selectModelId,$selectGroupName);
+
 
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
@@ -478,18 +487,10 @@ class GraphsController extends AppController
                     {   //次にgroup_dataに開発グループごとの欠陥数/ファイル数/行数/日付のデータを送信する。
                         //すでに存在する開発グループ名一覧を取得
                         $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
-                        $groupNames = $this->GroupData->uploadFromCSV($csvData,$selectModelName,$this->data['Graph']['date']);
                         $success = ($csvData != null);
                         if($success)
                         {   //最後にグループ名を追加する
                             $success = $this->GroupName->uploadFromCSV($groupNames,$groupNameData);
-                            // if($success)
-                            // {  //最後にグループ名を追加する
-                            //    if(!in_array($selectModelName,$modelNames))
-                            //    {
-                            //         $success = $this->ModelName->uploadFromCSV($selectModelName,count($modelNames));
-                            //    }
-                            // }
                         }
                     }
                 }

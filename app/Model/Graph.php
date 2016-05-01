@@ -8,6 +8,13 @@ class Graph extends AppModel
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+        'Uploaddata' => array(
+			'className' => 'Uploaddata',
+			'foreignKey' => 'upload_data_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
@@ -61,6 +68,62 @@ class Graph extends AppModel
     }
     ///////csvのアップロード用///////
     
+    
+    /////////全開発グループ用/////////
+    function getGroupData($selectGroupName,$upload_data_id) 
+    {
+        $conditions = array('Graph.upload_data_id' => $upload_data_id);
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        $data = $this->find('all',array('fields' => array(1,3,4,25),'conditions' => $conditions));
+        
+        for ($i = 0; $i < count($data); ++$i)
+        {
+            $data[$i] = $data[$i]['Graph'];
+        }
+
+        $group_array = array();
+        $numOfData = count($data);
+        for ($i = 0; $i < $numOfData; ++$i) 
+        {
+            $names = explode(';',$data[$i][25]);
+            $numOfNames = count($names);
+            for ($j = 0; $j < $numOfNames; ++$j) 
+            {
+                $name = trim($names[$j]);
+                if(!isset($group_array[$name]))
+                {
+                    $group_names[] = $name;
+                    $group_array += array($name=>array('file_num'=>1,'defact_num'=>$data[$i][3],'loc'=>$data[$i][4]));
+                }
+                else
+                {
+                    $group_array[$name]['file_num']   += 1;
+                    $group_array[$name]['defact_num'] += $data[$i][3];
+                    $group_array[$name]['loc']        += $data[$i][4];
+                }
+            }
+        }
+
+        $data = array();
+        foreach ($group_array as $key => $value)
+        {
+            $data[]      = array(
+                            'group_name' =>$key,
+                            'file_num'   =>$value['file_num'],
+                            'defact_num' =>$value['defact_num'],
+                            'loc'        =>$value['loc'],
+                            );
+        }
+
+        return $data;
+    }
+     /////////全開発グループ用/////////
+     
+     
     ///////ファイルメトリクス用///////
     function getFileMetricsTableFromCSV($up_file)
     {

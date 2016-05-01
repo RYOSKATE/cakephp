@@ -4,14 +4,12 @@
 <?php echo $this->element('pagepath', array("secondPath" => "全開発グループ","thirdPath" => "欠陥数散布図"));?>
 
 <div class="page-header">
-    <?php echo $this->element('selectForm1'); ?>
+    <?php echo $this->element('selectForm5'); ?>
 </div>
-
-<?php echo $time;?>
 
 <div id="chartdiv" style="height:500px;"></div>
 
-<div class="col-md-3 col-sm-3 pull-right">
+<!--<div class="col-md-3 col-sm-3 pull-right">
     <?php 
         echo $this->Form->input('順位表示数',array
         (
@@ -25,7 +23,7 @@
             'value'=>10,
          ));
     ?>
-</div>
+</div>-->
 
 <div class="row">
     <div class="col-md-12 col-sm-12" >
