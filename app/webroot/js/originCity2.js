@@ -170,6 +170,8 @@ $(function()
         }
         renderLoop();
         
+        
+        //Canvasのサイズをウィンドウサイズに追従
         window.addEventListener( 'resize', onWindowResize, false );
 
         function onWindowResize(){
