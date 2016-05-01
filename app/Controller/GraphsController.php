@@ -245,11 +245,11 @@ class GraphsController extends AppController
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
         $data2=null;
-echo '<pre>';
-print_r($modelNameData);
-print_r($selectModelName1);
-print_r($this->data);
-echo '</pre>';
+// echo '<pre>';
+// print_r($modelNameData);
+// print_r($selectModelName1);
+// print_r($this->data);
+// echo '</pre>';
         if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
         {
             $selectModelId1 = $this->data['Graph'] ['モデル1'];
