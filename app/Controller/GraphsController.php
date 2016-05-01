@@ -471,8 +471,9 @@ class GraphsController extends AppController
 
                 move_uploaded_file($up_file, $fileName);
                 $upload_date = $this->data['Graph']['date'];
+                $comment = $this->data['Graph']['comment'];
                 $user_id = $this->Auth->user('id');
-                $upload_id = $this->UploadData->upload($upload_date,$selectModelId,$user_id);
+                $upload_id = $this->UploadData->upload($comment,$upload_date,$selectModelId,$user_id);
                 $success = (0<$upload_id);
 
                 //まずCSVを全体をアップロードする

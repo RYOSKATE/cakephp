@@ -40,19 +40,34 @@
             //'class' => 'btn btn-lg btn-primary',
             )
         );//モデル名コンボボックス
-        echo $this->Form->input('新規モデル名', array('placeholder' => 'New Model Name'));
-
+        echo ' or ';
+        echo $this->Form->input('新規モデル名', array
+        (
+            'placeholder' => 'Input New Model Name',
+        ));
+        echo '<br>';
+        echo $this->Form->input('comment', array
+        (
+            'id'=> 'textarea',
+            'label'=>'コメント',
+            'type'=>'textarea',
+            'placeholder' => 'comment',
+        ));
+        echo '<br>';
         echo $this->Form->input('date', array(
             'type'=>'date',
+            'label'=>'データ取得日',
             'dateFormat' => 'YMD',
             'monthNames' => false,
             'maxYear' => date('Y'),
             'minYear' => date('Y') - 100,
             )
-        ); 
-        //echo $this->Form->text('addModelName');
-         //echo $this->Form->end();
-        echo $this->Form->file('選択ファイル');//ファイル選択
+        );
+        echo $this->Form->input('選択ファイル', array
+        (
+            'type' => 'file',
+            'label'=>'CSVファイル選択',
+        ));
     ?>
     </fieldset>
 

@@ -101,14 +101,14 @@ class UploadData extends AppModel {
 			'counterQuery' => ''
 		)
 	);
-    function upload($upload_date,$selectModelId,$user_id) 
+    function upload($comment,$upload_date,$selectModelId,$user_id) 
      {
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             $time = date('Y-m-d', mktime(0, 0, 0,$upload_date['month'], $upload_date['day'],$upload_date['year']));
-            $data = array('UploadData'=>array('date'=>$time,'modelname_id' =>$selectModelId,'user_id'=>$user_id));
-            if (!$this->save($data,false)) 
+            $data = array('date'=>$time,'modelname_id' =>$selectModelId,'user_id'=>$user_id,'comment'=>$comment);
+            if (!$this->save($data)) 
             {
                 throw new Exception();
             }
