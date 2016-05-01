@@ -129,7 +129,14 @@ class AppController extends Controller
     protected function setUploadList($state=null)
     {
         $this->UploadData->unbindModel(array('hasMany' => array('Graph')));
-        $uploadList = $this->UploadData->find('all', array('fields' => array( 'id', 'date','modelname_id')));
+        $uploadList = $this->UploadData->find('list', array('fields' => array('date'),'order' => array('date DESC'), ));
+        $uploadModelList = $this->UploadData->find('list', array('fields' => array('modelname_id')));
+        $modelnameList = $this->ModelName->find('list');
+        foreach($uploadList as $key => $value)
+        {
+            $uploadList[$key]=strval($value)."(".$modelnameList[$uploadModelList[$key]] .")";
+        }
+    
         $this->set('uploadList',$uploadList);
 // echo '<pre>';
 // print_r($uploadList);
@@ -138,4 +145,5 @@ class AppController extends Controller
         return $uploadList;
 
     }
+
 }

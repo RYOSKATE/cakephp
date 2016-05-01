@@ -49,7 +49,7 @@ class UploadData extends AppModel {
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
+				'allowEmpty' => true,//コメントのみ空欄を許す
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
@@ -108,7 +108,7 @@ class UploadData extends AppModel {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             $time = date('Y-m-d', mktime(0, 0, 0,$upload_date['month'], $upload_date['day'],$upload_date['year']));
             $data = array('date'=>$time,'modelname_id' =>$selectModelId,'user_id'=>$user_id,'comment'=>$comment);
-            if (!$this->save($data)) 
+			if (!$this->save($data)) 
             {
                 throw new Exception();
             }

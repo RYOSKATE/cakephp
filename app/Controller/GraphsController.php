@@ -66,15 +66,7 @@ class GraphsController extends AppController
     public function alldevgroup() 
     {
         $this->operateSticky();
-        $uploadList = $this->UploadData->find('list', array('fields' => array('date'),'order' => array('date DESC'), ));
-        $uploadModelList = $this->UploadData->find('list', array('fields' => array('modelname_id')));
-        $modelnameList = $this->ModelName->find('list');
-        foreach($uploadList as $key => $value)
-        {
-            $uploadList[$key]=strval($value)."(".$modelnameList[$uploadModelList[$key]] .")";
-        }
-    
-        $this->set('uploadList',$uploadList);
+        $uploadList = $this->setUploadList();
 
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);
@@ -130,16 +122,15 @@ class GraphsController extends AppController
     public function onedevgroup2() 
     {
         $this->operateSticky();
-        $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
+        $uploadList = $this->setUploadList();
+        $selectUploadDataId=reset($uploadList);
 
+        $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        $selectModelId=key($modelNameData);
         $tree=null;
 
         if (isset($this->request->data['set']))
         {
-            $selectModelId = $this->data['Graph'] ['モデル'];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             if (!empty($this->data['Graph']['選択ファイル']['name'])) 
             {
@@ -151,11 +142,12 @@ class GraphsController extends AppController
             }
             else 
             {
-                $tree = $this->Graph->getFileMetricsTable($selectModelId,$selectGroupName);
+                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
+                $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName);
             }
         }
         else
-            $tree = $this->Graph->getFileMetricsTable($selectModelId,$selectGroupName);
+            $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName);
 
 
         $this->set('tree',$tree);
@@ -492,7 +484,7 @@ class GraphsController extends AppController
             }
             if($success)
             {
-                $this->Session->setFlash(__('データをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                $this->Session->setFlash(__(basename($fileName).'のデータをアップロードしました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
             }
             else
             {
@@ -501,7 +493,7 @@ class GraphsController extends AppController
                     $this->UploadData->delete($upload_id);
                     $this->Graph->deleteAll(array('upload_data_id' => $upload_id));
                 }
-                $this->Session->setFlash(__('アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                $this->Session->setFlash(__(basename($fileName).'アップロードに失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
             }
         
             $file = new File($fileName);
