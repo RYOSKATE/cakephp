@@ -15,19 +15,18 @@ if($userData['role']!='reader')
 <div class="row">
 
 <?php
-	echo '<div class="col-md-12 col-sm-12">';
+	echo '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">';
     echo $this->Form->input('textarea', array
     (
     	'id'=> 'textarea',
     	'label'=>false,
     	'type'=>'textarea',
     	//'class' => 'col-md-12 col-sm-12',
-				'style'=>"width:100%;",
-
+		'style'=>"width:100%;",
     	'value'=>'',
     ));     
 	echo '</div>';
-    echo '<div class="col-md-6 col-sm-6">';    
+    echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">';    
     echo $this->Form->input('color',array
 	(
 		'id'=>'color',
@@ -36,7 +35,7 @@ if($userData['role']!='reader')
 	    'class' => 'form-control'
 	 ));
      echo '</div>';
-     echo '<div class="col-md-6 col-sm-6">';       
+     echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">';       
 	 echo $this->Form->input('id',array
 	(
 		'id'=> 'id',
@@ -50,7 +49,7 @@ if($userData['role']!='reader')
 	    // 'list'=>array(1,2,3),
 	 ));
 	 echo '</div>';
-     echo '<div class="col-md-6 col-sm-6">';    
+     echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">';    
    	echo $this->Form->input('x',array
 	(
 		'id'=> 'left',
@@ -63,7 +62,7 @@ if($userData['role']!='reader')
 	    // 'list'=>array(1,2,3),
 	 ));    
 	 echo '</div>';
-     echo '<div class="col-md-6 col-sm-6">';    
+     echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">';    
    	echo $this->Form->input('y',array
 	(
 		'id'=> 'top',
@@ -76,7 +75,7 @@ if($userData['role']!='reader')
 	    // 'list'=>array(1,2,3),
 	 ));     
 	 echo '</div>';
-     echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
+     echo '<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">';    
    	echo $this->Form->input('add', array
     (
     	'id'=> 'add',
@@ -89,7 +88,7 @@ if($userData['role']!='reader')
 		'style'=>"width:100%;",
     ));    
 	 echo '</div>';
-     echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
+     echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">';    
     echo $this->Form->input('edit', array
     (
     	'id'=> 'edit',
@@ -102,7 +101,7 @@ if($userData['role']!='reader')
 		'style'=>"width:100%;",
     ));     
 	echo '</div>';
-	echo '<div class="col-lg-4 col-md-4 col-sm-6">';    
+	echo '<div class="col-xs-6 col-sm-12 col-md-6 col-lg-4">';    
     echo $this->Form->input('delete', array
     (
     	'id'=> 'delete',
