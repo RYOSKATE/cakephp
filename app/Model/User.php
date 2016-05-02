@@ -13,12 +13,6 @@ class User extends AppModel
                 'message' => 'This username has already been registered'
             )
         ),
-        'group' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A group is required'
-            )
-        ),
         'password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -32,8 +26,49 @@ class User extends AppModel
                 'allowEmpty' => false
             )
         ),
+        'group' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A group is required'
+            )
+        ),
 
     );
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Sticky' => array(
+			'className' => 'Sticky',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'UploadData' => array(
+			'className' => 'UploadData',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
 
 
     public function beforeSave($options = array()) 

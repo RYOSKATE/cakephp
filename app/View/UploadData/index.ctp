@@ -48,9 +48,4 @@
 	?>
 	</div>
 </div>
-<div class="actions">
-	<h4><?php echo __('Relation'); ?></h4>
-	<ul>
-		<li><?php echo $this->Html->link(__('ModelNames'), array('controller' => 'model_names','action' => 'index')); ?> </li>
-	</ul>
-</div>
+<?php echo $this->element('manageListFooter'); ?>

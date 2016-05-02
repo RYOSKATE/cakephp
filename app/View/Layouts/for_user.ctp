@@ -53,10 +53,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		          	<?php echo $this->Html->link('Visualize Tool',array('controller' => 'graphs', 'action' => 'index'),array('class' =>'navbar-brand'));?>
 		        </div>
 		        <div class="navbar-collapse collapse">
-		          <ul class="nav navbar-nav navbar-left">
+		          <ul class="nav navbar-nav navbar-right">
 		            <!--<li class="active"><?php //echo $this->Html->link('Logout',array('controller' => 'users', 'action' => 'logout'));?></li>-->
-		            <li class="divider-vertical"><?php echo $this->Html->link('Login',array('controller' => 'users', 'action' => 'login'));?></li>
-		            <?php if($userData['role']=='admin' || isset($enableAdd)){?>
+		            <?php if(isset($userData)){?>
+		            	<li class="divider-vertical"><?php echo $this->Html->link('Logout',array('controller' => 'users', 'action' => 'logout'));?></li>
+					 <?php }else{?>
+					 	<li class="divider-vertical"><?php echo $this->Html->link('Login',array('controller' => 'users', 'action' => 'login'));?></li>
+					  <?php }
+					  if(isset($enableAdd)){?>
 		            <li class="divider-vertical"><?php echo $this->Html->link('Add',array('controller' => 'users', 'action' => 'add'));?></li>
 		            <?php }?>
 		          </ul>

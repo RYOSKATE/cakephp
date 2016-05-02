@@ -35,9 +35,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-<div class="actions">
-	<h4><?php echo __('Relation'); ?></h4>
-	<ul>
-		<li><?php echo $this->Html->link(__('UploadData'), array('controller' => 'upload_data','action' => 'index')); ?> </li>
-	</ul>
-</div>
+<?php echo $this->element('manageListFooter'); ?>

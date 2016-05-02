@@ -1,8 +1,13 @@
 <?php
-
-// app/Controller/UsersController.php
-class UsersController extends AppController 
-{
+App::uses('AppController', 'Controller');
+/**
+ * Users Controller
+ *
+ * @property User $User
+ * @property PaginatorComponent $Paginator
+ */
+class UsersController extends AppController {
+	
     public $layout = "for_user";//for_user.ctpのレイアウト設定を読み込む
 
     public function beforeFilter() 
@@ -14,26 +19,40 @@ class UsersController extends AppController
             $this->set('enableAdd', true);
         }
     }
-
+/**
+ * Components
+ *
+ * @var array
+ */
+	public $components = array('Paginator');
+	
     public function manage() 
     {
     }
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function index() {
+		$this->User->recursive = 0;
+		$this->set('users', $this->Paginator->paginate());
+	}
 
-    public function index() 
-    {
-        $this->User->recursive = 0;
-        $this->redirect("/graphs/index");
-    }
-
-    public function view($id = null) 
-    {                
-        $this->User->id = $id;
-        if (!$this->User->exists()) 
-        {
-            throw new NotFoundException(__('Invalid user'));
-        }
-        $this->set('user', $this->User->read(null, $id));
-    }
+/**
+ * view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function view($id = null) {
+		if (!$this->User->exists($id)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+		$this->set('user', $this->User->find('first', $options));
+	}
 
     public function add()
     {
@@ -51,8 +70,31 @@ class UsersController extends AppController
             }
         }
     }
-    
-    public function edit() 
+/**
+ * edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function edit($id = null) {
+		if (!$this->User->exists($id)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		if ($this->request->is(array('post', 'put'))) {
+			if ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(__('The user has been saved.'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+			}
+		} else {
+			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+			$this->request->data = $this->User->find('first', $options);
+		}
+	}
+
+	public function ownEdit() 
     {
         $id = $this->Auth->user('id');
         $this->User->id = $id;
@@ -85,53 +127,58 @@ class UsersController extends AppController
              unset($this->request->data['User']['password']);
         }
     }
-
-    public function delete($id = null) 
+/**
+ * delete method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function delete($id = null) {
+		$this->User->id = $id;
+		if (!$this->User->exists()) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$this->request->allowMethod('post', 'delete');
+		if ($this->User->delete()) {
+			$this->Session->setFlash(__('The user has been deleted.'));
+		} else {
+			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
+		}
+		return $this->redirect(array('action' => 'index'));
+	}
+	    
+	public function ownDelete($id = null) 
     {
-        //adminはだれでも削除できる
         if ($this->request->is('post'))
         {
             $message = 'Invalid username or password, try again.';
             $username = $this->request['data']['User']['username'];
             $password = $this->request['data']['User']['password'];
-
-            if($this->Auth->user('role') =='admin')
-            {
-                $param = array('username' => $username);
-                if ($this->User->hasAny($param)) 
-                {
-                    $rollArray = $this->User->find('all', array("roll" => "admin"));
-                    $numOfAdmin = count($rollArray);
-                    if($numOfAdmin!=1)//ただし自分が最後のadminの場合は削除させない
-                    {
-                        if ($this->User->deleteAll($param,false)) 
-                        {
-                            $this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-                            $this->redirect(array('action' => 'delete'));
-                        }
-                    }
-                    $message = 'You are the last administrator.';
-                }
-            }
-            //入力された名前とパスがログインユーザーのものと一致すればidで削除
-            else if($username == $this->Auth->user('username'))
-            {
-
-                $id = $this->Auth->user('id');
-                if ($this->User->exists($id)) 
-                {
-                    if ($this->User->delete($id)) 
-                    {
-                        $this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-                        $this->redirect(array('action' => 'login'));
-                    }
-                }
-            }
-
+			
+			$role = $this->Auth->user('role');
+			$numOfAdmin = count($this->User->find('all', array("roll" => "admin")));
+			$message == "あなたは最後のadminユーザーです";
+			if($role !="admin" && 1<$numOfAdmin)
+			{
+				$message == "ユーザーネームとパスワードを確認してください";
+				if($username == $this->Auth->user('username'))
+				{
+					$message == "このユーザーは既に存在しません";
+					$id = $this->Auth->user('id');
+					if ($this->User->exists($id)) 
+					{
+						if ($this->User->delete($id)) 
+						{
+							$this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+							$this->redirect(array('action' => 'login'));
+						}
+					}
+				}
+			}
             $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
         }
     }
-
     public function login()
     {
         if ($this->request->is('post'))
