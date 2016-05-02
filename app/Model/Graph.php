@@ -53,6 +53,9 @@ class Graph extends AppModel
                     }
                 }
         	}
+            $key = array_search('', $groupNameData);
+            if($key)
+                $groupNameData[$key]="グループ名なし";
             if (!$this->saveAll($allcsvData, array('validate' => 'first')))
             {
                 throw new Exception();
@@ -65,7 +68,6 @@ class Graph extends AppModel
             $this->rollback();
             return null;
         }
-
         return $groupNameData;
     }
     ///////csvのアップロード用///////

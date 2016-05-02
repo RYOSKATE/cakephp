@@ -106,7 +106,7 @@ class AppController extends Controller
    protected function setGroupName($state=null)
    {
         //すでに存在する開発グループ名一覧を取得
-        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name')));
+        $groupNameData = $this->GroupName->find('list', array('fields' => array( 'id', 'name'),'order' => array('name ASC')));
 
         if($this->Auth->user('group')!='ALL' && $this->Auth->user('role')!='admin' && $state!='add')
         {
