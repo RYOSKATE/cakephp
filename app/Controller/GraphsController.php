@@ -160,65 +160,37 @@ class GraphsController extends AppController
 
     public function origin()
     {
-        
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId1 = $this->getFirstKey($uploadList);
-        $selectUploadDataId2 = $this->getFirstKey($uploadList);
-        $selectModelName1 = null;
-        $selectModelName2 = null;
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-
-        //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
-        $data1=null;
-        $data2=null;
-
-        if (isset($this->request->data['set']))
+        for($i=1;$i<=2;++$i)
         {
-            $selectUploadDataId1 = $this->data['Graph']['CSV_ID1'];
-            $selectUploadDataId2 = $this->data['Graph']['CSV_ID2'];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-        
-            if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
+            $selectUploadDataId = $this->getFirstKey($uploadList);
+            $selectModelName =  null;
+            $data=null;
+            if (isset($this->request->data['set']))
             {
+                if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
+                {
 
-                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-                $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
-                move_uploaded_file($up_file, $fileName);
-                $data1 = $this->Graph->getOriginTableFromCSV($fileName);
-                $selectModelName1 = basename($fileName);
+                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                    $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
+                    move_uploaded_file($up_file, $fileName);
+                    $data = $this->Graph->getOriginTableFromCSV($fileName);
+                    $selectModelName2 = basename($fileName);
+                }
+                else
+                {
+                    $selectModelName = $uploadList[$selectUploadDataId];
+                    $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName);
+                }
             }
-            else
-            {
-                $selectModelName1 = $uploadList[$selectUploadDataId1];
-                $data1 = $this->Graph->getOriginTable($selectUploadDataId1,$selectGroupName);
-            }
-            if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
-            {
-
-                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-                $up_file = $this->data['Graph']['選択ファイル2']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
-                move_uploaded_file($up_file, $fileName);
-                $data2 = $this->Graph->getOriginTableFromCSV($fileName);
-                $selectModelName2 = basename($fileName);
-            }
-            else
-            {
-                $selectModelName2 = $uploadList[$selectUploadDataId2];
-                $data2 = $this->Graph->getOriginTable($selectUploadDataId2,$selectGroupName);
-            }
+            $this->set('model'.$i,$data);
+            $this->set('ModelName'.$i,$selectModelName);
         }
-        
-
-
-        $this->set('model1',$data1);
-        $this->set('model2',$data2);
-        $this->set('leftModelName',$selectModelName1);
-        $this->set('rightModelName',$selectModelName2);
         $this->set('useLocalCSV',true);
     }
     

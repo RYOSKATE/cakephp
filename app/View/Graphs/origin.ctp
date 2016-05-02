@@ -34,12 +34,12 @@
     <?php 
         $originTag = array(4=>'o13',5=>'o123',6=>'o23',7=>'o3');
         echo '<div class="tab-pane fade in active" id="'.$originTag[4].'">';
-        echo $this->element('piechart', array("leftModelName" => $leftModelName,"rightModelName" => $rightModelName,"No"=>4));
+        echo $this->element('piechart', array("leftModelName" => $ModelName1,"rightModelName" => $ModelName2,"No"=>4));
         echo '</div>';
         for($i=5;$i<=7;++$i)
         {
             echo '<div class="tab-pane fade" id="'.$originTag[$i].'">';
-            echo $this->element('piechart', array("leftModelName" => $leftModelName,"rightModelName" => $rightModelName,"No"=>$i));
+            echo $this->element('piechart', array("leftModelName" => $ModelName1,"rightModelName" => $ModelName2,"No"=>$i));
             echo '</div>';
         }
     ?>
