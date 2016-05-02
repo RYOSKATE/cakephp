@@ -18,7 +18,8 @@
 		</dd>
 		<dt><?php echo __('User'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
+			<?php echo h($uploadData['User']['username']); ?>
+			<?php //echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Comment'); ?></dt>

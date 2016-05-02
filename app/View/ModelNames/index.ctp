@@ -16,7 +16,7 @@
 		<td class="actions">
 			<!--<?php echo $this->Html->link(__('View'), array('action' => 'view', $modelName['ModelName']['id'])); ?>-->
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $modelName['ModelName']['id'])); ?>
-			<!--<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $modelName['ModelName']['id']), array(), __('Are you sure you want to delete # %s?', $modelName['ModelName']['id'])); ?>-->
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $modelName['ModelName']['id']), array(), __('Are you sure you want to delete # %s?', $modelName['ModelName']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -35,10 +35,9 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<!--<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+<div class="actions">
+	<h4><?php echo __('Relation'); ?></h4>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Model Name'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('UploadData'), array('controller' => 'upload_data','action' => 'index')); ?> </li>
 	</ul>
-</div>-->
+</div>

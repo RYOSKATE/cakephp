@@ -8,6 +8,8 @@ App::uses('AppController', 'Controller');
  */
 class ModelNamesController extends AppController {
 
+    public $uses = array('ModelName','UploadData');
+
 /**
  * Components
  *
@@ -88,16 +90,22 @@ class ModelNamesController extends AppController {
  * @param string $id
  * @return void
  */
+ 
+ //そのモデル名のCSVデータが全て削除されていればモデル名も削除可能
 	public function delete($id = null) {
-		$this->ModelName->id = $id;
-		if (!$this->ModelName->exists()) {
-			throw new NotFoundException(__('Invalid model name'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->ModelName->delete()) {
-			$this->Session->setFlash(__('The model name has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The model name could not be deleted. Please, try again.'));
+		if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$id))){
+			$this->Session->setFlash(__('そのモデルに依存したデータはまだ存在しています<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+		}else {
+			$this->ModelName->id = $id;
+			if (!$this->ModelName->exists()) {
+				throw new NotFoundException(__('Invalid model name'));
+			}
+			$this->request->allowMethod('post', 'delete');
+			if ($this->ModelName->delete()) {
+                $this->Session->setFlash(__('The model name has been deleted.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+			} else {
+				$this->Session->setFlash(__('The model name could not be deleted. Please, try again.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+			}
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

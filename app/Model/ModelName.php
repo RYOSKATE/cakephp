@@ -23,4 +23,28 @@ class ModelName extends AppModel {
 			),
 		),
 	);
+
+	function addNewModelName($newModelName)
+	{
+		try
+		{
+			$this->begin();//トランザクション(永続的な接続処理の開始)
+		
+			$data['name'] = $newModelName;
+		
+			if (!$this->saveAll($data)) 
+			{
+				throw new Exception();
+			}
+		
+			$this->commit();
+		}
+		catch(Exception $e) 
+		{
+			$this->rollback();
+			return 0;
+		}
+		$id = $this->getLastInsertID();
+		return $id;
+	}
 }
