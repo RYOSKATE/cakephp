@@ -71,28 +71,31 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-
         $groupNameData = $this->setGroupNameWithAll();
-        $selectGroupName = reset($groupNameData);
-        $selectUploadDataId = $this->getFirstKey($uploadList);;
-        $data=[];//nullだとページ切替時枠が描画されない
-        if (isset($this->request->data['set'])) 
-        {
-            $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-            $data = $this->Graph->getGroupData($selectGroupName, $selectUploadDataId);
+        if($uploadList)
+        {        
+            $selectGroupName = reset($groupNameData);
+            $selectUploadDataId = $this->getFirstKey($uploadList);
+            $data=[];//nullだとページ切替時枠が描画されない
+            if (isset($this->request->data['set'])) 
+            {
+                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
+                $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+                $data = $this->Graph->getGroupData($selectGroupName, $selectUploadDataId);
+            }
+            $this->set('data',$data);
         }
-        $this->set('data',$data);
     }
     
     public function onedevgroup() 
     {
         $this->operateSticky();
+        $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
-        if (isset($this->request->data['set'])) 
-        {            
+        if ($uploadList && isset($this->request->data['set'])) 
+        {
             $id = $this->getFirstKey($modelNameData);
             $name = $modelNameData[$id];
             $selectModelId = array($id,$id,$id,$id,$id);
@@ -124,34 +127,33 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId = $this->getFirstKey($uploadList);
-
         $groupNameData = $this->setGroupNameWithAll();
-        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $tree=null;
-
-        if (isset($this->request->data['set']))
+        if($uploadList)
         {
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-            if (!empty($this->data['Graph']['選択ファイル']['name'])) 
+            $selectUploadDataId = $this->getFirstKey($uploadList);
+            $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+            if (isset($this->request->data['set']))
             {
-                $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-                $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-                move_uploaded_file($up_file, $fileName);
-                $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+                $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+                if (!empty($this->data['Graph']['選択ファイル']['name'])) 
+                {
+                    $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                    $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+                    move_uploaded_file($up_file, $fileName);
+                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+                }
+                else 
+                {
+                    $selectUploadDataId = $this->data['Graph']['CSV_ID'];
+                    $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName);
+                }
             }
-            else 
-            {
-                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName);
-            }
+
         }
-
-
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
-
         $this->set('useLocalCSV',true);
     }
 
@@ -164,24 +166,27 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         for($i=1;$i<=2;++$i)
         {
-            $selectUploadDataId = $this->getFirstKey($uploadList);
             $selectModelName =  null;
             $data=null;
-            if (isset($this->request->data['set']))
+            if($uploadList)
             {
-                if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
+                $selectUploadDataId = $this->getFirstKey($uploadList);                
+                if (isset($this->request->data['set']))
                 {
-                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-                    $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $data = $this->Graph->getOriginTableFromCSV($fileName);
-                    $selectModelName = basename($fileName);
-                }
-                else
-                {
-                    $selectModelName = $uploadList[$selectUploadDataId];
-                    $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName);
+                    if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
+                    {
+                        $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                        $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                        $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
+                        move_uploaded_file($up_file, $fileName);
+                        $data = $this->Graph->getOriginTableFromCSV($fileName);
+                        $selectModelName = basename($fileName);
+                    }
+                    else
+                    {
+                        $selectModelName = $uploadList[$selectUploadDataId];
+                        $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName);
+                    }
                 }
             }
             $this->set('model'.$i,$data);
@@ -200,10 +205,9 @@ class GraphsController extends AppController
         $selectMetrics = $this->getFirstKey($metricsListData);//未使用
         for($i=1;$i<=2;++$i)
         {
-            $selectUploadDataId = $this->getFirstKey($uploadList);
             $selectModelName = null;
             $data=null;
-            if (isset($this->request->data['set']))
+            if ($uploadList && isset($this->request->data['set']))
             {
                 $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i];
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
@@ -247,10 +251,9 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         $selectMetrics = null;
         
-        $selectUploadDataId = null;
         $selectModelName = null;
         $data=null;
-        if (isset($this->request->data['set'])) 
+        if ($uploadList && isset($this->request->data['set'])) 
         {
             $selectUploadDataId = $this->data['Graph']['CSV_ID'];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
@@ -279,11 +282,11 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         for($i=1;$i<=2;++$i)
         {
-            $selectUploadDataId = $this->getFirstKey($uploadList);
             $selectModelName = null;
             $data=null;
-            if (isset($this->request->data['set']))
+            if ($uploadList && isset($this->request->data['set']))
             {
+                $selectUploadDataId = $this->getFirstKey($uploadList);                
                 $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i];            
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
