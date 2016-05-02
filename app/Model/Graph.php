@@ -634,9 +634,9 @@ class Graph extends AppModel
     }
 
     //model[由来0～7][欠陥数] = その欠陥数のファイル数
-    function getOriginTable($selectModelId,$selectGroupName) 
+    function getOriginTable($selectUploadDataId,$selectGroupName) 
     {
-        $conditions = array('Graph.modelname_id' => $selectModelId);
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {

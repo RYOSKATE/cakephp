@@ -134,7 +134,7 @@ class AppController extends Controller
         $modelnameList = $this->ModelName->find('list');
         foreach($uploadList as $key => $value)
         {
-            $uploadList[$key]=strval($value)."(".$modelnameList[$uploadModelList[$key]] .")";
+            $uploadList[$key]=$modelnameList[$uploadModelList[$key]]."(".strval($value).")";
         }
     
         $this->set('uploadList',$uploadList);

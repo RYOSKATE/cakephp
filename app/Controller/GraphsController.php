@@ -19,6 +19,12 @@ class GraphsController extends AppController
         return $modelNameData;
     }
 	
+    private function getArrayKeyAndValue($array,$index=0)
+    {
+        $key = array_key($array)[$index];
+        $value = $array[$key];
+        return array('key'=>$key,'value'=>$value);
+    }
 	private function setMetricsList()
     {
         //すでに存在する開発グループ名一覧を取得
@@ -70,7 +76,7 @@ class GraphsController extends AppController
 
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);
-        $selectUploadDataId=reset($uploadList);
+        $selectUploadDataId=key($uploadList);
         $data=[];
         if (isset($this->request->data['set'])) 
         {
@@ -123,7 +129,7 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId=reset($uploadList);
+        $selectUploadDataId=array_keys($uploadList)[0];
 
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
@@ -161,14 +167,12 @@ class GraphsController extends AppController
         
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $this->operateSticky();
+        $uploadList = $this->setUploadList();
+        $selectUploadDataId1 = array_keys($uploadList)[0];
+        $selectUploadDataId2 = array_keys($uploadList)[0];
+        
         $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
-
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        $selectModelName1 = reset($modelNameData);
-        $selectModelName2 = reset($modelNameData);
-        $selectModelId1 = array_keys($modelNameData)[0];
-        $selectModelId2 = array_keys($modelNameData)[0];
 
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
@@ -176,11 +180,8 @@ class GraphsController extends AppController
 
         if (isset($this->request->data['set']))
         {
-            $selectModelId1 = $this->data['Graph'] ['モデル1'];
-            $selectModelId2 = $this->data['Graph'] ['モデル2'];
-            
-            $selectModelName1 = $modelNameData[$selectModelId1];
-            $selectModelName2 = $modelNameData[$selectModelId2];
+            $selectUploadDataId1 = $this->data['Graph']['CSV_ID1'];
+            $selectUploadDataId2 = $this->data['Graph']['CSV_ID2'];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         
             if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
@@ -191,10 +192,10 @@ class GraphsController extends AppController
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
                 $data1 = $this->Graph->getOriginTableFromCSV($fileName);
-                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
-                if(empty($selectModelName1))
+                $selectUploadData1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
+                if(empty($selectUploadData1))
                 {
-                    $selectModelName1 = "local model1";
+                    $selectUploadData1 = "local model1";
                 }
             }
 
@@ -206,26 +207,28 @@ class GraphsController extends AppController
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
                 $data2 = $this->Graph->getOriginTableFromCSV($fileName);
-                $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
-                if(empty($selectModelName2))
+                $selectUploadData2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
+                if(empty($selectUploadData2))
                 {
-                    $selectModelName2 = "local model2";
+                    $selectUploadData2 = "local model2";
                 }
             }
         }
         if($data1==null)
         {
-            $data1 = $this->Graph->getOriginTable($selectModelId1,$selectGroupName);
+            $selectUploadData1 = $uploadList[$selectUploadDataId1];
+            $data1 = $this->Graph->getOriginTable($selectUploadDataId1,$selectGroupName);
         }
         if($data2==null)
         {
-            $data2 = $this->Graph->getOriginTable($selectModelId2,$selectGroupName);
+            $selectUploadData2 = $uploadList[$selectUploadDataId2];
+            $data2 = $this->Graph->getOriginTable($selectUploadDataId2,$selectGroupName);
         }
 
         $this->set('model1',$data1);
         $this->set('model2',$data2);
-        $this->set('leftModelName',$selectModelName1);
-        $this->set('rightModelName',$selectModelName2);
+        $this->set('leftModelName',$selectUploadData1);
+        $this->set('rightModelName',$selectUploadData2);
         $this->set('useLocalCSV',true);
     }
     
@@ -270,11 +273,7 @@ class GraphsController extends AppController
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
                 $data1 = $this->Graph->getOriginCityFromCSV($fileName,$selectMetrics);
-                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
-                if(empty($selectModelName1))
-                {
-                    $selectModelName1 = "local model1";
-                }
+                $selectModelName1 = basename($fileName);
             }
 
             if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
@@ -285,11 +284,7 @@ class GraphsController extends AppController
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル2']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
                 $data2 = $this->Graph->getOriginCityFromCSV($fileName,$selectMetrics);
-                $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
-                if(empty($selectModelName2))
-                {
-                    $selectModelName2 = "local model2";
-                }
+                $selectModelName2 = basename($fileName);
             }
         }
         if($data1==null)
@@ -353,8 +348,8 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
 
         $selectGroupName = reset($groupNameData);
-        $selectModelId1 = array_keys($modelNameData)[0];
-        $selectModelId2 = array_keys($modelNameData)[0];
+        $selectModelId1 = key($modelNameData);
+        $selectModelId2 = key($modelNameData);
         $selectModelName1 = reset($modelNameData);
         $selectModelName2 = reset($modelNameData);        
         $data1=null;

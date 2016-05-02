@@ -15,7 +15,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較(領域グラフ)"));?>
 <div class="page-header">
     <h1><small>由来比較(領域グラフ)</small></h1>
-    <?php echo $this->element('selectForm3', array("modelName" => $modelName,"groupName" => $groupName)); ?>
+    <?php echo $this->element('selectForm3', array("groupName" => $groupName)); ?>
 </div>
 <script>
     var originalSum1 = JSON.parse('<?=json_encode($model1);?>');
