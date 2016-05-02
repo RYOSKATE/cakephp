@@ -13,7 +13,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較(OriginCity)"));?>
 <div class="page-header">
     <h1><small>由来比較(OriginCity)</small></h1>
-    <?php echo $this->element('selectForm4', array("modelName" => $modelName,"groupName" => $groupName)); ?>
+    <?php echo $this->element('selectForm4'); ?>
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12">

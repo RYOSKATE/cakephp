@@ -70,10 +70,13 @@ th {text-align: right;}
 			for($j=1;$j<=7;++$j)//由来
 			{
 				?><td align="right"><?php
-				$value = $data[$j]['layerHeight'][$i];
-				$metricsSum[$j] += $value;
-				$leyarSum += $value;
-				echo $value;
+				if($data)
+				{
+					$value = $data[$j]['layerHeight'][$i];
+					$metricsSum[$j] += $value;
+					$leyarSum += $value;
+					echo $value;
+				}
 				?>
 				</td>
 				<?php
@@ -108,8 +111,11 @@ th {text-align: right;}
 			for($j=1;$j<=7;++$j)//由来
 			{
 				?><td align="right"><?php
+				if($data)
+				{
 					$leyarSum += $data[$j]['numOfFiles'];
 					echo $data[$j]['numOfFiles'];
+				}
 				?>
 				</td>
 				<?php

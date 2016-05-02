@@ -293,25 +293,24 @@ class GraphsController extends AppController
     }
     
     public function originCity2()
-    {        
+    { 
         $this->operateSticky();
-        $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
-		$metricsListData = $this->setMetricsList();
+        $uploadList = $this->setUploadList();
 		
-        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        $selectModelId = array_keys($modelNameData)[0];
-        $selectModelName = reset($modelNameData);
-        $selectMetrics = 2;
-        $data = null;
-        
-        if (isset($this->request->data['set']) && $this->data['Graph'] ['Metrics']!="")
+        $metricsListData = $this->setMetricsList();
+        $selectMetrics = null;
+        $groupNameData = $this->setGroupNameWithAll();
+        $selectGroupName = reset($groupNameData);
+        $selectUploadDataId = null;
+        $selectModelName = null;
+        $data=[];
+        if (isset($this->request->data['set'])) 
         {
-            $selectModelId = $this->data['Graph'] ['モデル1'];
-            $selectModelName = $modelNameData[$selectModelId];
+            $selectUploadDataId = $this->data['Graph']['CSV_ID'];
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-			$selectMetrics = $this->data['Graph'] ['Metrics'];
-            $data = $this->Graph->getOriginCity2($selectModelId,$selectGroupName,$selectMetrics);
+            $selectMetrics = $this->data['Graph'] ['Metrics'];
+            $data = $this->Graph->getOriginCity2($selectUploadDataId,$selectGroupName,$selectMetrics);
+            $selectModelName = $uploadList[$selectUploadDataId];
         }
         $this->set('selectModelName',$selectModelName);
         if(0<$selectMetrics)
@@ -319,7 +318,8 @@ class GraphsController extends AppController
         else
             $this->set('selectMetricsName',"");
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('data',$data);
+        $this->set('data',$data);        
+
         // echo '<pre>';
         // print_r($data);
         // echo '</pre>';

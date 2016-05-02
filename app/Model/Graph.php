@@ -777,7 +777,7 @@ class Graph extends AppModel
     }
     ///////由来比較用///////
         //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity2($selectModelId,$selectGroupName,$metricsNumber) 
+    function getOriginCity2($selectUploadDataId,$selectGroupName,$metricsNumber) 
     {	
     // 0L"(1) フォルダ／ファイル名",
 	// 1L"(2) 由来(1 - 7 = 2,12,1,13,123,23,3)",
@@ -786,7 +786,7 @@ class Graph extends AppModel
 	// 4L"(5) 物理行数",
     // 5L"(25) 手を加えた組織の数",
             
-        $conditions = array('Graph.modelname_id' => $selectModelId);
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
