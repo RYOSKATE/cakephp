@@ -22,7 +22,7 @@
 	    //'empty' => false,          // 空白を許可
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
-		'empty' => false,
+		'empty' => true,
 	 ));
     echo $this->Form->input('CSV_ID2',array
 	(
@@ -36,7 +36,7 @@
 	    //'empty' => false,          // 空白を許可
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
-		'empty' => false,
+		'empty' => true,
 	 ));
     echo $this->element('selectGroup',$groupName);
 	echo $this->element('setButton');

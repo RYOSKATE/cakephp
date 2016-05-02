@@ -734,12 +734,12 @@ class Graph extends AppModel
     }
     
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity($selectModelId,$selectGroupName,$metricsNumber) 
+    function getOriginCity($selectUploadDataId,$selectGroupName,$metricsNumber) 
     {
 		if($metricsNumber==2)//未使用
 			return array(0,0,0,0,0,0,0,0);
 			
-        $conditions = array('Graph.modelname_id' => $selectModelId);
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);

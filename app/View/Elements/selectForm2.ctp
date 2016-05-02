@@ -23,7 +23,7 @@
 	    //'empty' => false,          // 空白を許可
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
-		'empty' => false,
+		'empty' => true,
 	 ));
      echo '</div>';
      echo '<div class="col-md-6 col-sm-6">';
@@ -39,7 +39,7 @@
 	    //'empty' => false,          // 空白を許可
 	    //'div'   => 'list-group nav nav-tabs nav-stacked fixed-sidebar',
 	    'class' => 'form-control',
-		'empty' => false,
+		'empty' => true,
 	 ));
      echo '</div>';
     if(isset($useLocalCSV))
