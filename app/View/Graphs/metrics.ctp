@@ -17,7 +17,7 @@ echo '</pre>';*/
 
 <div class="page-header">
 	<h1><small>メトリクス比較</small></h1>
-    <?php echo $this->element('selectForm2', array("modelName" => $modelName,"groupName" => $groupName)); ?>
+    <?php echo $this->element('selectForm2', array("groupName" => $groupName)); ?>
 </div>
 
 <div class="row">

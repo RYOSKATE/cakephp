@@ -328,25 +328,22 @@ class GraphsController extends AppController
     public function metrics()
     {
         $this->operateSticky();
+        $uploadList = $this->setUploadList();
+        $selectUploadDataId1 = array_keys($uploadList)[0];
+        $selectUploadDataId2 = array_keys($uploadList)[0];
+        $selectModelName1 = null;
+        $selectModelName2 = null;
         $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
 
-        $selectGroupName = reset($groupNameData);
-        $selectModelId1 = key($modelNameData);
-        $selectModelId2 = key($modelNameData);
-        $selectModelName1 = reset($modelNameData);
-        $selectModelName2 = reset($modelNameData);        
         $data1=null;
         $data2=null;
 
+
         if (isset($this->request->data['set']))
         {
-            $selectModelId1 = $this->data['Graph'] ['モデル1'];
-            $selectModelId2 = $this->data['Graph'] ['モデル2'];
-            
-            $selectModelName1 = $modelNameData[$selectModelId1];
-            $selectModelName2 = $modelNameData[$selectModelId2];
-            
+            $selectUploadDataId1 = $this->data['Graph']['CSV_ID1'];
+            $selectUploadDataId2 = $this->data['Graph']['CSV_ID2'];            
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
         
             if (!empty($this->data['Graph'] ['選択ファイル1']['name'])) 
@@ -357,13 +354,13 @@ class GraphsController extends AppController
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
                 move_uploaded_file($up_file, $fileName);
                 $data1 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
-                $selectModelName1 = $this->data['Graph']['モデル名1(ローカルファイル)'];
-                if(empty($selectModelName1))
-                {
-                    $selectModelName1 = "local model1";
-                }
+                $selectModelName1 = basename($fileName);
             }
-
+            else
+            {
+                $selectModelName1 = $uploadList[$selectUploadDataId1];
+                $data1 = $this->Graph->getCompareMetricsTable($selectUploadDataId2,$selectGroupName);
+            }
             if (!empty($this->data['Graph'] ['選択ファイル2']['name'])) 
             {
 
@@ -373,19 +370,13 @@ class GraphsController extends AppController
                 move_uploaded_file($up_file, $fileName);
                 $data2 = $this->Graph->getCompareMetricsTableFromCSV($fileName);
                 $selectModelName2 = $this->data['Graph']['モデル名2(ローカルファイル)'];
-                if(empty($selectModelName2))
-                {
-                    $selectModelName2 = "local model2";
-                }
+                $selectModelName2 = basename($fileName);
             }
-        }
-        if($data1==null)
-        {
-            $data1 = $this->Graph->getCompareMetricsTable($selectModelId1,$selectGroupName);
-        }
-        if($data2==null)
-        {
-            $data2 = $this->Graph->getCompareMetricsTable($selectModelId2,$selectGroupName);
+            else
+            {
+                $selectModelName2 = $uploadList[$selectUploadDataId2];                
+                $data2 = $this->Graph->getCompareMetricsTable($selectUploadDataId2,$selectGroupName);
+            }
         }
 
         $this->set('data1',$data1);

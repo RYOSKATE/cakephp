@@ -436,15 +436,15 @@ class Graph extends AppModel
         return $newData;
     }
 
-    function getCompareMetricsTable($selectModelId,$selectGroupName) 
+    function getCompareMetricsTable($selectUploadDataId,$selectGroupName) 
     {
-        $conditions = array('Graph.modelname_id' => $selectModelId);
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('modelname_id','filepath','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('filepath','3'),'conditions' => $conditions));
 
         //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
