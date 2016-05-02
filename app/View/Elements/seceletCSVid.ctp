@@ -1,7 +1,7 @@
 <?php 
 	//$formname :'CSV_ID1'
 	//$isAllowEmpty:
-	echo $this->Form->input('CSV_ID1',array
+	echo $this->Form->input($formname,array
 	(
 	    'type'=>'select',
 	    'options'=>$uploadList,

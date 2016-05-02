@@ -28,13 +28,13 @@
 		<canvas id="canvas1"style="border:1px solid;width:100%;height:auto"></canvas>
     </div>
 	<div class="col-md-6 col-sm-6 ">
-		<?php echo $this->element('originCityTable', array("name" => $leftModelName,"data" => $model1,"metricsName"=>$selectMetricsStr));?>
+		<?php echo $this->element('originCityTable', array("name" => $ModelName1,"data" => $model1,"metricsName"=>$selectMetricsStr));?>
     </div>
 	<div class="col-md-6 col-sm-6">
 		<canvas id="canvas2"style="border:1px solid;width:100%;height:auto"></canvas>
     </div>
 	<div class="col-md-6 col-sm-6">
-		<?php echo $this->element('originCityTable', array("name" => $rightModelName,"data" => $model2,"metricsName"=>$selectMetricsStr));?>
+		<?php echo $this->element('originCityTable', array("name" => $ModelName2,"data" => $model2,"metricsName"=>$selectMetricsStr));?>
     </div>
 </div>
 <?php echo $this->Html->script('originCity', array('inline' => true));?>

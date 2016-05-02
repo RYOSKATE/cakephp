@@ -1,7 +1,7 @@
 <?php 
     echo $this->element('formCreate');
+    
     echo $this->element('seceletCSVid', array("formname" => 'CSV_ID1',"isAllowEmpty" => false));
-
     echo $this->element('seceletCSVid', array("formname" => 'CSV_ID2',"isAllowEmpty" => false));
 
     echo $this->element('selectGroup',$groupName);
