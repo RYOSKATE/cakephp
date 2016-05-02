@@ -1,14 +1,6 @@
 <?php 
-	echo $this->Form->create('Graph', array(
-    'inputDefaults' => array(
-        'div' => 'form-group',
-        'label' => false,//array('class' => 'control-label'),
-        'wrapInput' => false,
-        'class' => 'form-control'
-    ),
-    'class' => 'well form-inline',
-    'enctype' => 'multipart/form-data',
-)); 
+
+    echo $this->element('formCreate');
     echo $this->element('selectModel',$modelName);
     echo $this->element('selectGroup',$groupName); 
     echo $this->element('setButton'); 
