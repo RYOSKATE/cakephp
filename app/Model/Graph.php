@@ -40,13 +40,16 @@ class Graph extends AppModel
                 $col = str_getcsv($line);
                 $data = array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
 				$allcsvData[]  = $data;
-                $names = explode(';',$col[25]);
-                for ($j = 0; $j< count($names); ++$j)
+                if(4<=$col[1])
                 {
-                    $name = trim($names[$j]);
-                    if(!in_array($name, $groupNameData))
+                    $names = explode(';',$col[25]);
+                    for ($j = 0; $j< count($names); ++$j)
                     {
-                        $groupNameData[]=$name;
+                        $name = trim($names[$j]);
+                        if(!in_array($name, $groupNameData))
+                        {
+                            $groupNameData[]=$name;
+                        }
                     }
                 }
         	}

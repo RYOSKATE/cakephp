@@ -19,11 +19,9 @@ class GraphsController extends AppController
         return $modelNameData;
     }
 	
-    private function getArrayKeyAndValue($array,$index=0)
+    private function getFirstKey($array)
     {
-        $key = array_key($array)[$index];
-        $value = $array[$key];
-        return array('key'=>$key,'value'=>$value);
+        return array_keys($array)[0];
     }
 	private function setMetricsList()
     {
@@ -76,7 +74,7 @@ class GraphsController extends AppController
 
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);
-        $selectUploadDataId=key($uploadList);
+        $selectUploadDataId = $this->getFirstKey($uploadList);;
         $data=[];
         if (isset($this->request->data['set'])) 
         {
@@ -94,7 +92,7 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
 
-        $id=key($modelNameData);
+        $id = $this->getFirstKey($modelNameData);
         $name = $modelNameData[$id];
         $selectModelId = array($id,$id,$id,$id,$id);
         $selectModelName = array($name,$name,$name,$name,$name);
@@ -129,7 +127,7 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId=array_keys($uploadList)[0];
+        $selectUploadDataId = $this->getFirstKey($uploadList);
 
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
@@ -166,8 +164,8 @@ class GraphsController extends AppController
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId1 = array_keys($uploadList)[0];
-        $selectUploadDataId2 = array_keys($uploadList)[0];
+        $selectUploadDataId1 = $this->getFirstKey($uploadList);
+        $selectUploadDataId2 = $this->getFirstKey($uploadList);
         $selectModelName1 = null;
         $selectModelName2 = null;
         $groupNameData = $this->setGroupNameWithAll();
@@ -228,8 +226,8 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId1 = array_keys($uploadList)[0];
-        $selectUploadDataId2 = array_keys($uploadList)[0];
+        $selectUploadDataId1 = $this->getFirstKey($uploadList);
+        $selectUploadDataId2 = $this->getFirstKey($uploadList);
          
         $selectModelName1 = null;
         $selectModelName2 = null;
@@ -237,7 +235,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $metricsListData = $this->setMetricsList();
-		$selectMetrics = array_keys($metricsListData)[0];//未使用
+		$selectMetrics = $this->getFirstKey($metricsListData);//未使用
 
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $data1=null;
@@ -329,8 +327,8 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $selectUploadDataId1 = array_keys($uploadList)[0];
-        $selectUploadDataId2 = array_keys($uploadList)[0];
+        $selectUploadDataId1 = $this->getFirstKey($uploadList);
+        $selectUploadDataId2 = $this->getFirstKey($uploadList);
         $selectModelName1 = null;
         $selectModelName2 = null;
         $groupNameData = $this->setGroupNameWithAll();
