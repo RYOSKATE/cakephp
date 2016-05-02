@@ -86,9 +86,6 @@ class User extends AppModel
     {
         //$userData = $this->request->data['User'];
         $this->create();
-        $idArray = $this->find('first', array("fields" => "MAX(User.id) as max_id"));
-        $id = reset($idArray)['max_id'] + 1;
-        $userData['id'] = $id;
         foreach ($userData['group'] as &$value)
         {
             $value = $groupNameData[$value];

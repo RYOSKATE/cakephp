@@ -8,7 +8,9 @@
 			<th><?php echo $this->Paginator->sort('modelname_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('comment'); ?></th>
+			<?php if($userData['role']=='admin'){?>
 			<th class="actions"><?php echo __('Actions'); ?></th>
+			<?php }?>
 	</tr>
 	</thead>
 	<tbody>
@@ -25,11 +27,13 @@
 			<?php echo h($uploadData['User']['username']); ?>&nbsp;
 		</td>
 		<td><?php echo h($uploadData['UploadData']['comment']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $uploadData['UploadData']['id'])); ?>
-			<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $uploadData['UploadData']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $uploadData['UploadData']['id']), array(), __('Are you sure you want to delete # %s?', $uploadData['UploadData']['id'])); ?>
-		</td>
+		<?php if($userData['role']=='admin'){?>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('action' => 'view', $uploadData['UploadData']['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $uploadData['UploadData']['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $uploadData['UploadData']['id']), array(), __('Are you sure you want to delete # %s?', $uploadData['UploadData']['id'])); ?>
+			</td>
+		<?php }?>
 	</tr>
 <?php endforeach; ?>
 	</tbody>

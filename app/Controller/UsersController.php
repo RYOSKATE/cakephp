@@ -19,6 +19,15 @@ class UsersController extends AppController {
             $this->set('enableAdd', true);
         }
     }
+    	
+    public function flashText($message,$isSuccess=true)
+    {
+        if($isSuccess)
+            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+        else
+            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+    }
+    
 /**
  * Components
  *
@@ -35,6 +44,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
+        $this->rejectWithoutAdmin();
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
@@ -47,6 +57,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+        $this->rejectWithoutAdmin();
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -61,12 +72,12 @@ class UsersController extends AppController {
         {
             if($this->User->addUser($this->request->data['User'],$groupNameData))
             {
-                $this->Session->setFlash(__('The user has been saved<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                $this->flashText('The user has been saved.');
                 $this->redirect(array('action' => 'index'));
             }
             else
             {
-                $this->Session->setFlash(__('The user could not be saved. Please, try again.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-warning alert-dismissable'));
+                $this->flashText('The user could not be saved. Please, try again.',false);
             }
         }
     }
@@ -78,15 +89,23 @@ class UsersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+        $this->rejectWithoutAdmin();
+        $groupNameData = $this->setGroupNameWithAll('add');
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
+
 		if ($this->request->is(array('post', 'put'))) {
+            foreach ($this->request->data['User']['group'] as &$value)
+            {
+                $value = $groupNameData[$value];
+            }
+            $this->request->data['User']['group'] = implode(",",$this->request->data['User']['group']);
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved.'));
+                $this->flashText('The user has been saved.');
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->flashText('The user could not be saved. Please, try again.',false);
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -94,7 +113,7 @@ class UsersController extends AppController {
 		}
 	}
 
-	public function ownEdit() 
+	public function ownEdit($id = null) 
     {
         $id = $this->Auth->user('id');
         $this->User->id = $id;
@@ -114,11 +133,11 @@ class UsersController extends AppController {
  
             if ($this->User->save($this->request->data))
             {
-                $this->Session->setFlash(__('パスワードを変更しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                $this->flashText('パスワードを変更しました');
             }
             else 
             {
-                $this->Session->setFlash(__('パスワードの変更に失敗しました<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+                $this->flashText('パスワードの変更に失敗しました',false); 
             }
         }
         else
@@ -135,19 +154,20 @@ class UsersController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+        $this->rejectWithoutAdmin();
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->User->delete()) {
-			$this->Session->setFlash(__('The user has been deleted.'));
+            $this->flashText('The user has been deleted.');
 		} else {
-			$this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
+            $this->flashText('The user could not be deleted. Please, try again.',false);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
-	    
+
 	public function ownDelete($id = null) 
     {
         if ($this->request->is('post'))
@@ -170,13 +190,13 @@ class UsersController extends AppController {
 					{
 						if ($this->User->delete($id)) 
 						{
-							$this->Session->setFlash(__('user deleted<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                            $this->flashText('user deleted');
 							$this->redirect(array('action' => 'login'));
 						}
 					}
 				}
 			}
-            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+            $this->flashText($message,false);
         }
     }
     public function login()

@@ -33,6 +33,7 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->rejectWithoutAdmin();
 		if (!$this->UploadData->exists($id)) {
 			throw new NotFoundException(__('Invalid upload data'));
 		}
@@ -46,6 +47,7 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->rejectWithoutAdmin();
 		if ($this->request->is('post')) {
 			$this->UploadData->create();
 			if ($this->UploadData->save($this->request->data)) {
@@ -68,6 +70,7 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->rejectWithoutAdmin();
 		if (!$this->UploadData->exists($id)) {
 			throw new NotFoundException(__('Invalid upload data'));
 		}
@@ -95,6 +98,7 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->rejectWithoutAdmin();
 		$this->UploadData->id = $id;
 		if (!$this->UploadData->exists()) {
 			throw new NotFoundException(__('Invalid upload data'));

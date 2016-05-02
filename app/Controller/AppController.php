@@ -71,6 +71,22 @@ class AppController extends Controller
     $this->Auth->loginRedirect  = array('controller' => 'graphs', 'action' => 'index');
     $this->set('userData', $this->Auth->user());
   }
+  
+  protected function isUserRole($role)
+  {
+      return $this->Auth->user('role') ==$role;
+  }
+  
+  protected function isUserRoleAdmin()
+  {
+      return $this->isUserRole('admin');
+  }
+    
+  protected function rejectWithoutAdmin()
+  {
+      if(!$this->isUserRoleAdmin())
+        $this->redirect(array('controller' => 'graphs', 'action' => 'index'));
+  }
 
   public function beforeRender()
   {

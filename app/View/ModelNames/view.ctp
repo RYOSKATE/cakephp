@@ -16,7 +16,9 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
+		<?php if($userData['role']=='admin'){?>
 		<li><?php echo $this->Html->link(__('Edit Model Name'), array('action' => 'edit', $modelName['ModelName']['id'])); ?> </li>
+		<?php }?>
 		<!--<li><?php //echo $this->Form->postLink(__('Delete Model Name'), array('action' => 'delete', $modelName['ModelName']['id']), array(), __('Are you sure you want to delete # %s?', $modelName['ModelName']['id'])); ?> </li>-->
 		<li><?php echo $this->Html->link(__('List Model Names'), array('action' => 'index')); ?> </li>
 		<!--<li><?php //echo $this->Html->link(__('New Model Name'), array('action' => 'add')); ?> </li>-->

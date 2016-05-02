@@ -1,40 +1,40 @@
-<div class="container">  
-<div class="row">
-<div class="col-md-8 col-md-offset-2">
-
-<?php
- echo $this->Form->create('User', array(
-	'inputDefaults' => array(
-		'div' => 'form-group',
-		'label' => array(
-			'class' => 'col col-md-3 control-label'
-		),
-		'wrapInput' => 'col col-md-7',
-		'class' => 'form-control'
-	),
-	'class' => 'well form-horizontal',
-)); ?>
+<div class="users form">
+<?php echo $this->Form->create('User'); ?>
 	<fieldset>
-	<legend><?php echo __('Change Your Password'); ?></legend>
-	<?php echo $this->Form->input('username', array(
-		'placeholder' => 'username',
-		'value' => $userData['username']
-	)); ?>
+		<legend><?php echo __('Edit User'); ?></legend>
+	<?php
+		echo $this->Form->input('id');
+		echo $this->Form->input('username',array('disabled'=>'disabled'));
+		echo $this->Form->input('password',array('disabled'=>'disabled'));
+		echo $this->Form->input('role', array(
+            'options' => array('admin' => 'Admin', 'author' => 'Author','reader' => 'Reader')
+        ));
+		?>
 
-	<?php echo $this->Form->input('new password', array(
-		'placeholder' => 'new password'
-	)); ?>
-
-	<div class="form-group">
-		<?php echo $this->Form->submit('Update Account', array(
-			'div' => 'col col-md-6 col-md-offset-2',
-			'class' => 'btn btn-lg btn-primary',
-			'style' => 'padding:8px 20px;'
-		)); ?>
-	</div>
+<div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
+<a style="cursor:pointer;">グループ名▼</a>
+</div>
+<!--// 折り畳み展開ポインタ -->
+ 
+<!-- 折り畳まれ部分 -->
+<div id="open" style="display:none;clear:both;">
+<?php
+			echo $this->Form->input('group',array
+	(
+	    'type'=>'select',
+	    'options'=>$groupName,
+	    'multiple'=> 'checkbox',
+	    'class' => 'col-xs-6 col-sm-4 col-md-3 col-lg-2 '
+	 ));
+	?>
 	</fieldset>
-<?php echo $this->Form->end(); ?>
-
+<?php echo $this->Form->end(__('Submit')); ?>
 </div>
 </div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('User.id'))); ?></li>
+		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
+	</ul>
 </div>

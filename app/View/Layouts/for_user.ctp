@@ -54,12 +54,16 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		        </div>
 		        <div class="navbar-collapse collapse">
 		          <ul class="nav navbar-nav navbar-right">
-		            <!--<li class="active"><?php //echo $this->Html->link('Logout',array('controller' => 'users', 'action' => 'logout'));?></li>-->
+					<li><?php if(isset($userData))echo $this->Html->link($userData['username'],array('controller' => 'users',  'action' => 'manage'));?></li>
 		            <?php if(isset($userData)){?>
+						<?php if($userData['role']!='reader'){?>
+							<li><?php echo $this->Html->link('Upload',array('controller' => 'graphs', 'action' => 'upload'));?></li>
+						<?php }?>
+						<li><?php echo $this->Html->link('Data',array('controller' => 'upload_data', 'action' => 'index'));?></li>
 		            	<li class="divider-vertical"><?php echo $this->Html->link('Logout',array('controller' => 'users', 'action' => 'logout'));?></li>
-					 <?php }else{?>
+					<?php }else{?>
 					 	<li class="divider-vertical"><?php echo $this->Html->link('Login',array('controller' => 'users', 'action' => 'login'));?></li>
-					  <?php }
+					<?php }
 					  if(isset($enableAdd)){?>
 		            <li class="divider-vertical"><?php echo $this->Html->link('Add',array('controller' => 'users', 'action' => 'add'));?></li>
 		            <?php }?>
