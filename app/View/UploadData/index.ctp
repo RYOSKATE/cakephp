@@ -17,8 +17,8 @@
 		<td><?php echo h($uploadData['UploadData']['id']); ?>&nbsp;</td>
 		<td><?php echo h($uploadData['UploadData']['date']); ?>&nbsp;</td>
 		<td>
-			<?php //echo $this->Html->link($uploadData['Modelname']['name'], array('controller' => 'modelnames', 'action' => 'view', $uploadData['Modelname']['id'])); ?>
-			<?php echo h($uploadData['Modelname']['name']); ?>&nbsp;
+			<?php echo $this->Html->link($uploadData['Modelname']['name'], array('controller' => 'modelnames', 'action' => 'view', $uploadData['Modelname']['id'])); ?>
+			<?php //echo h($uploadData['Modelname']['name']); ?>&nbsp;
 		</td>
 		<td>
 			<?php //echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
