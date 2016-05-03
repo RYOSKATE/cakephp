@@ -14,7 +14,7 @@
 
 <div class="page-header">
 	<h1><small>ファイルメトリクス</small></h1>
-  <?php echo $this->element('selectForm5'); ?>
+  <?php echo $this->element('selectForm3'); ?>
 
 
   <?php

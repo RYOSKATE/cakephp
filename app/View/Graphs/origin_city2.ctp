@@ -13,7 +13,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較(OriginCity)"));?>
 <div class="page-header">
     <h1><small>由来比較(OriginCity)</small></h1>
-    <?php echo $this->element('selectForm4'); ?>
+    <?php echo $this->element('selectForm1'); ?>
 </div>
 <h4>モデル名:<?php echo $selectModelName;?></h4>
 <h6>メトリクス:<?php echo substr($selectMetricsName,4);?></h6>

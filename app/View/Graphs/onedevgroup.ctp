@@ -21,7 +21,7 @@
 
 <div class="page-header">
     <h1><small>メトリクス遷移</small></h1>
-    <?php echo $this->element('selectForm1'); ?>
+    <?php echo $this->element('selectForm2'); ?>
 </div>
 
 <div id="chartdiv" style="height:600px;"></div>

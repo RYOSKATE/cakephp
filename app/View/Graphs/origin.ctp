@@ -19,7 +19,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較(円グラフ)"));?>
 <div class="page-header">
     <h1><small>由来比較(円グラフ)</small></h1>
-    <?php echo $this->element('selectForm2'); ?>
+    <?php echo $this->element('selectForm4'); ?>
 </div>
 <!-- Nav tabs -->
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->

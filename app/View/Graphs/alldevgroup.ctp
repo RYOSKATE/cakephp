@@ -5,7 +5,7 @@
 
 <div class="page-header">
     <h1><small>欠陥数散布図</small></h1>
-     <?php echo $this->element('selectForm4'); ?>
+     <?php echo $this->element('selectForm1'); ?>
 </div>
 <h4>モデル名:<?php echo $name;?></h4>
 <h6>メトリクス:<?php echo substr($selectMetricsStr,4);?></h6>
