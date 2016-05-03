@@ -4,7 +4,8 @@
 <?php echo $this->element('pagepath', array("secondPath" => "全開発グループ","thirdPath" => "欠陥数散布図"));?>
 
 <div class="page-header">
-    <?php echo $this->element('selectForm5'); ?>
+    <?php //echo $this->element('selectForm5'); ?>
+     <?php echo $this->element('selectForm4'); ?>
 </div>
 
 <div id="chartdiv" style="height:500px;"></div>
@@ -24,16 +25,17 @@
          ));
     ?>
 </div>-->
-
+<h4>モデル名:<?php echo $name;?></h4>
+<h6>メトリクス:<?php echo substr($selectMetricsStr,4);?></h6>
 <div class="row">
     <div class="col-md-12 col-sm-12" >
     <table class="table table-hover table-condensed" id ="table">
         <thead>
         <tr>
             <th>順位</th>
-            <th>合計欠陥数</th>
-            <th>ファイルあたりの欠陥数</th>
-            <th>欠陥密度(LOC)</th>
+            <th>メトリクス合計値</th>
+            <th>ファイルあたりのメトリクス値</th>
+            <th>メトリクス密度(/LOC)</th>
         </tr>
         </thead>
         <tbody id = "rankTable"></tbody>
@@ -42,5 +44,8 @@
 </div>
 
 <!-- グラフ・表の作成処理 -->
-<script type="text/javascript">  var getData = JSON.parse('<?=json_encode($data);?>');</script>
+<script type="text/javascript">  
+    var getData = JSON.parse('<?=json_encode($data);?>');
+    var metricsName = JSON.parse('<?=json_encode(substr($selectMetricsStr,4));?>');
+</script>
 <?php echo $this->Html->script('alldevgroup', array('inline' => true));?>

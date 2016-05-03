@@ -4,6 +4,7 @@
 	(
 	    'type'=>'select',
 	    'options'=>$metricsList,
+		'value'=>$selectMetrics,//デフォルトは欠陥数
 		// 'style' => 'width: 200px',
 	    // 'onchange' => 'submit(this.form)',
 	    //'selected' => $selectMetrics,  // 規定値をvalueで指定

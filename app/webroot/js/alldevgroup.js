@@ -95,7 +95,7 @@ $(function()
     }, {
         "axisAlpha": 0,
         "position": "left",
-        "title": "欠陥数"
+        "title": metricsName
     }],
     "startDuration": 1.5,
     "graphs": [{

@@ -74,15 +74,18 @@ class Graph extends AppModel
     
     
     /////////全開発グループ用/////////
-    function getGroupData($selectGroupName,$upload_data_id) 
+    function getGroupData($upload_data_id,$selectMetrics,$selectGroupName) 
     {
+        //変数名defact_numは歴史的事情であり、実際には欠陥数以外のメトリクスも入る。
         $conditions = array('Graph.upload_data_id' => $upload_data_id);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array(1,3,4,25),'conditions' => $conditions));
+        //1:由来,3欠陥数,4物理行数,25グループ
+        //x軸がファイル数、円の大きさは物理行数、y軸がメトリクスの図になる。
+        $data = $this->find('all',array('fields' => array(1,3,$selectMetrics,4,25),'conditions' => $conditions));
         
         for ($i = 0; $i < count($data); ++$i)
         {
@@ -98,15 +101,21 @@ class Graph extends AppModel
             for ($j = 0; $j < $numOfNames; ++$j) 
             {
                 $name = trim($names[$j]);
+                $metrics = 1;//0の時はファイル数なので1
+			    if($selectMetrics==1 && $data[$i]['3']==0)
+			    {
+    				$metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
+	    		}else if(2<$selectMetrics)//3～欠陥数
+				    $metrics = $data[$i][$selectMetrics];
                 if(!isset($group_array[$name]))
                 {
                     $group_names[] = $name;
-                    $group_array += array($name=>array('file_num'=>1,'defact_num'=>$data[$i][3],'loc'=>$data[$i][4]));
+                    $group_array += array($name=>array('file_num'=>1,'defact_num'=>$metrics,'loc'=>$data[$i][4]));
                 }
                 else
                 {
                     $group_array[$name]['file_num']   += 1;
-                    $group_array[$name]['defact_num'] += $data[$i][3];
+                    $group_array[$name]['defact_num'] += $metrics;
                     $group_array[$name]['loc']        += $data[$i][4];
                 }
             }

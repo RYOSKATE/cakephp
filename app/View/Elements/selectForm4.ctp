@@ -4,7 +4,7 @@
 
     echo $this->element('selectGroup',$groupName);
 	echo $this->element('setButton');
-	echo $this->element('selectMetrics',array($metricsList,$selectMetrics));
+	echo $this->element('selectMetrics',array($metricsList));
     if(isset($useLocalCSV))
     {
     ?><br><?php

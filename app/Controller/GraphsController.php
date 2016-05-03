@@ -72,19 +72,27 @@ class GraphsController extends AppController
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
+        $metricsListData = $this->setMetricsList();
+        $selectModelName = null;
+        $selectMetrics = 3;
         if($uploadList)
         {        
-            $selectGroupName = reset($groupNameData);
-            $selectUploadDataId = $this->getFirstKey($uploadList);
             $data=[];//nullだとページ切替時枠が描画されない
             if (isset($this->request->data['set'])) 
             {
                 $selectUploadDataId = $this->data['Graph']['CSV_ID'];
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-                $data = $this->Graph->getGroupData($selectGroupName, $selectUploadDataId);
+                $selectMetrics = $this->data['Graph'] ['Metrics'];
+                $data = $this->Graph->getGroupData($selectUploadDataId,$selectMetrics,$selectGroupName);
+                $selectModelName = $uploadList[$selectUploadDataId];
             }
             $this->set('data',$data);
+            $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);
         }
+        else
+		    $this->set('selectMetricsStr',"");
+        $this->set('name',$selectModelName);
+        $this->set('selectMetrics',$selectMetrics);
     }
     
     public function onedevgroup() 
@@ -202,7 +210,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $metricsListData = $this->setMetricsList();
-        $selectMetrics = $this->getFirstKey($metricsListData);//未使用
+        $selectMetrics = 3;
         for($i=1;$i<=2;++$i)
         {
             $selectModelName = null;
@@ -249,7 +257,7 @@ class GraphsController extends AppController
         $selectGroupName = reset($groupNameData);
 
         $metricsListData = $this->setMetricsList();
-        $selectMetrics = null;
+        $selectMetrics = 3;
         
         $selectModelName = null;
         $data=null;
@@ -260,18 +268,13 @@ class GraphsController extends AppController
             $selectMetrics = $this->data['Graph'] ['Metrics'];
             $data = $this->Graph->getOriginCity2($selectUploadDataId,$selectGroupName,$selectMetrics);
             $selectModelName = $uploadList[$selectUploadDataId];
-        }
-        $this->set('selectModelName',$selectModelName);
-        if(0<$selectMetrics)
             $this->set('selectMetricsName',$metricsListData[$selectMetrics]);
+        }
         else
             $this->set('selectMetricsName',"");
+        $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
         $this->set('data',$data);        
-
-        // echo '<pre>';
-        // print_r($data);
-        // echo '</pre>';
     }
     
     public function metrics()
