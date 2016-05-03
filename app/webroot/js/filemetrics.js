@@ -1,17 +1,20 @@
-//ファイルメトリクスのツリーマップ・グラフをチャートグラフを作成する機能
 
+$(function()
+{
+  //ファイルメトリクスのツリーマップ・グラフをチャートグラフを作成する機能
     var path;
+    var scale = (800.0 - 180.0)/(930.0 - 80.0);
+    $('#body').height($('#body').width()*scale);
     function set(layer,zoomNode)
     {
       $("#body").empty();
       var pathJson = originPathJson;
 
-    var w = 930 - 80,
-        h = 800 - 180,
+    var w = $('#body').width(),
+        h = $('#body').height(),
         x = d3.scale.linear().range([0, w]),
         y = d3.scale.linear().range([0, h]),
         root,node;
-
         var treemap = d3.layout.treemap()
             .round(false)
             .size([w, h])
@@ -173,11 +176,14 @@
         {
           zoom(zoomNode);
         }
-        
     }
 
     set(1);
-
+    //Canvasのサイズをウィンドウサイズに追従
+    window.addEventListener( 'resize', onWindowResize, false );
+    function onWindowResize(){
+       set(1);
+    }
   var radarChartData;
 
   function setdata(node)
@@ -224,3 +230,4 @@
 
   var radarChartData = setdata(originPathJson);
   window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
+});

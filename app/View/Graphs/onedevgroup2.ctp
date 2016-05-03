@@ -10,10 +10,10 @@
 <?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 <?php $this->Html->script('d3.v2', array('inline' => false));?>
 <?php $this->Html->css('filemetrics', array('inline' => false));?>
-<?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "ファイルメトリクス"));?>
+<?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "欠陥数ファイルマップ"));?>
 
 <div class="page-header">
-	<h1><small>ファイルメトリクス</small></h1>
+	<h1><small>欠陥数ファイルマップ</small></h1>
   <?php echo $this->element('selectForm3'); ?>
 
 
@@ -36,14 +36,14 @@
      ));	
   ?>
   <select id = "select" class = "form-control">
-	  <option value="size">Size</option>
-    <option value="count">Count</option>
+	  <option value="size">欠陥数</option>
+    <option value="count">ファイル数</option>
   </select>
   <input id = "zoomreset" class = 'form-control' type="button" value="全体を表示">
   <?php echo $this->Form->end();?>
 
 </div>
-<div id="body"></div>
+<div id="body" style="border:1px solid;width:100%;height:auto"></div>
 <p id="path">表示パス:root/</p>
 <div id="footer">
   <div>

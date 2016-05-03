@@ -10,7 +10,7 @@
 <div data-role='page'>
 </div>
 
-<?php echo $this->element('pagepath', array("secondPath" => "モデル","thirdPath" => "由来比較(OriginCity)"));?>
+<?php echo $this->element('pagepath', array("secondPath" => "由来","thirdPath" => "由来比較(OriginCity)"));?>
 <div class="page-header">
     <h1><small>由来比較(OriginCity)</small></h1>
     <?php echo $this->element('selectForm1'); ?>

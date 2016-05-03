@@ -84,24 +84,25 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				<div class="col-md-3 col-sm-3">
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active">全開発グループ</div>
-						<?php echo $this->Html->link('欠陥数散布図',array('controller' => 'graphs', 'action' => 'alldevgroup'),array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link('メトリクス散布図',		   array('controller' => 'graphs', 'action' => 'alldevgroup'), array('class' =>'list-group-item'));?>
 					</div>
-
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active">各開発グループ</div>
-						<?php echo $this->Html->link('メトリクス遷移',array('controller' => 'graphs', 'action' => 'onedevgroup'),array('class' =>'list-group-item'));?>
-						<?php echo $this->Html->link('ファイルメトリクス',array('controller' => 'graphs', 'action' => 'onedevgroup2'),array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link('メトリクス遷移',		  array('controller' => 'graphs', 'action' => 'onedevgroup'), array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link('欠陥数ファイルマップ',	array('controller' => 'graphs', 'action' => 'onedevgroup2'),array('class' =>'list-group-item'));?>
 					</div>
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
-						<div class="list-group-item active">モデル</div>
-						<?php echo $this->Html->link('由来比較(円グラフ)',    array('controller' => 'graphs', 'action' => 'origin'), array('class' =>'list-group-item'));?>
-						<?php echo $this->Html->link('由来比較(領域図)',  array('controller' => 'graphs', 'action' => 'originCity'), array('class' =>'list-group-item'));?>
-						<?php echo $this->Html->link('由来比較(OriginCity)',array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
-						<?php echo $this->Html->link('メトリクス比較',         array('controller' => 'graphs', 'action' => 'metrics'),array('class' =>'list-group-item'));?>
+						<div class="list-group-item active">レイヤー</div>
+						<?php echo $this->Html->link('欠陥数レーダーチャート',		  array('controller' => 'graphs', 'action' => 'metrics'),	  array('class' =>'list-group-item'));?>
+					</div>
+					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
+						<div class="list-group-item active">由来</div>
+						<?php echo $this->Html->link('欠陥数円グラフ',   array('controller' => 'graphs', 'action' => 'origin'), 	 array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link('メトリクス領域図',	  array('controller' => 'graphs', 'action' => 'originCity'),  array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link('Origin City', array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
 					</div>
 					<!-- 付箋 -->
 					<?php echo $this->element('sticky'); ?>	
-					<!-- 付箋 -->
 				</div>
 				<!-- 残り9列はコンテンツ表示部分として使う -->
 				<div class="col-md-9 col-sm-9">
