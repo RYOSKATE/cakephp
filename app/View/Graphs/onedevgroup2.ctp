@@ -13,7 +13,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "ファイルメトリクス"));?>
 
 <div class="page-header">
-
+	<h1><small>ファイルメトリクス</small></h1>
   <?php echo $this->element('selectForm5'); ?>
 
 

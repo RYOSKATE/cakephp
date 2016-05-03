@@ -1,15 +1,29 @@
 <?php 
 
     echo $this->element('formCreate');
-    echo $this->element('selectModel',$modelName);
-    echo $this->element('selectGroup',$groupName); 
-    echo $this->element('setButton'); 
-
-    if(isset($useLocalCSV))
-    {
-    ?><br><?php
-    echo $this->Form->input('モデル名(ローカルファイル)', array('placeholder' => 'Local Model Name'));
-    echo $this->Form->file('選択ファイル');//ファイル選択
-	}
+    echo '<div class="row">';
+        for($i=1;$i<=4;++$i)
+        {
+            echo '<div class="col-sm-6 col-md-3 col-lg-3">';    
+            echo $this->Form->input('モデル'.$i,array
+            (
+                'type'=>'select',
+                'options'=>$modelName,
+                'label'=>'モデル選択'.$i,
+                'class' => 'form-control',
+                'style'=>"width:100%;",
+            ));
+            echo '</div>';
+        }
+        echo '<div class="col-sm-6 col-md-4 col-lg-4">';  
+        echo $this->element('selectGroup',$groupName);
+        echo '</div>';
+        echo '<div class="col-sm-6 col-md-8 col-lg-8">';  
+        echo $this->element('selectMetrics',array($metricsList));
+        echo '</div>';
+        echo '<div class="col-sm-12 col-md-12 col-lg-12">';  
+        echo $this->element('setButton');
+        echo '</div>';
+    echo '</div>';
     echo $this->Form->end();
 ?>

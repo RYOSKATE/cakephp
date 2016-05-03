@@ -20,39 +20,8 @@
 <?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "メトリクス遷移"));?>
 
 <div class="page-header">
-<?php 
-    echo $this->Form->create('Graph',array('inputDefaults' => 
-                                        array('div' => 'form-group',),
-                                        'class' => 'well form-inline',
-                                        )
-                            );
-    echo '<div class="row">';
-        for($i=1;$i<=4;++$i)
-        {
-            echo '<div class="col-sm-6 col-md-3 col-lg-3">';    
-            echo $this->Form->input('モデル'.$i,array
-            (
-                'type'=>'select',
-                'options'=>$modelName,
-                'class' => 'form-control',
-                'style'=>"width:100%;",
-            ));
-            echo '</div>';
-        }
-        echo '<div class="col-sm-6 col-md-4 col-lg-4">';  
-        echo $this->element('selectGroup',$groupName);
-        echo '</div>';
-        echo '<div class="col-sm-6 col-md-8 col-lg-8">';  
-        echo $this->element('selectMetrics',array($metricsList));
-        echo '</div>';
-        echo '<div class="col-sm-12 col-md-12 col-lg-12">';  
-        echo $this->element('setButton');
-        echo '</div>';
-    echo '</div>';
-    echo $this->Form->end();
-
-
-?>
+    <h1><small>メトリクス遷移</small></h1>
+    <?php echo $this->element('selectForm1'); ?>
 </div>
 
 <div id="chartdiv" style="height:600px;"></div>

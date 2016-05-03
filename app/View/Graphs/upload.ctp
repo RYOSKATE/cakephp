@@ -63,11 +63,8 @@
             'minYear' => date('Y') - 100,
             )
         );
-        echo $this->Form->input('選択ファイル', array
-        (
-            'type' => 'file',
-            'label'=>'CSVファイル選択',
-        ));
+        echo '<br>';
+        echo $this->element('localCSV',array("formname" => '選択ファイル'));
     ?>
     </fieldset>
 

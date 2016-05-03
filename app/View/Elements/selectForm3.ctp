@@ -1,18 +1,30 @@
 <?php 
     echo $this->element('formCreate');
-    
-    echo $this->element('seceletCSVid', array("formname" => 'CSV_ID1',"isAllowEmpty" => false));
-    echo $this->element('seceletCSVid', array("formname" => 'CSV_ID2',"isAllowEmpty" => false));
 
-    echo $this->element('selectGroup',$groupName);
-	echo $this->element('setButton');
-	echo $this->element('selectMetrics',array($metricsList,$selectMetrics));
-    if(isset($useLocalCSV))
-    {
-    ?><br><?php
-    echo $this->Form->file('選択ファイル1');//ファイル選択
-    echo $this->Form->file('選択ファイル2');//ファイル選択
-    }
+    echo '<div class="row">';
+        echo '<div class="col-md-6 col-sm-6">';
+                echo $this->element('seceletCSVid', array("formname" => 'CSV_ID1',"isAllowEmpty" => false));
+                if(isset($useLocalCSV))
+                {
+                    echo $this->element('localCSV',array("formname" => '選択ファイル1'));
+                }
+        echo '</div>';
+        echo '<div class="col-md-6 col-sm-6">';
+                echo $this->element('seceletCSVid', array("formname" => 'CSV_ID2',"isAllowEmpty" => false));
+                if(isset($useLocalCSV))
+                {
+                    echo $this->element('localCSV',array("formname" => '選択ファイル2'));
+                }            
+        echo '</div>';
+        echo '<div class="col-md-6 col-sm-6">';
+        echo $this->element('selectGroup',$groupName);
+        echo '</div>';
+        echo '<div class="col-md-6 col-sm-6">';
+        echo $this->element('selectMetrics',array($metricsList,$selectMetrics));
+        echo '</div>';
+        echo '<div class="col-md-6 col-sm-6">';
+        echo $this->element('setButton');
+        echo '</div>';
+    echo '</div>';
     echo $this->Form->end();
-
 ?>

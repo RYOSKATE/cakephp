@@ -162,6 +162,7 @@ class GraphsController extends AppController
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
                     move_uploaded_file($up_file, $fileName);
                     $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+                    $selectModelName = basename($fileName);
                 }
                 else 
                 {

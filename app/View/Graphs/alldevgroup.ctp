@@ -4,7 +4,7 @@
 <?php echo $this->element('pagepath', array("secondPath" => "全開発グループ","thirdPath" => "欠陥数散布図"));?>
 
 <div class="page-header">
-    <?php //echo $this->element('selectForm5'); ?>
+    <h1><small>欠陥数散布図</small></h1>
      <?php echo $this->element('selectForm4'); ?>
 </div>
 <h4>モデル名:<?php echo $name;?></h4>
