@@ -15,16 +15,16 @@ class UploadData extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'date' => array(
-			'date' => array(
-				'rule' => array('date'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+		// 'date' => array(
+		// 	'date' => array(
+		// 		'rule' => array('date'),
+		// 		//'message' => 'Your custom message here',
+		// 		//'allowEmpty' => false,
+		// 		//'required' => false,
+		// 		//'last' => false, // Stop validation after this rule
+		// 		//'on' => 'create', // Limit validation to 'create' or 'update' operations
+		// 	),
+		// ),
 		'modelname_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
@@ -101,14 +101,16 @@ class UploadData extends AppModel {
 			'counterQuery' => ''
 		)
 	);
-    function upload($comment,$upload_date,$selectModelId,$user_id) 
+	
+	//成功すれば追加したレコードのid,失敗時は0
+    function upload($data) 
      {
         try
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
-            $time = date('Y-m-d', mktime(0, 0, 0,$upload_date['month'], $upload_date['day'],$upload_date['year']));
-            $data = array('date'=>$time,'modelname_id' =>$selectModelId,'user_id'=>$user_id,'comment'=>$comment);
-			if (!$this->save($data)) 
+			$this->create();
+			
+			if (!$this->save($data,false)) 
             {
                 throw new Exception();
             }

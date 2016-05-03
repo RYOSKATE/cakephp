@@ -33,7 +33,7 @@ class Graph extends AppModel
         {
             $this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//sjis-win''
+        	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//from ASCII,JIS,UTF-8,EUC-JP,SJIS
         	$lines = str_getcsv($buf, "\r\n");
         	foreach ($lines as $line) 
             {

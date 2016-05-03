@@ -7,6 +7,14 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class UploadDataController extends AppController {
+	
+    public function flashText($message,$isSuccess=true)
+    {
+        if($isSuccess)
+            return $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+        else
+            return $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+    }
 
 /**
  * Components
@@ -51,10 +59,11 @@ class UploadDataController extends AppController {
 		if ($this->request->is('post')) {
 			$this->UploadData->create();
 			if ($this->UploadData->save($this->request->data)) {
-				$this->Session->setFlash(__('The upload data has been saved.'));
+				
+				$this->flashText(__('The upload data has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The upload data could not be saved. Please, try again.'));
+				$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
 			}
 		}
 		$modelnames = $this->UploadData->Modelname->find('list');
@@ -76,10 +85,10 @@ class UploadDataController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->UploadData->save($this->request->data)) {
-				$this->Session->setFlash(__('The upload data has been saved.'));
+				$this->flashText(__('The upload data has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The upload data could not be saved. Please, try again.'));
+				$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
 			}
 		} else {
 			$options = array('conditions' => array('UploadData.' . $this->UploadData->primaryKey => $id));
@@ -107,10 +116,10 @@ class UploadDataController extends AppController {
 		if ($this->UploadData->delete()) {
 			$this->loadModel('Graph');
 			if ($this->Graph->deleteAll(array('upload_data_id' => $id))) {
-  				$this->Session->setFlash(__('The upload data has been deleted.'));
+  				$this->flashText(__('The upload data has been deleted.'));
 			}
 		} else {
-			$this->Session->setFlash(__('The upload data could not be deleted. Please, try again.'));
+			$this->flashText(__('The upload data could not be deleted. Please, try again.'),false);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
