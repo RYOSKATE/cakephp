@@ -104,10 +104,10 @@ echo '<div class="row">';
 <table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
 	<thead>
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('date'); ?></th>
-			<th><?php echo $this->Paginator->sort('modelname_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
+			<th><?php echo 'id'; ?></th>
+			<th><?php echo 'date'; ?></th>
+			<th><?php echo 'modelname_id'; ?></th>
+			<th><?php echo 'user_id'; ?></th>
 			<th><?php echo 'comment'; ?></th>
             <th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
@@ -126,7 +126,7 @@ echo '<div class="row">';
 			<?php echo h($uploadData['User']['username']); ?>&nbsp;
 		</td>
 		<td><?php echo h($uploadData['UploadData']['comment']); ?>&nbsp;</td>
-		<?php if($userData['role']=='admin'){?>
+		<?php if($userData['role']=='admin' || $uploadData['User']['id']==$userData['id']){?>
 			<td class="actions">
 				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'upload_data','action' => 'delete', $uploadData['UploadData']['id']), array(), __('Are you sure you want to delete # %s?', $uploadData['UploadData']['id'])); ?>
 			</td>
@@ -135,6 +135,4 @@ echo '<div class="row">';
 <?php endforeach; ?>
 	</tbody>
 	</table>
-<?php if($userData['role']=='admin'){?>
 <h3><?php echo $this->Html->link('more...',array('controller' => 'upload_data', 'action' => 'index'));?></h3>
-<?php }?>

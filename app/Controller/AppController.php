@@ -87,7 +87,11 @@ class AppController extends Controller
       if(!$this->isUserRoleAdmin())
         $this->redirect(array('controller' => 'graphs', 'action' => 'index'));
   }
-
+  protected function rejectReader()
+  {
+      if($this->isUserRole('reader'))
+        $this->redirect(array('controller' => 'graphs', 'action' => 'index'));
+  }
   public function beforeRender()
   {
     $this->set('stickies', $this->Sticky->getStickies($this->action));

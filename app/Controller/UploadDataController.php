@@ -109,20 +109,19 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
-		$this->rejectWithoutAdmin();
 		$this->UploadData->id = $id;
-		if (!$this->UploadData->exists()) {
-			throw new NotFoundException(__('Invalid upload data'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->UploadData->delete()) {
-			$this->loadModel('Graph');
-			if ($this->Graph->deleteAll(array('upload_data_id' => $id))) {
-  				$this->flashText(__('The upload data has been deleted.'));
+			if (!$this->UploadData->exists()) {
+				throw new NotFoundException(__('Invalid upload data'));
 			}
-		} else {
-			$this->flashText(__('The upload data could not be deleted. Please, try again.'),false);
-		}
+			$this->request->allowMethod('post', 'delete');
+			if ($this->UploadData->delete()) {
+				$this->loadModel('Graph');
+				if ($this->Graph->deleteAll(array('upload_data_id' => $id))) {
+					$this->flashText(__('The upload data has been deleted.'));
+				}
+			} else {
+				$this->flashText(__('The upload data could not be deleted. Please, try again.'),false);
+			}
 		return $this->redirect(array('action' => 'index'));
 	}
 }

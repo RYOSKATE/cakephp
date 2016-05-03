@@ -31,7 +31,7 @@
 </div>
 	
 <div class="related">
-	<h3><?php echo __('Related Graphs'); ?></h3>
+	<h3><?php echo __('Part of Related Data'); ?></h3>
 	<?php if (!empty($uploadData['Graph'])): ?>
 	<table cellpadding = "0" cellspacing = "0" class="table table-hover table-condensed">
 	<tr>
@@ -64,7 +64,10 @@
 		<th><?php echo __('25'); ?></th>
 		<!--<th class="actions"><?php //echo __('Actions'); ?></th>-->
 	</tr>
-	<?php foreach ($uploadData['Graph'] as $graph): ?>
+	<?php 
+	$i=0;
+	foreach ($uploadData['Graph'] as $graph): 
+	if(20<++$i)break;?>
 		<tr>
 			<td><?php echo $graph['id']; ?></td>
 			<td><?php echo $graph['filepath']; ?></td>
@@ -99,6 +102,7 @@
 				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'graphs', 'action' => 'delete', $graph['id']), array(), __('Are you sure you want to delete # %s?', $graph['id'])); ?>
 			</td>-->
 		</tr>
+
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>	

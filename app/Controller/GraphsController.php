@@ -357,7 +357,8 @@ class GraphsController extends AppController
     }
 
     public function upload()
-    { 
+    {
+        $this->rejectReader();
         //すでに存在するモデル名一覧を取得
         $modelNames = $this->ModelName->find('list');
         $this->set('modelName',$modelNames);
@@ -371,68 +372,72 @@ class GraphsController extends AppController
         $upload_id = 0;//アップロード時のid
         if (!empty($this->data)) 
         {
-            //モデル名(id)を取得・あるいは新規追加
-            $selectModelId = $this->data['Graph'] ['モデル名'];
-            $newModelName = $this->data['Graph'] ['新規モデル名'];
-            
-            //既存モデル名・新規モデル名のチェック
-            if(!empty($newModelName) || !empty($selectModelId))
+            //ファイルパス等を取得
+            $fileName = $this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+            $tmp_file_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp(PHPスクリプト終了と同時に削除されます)
+            if($fileName)
             {
+                //モデル名(id)を取得・あるいは新規追加
+                $selectModelId = $this->data['Graph'] ['モデル名'];
+                $newModelName = $this->data['Graph'] ['新規モデル名'];
                 
-                //新規モデル名入力時はDBに存在チェック、なければDBに追加。
-                if(empty($selectModelId))
+                //既存モデル名・新規モデル名のチェック
+                if(!empty($newModelName) || !empty($selectModelId))
                 {
-                    if(!$this->ModelName->hasAny(array('ModelName.name'=>$newModelName)))
+                    
+                    //新規モデル名入力時はDBに存在チェック、なければDBに追加。
+                    if(empty($selectModelId))
                     {
-                        //DBに新規モデル名を追加。
-                        $selectModelId = $this->ModelName->addNewModelName($newModelName);
-                    }
-                    else 
-                    {
-                        //既にDBにそのモデル名が存在していた場合。
-                        $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
-                        print_r($selectModelId);
-                        $this->Session->setFlash(__($newModelName.'は既に登録されています。<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-dismissable'));
-                    }
-                }
-                
-                if(!$this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$this->data['Graph']['date'])))
-                {
-                    //UploadDataをDBに追加
-                    $data = $this->data['Graph'];
-                    $data['user_id'] = $this->Auth->user('id');
-                    $data['modelname_id'] = $selectModelId;
-                    $upload_id = $this->UploadData->upload($data);
-                    if($upload_id)
-                    {            
-                        //ファイルパス等を取得
-                        $fileName = $this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-                        $tmp_file_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp(PHPスクリプト終了と同時に削除されます)
-                        
-                        //CSVの内容をDBにアップロードする
-                        $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
-                        if($groupNames != null)
+                        if(!$this->ModelName->hasAny(array('ModelName.name'=>$newModelName)))
                         {
-                            //最後にグループ名を追加する
-                            if($success = $this->GroupName->uploadFromCSV($groupNames))
-                            {   
-                                $this->flashText(__( $fileName. 'のデータをアップロードしました'));
+                            //DBに新規モデル名を追加。
+                            $selectModelId = $this->ModelName->addNewModelName($newModelName);
+                        }
+                        else 
+                        {
+                            //既にDBにそのモデル名が存在していた場合。
+                            $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
+                            print_r($selectModelId);
+                            $this->Session->setFlash(__($newModelName.'は既に登録されています。<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-dismissable'));
+                        }
+                    }
+                    
+                    if(!$this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$this->data['Graph']['date'])))
+                    {
+                        //UploadDataをDBに追加
+                        $data = $this->data['Graph'];
+                        $data['user_id'] = $this->Auth->user('id');
+                        $data['modelname_id'] = $selectModelId;
+                        $upload_id = $this->UploadData->upload($data);
+                        if($upload_id)
+                        {                                    
+                            //CSVの内容をDBにアップロードする
+                            $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
+                            if($groupNames != null)
+                            {
+                                //最後にグループ名を追加する
+                                if($success = $this->GroupName->uploadFromCSV($groupNames))
+                                {   
+                                    $this->flashText(__( $fileName. 'のデータをアップロードしました。'));
+                                }
+                                else
+                                    $error_message = 'グループ名の登録に失敗しました。';
                             }
                             else
-                                $error_message = 'グループ名の登録に失敗しました。';
-                       }
+                                $error_message = 'CSVデータの内容のアップロードに失敗しました。';
+                        }
                         else
-                            $error_message = 'CSVデータの内容のアップロードに失敗しました。';
-                   }
+                            $error_message = $UploadData . 'の登録に失敗しました。';
+                    }
                     else
-                        $error_message = $UploadData . 'の登録に失敗しました。';
-               }
+                        $error_message = '同一のモデル名、日付のデータが既に存在します。';
+                }
                 else
-                    $error_message = '同一のモデル名、日付のデータが既に存在します。';
-           }
-           else
-               $error_message = 'モデル名が入力されていません';
-
+                    $error_message = 'モデル名が入力されていません。';
+            }
+            else
+                $error_message = 'CSVデータファイルが選択されていません。';
+                
             if($error_message)
             {
                 if($upload_id)
@@ -441,8 +446,9 @@ class GraphsController extends AppController
                     $this->UploadData->delete($upload_id);
                     $this->Graph->deleteAll(array('upload_data_id' => $upload_id));
                 }
-                $this->flashText($error_message,false);
+                $this->flashText($error_message.'<br>アップロード処理を中断しました。',false);
             }
+
         }
     }
 }
