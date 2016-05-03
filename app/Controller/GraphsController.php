@@ -102,6 +102,10 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupName();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
+        
+        $metricsListData = $this->setMetricsList();
+        $selectModelName = null;
+        $selectMetrics = 3;
         if ($uploadList && isset($this->request->data['set'])) 
         {
             $id = $this->getFirstKey($modelNameData);
@@ -113,7 +117,8 @@ class GraphsController extends AppController
                 $selectModelId[$i] = $this->data['Graph']['モデル'.$i];
                 $selectModelName[$i] = $modelNameData[$selectModelId[$i]];
             }
-            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];         
+            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
+            $selectMetrics = $this->data['Graph'] ['Metrics'];      
             for($i=1;$i<count($selectModelName);++$i)
             {
                 //モデル名Aのidのデータのidを全て取得
@@ -121,7 +126,12 @@ class GraphsController extends AppController
                 $data  = array();
                 foreach($dataIdByModel as $id=>$date)
                 {
-                    $groupdata = $this->Graph->getGroupData($selectGroupName, $id)[0];
+                    $groupDataO = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
+                    if($groupDataO)
+                        $groupdata = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName)[0];
+                    else
+                        $this->Session->setFlash(__('選択グループは'.$selectModelName[$i].'のデータが存在しません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+
                     $groupdata['date'] = $date;
                     $data[] = $groupdata;
                 }
@@ -129,6 +139,7 @@ class GraphsController extends AppController
             }
             $this->set('model',$selectModelName);
         }
+        $this->set('selectMetrics',$selectMetrics);
     }
 
     public function onedevgroup2() 
