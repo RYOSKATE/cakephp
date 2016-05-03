@@ -8,7 +8,7 @@
 			<th><?php echo $this->Paginator->sort('modelname_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('comment'); ?></th>
-			<?php if($userData['role']=='admin'){?>
+			<?php if($userData['role']!='reader'){?>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 			<?php }?>
 	</tr>
