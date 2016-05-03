@@ -3,8 +3,7 @@
 th {text-align: right;}
 -->
 </style>
-<h4>モデル名:<?php echo $name;?></h4>
-<h6>メトリクス:<?php echo substr($metricsName,4);?></h6>
+
         <?php $ori = array(
 			1=>'o1',
 			2=>'o12',

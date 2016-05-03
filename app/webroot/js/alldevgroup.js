@@ -49,7 +49,7 @@ $(function()
         var temp = getData[i];
         var y = Number(temp['defact_num']);
         var x = Number(temp['file_num']);
-        var kloc = Number(temp['loc']);
+        var loc = Number(temp['loc']);
         var name = temp['group_name'];
 
         if(maxFile<x)
@@ -63,12 +63,12 @@ $(function()
         //バブルサイズの計算式
         //var dist = (y-x)/Math.sqrt(2);
         //var value = parseInt(Math.round(dist));
-        value = kloc;
+        value = loc;
         
-        data.push({"group":name ,"y": y,"x": x ,"value": value} );
+        data.push({"group":name ,"x": x ,"y": y,"value": value} );
         totalDefact.push({"group":name ,"v": y} );
         defactPerFile.push({"group":name ,"v": y/x} );
-        defactPerLoc.push({"group":name ,"v": (1000*y/kloc).toFixed(3)} );
+        defactPerLoc.push({"group":name ,"v": (1000*y/loc).toFixed(3)} );
     }
     totalDefact.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});
     defactPerFile.sort(function(a, b) {return (a.v > b.v) ? -1 : 1;});

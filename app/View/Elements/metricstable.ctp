@@ -1,4 +1,4 @@
-<h4><?php echo $name;?></h4>
+<h4>モデル名:<?php echo $name;?></h4>
     <table class="table table-hover table-condensed" id ="table">
         <thead>
         <tr>

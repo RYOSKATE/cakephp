@@ -7,7 +7,8 @@
     <?php //echo $this->element('selectForm5'); ?>
      <?php echo $this->element('selectForm4'); ?>
 </div>
-
+<h4>モデル名:<?php echo $name;?></h4>
+<h6>メトリクス:<?php echo substr($selectMetricsStr,4);?></h6>
 <div id="chartdiv" style="height:500px;"></div>
 
 <!--<div class="col-md-3 col-sm-3 pull-right">
@@ -25,8 +26,7 @@
          ));
     ?>
 </div>-->
-<h4>モデル名:<?php echo $name;?></h4>
-<h6>メトリクス:<?php echo substr($selectMetricsStr,4);?></h6>
+
 <div class="row">
     <div class="col-md-12 col-sm-12" >
     <table class="table table-hover table-condensed" id ="table">
@@ -35,7 +35,7 @@
             <th>順位</th>
             <th>メトリクス合計値</th>
             <th>ファイルあたりのメトリクス値</th>
-            <th>メトリクス密度(/LOC)</th>
+            <th>メトリクス密度(/kLOC)</th>
         </tr>
         </thead>
         <tbody id = "rankTable"></tbody>
