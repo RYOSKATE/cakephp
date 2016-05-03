@@ -13,7 +13,7 @@
 		</dd>
 		<dt><?php echo __('Password'); ?></dt>
 		<dd>
-			<?php echo h($user['User']['password']); ?>
+			<?php echo h('●●●●●●●●'); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Role'); ?></dt>

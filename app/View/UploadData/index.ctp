@@ -23,8 +23,13 @@
 			<?php //echo h($uploadData['Modelname']['name']); ?>&nbsp;
 		</td>
 		<td>
-			<?php //echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id'])); ?>
-			<?php echo h($uploadData['User']['username']); ?>&nbsp;
+			
+			<?php 
+			if($userData['role']=='admin')
+				echo $this->Html->link($uploadData['User']['username'], array('controller' => 'users', 'action' => 'view', $uploadData['User']['id']));
+			else 
+				echo h($uploadData['User']['username']);
+			?>&nbsp;
 		</td>
 		<td><?php echo h($uploadData['UploadData']['comment']); ?>&nbsp;</td>
 		<?php if($userData['role']=='admin' || $uploadData['User']['id']==$userData['id']){?>
