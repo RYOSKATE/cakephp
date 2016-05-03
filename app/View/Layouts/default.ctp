@@ -81,7 +81,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<div class="container">
 			<div class="row">
 				<!-- 3列をサイドメニューに割り当て -->
-				<div class="col-md-3 col-sm-3">
+				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-3">
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active">全開発グループ</div>
 						<?php echo $this->Html->link('メトリクス散布図',		   array('controller' => 'graphs', 'action' => 'alldevgroup'), array('class' =>'list-group-item'));?>
@@ -102,10 +102,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 						<?php echo $this->Html->link('Origin City', array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
 					</div>
 					<!-- 付箋 -->
+					
 					<?php echo $this->element('sticky'); ?>	
 				</div>
 				<!-- 残り9列はコンテンツ表示部分として使う -->
-				<div class="col-md-9 col-sm-9">
+				<div class="col-xs-12 col-sm-9 col-md-10 col-lg-9">
 					<div id="content">
 					<?php echo $this->Session->flash(); ?>
 					<?php echo $this->fetch('content'); ?>

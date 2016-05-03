@@ -2,7 +2,7 @@
 class GraphsController extends AppController 
 {    
     public $helpers = array('Html', 'Form', 'Session');
-    public $components = array('Session');
+    public $components = array('Session','Paginator');
 
     public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData');
     /*
@@ -117,35 +117,57 @@ class GraphsController extends AppController
         $selectMetrics = 3;
         if ($uploadList && isset($this->request->data['set'])) 
         {
-            $id = $this->getFirstKey($modelNameData);
-            $name = $modelNameData[$id];
-            $selectModelId = array($id,$id,$id,$id,$id);
-            $selectModelName = array($name,$name,$name,$name,$name);
-            for($i=1;$i<count($selectModelName);++$i)
+            $selectModelId = array_fill(1,  4, null);
+            $selectModelName = array_fill(1,  4, null);
+            for($i=1;$i<=count($selectModelName);++$i)
             {
-                $selectModelId[$i] = $this->data['Graph']['モデル'.$i];
-                $selectModelName[$i] = $modelNameData[$selectModelId[$i]];
-            }
-            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
-            $selectMetrics = $this->data['Graph'] ['Metrics'];      
-            for($i=1;$i<count($selectModelName);++$i)
-            {
-                //モデル名Aのidのデータのidを全て取得
-                $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId[$i])));
-                $data  = array();
-                foreach($dataIdByModel as $id=>$date)
+                if($this->data['Graph']['モデル'.$i] != '')
                 {
-                    $groupDataO = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
-                    if($groupDataO)
-                        $groupdata = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName)[0];
-                    else
-                        $this->Session->setFlash(__('選択グループは'.$selectModelName[$i].'のデータが存在しません<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-
-                    $groupdata['date'] = $date;
-                    $data[] = $groupdata;
+                    $selectModelId[$i] = $this->data['Graph']['モデル'.$i];
+                    $selectModelName[$i] = $modelNameData[$selectModelId[$i]];
                 }
-                $this->set('data'.$i,$data);
             }
+       
+            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
+            $selectMetrics = $this->data['Graph'] ['Metrics'];
+            
+            $data = array_fill(1,  4, array());          
+            for($i=1;$i<=count($selectModelId);++$i)
+            {
+                $isDuplicate  = false;
+                for($j=1;$j<$i;++$j)
+                {
+                    if($selectModelId[$i]==$selectModelId[$j])
+                    {
+                        $isDuplicate=true;
+                        $data[$i] = $data[$j];
+                        break;
+                        die();  
+                    }
+                }
+                if(!$isDuplicate)
+                {
+
+                    //モデル名Aのidのデータのidを全て取得
+                    $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId[$i])));
+                    if(!$dataIdByModel)
+                    {
+                        $this->flashText($selectModelName[$i].'のデータが存在しません',false);
+                    }
+                    foreach($dataIdByModel as $id=>$date)
+                    {
+                        $groupDataO = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
+                        if($groupDataO)
+                            $groupdata = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName)[0];
+                        else
+                            $this->flashText('選択グループは'.$selectModelName[$i].'のデータが存在しません',false);
+
+                        $groupdata['date'] = $date;
+                        $data[$i][] = $groupdata;
+                    }
+                }
+                $this->set('data'.$i,$data[$i]);
+            }  
             $this->set('model',$selectModelName);
         }
         $this->set('selectMetrics',$selectMetrics);
@@ -340,6 +362,11 @@ class GraphsController extends AppController
         $modelNames = $this->ModelName->find('list');
         $this->set('modelName',$modelNames);
         
+        $uploadList = $this->setUploadList();
+		$this->UploadData->recursive = 0;
+        $this->Paginator->paginate();
+		$this->set('uploadData', $this->requestAction('upload_data/index'));
+        
         $error_message = '';//エラーメッセージ用文字列
         $upload_id = 0;//アップロード時のid
         if (!empty($this->data)) 
@@ -363,7 +390,8 @@ class GraphsController extends AppController
                     else 
                     {
                         //既にDBにそのモデル名が存在していた場合。
-                        $selectModelId = $is['ModelName']['id'];
+                        $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
+                        print_r($selectModelId);
                         $this->Session->setFlash(__($newModelName.'は既に登録されています。<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-dismissable'));
                     }
                 }
@@ -397,7 +425,7 @@ class GraphsController extends AppController
                             $error_message = 'CSVデータの内容のアップロードに失敗しました。';
                    }
                     else
-                        $error_message = UploadData . 'の登録に失敗しました。';
+                        $error_message = $UploadData . 'の登録に失敗しました。';
                }
                 else
                     $error_message = '同一のモデル名、日付のデータが既に存在します。';
@@ -413,7 +441,6 @@ class GraphsController extends AppController
                     $this->UploadData->delete($upload_id);
                     $this->Graph->deleteAll(array('upload_data_id' => $upload_id));
                 }
-                $this->flashText(__('アップロードに失敗しました。' . $error_message),false);
                 $this->flashText($error_message,false);
             }
         }

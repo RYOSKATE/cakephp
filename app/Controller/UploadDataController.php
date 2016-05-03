@@ -30,7 +30,9 @@ class UploadDataController extends AppController {
  */
 	public function index() {
 		$this->UploadData->recursive = 0;
-		$this->set('uploadData', $this->Paginator->paginate());
+		$data = $this->Paginator->paginate();
+		$this->set('uploadData', $data);
+		return $data;
 	}
 
 /**

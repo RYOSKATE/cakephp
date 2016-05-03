@@ -12,6 +12,7 @@
                 'label'=>'モデル選択'.$i,
                 'class' => 'form-control',
                 'style'=>"width:100%;",
+                'empty' => 1<$i,
             ));
             echo '</div>';
         }

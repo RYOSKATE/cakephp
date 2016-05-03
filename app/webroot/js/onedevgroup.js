@@ -5,32 +5,37 @@
 
     AmCharts.ready(function () 
     {
-        generateChartData();
-        createStockChart();
+        if(typeof(data) != "undefined")
+        {
+            var chartData = generateChartData();
+            createStockChart(chartData);
+        }
     });
-    var chartData = new Array();
+    
     function generateChartData() 
     {
-        var date = data[0][0]['date'];
-        var firstDate = new Date(date);
-
-        for(var i =0;i<data.length;++i)
+        var chartData = new Array();
+        for(var i = 0;i<data.length;++i)
         {
-            var chartDataTemp = [];
-            for(var j =0;j<data[i].length;++j)
+            if(0<data[i].length)
             {
-                var dataTemp = data[i][j];
-                chartDataTemp.push({
-                    date: dataTemp['date'],
-                    value: dataTemp['defact_num'],
-                    volume: 0
-                });
+                var chartDataTemp = [];
+                for(var j =0;j<data[i].length;++j)
+                {
+                    var dataTemp = data[i][j];
+                    chartDataTemp.push({
+                        date: dataTemp['date'],
+                        value: dataTemp['defact_num'],
+                        volume: 0
+                    });
+                }
+                chartData.push(chartDataTemp);
             }
-            chartData.push(chartDataTemp);
         }
+        return chartData;
     }
 
-    function createStockChart() 
+    function createStockChart(chartData) 
     {
         var chart = new AmCharts.AmStockChart();
         chart.pathToImages = "http://www.amcharts.com/lib/3/images/";///ファイルパスの設定要確認
