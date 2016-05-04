@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class GroupNamesController extends AppController {
+    public $uses = array('GroupName','Graph');
 
 /**
  * Components
@@ -90,14 +91,19 @@ class GroupNamesController extends AppController {
  */
 	public function delete($id = null) {
 		$this->GroupName->id = $id;
-		if (!$this->GroupName->exists()) {
-			throw new NotFoundException(__('Invalid group name'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->GroupName->delete()) {
-			$this->flashText(__('The group name has been deleted.'));
-		} else {
-			$this->flashText(__('The group name could not be deleted. Please, try again.'),false);
+		$name = $this->GroupName->find('list')[$id];
+		if($this->Graph->hasAny(array('Graph.25'=>$name))){
+			$this->Session->setFlash(__($name.'に依存したデータはまだ存在しています<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+		}else {
+			if (!$this->GroupName->exists()) {
+				throw new NotFoundException(__('Invalid group name'));
+			}
+			$this->request->allowMethod('post', 'delete');
+			if ($this->GroupName->delete()) {
+				$this->flashText(__($name.' を削除しました。'));
+			} else {
+				$this->flashText(__($name.' を削除できませんでした。'),false);
+			}
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
