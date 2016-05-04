@@ -9,12 +9,6 @@
 ?>
 	<fieldset>
 			
-	<!--// 折り畳み展開ポインタ -->
-		<div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
-			<legend><a style="cursor:pointer;">付箋▼</a></legend>
-		</div>
-		<!-- 折り畳まれ部分 -->
-		<div id="open" style="display:none;clear:both;">
 			<div class="row">
 
 				<?php
@@ -57,8 +51,8 @@
 						'type'=>'number',
 						'class' => 'form-control',
 						'step'=>1,
-						'min'=>0,
-						'value'=>350,
+						//'min'=>0,
+						'value'=>350.0,
 						'style'=>"width:100%;",
 						// 'list'=>array(1,2,3),
 					));    
@@ -70,8 +64,8 @@
 						'type'=>'number',
 						'class' => 'form-control',
 						'step'=>1,
-						'min'=>0,
-						'value'=>490,
+						//'min'=>0,
+						'value'=>490.0,
 						'style'=>"width:100%;",
 						// 'list'=>array(1,2,3),
 					));     
@@ -117,7 +111,6 @@
 					echo '</div>';
 				?>
 
-			</div>
 		</div>	
 	</fieldset>
 <?php
