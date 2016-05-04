@@ -49,10 +49,10 @@ class GroupNamesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->GroupName->create();
 			if ($this->GroupName->save($this->request->data)) {
-				$this->Session->setFlash(__('The group name has been saved.'));
+				$this->flashText(__('The group name has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The group name could not be saved. Please, try again.'));
+				$this->flashText(__('The group name could not be saved. Please, try again.'),false);
 			}
 		}
 	}
@@ -70,10 +70,10 @@ class GroupNamesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->GroupName->save($this->request->data)) {
-				$this->Session->setFlash(__('The group name has been saved.'));
+				$this->flashText(__('The group name has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The group name could not be saved. Please, try again.'));
+				$this->flashText(__('The group name could not be saved. Please, try again.'),false);
 			}
 		} else {
 			$options = array('conditions' => array('GroupName.' . $this->GroupName->primaryKey => $id));
@@ -95,9 +95,9 @@ class GroupNamesController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->GroupName->delete()) {
-			$this->Session->setFlash(__('The group name has been deleted.'));
+			$this->flashText(__('The group name has been deleted.'));
 		} else {
-			$this->Session->setFlash(__('The group name could not be deleted. Please, try again.'));
+			$this->flashText(__('The group name could not be deleted. Please, try again.'),false);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

@@ -61,7 +61,15 @@ class AppController extends Controller
     'Form'      => array('className' => 'BoostCake.BoostCakeForm'),
     'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
   );
-
+  
+  public function flashText($message,$isSuccess=true)
+  {
+    if($isSuccess)
+        $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+    else
+        $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+  }
+  
   public function beforeFilter() 
   {
       //サイズは3<=2<=1でなければならない -1は自動(無制限)

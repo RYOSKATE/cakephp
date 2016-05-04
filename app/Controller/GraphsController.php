@@ -11,14 +11,6 @@ class GraphsController extends AppController
     由来比較     OriginChart
     */
     
-    public function flashText($message,$isSuccess=true)
-    {
-        if($isSuccess)
-            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-        else
-            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-    }
-    
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得

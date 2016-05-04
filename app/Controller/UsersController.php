@@ -19,14 +19,6 @@ class UsersController extends AppController {
             $this->set('enableAdd', true);
         }
     }
-    	
-    public function flashText($message,$isSuccess=true)
-    {
-        if($isSuccess)
-            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-        else
-            $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-    }
     
 /**
  * Components

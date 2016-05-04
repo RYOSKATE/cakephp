@@ -8,14 +8,6 @@ App::uses('AppController', 'Controller');
  */
 class UploadDataController extends AppController {
 	
-    public function flashText($message,$isSuccess=true)
-    {
-        if($isSuccess)
-            return $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
-        else
-            return $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
-    }
-
 /**
  * Components
  *

@@ -1,6 +1,6 @@
 <div class="groupNames index">
 	<h2><?php echo __('Group Names'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
+	<table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>

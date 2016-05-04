@@ -1,7 +1,32 @@
 <?php
-class GroupName extends AppModel 
-{
+
+App::uses('AppModel', 'Model');
+/**
+ * GroupName Model
+ *
+ */
+class GroupName extends AppModel {
+
     public $useTable = 'group_names';
+
+/**
+ * Validation rules
+ *
+ * @var array
+ */
+	public $validate = array(
+		'name' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+	);
+    
     function uploadFromCSV($groupNames) 
     {
 
@@ -39,29 +64,5 @@ class GroupName extends AppModel
             return false;
         }
         return true;
-    }
-App::uses('AppModel', 'Model');
-/**
- * GroupName Model
- *
- */
-class GroupName extends AppModel {
-
-/**
- * Validation rules
- *
- * @var array
- */
-	public $validate = array(
-		'name' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
+    }    
 }
