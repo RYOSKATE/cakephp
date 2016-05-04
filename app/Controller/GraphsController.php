@@ -131,7 +131,8 @@ class GraphsController extends AppController
             $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
             $selectMetrics = $this->data['Graph'] ['Metrics'];
             
-            $data = array_fill(1,  4, array());          
+            $data = array_fill(1,  4, array());
+            $error_message = '';      
             for($i=1;$i<=count($selectModelId);++$i)
             {
                 $isDuplicate  = false;
@@ -142,32 +143,37 @@ class GraphsController extends AppController
                         $isDuplicate=true;
                         $data[$i] = $data[$j];
                         break;
-                        die();  
                     }
                 }
-                if(!$isDuplicate)
+                if(!$isDuplicate && $selectModelId[$i]!=null)
                 {
-
                     //モデル名Aのidのデータのidを全て取得
                     $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId[$i])));
-                    if(!$dataIdByModel)
+                    if($dataIdByModel)
                     {
-                        $this->flashText($selectModelName[$i].'のデータが存在しません',false);
+                        foreach($dataIdByModel as $id=>$date)//モデルAの日付ごとのデータ
+                        {
+                            $groupData = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
+                            if(isset($groupData[0]))
+                            {
+                                $groupData=$groupData[0];
+                                $groupData['date'] = $date;
+                                $data[$i][] = $groupData;
+                            }
+                        }
                     }
-                    foreach($dataIdByModel as $id=>$date)
+                    else 
                     {
-                        $groupDataO = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
-                        if($groupDataO)
-                            $groupdata = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName)[0];
-                        else
-                            $this->flashText('選択グループは'.$selectModelName[$i].'のデータが存在しません',false);
-
-                        $groupdata['date'] = $date;
-                        $data[$i][] = $groupdata;
+                        $error_message .= $selectModelName[$i].'のデータが存在しません<br>';
                     }
                 }
                 $this->set('data'.$i,$data[$i]);
             }  
+            if($error_message!='')
+            {
+                $this->flashText($error_message,false);
+            }
+
             $this->set('model',$selectModelName);
         }
         $this->set('selectMetrics',$selectMetrics);
