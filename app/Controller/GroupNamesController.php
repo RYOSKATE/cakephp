@@ -65,15 +65,28 @@ class GroupNamesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
+	public function edit($id = null) {	
 		if (!$this->GroupName->exists($id)) {
 			throw new NotFoundException(__('Invalid group name'));
 		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->GroupName->save($this->request->data)) {
+		if ($this->request->is(array('post', 'put')))
+		{
+			$preName = $this->GroupName->find('list')[$id];
+			$newName = $this->request->data['GroupName']['name'];
+        	$data = $this->Graph->find('all',array('fields' => array('id','25'),'conditions' => array('Graph.25' => $preName)));
+			foreach($data as &$value)
+			{
+				$value['Graph']['25']=$newName;
+			}
+			
+			$this->GroupName->begin();
+			if ($this->Graph->saveAll($data) && $this->GroupName->save($this->request->data)) 
+			{
+				$this->GroupName->commit();
 				$this->flashText(__('The group name has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
+				$this->GroupName->rollback($this);
 				$this->flashText(__('The group name could not be saved. Please, try again.'),false);
 			}
 		} else {

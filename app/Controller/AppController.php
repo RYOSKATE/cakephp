@@ -61,7 +61,7 @@ class AppController extends Controller
     'Form'      => array('className' => 'BoostCake.BoostCakeForm'),
     'Paginator' => array('className' => 'BoostCake.BoostCakePaginator'),
   );
-  
+
   public function flashText($message,$isSuccess=true)
   {
     if($isSuccess)
