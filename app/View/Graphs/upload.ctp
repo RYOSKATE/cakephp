@@ -102,15 +102,21 @@ echo '<div class="row">';
         </fieldset>
         <br>
     </div>
-    注)同じ日付のデータはアップロードできません。
+<h4>アップロード時の注意</h4>
+<ul>
+    <li>既存のモデル名を選択、あるいは新規モデル名を入力してください</li>
+    <li>同じ日付のデータはアップロードできません。上書きが必要な場合は以下の履歴から削除してください。</li>
+    <li>文字コードチェックを有効にすると文字化けの可能性のあるグループ名が存在する場合処理を中止します。</li>
+</ul>
+
     <br>
-    上書きが必要な場合は以下の履歴から削除してください。
     </div>
 <?php
 }else{
-
+    echo 'あなたの権限は「閲覧者」です。CSVのアップロードはできません。';
 }?>
 
+<h3><?php echo __('Upload History'); ?></h3>
 <table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
 	<thead>
 	<tr>
