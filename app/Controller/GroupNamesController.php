@@ -66,42 +66,84 @@ class GroupNamesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {	
+		
 		if (!$this->GroupName->exists($id)) {
 			throw new NotFoundException(__('Invalid group name'));
 		}
+		$message='';
 		if ($this->request->is(array('post', 'put')))
 		{
-			$preName = $this->GroupName->find('list')[$id];
-			$newName = $this->request->data['GroupName']['name'];
-        	$dataG = $this->Graph->find('all',array('fields' => array('id','25'),'conditions' => array('Graph.25' => $preName)));
-			foreach($dataG as &$value)
-			{
-				$value['Graph']['25']=$newName;
-			}
-        	$dataU = $this->User->find('all',array('fields' => array('id','group')));
-			foreach($dataU as &$value)
-			{
-				$name = $value['User']['group'];
-				$names = explode(',',$name);
-				foreach($names as &$v)
+			try
+        	{
+				$preName = $this->GroupName->find('list')[$id];
+				$newName = $this->request->data['GroupName']['name'];
+				$merge = false;
+				if($this->GroupName->hasAny(array('GroupName.name'=>$newName)))
 				{
-					if($v==$preName)
-						$v=$newName;
+					if(isset($this->request['data']['update']))
+					{
+						$message = $newName.' は既に存在しています。<br>Mergeを実行することでこのグループを削除し・選択グループに統合します。';
+						throw new Exception();
+					}
+					$merge = isset($this->request['data']['merge']);
 				}
-				$name = implode(",", $names);
-				$value['User']['group']=$name;
-			}			
-			$this->GroupName->begin();
-			if ($this->Graph->saveAll($dataG)
-			 && $this->User->saveAll($dataU)
-			 && $this->GroupName->save($this->request->data)) 
-			{
+				$this->GroupName->begin();
+				$dataG = $this->Graph->find('all',array('fields' => array('id','25'),'conditions' => array('Graph.25' => $preName)));
+				foreach($dataG as &$value)
+				{
+					$value['Graph']['25']=$newName;
+				}
+				if (!$this->Graph->saveAll($dataG))
+				{
+					$message = '各データのグループ名変更に失敗しました。';
+					throw new Exception();
+				}
+				$dataU = $this->User->find('all',array('fields' => array('id','group')));
+				foreach($dataU as &$value)
+				{
+					$name = $value['User']['group'];
+					$names = explode(',',$name);
+					foreach($names as &$v)
+					{
+						if($v==$preName)
+							$v=$newName;
+					}
+					$name = implode(",", $names);
+					$value['User']['group']=$name;
+				}
+				if (!$this->User->saveAll($dataU))
+				{
+					$message = 'ユーザーの所属グループ名変更に失敗しました。';
+					throw new Exception();
+				}					
+				if (!$this->GroupName->save($this->request->data))
+				{
+					$message = 'グループ名の変更に失敗しました。';
+					throw new Exception();
+				}					
+
+				if($merge)
+				{
+					if(!$this->GroupName->delete(array('GroupName.id' => $id)))
+					{
+						$message = 'マージ処理に失敗しました。';
+						throw new Exception();
+					}
+					else
+						$message = $preName . ' を ' .$newName . ' にマージしました。';
+				}
+				else
+					$message = $preName . ' を ' .$newName . ' に変更しました。';
+
 				$this->GroupName->commit();
-				$this->flashText(__('The group name has been saved.'));
+				$this->flashText($message);
 				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->GroupName->rollback($this);
-				$this->flashText(__('The group name could not be saved. Please, try again.'),false);
+			}
+			catch(Exception $e) 
+			{
+				$this->flashText($message,false);
+				$this->GroupName->rollback();
+				return null;
 			}
 		} else {
 			$options = array('conditions' => array('GroupName.' . $this->GroupName->primaryKey => $id));
@@ -120,7 +162,7 @@ class GroupNamesController extends AppController {
 		$this->GroupName->id = $id;
 		$name = $this->GroupName->find('list')[$id];
 		if($this->Graph->hasAny(array('Graph.25'=>$name))){
-			$this->Session->setFlash(__($name.'に依存したデータはまだ存在しています<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+			$this->Session->setFlash(__($name.'に依存したデータはまだ存在しています。<重複したグループ名が存在する場合は削除可能です。><button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
 		}else {
 			if (!$this->GroupName->exists()) {
 				throw new NotFoundException(__('Invalid group name'));

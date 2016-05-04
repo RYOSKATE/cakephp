@@ -14,7 +14,7 @@
 		<td><?php echo h($groupName['GroupName']['id']); ?>&nbsp;</td>
 		<td><?php echo h($groupName['GroupName']['name']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $groupName['GroupName']['id'])); ?>
+			<!--<?php echo $this->Html->link(__('View'), array('action' => 'view', $groupName['GroupName']['id'])); ?>-->
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $groupName['GroupName']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $groupName['GroupName']['id']), array(), __('Are you sure you want to delete # %s?', $groupName['GroupName']['id'])); ?>
 		</td>

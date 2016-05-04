@@ -49,7 +49,7 @@ echo '<div class="row">';
                 'placeholder' => 'Input New Model Name',
                 'style'=>"width:100%;",
             ));
-            echo '</div><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">';
+            echo '</div><div class="col-sm-12 col-md-6 col-lg-6">';
             echo $this->Form->input('date', array(
                 'type'=>'date',
                 'label'=>'データ取得日',
@@ -61,6 +61,17 @@ echo '<div class="row">';
                 'style'=>"margin: 10px;",
                 )
             );
+            echo '</div>';
+            
+            echo '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">';
+            echo $this->Form->input( 'code_check', array( 
+                'type' => 'checkbox',
+                'checked' => true,    // 初期表示で選択させる場合
+                'label' => '文字コード(UTF-8)チェック',    // チェックボックスのラベル
+                'style'=>"margin: 10px;",
+                // 'style'=>"width:100%;",
+                // 'div'=>'form-group',
+            ));
             echo '</div>';
             echo '<div class="col-md-12 col-sm-12">';
             echo $this->element('localCSV',array("formname" => '選択ファイル'));
@@ -83,7 +94,6 @@ echo '<div class="row">';
                 'type'=>'submit',
                 'onchange' => 'submit(this.form)',
                 'style'=>"width:100%;",
-                'class' => 'form-control'
             ));
             echo '</div>';
             echo $this->Form->end();

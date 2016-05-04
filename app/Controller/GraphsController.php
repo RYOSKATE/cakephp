@@ -403,7 +403,6 @@ class GraphsController extends AppController
                     if(!$this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$this->data['Graph']['date'])))
                     {
                         //UploadDataをDBに追加
-                        $data = $this->data['Graph'];
                         $data['user_id'] = $this->Auth->user('id');
                         $data['modelname_id'] = $selectModelId;
                         $upload_id = $this->UploadData->upload($data);
@@ -414,18 +413,30 @@ class GraphsController extends AppController
                             if($groupNames != null)
                             {
                                 //最後にグループ名を追加する
-                                if($success = $this->GroupName->uploadFromCSV($groupNames))
+                                $isCodeCheck = $this->data['Graph']['code_check'];
+                                $errorGroupNames = $this->GroupName->uploadFromCSV($groupNames,$isCodeCheck);
+                                if(empty($errorGroupNames))
                                 {   
                                     $this->flashText(__( $fileName. 'のデータをアップロードしました。'));
                                 }
                                 else
-                                    $error_message = 'グループ名の登録に失敗しました。';
+                                {
+                                    $error_message = 'グループ名の登録に失敗しました。<br>';
+                                    if($errorGroupNames[0] != 'saveError')
+                                    {
+                                        foreach($errorGroupNames as $name)
+                                        {
+                                            $error_message .= '・' . $name . '<br>';
+                                        }
+                                        $error_message .= '文字コードチェックが有効の場合、UTF-8であるか確認してください。';                                        
+                                    }
+                                }
                             }
                             else
-                                $error_message = 'CSVデータの内容のアップロードに失敗しました。<br>文字コード(UTF-8)、項目順が異なる可能性があります。';
+                                $error_message = 'CSVデータの内容のアップロードに失敗しました。';
                         }
                         else
-                            $error_message = $UploadData . 'の登録に失敗しました。';
+                            $error_message = 'UploadDataの登録に失敗しました。';
                     }
                     else
                         $error_message = '同一のモデル名、日付のデータが既に存在します。';

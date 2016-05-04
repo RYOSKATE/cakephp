@@ -58,8 +58,6 @@ class Graph extends AppModel
                         $name = trim($names[$j]);
                         if(!in_array($name, $groupNameData))
                         {
-                            if(!mb_check_encoding($name,'UTF-8'))
-                                throw new Exception();
                             $groupNameData[]=$name;
                         }
                     }

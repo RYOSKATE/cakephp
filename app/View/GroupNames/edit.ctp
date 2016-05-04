@@ -5,9 +5,22 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('name');
+		echo $this->Form->input('Update', array
+    (
+    	'label'=>"　",
+    	'name'=>'update',
+    	'type'=>'submit',
+    ));
+	echo '<br>';
+		echo $this->Form->input('Merge', array
+    (
+    	'label'=>"すでに存在するグループと統合する場合はMergeを実行してください。",
+    	'name'=>'merge',
+    	'type'=>'submit',
+    ));
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(); ?>
 </div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
