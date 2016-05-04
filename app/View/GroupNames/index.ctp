@@ -42,3 +42,4 @@
 		<li><?php echo $this->Html->link(__('New Group Name'), array('action' => 'add')); ?></li>
 	</ul>
 </div>
+<?php echo $this->element('manageListFooter'); ?>

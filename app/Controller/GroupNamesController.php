@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  * @property PaginatorComponent $Paginator
  */
 class GroupNamesController extends AppController {
-    public $uses = array('GroupName','Graph');
+    public $uses = array('GroupName','Graph','User');
 
 /**
  * Components
@@ -73,14 +73,28 @@ class GroupNamesController extends AppController {
 		{
 			$preName = $this->GroupName->find('list')[$id];
 			$newName = $this->request->data['GroupName']['name'];
-        	$data = $this->Graph->find('all',array('fields' => array('id','25'),'conditions' => array('Graph.25' => $preName)));
-			foreach($data as &$value)
+        	$dataG = $this->Graph->find('all',array('fields' => array('id','25'),'conditions' => array('Graph.25' => $preName)));
+			foreach($dataG as &$value)
 			{
 				$value['Graph']['25']=$newName;
 			}
-			
+        	$dataU = $this->User->find('all',array('fields' => array('id','group')));
+			foreach($dataU as &$value)
+			{
+				$name = $value['User']['group'];
+				$names = explode(',',$name);
+				foreach($names as &$v)
+				{
+					if($v==$preName)
+						$v=$newName;
+				}
+				$name = implode(",", $names);
+				$value['User']['group']=$name;
+			}			
 			$this->GroupName->begin();
-			if ($this->Graph->saveAll($data) && $this->GroupName->save($this->request->data)) 
+			if ($this->Graph->saveAll($dataG)
+			 && $this->User->saveAll($dataU)
+			 && $this->GroupName->save($this->request->data)) 
 			{
 				$this->GroupName->commit();
 				$this->flashText(__('The group name has been saved.'));
