@@ -424,7 +424,7 @@ class GraphsController extends AppController
                                     $error_message = 'グループ名の登録に失敗しました。';
                             }
                             else
-                                $error_message = 'CSVデータの内容のアップロードに失敗しました。';
+                                $error_message = 'CSVデータの内容のアップロードに失敗しました。<br>文字コード(UTF-8)、項目順が異なる可能性があります。';
                         }
                         else
                             $error_message = $UploadData . 'の登録に失敗しました。';

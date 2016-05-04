@@ -64,12 +64,17 @@ class AppController extends Controller
 
   public function beforeFilter() 
   {
-    //Configure AuthComponent
-    $this->Auth->allow('display'); // Allows access to the homepage of the app
-    $this->Auth->loginAction    = array('controller' => 'users' , 'action' => 'login');
-    $this->Auth->logoutRedirect = array('controller' => 'users' , 'action' => 'login');
-    $this->Auth->loginRedirect  = array('controller' => 'graphs', 'action' => 'index');
-    $this->set('userData', $this->Auth->user());
+      //サイズは3<=2<=1でなければならない -1は自動(無制限)
+      ini_set('memory_limit', -1);//1.使用するメモリ量：CSVのアップロードで1GB以上
+      ini_set('post_max_size', '64M');//2.CSVファイルが数十MB
+      ini_set('upload_max_filesize', '64M');//3.CSVファイルが数十MB
+      ini_set('max_execution_time', -1);//秒数：データベースにCSVファイルの内容を登録するのに数分
+      //Configure AuthComponent
+      $this->Auth->allow('display'); // Allows access to the homepage of the app
+      $this->Auth->loginAction    = array('controller' => 'users' , 'action' => 'login');
+      $this->Auth->logoutRedirect = array('controller' => 'users' , 'action' => 'login');
+      $this->Auth->loginRedirect  = array('controller' => 'graphs', 'action' => 'index');
+      $this->set('userData', $this->Auth->user());
   }
   
   protected function isUserRole($role)

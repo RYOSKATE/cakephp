@@ -19,44 +19,54 @@ class Graph extends AppModel
 	);
 
     ///////csvのアップロード用///////
-    function uploadFromCSV($fileName,$selectModelId,$upload_id) 
+    function uploadFromCSV($filepath,$selectModelId,$upload_id) 
     {
-
-    // php.iniの変更点
-    // upload_max_filesize=32M  8万行のデータで約10MB
+    // php.iniを変更する場合
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
     // post_max_size=64M        8万行のデータを(ry
+    // upload_max_filesize=32M  8万行のデータで約10MB
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
-        $allcsvData = array();
+        //AppControllerのbeforeFilterで設定している
 		$groupNameData = array();
         try
         {
+            //ini_set('memory_limit', -1);
+
             $this->begin();//トランザクション(永続的な接続処理の開始)
-            setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        	$buf = mb_convert_encoding(file_get_contents($fileName), "utf-8", "auto");//from ASCII,JIS,UTF-8,EUC-JP,SJIS
-        	$lines = str_getcsv($buf, "\r\n");
-        	foreach ($lines as $line) 
+            
+            $records = array();
             {
-                $col = str_getcsv($line);
-                $data = array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$col[0]) + $col;
-				$allcsvData[]  = $data;
-                if(4<=$col[1])
+                $file = new SplFileObject($filepath); 
+                $file->setFlags(SplFileObject::READ_CSV); 
+                foreach ($file as $line) {
+                    $records[] = $line; 
+                }
+            }
+            unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
+        	for ($i = 0; $i< count($records); ++$i)
+            {
+                $records[$i] += array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
+                if(4<=$records[$i][1])
                 {
-                    $names = explode(';',$col[25]);
+                    if($records[$i][25]=='')
+                        $records[$i][25] = 'グループ名なし';
+                        
+                    //グループ名は;で区切られている
+                    $names = explode(';',$records[$i][25]);
                     for ($j = 0; $j< count($names); ++$j)
                     {
                         $name = trim($names[$j]);
                         if(!in_array($name, $groupNameData))
                         {
+                            if(!mb_check_encoding($name,'UTF-8'))
+                                throw new Exception();
                             $groupNameData[]=$name;
                         }
                     }
                 }
         	}
-            $key = array_search('', $groupNameData);
-            if($key)
-                $groupNameData[$key]="グループ名なし";
-            if (!$this->saveAll($allcsvData, array('validate' => 'first')))
+            //ここまではたぶん数秒で終わる
+            if (!$this->saveAll($records))
             {
                 throw new Exception();
             }
