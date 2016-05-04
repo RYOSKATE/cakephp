@@ -28,7 +28,7 @@ class ModelName extends AppModel {
 	{
 		try
 		{
-			$this->begin();//トランザクション(永続的な接続処理の開始)
+			//$this->begin();//トランザクション(永続的な接続処理の開始)
 		
 			$data['name'] = $newModelName;
 		
@@ -37,11 +37,11 @@ class ModelName extends AppModel {
 				throw new Exception();
 			}
 		
-			$this->commit();
+			//$this->commit();
 		}
 		catch(Exception $e) 
 		{
-			$this->rollback();
+			//$this->rollback();
 			return 0;
 		}
 		$id = $this->getLastInsertID();

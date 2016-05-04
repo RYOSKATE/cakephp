@@ -366,98 +366,106 @@ class GraphsController extends AppController
         $this->Paginator->paginate();
 		$this->set('uploadData', $this->requestAction('upload_data/index'));
         
-        $error_message = '';//エラーメッセージ用文字列
+        $message = '';//エラーメッセージ用文字列
         $upload_id = 0;//アップロード時のid
+        
         if (!empty($this->data)) 
         {
-            //ファイルパス等を取得
-            $fileName = $this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-            $tmp_file_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp(PHPスクリプト終了と同時に削除されます)
-            if($fileName)
-            {
+            try
+		    {
+                $this->GroupName->begin();//複数Modelにまたがるトランザクション開始
+                //ファイルパス等を取得
+                $fileName = $this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+                $tmp_file_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp(PHPスクリプト終了と同時に削除されます)
+                if(empty($fileName))
+                {
+                    $message = 'CSVデータファイルが選択されていません。';
+                    throw new Exception();
+                }
                 //モデル名(id)を取得・あるいは新規追加
                 $selectModelId = $this->data['Graph'] ['モデル名'];
                 $newModelName = $this->data['Graph'] ['新規モデル名'];
                 
                 //既存モデル名・新規モデル名のチェック
-                if(!empty($newModelName) || !empty($selectModelId))
+                if(empty($newModelName) && empty($selectModelId))
                 {
-                    
-                    //新規モデル名入力時はDBに存在チェック、なければDBに追加。
-                    if(empty($selectModelId))
-                    {
-                        if(!$this->ModelName->hasAny(array('ModelName.name'=>$newModelName)))
-                        {
-                            //DBに新規モデル名を追加。
-                            $selectModelId = $this->ModelName->addNewModelName($newModelName);
-                        }
-                        else 
-                        {
-                            //既にDBにそのモデル名が存在していた場合。
-                            $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
-                            print_r($selectModelId);
-                            $this->Session->setFlash(__($newModelName.'は既に登録されています。<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-dismissable'));
-                        }
-                    }
-                    
-                    if(!$this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$this->data['Graph']['date'])))
-                    {
-                        //UploadDataをDBに追加
-                        $data['user_id'] = $this->Auth->user('id');
-                        $data['modelname_id'] = $selectModelId;
-                        $upload_id = $this->UploadData->upload($data);
-                        if($upload_id)
-                        {                                    
-                            //CSVの内容をDBにアップロードする
-                            $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
-                            if($groupNames != null)
-                            {
-                                //最後にグループ名を追加する
-                                $isCodeCheck = $this->data['Graph']['code_check'];
-                                $errorGroupNames = $this->GroupName->uploadFromCSV($groupNames,$isCodeCheck);
-                                if(empty($errorGroupNames))
-                                {   
-                                    $this->flashText(__( $fileName. 'のデータをアップロードしました。'));
-                                }
-                                else
-                                {
-                                    $error_message = 'グループ名の登録に失敗しました。<br>';
-                                    if($errorGroupNames[0] != 'saveError')
-                                    {
-                                        foreach($errorGroupNames as $name)
-                                        {
-                                            $error_message .= '・' . $name . '<br>';
-                                        }
-                                        $error_message .= '文字コードチェックが有効の場合、UTF-8であるか確認してください。';                                        
-                                    }
-                                }
-                            }
-                            else
-                                $error_message = 'CSVデータの内容のアップロードに失敗しました。';
-                        }
-                        else
-                            $error_message = 'UploadDataの登録に失敗しました。';
-                    }
-                    else
-                        $error_message = '同一のモデル名、日付のデータが既に存在します。';
+                    $message = 'モデル名が入力されていません。';   
+                    throw new Exception();
                 }
-                else
-                    $error_message = 'モデル名が入力されていません。';
-            }
-            else
-                $error_message = 'CSVデータファイルが選択されていません。';
+  
                 
-            if($error_message)
-            {
-                if($upload_id)
+                //新規モデル名入力時はDBに存在チェック、なければDBに追加。
+                if(empty($selectModelId))
                 {
-                    //$upload_idが0出ない場合、アップロードされてしまったデータを削除しておく。
-                    $this->UploadData->delete($upload_id);
-                    $this->Graph->deleteAll(array('upload_data_id' => $upload_id));
+                    if(!$this->ModelName->hasAny(array('ModelName.name'=>$newModelName)))
+                    {
+                        //DBに新規モデル名を追加。
+                        $selectModelId = $this->ModelName->addNewModelName($newModelName);
+                    }
+                    else 
+                    {
+                        //既にDBにそのモデル名が存在していた場合。
+                        $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
+                        $message .=$newModelName.'は既に登録されています。';
+                    }
                 }
-                $this->flashText($error_message.'<br>アップロード処理を中断しました。',false);
+                
+                $date = $this->data['Graph']['date'];
+                $date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+                if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$date)))
+                {             
+                    $message = '同一のモデル名、日付のデータが既に存在します。';
+                    throw new Exception();
+                }
+                
+                //UploadDataをDBに追加
+                $UploadData = array(
+                    'date'=>$this->data['Graph']['date'],
+                    'modelname_id'=>$selectModelId,
+                    'user_id'=>$this->Auth->user('id'),
+                    'comment'=>$this->data['Graph']['comment'],
+                );
+                $upload_id = $this->UploadData->upload($UploadData);
+                if($upload_id==0)
+                {                
+                    $message = 'UploadDataの登録に失敗しました。';
+                    throw new Exception();
+                }
+                        
+                //CSVの内容をDBにアップロードする
+                $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
+                if($groupNames == null)
+                {
+                    $message = 'CSVデータの内容のアップロードに失敗しました。';
+                    throw new Exception();
+                }
+                
+                //最後にグループ名を追加する
+                $isCodeCheck = $this->data['Graph']['code_check'];
+                $errorGroupNames = $this->GroupName->uploadFromCSV($groupNames,$isCodeCheck);
+                
+                if(!empty($errorGroupNames))
+                {
+                    $message = 'グループ名の登録に失敗しました。<br>';
+                    if($errorGroupNames[0] != 'saveError')
+                    {
+                        foreach($errorGroupNames as $name)
+                        {
+                            $message .= '・' . $name . '<br>';
+                        }
+                        $message .= '文字コードチェックが有効の場合、UTF-8であるか確認してください。';                                        
+                    }
+                    throw new Exception();
+                }
+                
+                $this->flashText(__( $fileName. 'のデータをアップロードしました。'));
+                $this->Graph->commit();
             }
-
+            catch(Exception $e) 
+            {
+                $this->flashText($message.'<br>アップロード処理を中断しました。',false);               
+                $this->Graph->rollback();
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ class GroupName extends AppModel {
         $errorNames=array();
         try
         {
-            $this->begin();//トランザクション(永続的な接続処理の開始)
+            //$this->begin();//トランザクション(永続的な接続処理の開始)
             setlocale( LC_ALL, 'ja_JP.UTF-8' );
             $result = array_unique($groupNames);
  			$data = array();
@@ -53,11 +53,11 @@ class GroupName extends AppModel {
                     throw new Exception();
                 }
             }
-            $this->commit();
+            //$this->commit();
         }
         catch(Exception $e) 
         {
-            $this->rollback();
+            //$this->rollback();
         }
         return $errorNames;
     }    

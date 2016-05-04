@@ -32,7 +32,7 @@ class Graph extends AppModel
         {
             //ini_set('memory_limit', -1);
 
-            $this->begin();//トランザクション(永続的な接続処理の開始)
+            //$this->begin();//トランザクション(永続的な接続処理の開始)
             
             $records = array();
             {
@@ -69,11 +69,11 @@ class Graph extends AppModel
                 throw new Exception();
             }
 
-            $this->commit();
+            //$this->commit();
         }
         catch(Exception $e) 
         {
-            $this->rollback();
+            //$this->rollback();
             return null;
         }
         return $groupNameData;

@@ -107,18 +107,18 @@ class UploadData extends AppModel {
      {
         try
         {
-            $this->begin();//トランザクション(永続的な接続処理の開始)
+            //$this->begin();//トランザクション(永続的な接続処理の開始)
 			$this->create();
 			
 			if (!$this->save($data,false)) 
             {
                 throw new Exception();
             }
-            $this->commit();
+            //$this->commit();
         }
         catch(Exception $e) 
         {
-            $this->rollback();
+            //$this->rollback();
             return 0;
         }
 		$id = $this->getLastInsertID();
