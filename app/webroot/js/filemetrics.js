@@ -20,7 +20,7 @@ $(function()
             .size([w, h])
             .sticky(true)
             .padding([0, 0, 0, 0])
-            .value(function(d) { return document.getElementById("select").options[0].selected ? d.defact : 1; });//selectの0番目はsizeなのでそちらが選択されていればsize,そうでなければcountなので1
+            .value(function(d) { return document.getElementById("select").options[0].selected ? d.metrics : 1; });//selectの0番目はsizeなのでそちらが選択されていればsize,そうでなければcountなので1
         var svg = d3.select("#body").append("div")
             .attr("class", "chart")
             .style("width", w + "px")
@@ -35,9 +35,9 @@ $(function()
           var max=0;
           var nodes = treemap.nodes(root).filter(function(d) {
               var isIn = (d.layer==layer ||(d.layer<layer && !d.children));
-              if(isIn && max<d.defact)
+              if(isIn && max<d.metrics)
               {
-                max = d.defact;//色分け用にその表示レイヤーでの最大欠陥数を計算する
+                max = d.metrics;//色分け用にその表示レイヤーでの最大欠陥数を計算する
               }
               return isIn;
             });
@@ -65,13 +65,13 @@ $(function()
           cell.append("svg:rect")
               .attr("width", function(d) { return d.dx - 1; })
               .attr("height", function(d) { return d.dy - 1; })
-              .style("fill", function(d) { return getColor(d.defact); });
+              .style("fill", function(d) { return getColor(d.metrics); });
           cell.append("svg:text")//
               .attr("x", function(d) { return d.dx / 2; })
               .attr("y", function(d) { return d.dy / 2; })
               .attr("dy", ".35em")
               .attr("text-anchor", "middle")
-              .text(function(d) { return d.name+"("+d.defact+")"; })
+              .text(function(d) { return d.name+"("+d.metrics+")"; })
               .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
           //ツリーマップ外のクリックで全体表示
@@ -80,7 +80,7 @@ $(function()
           //size/countセレクトボックスの切り替え
           d3.select("#select").on("change", function() 
           {
-            treemap.value(this.value == "size" ? defact : count).nodes(root);
+            treemap.value(this.value == "size" ? metrics : count).nodes(root);
             var n = node;
             zoom(root);
             zoom(n);
@@ -99,7 +99,7 @@ $(function()
           });
 
         
-        function defact(d) {return d.defact;}
+        function metrics(d) {return d.metrics;}
 
         function count(d) {return 1;}
 

@@ -177,15 +177,15 @@ class Graph extends AppModel
         //         )
 
         // )
-         $tree = array("name"    =>   "root",
-                "defact"         =>0,
-                "otherClassFunc" =>0,
-                "LCOM"           =>0,
-                "Method"         =>0,
-                "Field"          =>0,
-                "otherFileFunc"  =>0,
-                "layer"          =>0,
-                "children"       => array());
+         $tree = array('name'    =>   "root",
+                'defact'         =>0,
+                'otherClassFunc' =>0,
+                'LCOM'           =>0,
+                'Method'         =>0,
+                'Field'          =>0,
+                'otherFileFunc'  =>0,
+                'layer'          =>0,
+                'children'       => array());
         $dataSize = count($data);
         for ($i = 0; $i < $dataSize; ++$i)
         {
@@ -193,7 +193,7 @@ class Graph extends AppModel
             $path     = explode('/',$filepath);
             $path[0]  = trim($path[0]);
             $parent   = &$tree;
-            $children = &$tree["children"];
+            $children = &$tree['children'];
             $defact         = $data[$i][3];
             $otherClassFunc = $data[$i][8];
             $LCOM           = $data[$i][9];
@@ -211,19 +211,19 @@ class Graph extends AppModel
                 $isTheDir = false;
                 for ($k = 0; $k < count($children); ++$k)
                 {
-                    $isTheDir = ($children[$k]["name"] == $path[$j]);
+                    $isTheDir = ($children[$k]['name'] == $path[$j]);
                     if($isTheDir)//そのディレクトリが存在した
                     {
-                        $parent["defact"]         += $defact;
-                        $parent["otherClassFunc"] += $otherClassFunc;
-                        $parent["LCOM"]           += $LCOM;
-                        $parent["Method"]         += $Method;
-                        $parent["Field"]          += $Field;
-                        $parent["otherFileFunc"]  += $otherFileFunc;
+                        $parent['defact']         += $defact;
+                        $parent['otherClassFunc'] += $otherClassFunc;
+                        $parent['LCOM']           += $LCOM;
+                        $parent['Method']         += $Method;
+                        $parent['Field']          += $Field;
+                        $parent['otherFileFunc']  += $otherFileFunc;
 
                         $parent = &$children[$k];
-                        $children[$k] += array("children"=> array());
-                        $children = &$children[$k]["children"];
+                        $children[$k] += array('children'=> array());
+                        $children = &$children[$k]['children'];
                         break;
                     }
                 }
@@ -231,34 +231,34 @@ class Graph extends AppModel
                 if(!$isTheDir)//そのディレクトリが初めて登場した
                 {
                     $node = array(
-                                    "name"           =>$path[$j],
-                                    "defact"         =>$defact,
-                                    "otherClassFunc" =>$otherClassFunc,
-                                    "LCOM"           =>$LCOM,
-                                    "Method"         =>$Method,
-                                    "Field"          =>$Field,
-                                    "otherFileFunc"  =>$otherFileFunc,
-                                    "layer"          =>($j+1),
+                                    'name'           =>$path[$j],
+                                    'defact'         =>$defact,
+                                    'otherClassFunc' =>$otherClassFunc,
+                                    'LCOM'           =>$LCOM,
+                                    'Method'         =>$Method,
+                                    'Field'          =>$Field,
+                                    'otherFileFunc'  =>$otherFileFunc,
+                                    'layer'          =>($j+1),
                                  );
                     $children[] = $node;
-                    $children = &$children[count($children) - 1]["children"];
+                    $children = &$children[count($children) - 1]['children'];
                 }
             }
-            $parent["defact"]         += $defact;
-            $parent["otherClassFunc"] += $otherClassFunc;
-            $parent["LCOM"]           += $LCOM;
-            $parent["Method"]         += $Method;
-            $parent["Field"]          += $Field;
-            $parent["otherFileFunc"]  += $otherFileFunc;
+            $parent['defact']         += $defact;
+            $parent['otherClassFunc'] += $otherClassFunc;
+            $parent['LCOM']           += $LCOM;
+            $parent['Method']         += $Method;
+            $parent['Field']          += $Field;
+            $parent['otherFileFunc']  += $otherFileFunc;
             $children[] = array(
-                                "name"           =>$path[$pathDepth-1],
-                                "defact"         =>$defact,
-                                "otherClassFunc" =>$otherClassFunc,
-                                "LCOM"           =>$LCOM,
-                                "Method"         =>$Method,
-                                "Field"          =>$Field,
-                                "otherFileFunc"  =>$otherFileFunc,
-                                "layer"          => ($pathDepth)
+                                'name'           =>$path[$pathDepth-1],
+                                'defact'         =>$defact,
+                                'otherClassFunc' =>$otherClassFunc,
+                                'LCOM'           =>$LCOM,
+                                'Method'         =>$Method,
+                                'Field'          =>$Field,
+                                'otherFileFunc'  =>$otherFileFunc,
+                                'layer'          => ($pathDepth)
                             );
         }
  // echo '<pre>';
@@ -275,7 +275,7 @@ class Graph extends AppModel
     {
         return $this->depth;
     }
-    function getFileMetricsTable($selectUploadDataId,$selectGroupName) 
+    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
     {
 
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
@@ -284,7 +284,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('fields' => array('modelname_id','filepath','3','8','9','10','11','18'),'conditions' => $conditions));
+        $data = $this->find('all',array('fields' => array('modelname_id','filepath',$selectMetrics,'3','8','9','10','11','18'),'conditions' => $conditions));
 
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
@@ -300,18 +300,22 @@ class Graph extends AppModel
         //             [10] =>Public メソッド数
         //             [11] =>Public 属性数
         //             [18] => 呼び出す他ファイルの関数の種類数
+        //             [$selectMetrics] => 選択されたメトリクス
         //         )
 
         // )
-                 $tree = array("name"    =>   "root",
-                        "defact"           =>0,
-                        "otherClassFunc" =>0,
-                        "LCOM"           =>0,
-                        "Method"         =>0,
-                        "Field"          =>0,
-                        "otherFileFunc"  =>0,
-                        "layer"          =>0,
-                        "children"       => array());
+        
+        //木の初期化
+        $tree = array('name'    =>   "root",
+            'metrics'         =>0,
+            'defact'         =>0,
+            'otherClassFunc' =>0,
+            'LCOM'           =>0,
+            'Method'         =>0,
+            'Field'          =>0,
+            'otherFileFunc'  =>0,
+            'layer'          =>0,
+            'children'       => array());
         $dataSize = count($data);
 
         for ($i = 0; $i < $dataSize; ++$i)
@@ -320,13 +324,19 @@ class Graph extends AppModel
             $path     = explode('/',$filepath);
             $path[0]  = trim($path[0]);
             $parent   = &$tree;
-            $children = &$tree["children"];
+            $children = &$tree['children'];
             $defact         = $data[$i]['Graph'][3];
             $otherClassFunc = $data[$i]['Graph'][8];
             $LCOM           = $data[$i]['Graph'][9];
             $Method         = $data[$i]['Graph'][10];
             $Field          = $data[$i]['Graph'][11];
             $otherFileFunc  = $data[$i]['Graph'][18];
+            $metrics = 1;//0の時はファイル数なので1
+            if($selectMetrics==1 && $defact==0)
+            {
+                $metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
+            }else if(2<$selectMetrics)//3～欠陥数
+                $metrics = $data[$i]['Graph'][$selectMetrics];     
 
             $pathDepth=count($path);
             if($this->depth < $pathDepth)
@@ -338,19 +348,20 @@ class Graph extends AppModel
                 $isTheDir = false;
                 for ($k = 0; $k < count($children); ++$k)
                 {
-                    $isTheDir = ($children[$k]["name"] == $path[$j]);
+                    $isTheDir = ($children[$k]['name'] == $path[$j]);
                     if($isTheDir)//そのディレクトリが存在した
                     {
-                        $parent["defact"]         += $defact;
-                        $parent["otherClassFunc"] += $otherClassFunc;
-                        $parent["LCOM"]           += $LCOM;
-                        $parent["Method"]         += $Method;
-                        $parent["Field"]          += $Field;
-                        $parent["otherFileFunc"]  += $otherFileFunc;
+                        $parent['metrics']         += $metrics;
+                        $parent['defact']         += $defact;
+                        $parent['otherClassFunc'] += $otherClassFunc;
+                        $parent['LCOM']           += $LCOM;
+                        $parent['Method']         += $Method;
+                        $parent['Field']          += $Field;
+                        $parent['otherFileFunc']  += $otherFileFunc;
 
                         $parent = &$children[$k];
-                        $children[$k] += array("children"=> array());
-                        $children = &$children[$k]["children"];
+                        $children[$k] += array('children'=> array());
+                        $children = &$children[$k]['children'];
                         break;
                     }
                 }
@@ -358,34 +369,37 @@ class Graph extends AppModel
                 if(!$isTheDir)//そのディレクトリが初めて登場した
                 {
                     $node = array(
-                                    "name"           =>$path[$j],
-                                    "defact"         =>$defact,
-                                    "otherClassFunc" =>$otherClassFunc,
-                                    "LCOM"           =>$LCOM,
-                                    "Method"         =>$Method,
-                                    "Field"          =>$Field,
-                                    "otherFileFunc"  =>$otherFileFunc,
-                                    "layer"          =>($j+1),
+                                    'name'           =>$path[$j],
+                                    'metrics'        =>$metrics,
+                                    'defact'         =>$defact,
+                                    'otherClassFunc' =>$otherClassFunc,
+                                    'LCOM'           =>$LCOM,
+                                    'Method'         =>$Method,
+                                    'Field'          =>$Field,
+                                    'otherFileFunc'  =>$otherFileFunc,
+                                    'layer'          =>($j+1),
                                  );
                     $children[] = $node;
-                    $children = &$children[count($children) - 1]["children"];
+                    $children = &$children[count($children) - 1]['children'];
                 }
             }
-            $parent["defact"]         += $defact;
-            $parent["otherClassFunc"] += $otherClassFunc;
-            $parent["LCOM"]           += $LCOM;
-            $parent["Method"]         += $Method;
-            $parent["Field"]          += $Field;
-            $parent["otherFileFunc"]  += $otherFileFunc;
+            $parent['metrics']        += $metrics;
+            $parent['defact']         += $defact;
+            $parent['otherClassFunc'] += $otherClassFunc;
+            $parent['LCOM']           += $LCOM;
+            $parent['Method']         += $Method;
+            $parent['Field']          += $Field;
+            $parent['otherFileFunc']  += $otherFileFunc;
             $children[] = array(
-                                "name"           =>$path[$pathDepth-1],
-                                "defact"         =>$defact,
-                                "otherClassFunc" =>$otherClassFunc,
-                                "LCOM"           =>$LCOM,
-                                "Method"         =>$Method,
-                                "Field"          =>$Field,
-                                "otherFileFunc"  =>$otherFileFunc,
-                                "layer"          => ($pathDepth)
+                                'metrics'        =>$metrics,
+                                'name'           =>$path[$pathDepth-1],
+                                'defact'         =>$defact,
+                                'otherClassFunc' =>$otherClassFunc,
+                                'LCOM'           =>$LCOM,
+                                'Method'         =>$Method,
+                                'Field'          =>$Field,
+                                'otherFileFunc'  =>$otherFileFunc,
+                                'layer'          => ($pathDepth)
                             );
         }
  // echo '<pre>';

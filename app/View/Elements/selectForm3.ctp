@@ -11,6 +11,9 @@
         echo $this->element('selectGroup',$groupName); 
         echo '</div>';
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+        echo $this->element('selectMetrics',$groupName); 
+        echo '</div>';
+        echo '<div class="col-sm-6 col-md-6 col-lg-6">';
         echo $this->element('setButton'); 
         echo '</div>';
     echo '</div>';

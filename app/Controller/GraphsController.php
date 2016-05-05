@@ -208,12 +208,15 @@ class GraphsController extends AppController
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $tree=null;
+        $metricsListData = $this->setMetricsList();
+        $selectMetrics = 3;        
         if($uploadList)
         {
             $selectUploadDataId = $this->getFirstKey($uploadList);
             $selectGroupName = reset($groupNameData);//ALLは0に追加されている
             if (isset($this->request->data['set']))
             {
+                $selectMetrics = $this->data['Graph'] ['Metrics']; 
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 if (!empty($this->data['Graph']['選択ファイル']['name'])) 
                 {
@@ -227,13 +230,14 @@ class GraphsController extends AppController
                 else 
                 {
                     $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                    $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName);
+                    $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
             }
 
         }
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
+		$this->set('selectMetrics',$selectMetrics);                
         $this->set('useLocalCSV',true);
     }
 
