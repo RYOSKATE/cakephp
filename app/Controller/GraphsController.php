@@ -233,11 +233,10 @@ class GraphsController extends AppController
                     $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
             }
-
         }
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
-		$this->set('selectMetrics',$selectMetrics);                
+		$this->set('selectMetrics',$metricsListData[$selectMetrics]);                
         $this->set('useLocalCSV',true);
     }
 

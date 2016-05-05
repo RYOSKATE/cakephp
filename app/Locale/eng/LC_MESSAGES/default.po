@@ -475,8 +475,8 @@ msgstr "Metrics Transition"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:13;16
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:92
-msgid "欠陥数ファイルマップ"
-msgstr "Defects File Map"
+msgid "メトリクスファイルマップ"
+msgstr "Metrics File Map"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:42
 msgid "全体を表示"

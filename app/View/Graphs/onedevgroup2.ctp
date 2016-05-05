@@ -36,7 +36,7 @@
      ));	
   ?>
   <select id = "select" class = "form-control">
-	  <option value="size"><?php echo __('欠陥数');?></option>
+	  <option value="size"><?php echo substr($selectMetrics,4);?></option>
     <option value="count"><?php echo __('ファイル数');?></option>
   </select>
   <input id = "zoomreset" class = 'form-control' type="button" value="<?php echo __('全体を表示');?>">

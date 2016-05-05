@@ -92,7 +92,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active"><?php echo __('各開発グループ');?></div>
 						<?php echo $this->Html->link(__('メトリクス遷移'),		  array('controller' => 'graphs', 'action' => 'onedevgroup'), array('class' =>'list-group-item'));?>
-						<?php echo $this->Html->link(__('欠陥数ファイルマップ'),	array('controller' => 'graphs', 'action' => 'onedevgroup2'),array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link(__('メトリクスファイルマップ'),	array('controller' => 'graphs', 'action' => 'onedevgroup2'),array('class' =>'list-group-item'));?>
 					</div>
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active"><?php echo __('レイヤー');?></div>
