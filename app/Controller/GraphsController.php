@@ -216,6 +216,7 @@ class GraphsController extends AppController
             $selectGroupName = reset($groupNameData);//ALLは0に追加されている
             if (isset($this->request->data['set']))
             {
+               
                 $selectMetrics = $this->data['Graph'] ['Metrics']; 
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 if (!empty($this->data['Graph']['選択ファイル']['name'])) 
@@ -224,7 +225,7 @@ class GraphsController extends AppController
                     $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
                     move_uploaded_file($up_file, $fileName);
-                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName);
+                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else 

@@ -10,10 +10,10 @@
 <?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 <?php $this->Html->script('d3.v2', array('inline' => false));?>
 <?php $this->Html->css('filemetrics', array('inline' => false));?>
-<?php echo $this->element('pagepath', array("secondPath" => __("各開発グループ"),"thirdPath" => __("欠陥数ファイルマップ")));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("各開発グループ"),"thirdPath" => __("メトリクスファイルマップ")));?>
 
 <div class="page-header">
-	<h1><small><?php echo __('欠陥数ファイルマップ');?></small></h1>
+	<h1><small><?php echo __('メトリクスファイルマップ');?></small></h1>
   <?php echo $this->element('selectForm3'); ?>
 
 

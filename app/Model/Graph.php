@@ -18,6 +18,19 @@ class Graph extends AppModel
 		)
 	);
 
+    function readCSV($filepath,$selectModelId,$upload_id)
+    {
+        $records = array();
+        $file = new SplFileObject($filepath); 
+        $file->setFlags(SplFileObject::READ_CSV); 
+        foreach ($file as $line) {
+            $records[] = array('Graph'=>$line + array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$line[0])); 
+        }
+
+        if(!isset($records[count($records)-1]['Graph'][1]))
+            unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
+	    return $records;
+    }
     ///////csvのアップロード用///////
     function uploadFromCSV($filepath,$selectModelId,$upload_id) 
     {
@@ -146,126 +159,10 @@ class Graph extends AppModel
      
      
     ///////ファイルメトリクス用///////
-    function getFileMetricsTableFromCSV($up_file)
+    function getFileMetricsTableFromCSV($up_file,$selectMetrics)
     {
-        setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        $data = array();
-        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
-        $lines = str_getcsv($buf, "\r\n");
-        foreach ($lines as $line) 
-        {
-            $col = str_getcsv($line);
-            if(4<=$col[1])//由来o3,o13,o23,o123のみ
-            {
-              $data[] = array('modelname_id'=> -1,'filepath'=>$col[0]) +$col;
-            }
-        }
-        $this->depth=0;
-        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
-//data[0]=Array
-        // (
-        //     [Graph] => Array
-        //         (
-        //             [model] => testA
-        //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
-        //             [3] => 1//欠陥数
-        //             [8] => 呼び出す他クラスの関数種類数
-        //             [9] => メソッドの凝集度の欠如(LCOM)
-        //             [10] =>Public メソッド数
-        //             [11] =>Public 属性数
-        //             [18] => 呼び出す他ファイルの関数の種類数
-        //         )
-
-        // )
-         $tree = array('name'    =>   "root",
-                'defact'         =>0,
-                'otherClassFunc' =>0,
-                'LCOM'           =>0,
-                'Method'         =>0,
-                'Field'          =>0,
-                'otherFileFunc'  =>0,
-                'layer'          =>0,
-                'children'       => array());
-        $dataSize = count($data);
-        for ($i = 0; $i < $dataSize; ++$i)
-        {
-            $filepath = $data[$i]['filepath'];
-            $path     = explode('/',$filepath);
-            $path[0]  = trim($path[0]);
-            $parent   = &$tree;
-            $children = &$tree['children'];
-            $defact         = $data[$i][3];
-            $otherClassFunc = $data[$i][8];
-            $LCOM           = $data[$i][9];
-            $Method         = $data[$i][10];
-            $Field          = $data[$i][11];
-            $otherFileFunc  = $data[$i][18];
-
-            $pathDepth=count($path);
-            if($this->depth < $pathDepth)
-            {
-                $this->depth = $pathDepth;//ビューのレイヤー切り替えの最大値用に最深度を記録しておく
-            }
-            for($j = 0; $j < $pathDepth-1; ++$j)
-            {
-                $isTheDir = false;
-                for ($k = 0; $k < count($children); ++$k)
-                {
-                    $isTheDir = ($children[$k]['name'] == $path[$j]);
-                    if($isTheDir)//そのディレクトリが存在した
-                    {
-                        $parent['defact']         += $defact;
-                        $parent['otherClassFunc'] += $otherClassFunc;
-                        $parent['LCOM']           += $LCOM;
-                        $parent['Method']         += $Method;
-                        $parent['Field']          += $Field;
-                        $parent['otherFileFunc']  += $otherFileFunc;
-
-                        $parent = &$children[$k];
-                        $children[$k] += array('children'=> array());
-                        $children = &$children[$k]['children'];
-                        break;
-                    }
-                }
-
-                if(!$isTheDir)//そのディレクトリが初めて登場した
-                {
-                    $node = array(
-                                    'name'           =>$path[$j],
-                                    'defact'         =>$defact,
-                                    'otherClassFunc' =>$otherClassFunc,
-                                    'LCOM'           =>$LCOM,
-                                    'Method'         =>$Method,
-                                    'Field'          =>$Field,
-                                    'otherFileFunc'  =>$otherFileFunc,
-                                    'layer'          =>($j+1),
-                                 );
-                    $children[] = $node;
-                    $children = &$children[count($children) - 1]['children'];
-                }
-            }
-            $parent['defact']         += $defact;
-            $parent['otherClassFunc'] += $otherClassFunc;
-            $parent['LCOM']           += $LCOM;
-            $parent['Method']         += $Method;
-            $parent['Field']          += $Field;
-            $parent['otherFileFunc']  += $otherFileFunc;
-            $children[] = array(
-                                'name'           =>$path[$pathDepth-1],
-                                'defact'         =>$defact,
-                                'otherClassFunc' =>$otherClassFunc,
-                                'LCOM'           =>$LCOM,
-                                'Method'         =>$Method,
-                                'Field'          =>$Field,
-                                'otherFileFunc'  =>$otherFileFunc,
-                                'layer'          => ($pathDepth)
-                            );
-        }
- // echo '<pre>';
- // print_r($tree);
- // echo '</pre>';
-        $tree=json_encode($tree);
-        return $tree;
+        $data = $this->readCSV($up_file,-1,-1);
+        return $this->getFileMetricsTableImple($data, $selectMetrics);
     }
 
 
@@ -275,17 +172,8 @@ class Graph extends AppModel
     {
         return $this->depth;
     }
-    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    function getFileMetricsTableImple($data, $selectMetrics)
     {
-
-        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
-		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
-        if($selectGroupName != 'ALL')
-        {
-            $conditions += array('Graph.25' => $selectGroupName);
-        }
-        $data = $this->find('all',array('fields' => array('modelname_id','filepath',$selectMetrics,'3','8','9','10','11','18'),'conditions' => $conditions));
-
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
         //data[0]=Array
@@ -406,7 +294,20 @@ class Graph extends AppModel
  // print_r($tree);
  // echo '</pre>';
         $tree=json_encode($tree);
-        return $tree;
+        return $tree;        
+    }
+    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    {
+
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        $data = $this->find('all',array('fields' => array('modelname_id','filepath',$selectMetrics,'3','8','9','10','11','18'),'conditions' => $conditions));
+
+        return $this->getFileMetricsTableImple($data,$selectMetrics);
     }
     ///////ファイルメトリクス用///////
 
