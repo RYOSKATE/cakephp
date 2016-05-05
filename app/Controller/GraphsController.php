@@ -453,7 +453,7 @@ class GraphsController extends AppController
                         {
                             $message .= '・' . $name . '<br>';
                         }
-                        $message .= '文字コードチェックが有効の場合、UTF-8であるか確認してください。';                                        
+                        $message .= 'UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。';                                        
                     }
                     throw new Exception();
                 }
