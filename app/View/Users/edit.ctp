@@ -12,7 +12,7 @@
 		?>
 
 <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
-<a style="cursor:pointer;">グループ名▼</a>
+<a style="cursor:pointer;"><?php echo __('グループ名▼');?></a>
 </div>
 <!--// 折り畳み展開ポインタ -->
  

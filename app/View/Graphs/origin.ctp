@@ -16,9 +16,9 @@
 <div data-role='page'>
 <?php echo $this->Html->script('origin', array('inline' => true));?>
 </div>
-<?php echo $this->element('pagepath', array("secondPath" => "由来","thirdPath" => "欠陥数円グラフ"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("欠陥数円グラフ")));?>
 <div class="page-header">
-    <h1><small>欠陥数円グラフ</small></h1>
+    <h1><small><?php echo __('欠陥数円グラフ');?></small></h1>
     <?php echo $this->element('selectForm4'); ?>
 </div>
 <!-- Nav tabs -->

@@ -14,7 +14,7 @@
 	echo '<br>';
 		echo $this->Form->input('Merge', array
     (
-    	'label'=>"すでに存在するグループと統合する場合はMergeを実行してください。",
+    	'label'=>__("すでに存在するグループと統合する場合はMergeを実行してください。"),
     	'name'=>'merge',
     	'type'=>'submit',
     ));

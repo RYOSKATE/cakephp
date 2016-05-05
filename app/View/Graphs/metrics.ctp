@@ -13,10 +13,10 @@ echo '</pre>';*/
     var label2 = '<?php echo $name2;?>';
 </script>
 <?php echo $this->Html->script('metrics', array('inline' => true));?>
-<?php echo $this->element('pagepath', array("secondPath" => "レイヤー","thirdPath" => "欠陥数レーダーチャート"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("レイヤー"),"thirdPath" => __("欠陥数レーダーチャート")));?>
 
 <div class="page-header">
-	<h1><small>欠陥数レーダーチャート</small></h1>
+	<h1><small><?php echo __('欠陥数レーダーチャート');?></small></h1>
     <?php echo $this->element('selectForm4', array("groupName" => $groupName)); ?>
 </div>
 

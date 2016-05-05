@@ -379,7 +379,7 @@ class GraphsController extends AppController
                 $tmp_file_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp(PHPスクリプト終了と同時に削除されます)
                 if(empty($fileName))
                 {
-                    $message = 'CSVデータファイルが選択されていません。';
+                    $message = __('CSVデータファイルが選択されていません。');
                     throw new Exception();
                 }
                 //モデル名(id)を取得・あるいは新規追加
@@ -389,7 +389,7 @@ class GraphsController extends AppController
                 //既存モデル名・新規モデル名のチェック
                 if(empty($newModelName) && empty($selectModelId))
                 {
-                    $message = 'モデル名が入力されていません。';   
+                    $message = __('モデル名が入力されていません。');   
                     throw new Exception();
                 }
   
@@ -414,7 +414,7 @@ class GraphsController extends AppController
                 $date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
                 if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$date)))
                 {             
-                    $message = '同一のモデル名、日付のデータが既に存在します。';
+                    $message = __('同一のモデル名、日付のデータが既に存在します。');
                     throw new Exception();
                 }
                 
@@ -428,7 +428,7 @@ class GraphsController extends AppController
                 $upload_id = $this->UploadData->upload($UploadData);
                 if($upload_id==0)
                 {                
-                    $message = 'UploadDataの登録に失敗しました。';
+                    $message = __('UploadDataの登録に失敗しました。');
                     throw new Exception();
                 }
                         
@@ -436,7 +436,7 @@ class GraphsController extends AppController
                 $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
                 if($groupNames == null)
                 {
-                    $message = 'CSVデータの内容のアップロードに失敗しました。';
+                    $message = __('CSVデータの内容のアップロードに失敗しました。');
                     throw new Exception();
                 }
                 
@@ -446,14 +446,14 @@ class GraphsController extends AppController
                 
                 if(!empty($errorGroupNames))
                 {
-                    $message = 'グループ名の登録に失敗しました。<br>';
+                    $message = __('グループ名の登録に失敗しました。<br>');
                     if($errorGroupNames[0] != 'saveError')
                     {
                         foreach($errorGroupNames as $name)
                         {
                             $message .= '・' . $name . '<br>';
                         }
-                        $message .= 'UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。';                                        
+                        $message .= __('UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。');                                        
                     }
                     throw new Exception();
                 }

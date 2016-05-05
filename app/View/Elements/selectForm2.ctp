@@ -9,7 +9,7 @@
             (
                 'type'=>'select',
                 'options'=>$modelName,
-                'label'=>'モデル選択'.$i,
+                'label'=>__('モデル選択'.$i),
                 'class' => 'form-control',
                 'style'=>"width:100%;",
                 'empty' => 1<$i,

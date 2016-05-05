@@ -1,5 +1,5 @@
-<h4>モデル名:<?php echo $name;?></h4>
-<h6>メトリクス(面積要素):<?php echo $metricsName;?></h6>
+<h4><?php echo __('モデル名');?>:<?php echo $name;?></h4>
+<h6><?php echo __('メトリクス(面積要素)');?>:<?php echo $metricsName;?></h6>
         <?php $ori = array(
 			1=>'o1',
 			2=>'o12',
@@ -46,8 +46,8 @@
 	<thead>
         <tr>
 			<th></th><th></th><th></th><th></th>
-            <th>関連領域</th>
-            <th>面積</th>
+            <th><?php echo __('関連領域');?></th>
+            <th><?php echo __('面積');?></th>
 			<?php 
 			for($i=1;$i<=3;++$i)
 			{?>
@@ -93,8 +93,8 @@
         <thead>
         <tr>
 			<th> 　　 </th>
-            <th>由来</th>
-            <th>面積</th>
+            <th><?php echo __('由来');?></th>
+            <th><?php echo __('面積');?></th>
 			<?php 
 			for($i=1;$i<=3;++$i)
 			{?>

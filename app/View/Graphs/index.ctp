@@ -1,1 +1,1 @@
-<h1>Welcome to Visualize Tool</h1>
+<h1><?php echo __('Welcome to Visualize Tool');?></h1>

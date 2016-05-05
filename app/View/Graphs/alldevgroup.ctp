@@ -1,14 +1,14 @@
 
 <?php $this->Html->script('amcharts/xy', array('inline' => false));?>
 
-<?php echo $this->element('pagepath', array("secondPath" => "全開発グループ","thirdPath" => "メトリクス散布図"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("全開発グループ"),"thirdPath" => __("メトリクス散布図")));?>
 
 <div class="page-header">
-    <h1><small>メトリクス散布図</small></h1>
+    <h1><small><?php echo __('メトリクス散布図');?></small></h1>
      <?php echo $this->element('selectForm1'); ?>
 </div>
-<h4>モデル名:<?php echo $name;?></h4>
-<h6>メトリクス:<?php echo substr($selectMetricsStr,4);?></h6>
+<h4><?php echo __('モデル名');?>:<?php echo $name;?></h4>
+<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 <div id="chartdiv" style="height:500px;"></div>
 
 <!--<div class="col-md-3 col-sm-3 pull-right">
@@ -32,10 +32,10 @@
     <table class="table table-hover table-condensed" id ="table">
         <thead>
         <tr>
-            <th>順位</th>
-            <th>メトリクス合計値</th>
-            <th>ファイルあたりのメトリクス値</th>
-            <th>メトリクス密度(/kLOC)</th>
+            <th><?php echo __('順位');?></th>
+            <th><?php echo __('メトリクス合計値');?></th>
+            <th><?php echo __('ファイルあたりのメトリクス値');?></th>
+            <th><?php echo __('メトリクス密度(/kLOC)');?></th>
         </tr>
         </thead>
         <tbody id = "rankTable"></tbody>

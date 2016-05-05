@@ -1,23 +1,23 @@
-<h4>モデル名:<?php echo $name;?></h4>
+<h4><?php echo __('モデル名');?>:<?php echo $name;?></h4>
     <table class="table table-hover table-condensed" id ="table">
         <thead>
         <tr>
-            <th>機能レイヤ</th>
-            <th>ファイル数</th>
-            <th>欠陥ファイル数</th>
-            <th>欠陥ファイル率</th>
-            <th>欠陥数</th>
+            <th><?php echo __('機能レイヤ');?></th>
+            <th><?php echo __('ファイル数');?></th>
+            <th><?php echo __('欠陥ファイル数');?></th>
+            <th><?php echo __('欠陥ファイル率');?></th>
+            <th><?php echo __('欠陥数');?></th>
         </tr>
         </thead>
         <tbody>
-        <?php $layer = array( 0=>'アプリケーション(APP)',
-                              1=>'アプリケーションフレームワーク(FW)',
-                              2=>'ライブラリ(外部OSS)',
-                              3=>'Android Runtinme(SYSTEM)', 
-                              4=>'HWライブラリ',
-                              5=>'Kernel',
-                              //5=>'Kernel/ドライバ/ブードローダー',
-                              6=>'Others',
+        <?php $layer = array( 0=>__('アプリケーション(APP)'),
+                              1=>__('アプリケーションフレームワーク(FW)'),
+                              2=>__('ライブラリ(外部OSS)'),
+                              3=>__('Android Runtinme(SYSTEM)'), 
+                              4=>__('HWライブラリ'),
+                              5=>__('Kernel'),
+                              //5=>__('Kernel/ドライバ/ブードローダー'),
+                              6=>__('Others'),
                              );
         ?>
         <?php 

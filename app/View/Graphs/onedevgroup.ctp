@@ -17,10 +17,10 @@
 </script>
 <?php echo $this->Html->script('onedevgroup', array('inline' => true));?>
 
-<?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "メトリクス遷移"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("各開発グループ"),"thirdPath" => __("メトリクス遷移")));?>
 
 <div class="page-header">
-    <h1><small>メトリクス遷移</small></h1>
+    <h1><small><?php echo __('メトリクス遷移');?></small></h1>
     <?php echo $this->element('selectForm2'); ?>
 </div>
 

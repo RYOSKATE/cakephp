@@ -82,7 +82,8 @@ class GroupNamesController extends AppController {
 				{
 					if(isset($this->request['data']['update']))
 					{
-						$message = $newName.' は既に存在しています。<br>Mergeを実行することでこのグループを削除し・選択グループに統合します。';
+						$message .= $newName;
+						$message .= __(' は既に存在しています。<br>Mergeを実行することでこのグループを削除し・選択グループに統合します。');
 						throw new Exception();
 					}
 					$merge = isset($this->request['data']['merge']);
@@ -95,7 +96,7 @@ class GroupNamesController extends AppController {
 				}
 				if (!$this->Graph->saveAll($dataG))
 				{
-					$message = '各データのグループ名変更に失敗しました。';
+					$message = __('各データのグループ名変更に失敗しました。');
 					throw new Exception();
 				}
 				$dataU = $this->User->find('all',array('fields' => array('id','group')));
@@ -113,12 +114,12 @@ class GroupNamesController extends AppController {
 				}
 				if (!$this->User->saveAll($dataU))
 				{
-					$message = 'ユーザーの所属グループ名変更に失敗しました。';
+					$message = __('ユーザーの所属グループ名変更に失敗しました。');
 					throw new Exception();
 				}					
 				if (!$this->GroupName->save($this->request->data))
 				{
-					$message = 'グループ名の変更に失敗しました。';
+					$message = __('グループ名の変更に失敗しました。');
 					throw new Exception();
 				}					
 
@@ -126,7 +127,7 @@ class GroupNamesController extends AppController {
 				{
 					if(!$this->GroupName->delete(array('GroupName.id' => $id)))
 					{
-						$message = 'マージ処理に失敗しました。';
+						$message = __('マージ処理に失敗しました。');
 						throw new Exception();
 					}
 					else

@@ -2,8 +2,8 @@
 	echo $this->Form->input($formname, array
         (
             'type' => 'file',
-            'label'=>'CSVファイル選択',
+            'label'=>__('CSVファイル選択'),
             'style'=>"width:100%;",
-	        'class' => 'form-control',
+            'class' => 'form-control',
         ));
 ?>

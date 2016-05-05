@@ -3,7 +3,7 @@
 	(
 	    'type'=>'select',
 	    'options'=>$modelName,
-		'label'=>'モデル名',
+		'label'=>__('モデル名'),
 	    // 'style' => 'width: 200px',
 	    // 'onchange' => 'submit(this.form)',
 	    //'selected' => $selected,  // 規定値をvalueで指定

@@ -3,7 +3,7 @@
 	(
 	    'type'=>'select',
 	    'options'=>$groupName,
-		'label'=>'グループ選択',
+		'label'=>__('グループ選択'),
 	    // 'style' => 'width: 200px',
 	    // 'onchange' => 'submit(this.form)',
 	    //'selected' => $selected,  // 規定値をvalueで指定

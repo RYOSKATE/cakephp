@@ -64,12 +64,12 @@ class UsersController extends AppController {
         {
             if($this->User->addUser($this->request->data['User'],$groupNameData))
             {
-                $this->flashText('The user has been saved.');
+                $this->flashText(__('The user has been saved.'));
                 $this->redirect(array('action' => 'index'));
             }
             else
             {
-                $this->flashText('The user could not be saved. Please, try again.',false);
+                $this->flashText(__('The user could not be saved. Please, try again.'),false);
             }
         }
     }
@@ -94,10 +94,10 @@ class UsersController extends AppController {
             }
             $this->request->data['User']['group'] = implode(",",$this->request->data['User']['group']);
 			if ($this->User->save($this->request->data)) {
-                $this->flashText('The user has been saved.');
+                $this->flashText(__('The user has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->flashText('The user could not be saved. Please, try again.',false);
+				$this->flashText(__('The user could not be saved. Please, try again.'),false);
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -125,11 +125,11 @@ class UsersController extends AppController {
  
             if ($this->User->save($this->request->data))
             {
-                $this->flashText('パスワードを変更しました');
+                $this->flashText(__('パスワードを変更しました'));
             }
             else 
             {
-                $this->flashText('パスワードの変更に失敗しました',false); 
+                $this->flashText(__('パスワードの変更に失敗しました'),false); 
             }
         }
         else
@@ -153,9 +153,9 @@ class UsersController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->User->delete()) {
-            $this->flashText('The user has been deleted.');
+            $this->flashText(__('The user has been deleted.'));
 		} else {
-            $this->flashText('The user could not be deleted. Please, try again.',false);
+            $this->flashText(__('The user could not be deleted. Please, try again.'),false);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
@@ -182,7 +182,7 @@ class UsersController extends AppController {
 					{
 						if ($this->User->delete($id)) 
 						{
-                            $this->flashText('user deleted');
+                            $this->flashText(__('user deleted'));
 							$this->redirect(array('action' => 'login'));
 						}
 					}
@@ -201,7 +201,8 @@ class UsersController extends AppController {
             } 
             else 
             {
-                $this->Session->setFlash('Invalid username or password, try again.<button class="close" data-dismiss="alert">&times;</button>', 'default', ['class'=> 'alert alert-warning alert-dismissable']);
+                $message = __('Invalid username or password, try again.');
+                $this->Session->setFlash(message . '<button class="close" data-dismiss="alert">&times;</button>', 'default', ['class'=> 'alert alert-warning alert-dismissable']);
             }
         }
     }

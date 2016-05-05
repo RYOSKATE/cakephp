@@ -3,8 +3,8 @@
     <div class="row">
 
     <ol class="breadcrumb">
-    <li><?php echo $this->Html->link('Home',array('controller' => 'graphs', 'action' => 'index'));?></li>
-    <li class="active">ファイルアップロード</a></li>
+    <li><?php echo $this->Html->link(__('Home'),array('controller' => 'graphs', 'action' => 'index'));?></li>
+    <li class="active"><?php echo __('ファイルアップロード');?></a></li>
     </ol>
 
     <div class="options form">
@@ -20,7 +20,7 @@
     )); 
     ?>
         <fieldset>
-            <legend>データのアップロード</legend>
+            <legend><?php echo __('データのアップロード');?></legend>
         <?php
 
 echo '<div class="row">';
@@ -45,13 +45,13 @@ echo '<div class="row">';
             echo '</div><div class="col-sm-6 col-md-6 col-lg-6">';
             echo $this->Form->input('新規モデル名', array
             (
-                'label' => '新規モデル名',
+                'label' => __('新規モデル名'),
                 'placeholder' => 'Input New Model Name',
                 'style'=>"width:100%;",
             ));
             echo '</div><div class="col-sm-12 col-md-6 col-lg-6">';
             echo $this->Form->input('date', array(
-                'type'=>'date',
+                'type'=>__('date'),
                 'label'=>'データ取得日',
                 'dateFormat' => 'YMD',
                 'monthNames' => false,
@@ -67,7 +67,7 @@ echo '<div class="row">';
             echo $this->Form->input( 'code_check', array( 
                 'type' => 'checkbox',
                 'checked' => true,    // 初期表示で選択させる場合
-                'label' => '文字コード(UTF-8)チェック',    // チェックボックスのラベル
+                'label' => __('文字コード(UTF-8)チェック'),    // チェックボックスのラベル
                 'style'=>"margin: 10px;",
                 // 'style'=>"width:100%;",
                 // 'div'=>'form-group',
@@ -80,9 +80,9 @@ echo '<div class="row">';
             echo $this->Form->input('comment', array
             (
                 'id'=> 'textarea',
-                'label'=>'コメント',
+                'label'=>__('コメント'),
                 'type'=>'textarea',
-                'placeholder' => 'コメント(任意)',
+                'placeholder' => __('コメント(任意)'),
                 'style'=>"width:100%;",
             ));
             echo '</div>';
@@ -102,19 +102,19 @@ echo '<div class="row">';
         </fieldset>
         <br>
     </div>
-<h4>アップロード時の注意</h4>
+<h4><?php echo __('アップロード時の注意');?></h4>
 <ul>
-    <li>既存のモデル名を選択、あるいは新規モデル名を入力してください</li>
-    <li>モデル名・日付が同じデータはアップロードできません。上書きが必要な場合は以下の履歴から削除してください。</li>
-    <li>CSVファイル中のグループ名はUTF-8に変換しアップロードします。<br>「文字コードチェック」オプションは正しく変換できたかチェックを行い、文字化けの可能性がある場合は処理を中断します。</li>
-    <li>アップロードには数十秒から数分かかります。画面上部にメッセージが表示されるまでページを移動しないでください。</li>
+    <?php echo __('
+        <li>既存のモデル名を選択、あるいは新規モデル名を入力してください</li>
+        <li>モデル名・日付が同じデータはアップロードできません。上書きが必要な場合は以下の履歴から削除してください。</li>
+        <li>CSVファイル中のグループ名はUTF-8に変換しアップロードします。<br>「文字コードチェック」オプションは正しく変換できたかチェックを行い、文字化けの可能性がある場合は処理を中断します。</li>
+        <li>アップロードには数十秒から数分かかります。画面上部にメッセージが表示されるまでページを移動しないでください。</li>
+    ');?>
 </ul>
 
     <br>
     </div>
 <?php
-}else{
-    echo 'あなたの権限は「閲覧者」です。CSVのアップロードはできません。';
 }?>
 
 <h3><?php echo __('Upload History'); ?></h3>

@@ -3,7 +3,7 @@
 	echo $this->Form->input('Metrics',array
 	(
 	    'type'=>'select',
-		'label'=>'メトリクス選択',
+		'label'=>__('メトリクス選択'),
 	    'options'=>$metricsList,
 		'value'=>$selectMetrics,//デフォルトは欠陥数
 		// 'style' => 'width: 200px',

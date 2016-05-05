@@ -26,7 +26,7 @@
 					(
 						'id'=>'color',
 						'type'=>'select',
-						'options'=>array('#FFFFFF' => '白','#C869FF' => '紫', '#6BCDFF' => '青', '#71FD5E' => '緑', '#FECA61' => '黄', '#FA6565' => '赤'),
+						'options'=>array('#FFFFFF' => __('白'),'#C869FF' => __('紫'), '#6BCDFF' => __('青'), '#71FD5E' => __('緑'), '#FECA61' => __('黄'), '#FA6565' => __('赤')),
 						'class' => 'form-control'
 					));
 					echo '</div>';

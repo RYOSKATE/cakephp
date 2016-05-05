@@ -10,13 +10,13 @@
 <div data-role='page'>
 </div>
 
-<?php echo $this->element('pagepath', array("secondPath" => "由来","thirdPath" => "由来比較(OriginCity)"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("由来比較(OriginCity)")));?>
 <div class="page-header">
-    <h1><small>由来比較(OriginCity)</small></h1>
+    <h1><small><?php echo __('由来比較(OriginCity)');?></small></h1>
     <?php echo $this->element('selectForm1'); ?>
 </div>
-<h4>モデル名:<?php echo $selectModelName;?></h4>
-<h6>メトリクス:<?php echo substr($selectMetricsName,4);?></h6>
+<h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
+<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsName,4);?></h6>
 <div class="row">
     <div class="col-md-12 col-sm-12">
          <div id="canvas-wrapper"></div>

@@ -10,10 +10,10 @@
 <?php $this->Html->script('amcharts/Chart.Radar', array('inline' => false));?>
 <?php $this->Html->script('d3.v2', array('inline' => false));?>
 <?php $this->Html->css('filemetrics', array('inline' => false));?>
-<?php echo $this->element('pagepath', array("secondPath" => "各開発グループ","thirdPath" => "欠陥数ファイルマップ"));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("各開発グループ"),"thirdPath" => __("欠陥数ファイルマップ")));?>
 
 <div class="page-header">
-	<h1><small>欠陥数ファイルマップ</small></h1>
+	<h1><small><?php echo __('欠陥数ファイルマップ');?></small></h1>
   <?php echo $this->element('selectForm3'); ?>
 
 
@@ -36,22 +36,25 @@
      ));	
   ?>
   <select id = "select" class = "form-control">
-	  <option value="size">欠陥数</option>
-    <option value="count">ファイル数</option>
+	  <option value="size"><?php echo __('欠陥数');?></option>
+    <option value="count"><?php echo __('ファイル数');?></option>
   </select>
-  <input id = "zoomreset" class = 'form-control' type="button" value="全体を表示">
+  <input id = "zoomreset" class = 'form-control' type="button" value="<?php echo __('全体を表示');?>">
   <?php echo $this->Form->end();?>
 
 </div>
 <div id="body" style="border:1px solid;width:100%;height:auto"></div>
-<p id="path">表示パス:root/</p>
+<p id="path"><?php echo __('表示パス');?>:root/</p>
 <div id="footer">
   <div>
-  ○操作方法<br>
+    <?php echo __('
+    ○操作方法<br>
   ・レイヤースピンボックスでファイル階層を切り替え<br>
   ・size:欠陥の数  count:ディレクトリ以下のファイル数<br>
   ・ディレクトリブロックをクリックでズーム(alt:低速ズーム)<br>
   (sizeが0で重なりあった複数のブロックを同時にクリックするとレイアウトが崩れる不具合あり)
+  ');?>
+  
   </div>
 </div>
 

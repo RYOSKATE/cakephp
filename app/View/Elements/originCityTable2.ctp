@@ -24,14 +24,14 @@ th {text-align: right;}
 			6 => '#DDDDDD',//灰
         );
 		$layer = array( 
-			0=>'アプリケーション(APP)',
-			1=>'アプリケーションフレームワーク(FW)',
-			2=>'ライブラリ(外部OSS)',
-			3=>'Android Runtinme(SYSTEM)', 
-			4=>'HWライブラリ',
-			5=>'Kernel',
-			//5=>'Kernel/ドライバ/ブードローダー',
-			6=>'Others',
+			0=>__('アプリケーション(APP)'),
+			1=>__('アプリケーションフレームワーク(FW)'),
+			2=>__('ライブラリ(外部OSS)'),
+			3=>__('Android Runtinme(SYSTEM)'), 
+			4=>__('HWライブラリ'),
+			5=>__('Kernel'),
+			//5=>__('Kernel/ドライバ/ブードローダー'),
+			6=>__('Others'),
 		);
 		
 		$metricsSum = array(0,0,0,0,0,0,0,0);
@@ -39,14 +39,14 @@ th {text-align: right;}
 <table class="table table-condensed" id ="table">
         <thead>
         <tr>
-			<th align="left">機能レイヤ</th>
+			<th align="left"><?php echo __('機能レイヤ');?></th>
 			<?php 
 			for($i=1;$i<=7;++$i)
 			{?>
 				<th align="right"><?php echo $ori[$i];?></th>
 			<?php
 			}?>
-			<th align="left">合計値</th>
+			<th align="left"><?php echo __('合計値');?></th>
         </tr>
         </thead>
         <tbody>
@@ -88,7 +88,7 @@ th {text-align: right;}
 		}
         ?>
 		<tr>
-		<td>メトリクス合計値</td>
+		<td><?php echo __('メトリクス合計値');?></td>
 			<?php 
 			$leyarSum = 0;
 			for($j=1;$j<=7;++$j)//由来
@@ -104,7 +104,7 @@ th {text-align: right;}
 			<td align="right"><?php echo $leyarSum;?>
 		</tr>
 		<tr>
-		<td>合計ファイル数</td>
+		<td><?php echo __('合計ファイル数');?></td>
 			<?php 
 			$leyarSum = 0;
 			for($j=1;$j<=7;++$j)//由来
