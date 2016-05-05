@@ -10,9 +10,9 @@
 <div data-role='page'>
 </div>
 
-<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("由来比較(OriginCity)")));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("OriginCity")));?>
 <div class="page-header">
-    <h1><small><?php echo __('由来比較(OriginCity)');?></small></h1>
+    <h1><small><?php echo __('OriginCity');?></small></h1>
     <?php echo $this->element('selectForm1'); ?>
 </div>
 <h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>

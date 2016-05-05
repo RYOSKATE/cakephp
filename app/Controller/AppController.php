@@ -70,8 +70,41 @@ class AppController extends Controller
         $this->Session->setFlash(__($message.'<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
   }
   
+  public function getLang()
+  {
+		//全てに当てはまらなかった場合の初期値
+		$lang = 'jpn';
+    //表示言語を判別する。
+	if (isset($this->params['named']['lang'])) {
+		//URL中の"lang"パラメータ
+		$lang = $this->params['named']['lang'];
+	} elseif ($cookie = $this->Cookie->read('lang')) {
+		//クッキー
+		$lang = ($cookie == 'jpn')
+			? 'jpn'
+			: 'eng';
+	} elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+		//ユーザのブラウザの言語設定
+		$arr = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$arr = explode(';', $arr[0]);
+		$lang = ($arr[0] == 'ja')
+			? 'jpn'
+			: 'eng';
+	}
+    return $lang;
+  }
+  private function setTextLocal()
+  {
+    
+	$lang = $this->getLang();
+	//CakePHPでの表示言語を指定。
+	Configure::write('Config.language', $lang);
+	//クッキーに言語情報を格納。
+	$this->Cookie->write('lang', $lang, true, '30 Days');
+  }
   public function beforeFilter() 
   {
+      $this->setTextLocal();
       //サイズは3<=2<=1でなければならない -1は自動(無制限)
       ini_set('memory_limit', -1);//1.使用するメモリ量：CSVのアップロードで1GB以上
       ini_set('post_max_size', '64M');//2.CSVファイルが数十MB

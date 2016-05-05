@@ -51,6 +51,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		            <span class="icon-bar"></span>
 		          	</button>
 		          	<?php echo $this->Html->link('Visualize Tool',array('controller' => 'graphs', 'action' => 'index'),array('class' =>'navbar-brand'));?>
+					<?php echo $this->Html->link('日本語',array('controller' => 'graphs', 'action' => 'index/lang:jpn'),array('class' =>'navbar-brand'));?>
+					<?php echo $this->Html->link('English',array('controller' => 'graphs', 'action' => 'index/lang:eng'),array('class' =>'navbar-brand'));?>		  
 		        </div>
 		        <div class="navbar-collapse collapse">
 		          <ul class="nav navbar-nav navbar-right">

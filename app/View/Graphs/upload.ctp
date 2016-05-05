@@ -52,7 +52,7 @@ echo '<div class="row">';
             echo '</div><div class="col-sm-12 col-md-6 col-lg-6">';
             echo $this->Form->input('date', array(
                 'type'=>__('date'),
-                'label'=>'データ取得日',
+                'label'=>__('データ取得日'),
                 'dateFormat' => 'YMD',
                 'monthNames' => false,
                 'maxYear' => date('Y'),
@@ -87,7 +87,7 @@ echo '<div class="row">';
             ));
             echo '</div>';
             echo '<div class="col-md-12 col-sm-12">';
-            echo $this->Form->input('アップロード', array
+            echo $this->Form->input(__('アップロード'), array
             (
                 'label'=>"　",
                 'name'=>'set',
@@ -121,11 +121,11 @@ echo '<div class="row">';
 <table cellpadding="0" cellspacing="0" class="table table-hover table-condensed">
 	<thead>
 	<tr>
-			<th><?php echo 'id'; ?></th>
-			<th><?php echo 'date'; ?></th>
-			<th><?php echo 'modelname_id'; ?></th>
-			<th><?php echo 'user_id'; ?></th>
-			<th><?php echo 'comment'; ?></th>
+			<th><?php echo __('id'); ?></th>
+			<th><?php echo __('date'); ?></th>
+			<th><?php echo __('modelname_id'); ?></th>
+			<th><?php echo __('user_id'); ?></th>
+			<th><?php echo __('comment'); ?></th>
             <th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>

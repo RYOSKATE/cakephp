@@ -5,7 +5,7 @@
 	(
 	    'type'=>'select',
 	    'options'=>$uploadList,
-		'label'=>'モデル選択',
+		'label'=> __('モデル選択'),
 		// 'style' => 'width: 200px',
 	    // 'onchange' => 'submit(this.form)',
 	    //'selected' => $selectMetrics,  // 規定値をvalueで指定

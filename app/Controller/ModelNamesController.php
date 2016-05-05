@@ -51,10 +51,10 @@ class ModelNamesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->ModelName->create();
 			if ($this->ModelName->save($this->request->data)) {
-				$this->Session->setFlash(__('The model name has been saved.'));
+				$this->flashText(__('The model name has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The model name could not be saved. Please, try again.'));
+				$this->flashText(__('The model name could not be saved. Please, try again.'));
 			}
 		}
 	}
@@ -73,10 +73,10 @@ class ModelNamesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->ModelName->save($this->request->data)) {
-				$this->Session->setFlash(__('The model name has been saved.'));
+				$this->flashText(__('The model name has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The model name could not be saved. Please, try again.'));
+				$this->flashText(__('The model name could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('ModelName.' . $this->ModelName->primaryKey => $id));
@@ -96,7 +96,7 @@ class ModelNamesController extends AppController {
 	public function delete($id = null) {
 		$this->rejectWithoutAdmin();
 		if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$id))){
-			$this->Session->setFlash(__('そのモデルに依存したデータはまだ存在しています<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+			$this->flashText(__('そのモデルに依存したデータはまだ存在しています'),false);
 		}else {
 			$this->ModelName->id = $id;
 			if (!$this->ModelName->exists()) {
@@ -104,9 +104,9 @@ class ModelNamesController extends AppController {
 			}
 			$this->request->allowMethod('post', 'delete');
 			if ($this->ModelName->delete()) {
-                $this->Session->setFlash(__('The model name has been deleted.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-success alert-dismissable'));
+                $this->flashText(__('The model name has been deleted.'));
 			} else {
-				$this->Session->setFlash(__('The model name could not be deleted. Please, try again.<button class="close" data-dismiss="alert">&times;</button>'), 'default', array('class'=> 'alert alert-danger alert-dismissable'));
+				$this->flashText(__('The model name could not be deleted. Please, try again.'));
 			}
 		}
 		return $this->redirect(array('action' => 'index'));

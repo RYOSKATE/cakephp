@@ -70,11 +70,11 @@
 						// 'list'=>array(1,2,3),
 					));     
 					echo '</div>';
-					echo '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">';    
-					echo $this->Form->input('add', array
+					echo '<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">';    
+					echo $this->Form->input(__('add'), array
 					(
 						'id'=> 'add',
-						'label'=>false,
+						'label'=>' ',
 						'name'=>'add',
 						'type'=>'button',
 						'onchange' => 'submit(this.form)',
@@ -83,12 +83,12 @@
 						'style'=>"width:100%;",
 					));    
 					echo '</div>';
-					echo '<div class="col-xs-6 col-sm-6 col-md-12 col-lg-4">';    
-					echo $this->Form->input('edit', array
+					echo '<div class="col-xs-6 col-sm-6 col-md-12 col-lg-6">';    
+					echo $this->Form->input(__('edit'), array
 					(
 						'id'=> 'edit',
 						'name'=>'edit',
-						'label'=>false,
+						'label'=>' ',
 						'type'=>'button',
 						'onchange' => 'submit(this.form)',
 						'class' => 'form-control',
@@ -96,11 +96,11 @@
 						'style'=>"width:100%;",
 					));     
 					echo '</div>';
-					echo '<div class="col-xs-6 col-sm-12 col-md-12 col-lg-4">';    
-					echo $this->Form->input('delete', array
+					echo '<div class="col-xs-6 col-sm-12 col-md-12 col-lg-12">';    
+					echo $this->Form->input(__('delete'), array
 					(
 						'id'=> 'delete',
-						'label'=>false,
+						'label'=>' ',
 						'name'=>'delete',
 						'type'=>'button',
 						'onchange' => 'submit(this.form)',

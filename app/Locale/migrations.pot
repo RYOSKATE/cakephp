@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2016-05-05 06:51+0200\n"
+"POT-Creation-Date: 2016-05-05 07:41+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,232 +14,232 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: Plugin/Migrations/Config/Migration/002_convert_version_to_class_names.php:56
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Config/Migration/002_convert_version_to_class_names.php:56
 msgid "Sorry, I can't downgrade. Why would you want that anyways?"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:75
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:75
 msgid "Cake Migration Shell"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:108
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:108
 msgid "Creating table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:109
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:109
 msgid "Dropping table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:110
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:110
 msgid "Renaming table \":old_name\" to \":new_name\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:111
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:111
 msgid "Adding field \":field\" to table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:112
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:112
 msgid "Dropping field \":field\" from table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:113
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:113
 msgid "Changing field \":field\" from table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:114
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:114
 msgid "Renaming field \":old_name\" to \":new_name\" on table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:115
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:115
 msgid "Adding index \":index\" to table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:116
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:116
 msgid "Dropping index \":index\" from table \":table\"."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:195
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:195
 msgid "No migrations available."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:225
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:225
 msgid "Running migrations:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:237
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:237
 msgid "Migration will run dry, no database changes will be made"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:246
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:246
 msgid "All migrations have completed."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:257
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:257
 msgid "An error occurred when processing the migration:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:258
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:258
 msgid "Migration: %s"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:259
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:259
 msgid "Error: %s"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:263
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:263
 msgid "Do you want to mark the migration as successful?. [y]es or [a]bort."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:311;324;351
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:311;324;351
 msgid "Not a valid migration version."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:332
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:332
 msgid "Please, choose what version you want to migrate to. [q]uit or [c]lean."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:378
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:378
 msgid "Do you want compare the schema.php file to the database?"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:383
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:383
 msgid "No database changes detected."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:389
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:389
 msgid "Do you want generate a dump from current database?"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:400
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:400
 msgid "Do you want update the schema.php file?"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:416
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:416
 msgid "Comparing schema.php to the database..."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:435
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:435
 msgid "Generating migration from commandline arguments..."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:463;809
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:463;809
 msgid "Invalid argument"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:463
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:463
 msgid "Migration name (%s) is invalid. It cannot be used to generate a migration from the CLI."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:484
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:484
 msgid "Generating dump from current database..."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:505
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:505
 msgid "Do you want to preview the file before generation?"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:515
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:515
 msgid "Generating Migration..."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:524
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:524
 msgid "Done."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:533
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:533
 msgid "Please enter the descriptive name of the migration to generate:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:536
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:536
 msgid "Migration name (%s) is invalid. It must only contain alphanumeric characters and start with a letter."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:539
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:539
 msgid "Migration name (%s) is invalid. It cannot be longer than 255 characters."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:575
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:575
 msgid "Current version:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:580
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:580
 msgid "None applied."
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:583
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:583
 msgid "Latest version:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:607
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:607
 msgid "Current migration version:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:612
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:612
 msgid "Available migrations:"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:618
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:618
 msgid "applied"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:620
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:620
 msgid "not applied"
 msgstr ""
 
-#: Plugin/Migrations/Console/Command/MigrationShell.php:809
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Console/Command/MigrationShell.php:809
 msgid "Missing required argument 'name' for migration"
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:205
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:205
 msgid "Migration precheck class (%s) could not be loaded."
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:213
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:213
 msgid "Migration precheck class (%s) is not a valid precheck class."
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:229
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:229
 msgid "Migration direction (%s) is not one of valid directions."
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:295
-#: Plugin/Migrations/Lib/Migration/PrecheckBase.php:111
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:295
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/Migration/PrecheckBase.php:111
 msgid "Migration action type (%s) is not one of valid actions type."
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:343;373;401;489;529
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:343;373;401;489;529
 msgid "SQL Error: %s"
 msgstr ""
 
-#: Plugin/Migrations/Lib/CakeMigration.php:567
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/CakeMigration.php:567
 msgid "Interrupted when running \"%s\" callback."
 msgstr ""
 
-#: Plugin/Migrations/Lib/MigrationVersion.php:273
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/MigrationVersion.php:273
 msgid "Class `%1$s` not found on file `%2$s` for %3$s."
 msgstr ""
 
-#: Plugin/Migrations/Lib/MigrationVersion.php:408
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/MigrationVersion.php:408
 msgid "File `%1$s` not found in the %2$s."
 msgstr ""
 
-#: Plugin/Migrations/Lib/Migration/PrecheckException.php:26
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/Migration/PrecheckException.php:26
 msgid "Table \"%s\" does not exists in database."
 msgstr ""
 
-#: Plugin/Migrations/Lib/Migration/PrecheckException.php:42
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/Migration/PrecheckException.php:42
 msgid "Table \"%s\" already exists in database."
 msgstr ""
 
-#: Plugin/Migrations/Lib/Migration/PrecheckException.php:59
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/Migration/PrecheckException.php:59
 msgid "Field \"%s\" does not exists in \"%s\"."
 msgstr ""
 
-#: Plugin/Migrations/Lib/Migration/PrecheckException.php:76
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/Lib/Migration/PrecheckException.php:76
 msgid "Field \"%s\" already exists in \"%s\"."
 msgstr ""
 
-#: Plugin/Migrations/View/Elements/migrations_panel.ctp:12
+#: c:/xampp/htdocs/cakephp/app/Plugin/Migrations/View/Elements/migrations_panel.ctp:12
 msgid "Migration Status"
 msgstr ""
 

@@ -16,55 +16,55 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:382
 msgid "CSVデータファイルが選択されていません。"
-msgstr "CSV data file has not been selected."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:392
 msgid "モデル名が入力されていません。"
-msgstr "Model name has not been input."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:417
 msgid "同一のモデル名、日付のデータが既に存在します。"
-msgstr "Already exists data of the same model name and date."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:431
 msgid "UploadDataの登録に失敗しました。"
-msgstr "The UploadData could not be saved. Please, try again."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:439
 msgid "CSVデータの内容のアップロードに失敗しました。"
-msgstr "Failed to upload the contents of the CSV data.."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:449
 msgid "グループ名の登録に失敗しました。<br>"
-msgstr "Failed to register the group name.<br>"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GraphsController.php:456
 msgid "UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。"
-msgstr "Could not load as UTF-8. Please check the character code of the CSV file."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:38;71;169
 msgid "Invalid group name"
-msgstr ""
+msgstr "無効なグループ名です。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:53
 msgid "The group name has been saved."
-msgstr ""
+msgstr "グループ名を保存しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:56
 msgid "The group name could not be saved. Please, try again."
-msgstr ""
+msgstr "グループ名を保存できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:86
 msgid " は既に存在しています。<br>Mergeを実行することでこのグループを削除し・選択グループに統合します。"
-msgstr "already exists.<br>Please user 'Merge.'"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:99
 msgid "各データのグループ名変更に失敗しました。"
-msgstr "Failed to group name change of each data."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:117
 msgid "ユーザーの所属グループ名変更に失敗しました。"
-msgstr "Failed to user belongs group name change."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:122
 msgid "グループ名の変更に失敗しました。"
@@ -72,47 +72,47 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/GroupNamesController.php:130
 msgid "マージ処理に失敗しました。"
-msgstr "Failed to change the group name."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:39;72;103
 msgid "Invalid model name"
-msgstr ""
+msgstr "無効なモデル名です。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:54;76
 msgid "The model name has been saved."
-msgstr ""
+msgstr "モデル名を保存しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:57;79
 msgid "The model name could not be saved. Please, try again."
-msgstr ""
+msgstr "モデル名を保存できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:99
 msgid "そのモデルに依存したデータはまだ存在しています"
-msgstr "Data depending on the model still exists."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:107
 msgid "The model name has been deleted."
-msgstr ""
+msgstr "モデル名を削除しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/ModelNamesController.php:109
 msgid "The model name could not be deleted. Please, try again."
-msgstr ""
+msgstr "モデル名を削除できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UploadDataController.php:40;78;106
 msgid "Invalid upload data"
-msgstr ""
+msgstr "無効なデータです。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UploadDataController.php:57;82
 msgid "The upload data has been saved."
-msgstr ""
+msgstr "データを登録しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UploadDataController.php:60;85
 msgid "The upload data could not be saved. Please, try again."
-msgstr ""
+msgstr "データを登録できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UploadDataController.php:112
 msgid "The upload data has been deleted."
-msgstr ""
+msgstr "登録データを削除しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UploadDataController.php:115
 msgid "The upload data could not be deleted. Please, try again."
@@ -120,15 +120,15 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:54;87;152
 msgid "Invalid user"
-msgstr ""
+msgstr "無効なユーザーです。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:67;97
 msgid "The user has been saved."
-msgstr ""
+msgstr "ユーザーを登録しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:72;100
 msgid "The user could not be saved. Please, try again."
-msgstr ""
+msgstr "ユーザーを保存できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:114
 msgid "Invalid customer"
@@ -136,27 +136,27 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:128
 msgid "パスワードを変更しました"
-msgstr "Password changed"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:132
 msgid "パスワードの変更に失敗しました"
-msgstr "To change the password failed"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:156
 msgid "The user has been deleted."
-msgstr ""
+msgstr "ユーザーを削除しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:158
 msgid "The user could not be deleted. Please, try again."
-msgstr ""
+msgstr "ユーザーを削除できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:185
 msgid "user deleted"
-msgstr ""
+msgstr "ユーザーの削除"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:204
 msgid "Invalid username or password, try again."
-msgstr ""
+msgstr "ユーザー名、パスワードが無効です。もう一度入力してください。"
 
 #: c:/xampp/htdocs/cakephp/app/Plugin/BoostCake/Controller/BoostCakeController.php:22
 msgid "Debug setting does not allow access to this url."
@@ -239,28 +239,28 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/localCSV.ctp:5
 msgid "CSVファイル選択"
-msgstr "CSV file selection"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/manageListFooter.ctp:2
 msgid "Relation"
-msgstr ""
+msgstr "関連項目"
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/manageListFooter.ctp:4
 msgid "UploadDatas"
-msgstr ""
+msgstr "アップロードデータ"
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/manageListFooter.ctp:5
 msgid "ModelNames"
-msgstr ""
+msgstr "モデル名"
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/manageListFooter.ctp:6
 msgid "GroupNames"
-msgstr ""
+msgstr "グループ名"
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/manageListFooter.ctp:8
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:2
 msgid "Users"
-msgstr ""
+msgstr "ユーザー"
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:1
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable.ctp:1
@@ -268,45 +268,45 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:10
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin_city2.ctp:18
 msgid "モデル名"
-msgstr "Model name"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:5
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:42
 msgid "機能レイヤ"
-msgstr "Function layer"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:6
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:40
 msgid "ファイル数"
-msgstr "Number of Files"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:7
 msgid "欠陥ファイル数"
-msgstr "Number of defects file"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:8
 msgid "欠陥ファイル率"
-msgstr "Defect file rate"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:9
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:39
 msgid "欠陥数"
-msgstr "Number of defects"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:13
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:27
 msgid "アプリケーション(APP)"
-msgstr "Application (APP)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:14
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:28
 msgid "アプリケーションフレームワーク(FW)"
-msgstr "Application framework (FW)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:15
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:29
 msgid "ライブラリ(外部OSS)"
-msgstr "Library (external OSS)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:16
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:30
@@ -316,7 +316,7 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:17
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:31
 msgid "HWライブラリ"
-msgstr "HW Library"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/metricstable.ctp:18
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:32
@@ -330,15 +330,15 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable.ctp:2
 msgid "メトリクス(面積要素)"
-msgstr "Metrics (area element)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable.ctp:49
 msgid "関連領域"
-msgstr "Related region"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable.ctp:50;97
 msgid "面積"
-msgstr "Area"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable.ctp:96
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin.ctp:19
@@ -346,20 +346,20 @@ msgstr "Area"
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin_city2.ctp:13
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:99
 msgid "由来"
-msgstr "Origin"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:49
 msgid "合計値"
-msgstr "Total value"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:91
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:36
 msgid "メトリクス合計値"
-msgstr "Metrics total value"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/originCityTable2.ctp:107
 msgid "合計ファイル数"
-msgstr "Total number of files"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/pagepath.ctp:2
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:6
@@ -368,85 +368,85 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm1.ctp:19
 msgid "モデル名1(ローカルファイル)"
-msgstr "Model name 1 (local file)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm1.ctp:20
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm4.ctp:9
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm5.ctp:9
 msgid "選択ファイル1"
-msgstr "Select File 1"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm2.ctp:12
 msgid "モデル選択"
-msgstr "Model selection"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm3.ctp:8
 msgid "選択ファイル"
-msgstr "Select File "
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm4.ctp:16
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectForm5.ctp:16
 msgid "選択ファイル2"
-msgstr "Select File 2"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectGroup.ctp:6
 msgid "グループ選択"
-msgstr "Group selection"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/selectMetrics.ctp:6
 msgid "メトリクス選択"
-msgstr "Metrics selection"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "白"
-msgstr "white"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "紫"
-msgstr "purple"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "青"
-msgstr "blue"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "緑"
-msgstr "green"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "黄"
-msgstr "yellow"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Elements/sticky.ctp:29
 msgid "赤"
-msgstr "red"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:4
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:86
 msgid "全開発グループ"
-msgstr "All Development Group"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:4;7
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:87
 msgid "メトリクス散布図"
-msgstr "Metrics Scatter Plot"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:11
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin_city2.ctp:19
 msgid "メトリクス"
-msgstr "Metrics"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:35
 msgid "順位"
-msgstr "Rank"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:37
 msgid "ファイルあたりのメトリクス値"
-msgstr "Metrics value per file"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/alldevgroup.ctp:38
 msgid "メトリクス密度(/kLOC)"
-msgstr "Metrics density(/kLOC)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/index.ctp:1
 msgid "Welcome to Visualize Tool"
@@ -455,94 +455,93 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/metrics.ctp:16
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:95
 msgid "レイヤー"
-msgstr "Layer"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/metrics.ctp:16;19
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:96
 msgid "欠陥数レーダーチャート"
-msgstr "Defects Radar Chart"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup.ctp:20
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:13
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:90
 msgid "各開発グループ"
-msgstr "Each Development Group"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup.ctp:20;23
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:91
 msgid "メトリクス遷移"
-msgstr "Metrics Transition"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:13;16
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:92
 msgid "欠陥数ファイルマップ"
-msgstr "Defects File Map"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:42
 msgid "全体を表示"
-msgstr "View the entire"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:47
 msgid "表示パス"
-msgstr "Display path"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:50
 msgid "\n    ○操作方法<br>\n  ・レイヤースピンボックスでファイル階層を切り替え<br>\n  ・size:欠陥の数  count:ディレクトリ以下のファイル数<br>\n  ・ディレクトリブロックをクリックでズーム(alt:低速ズーム)<br>\n  (sizeが0で重なりあった複数のブロックを同時にクリックするとレイアウトが崩れる不具合あり)\n  "
-msgstr "\n    ○Method<br>\n  ・Switch the file hierarchy with the Layer spin box<br>\n  ・size:number of defects  count:number of files<br>\n  ・Zoom with click on the directory block(alt:slow zoom)<br>\n  (The layout may be lost when you click the block at the same time)\n  "
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin.ctp:19;21
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:100
 msgid "欠陥数円グラフ"
-msgstr "Defect Pie Chart"
+msgstr ""
 
-#: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:101
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin_city.ctp:15;17
-msgid "メトリクス領域図"
-msgstr "Metrics Area Figure"
+msgid "由来比較(領域図)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/origin_city2.ctp:13;15
-msgid "OriginCity"
+msgid "由来比較(OriginCity)"
 msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:7
 msgid "ファイルアップロード"
-msgstr "Upload File"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:23
 msgid "データのアップロード"
-msgstr "Data Upload"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:48
 msgid "新規モデル名"
-msgstr "new model name"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:54
 msgid "date"
-msgstr ""
+msgstr "日付"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:70
 msgid "文字コード(UTF-8)チェック"
-msgstr "Character code (UTF-8) Check"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:83
 msgid "コメント"
-msgstr "comment"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:85
 msgid "コメント(任意)"
-msgstr "Comments (optional)"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:105
 msgid "アップロード時の注意"
-msgstr "Note:"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:107
 msgid "\n        <li>既存のモデル名を選択、あるいは新規モデル名を入力してください</li>\n        <li>モデル名・日付が同じデータはアップロードできません。上書きが必要な場合は以下の履歴から削除してください。</li>\n        <li>CSVファイル中のグループ名はUTF-8に変換しアップロードします。<br>「文字コードチェック」オプションは正しく変換できたかチェックを行い、文字化けの可能性がある場合は処理を中断します。</li>\n        <li>アップロードには数十秒から数分かかります。画面上部にメッセージが表示されるまでページを移動しないでください。</li>\n    "
-msgstr "\n        <li>Please select an existing model name, or enter a new model name</li>\n        <li>You can not upload same model name and date data. If overwrite is required, please remove from the following history.</li>\n        <li>Group names in the CSV file is converted to UTF-8. <br> "character code check" option performs a check or not converted correctly, if there is a possibility of garbled suspends.</li>\n        <li>It takes you a few minutes to upload date. Please wait until a result message is shown on this page.</li>\n    "
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:120
 msgid "Upload History"
-msgstr ""
+msgstr "アップロード履歴"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:129
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/add.ctp:12
@@ -560,7 +559,7 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:11;48
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:32
 msgid "Actions"
-msgstr ""
+msgstr "操作"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:148
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/edit.ctp:29
@@ -572,7 +571,7 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Users/edit.ctp:38
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:26
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/upload.ctp:148
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/edit.ctp:29
@@ -586,11 +585,11 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:26
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:35
 msgid "Are you sure you want to delete # %s?"
-msgstr ""
+msgstr "一度削除したデータは復元できません。id:%sのデータを削除しますか?"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/add.ctp:4
 msgid "Add Group Name"
-msgstr ""
+msgstr "新規グループ名の追加"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/add.ctp:9
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/add.ctp:9
@@ -598,69 +597,69 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:13
 #: c:/xampp/htdocs/cakephp/app/View/Users/edit.ctp:31
 msgid "Submit"
-msgstr ""
+msgstr "送信"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/add.ctp:15
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/edit.ctp:30
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:21
 msgid "List Group Names"
-msgstr ""
+msgstr "グループ名一覧"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/edit.ctp:4
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:19
 msgid "Edit Group Name"
-msgstr ""
+msgstr "グループ名の編集"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/edit.ctp:17
 msgid "すでに存在するグループと統合する場合はMergeを実行してください。"
-msgstr "Please run the Merge if you want to integrate with aonther group."
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:2
 msgid "Group Names"
-msgstr ""
+msgstr "グループ名"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:17
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:20
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/index.ctp:37
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:23
 msgid "View"
-msgstr ""
+msgstr "表示"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:18
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:22
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:24
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:28
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:33
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/index.ctp:49
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:36
 msgid "Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}"
-msgstr ""
+msgstr "{:page}/{:pages}ページ {:count}項目中{:start}～{:end}を表示中, "
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:33
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:38
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/index.ctp:54
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:41
 msgid "previous "
-msgstr ""
+msgstr "前 "
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:35
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:40
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/index.ctp:56
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:43
 msgid " next"
-msgstr ""
+msgstr " 次"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/index.ctp:42
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:22
 msgid "New Group Name"
-msgstr ""
+msgstr "新規グループ名"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:2
 msgid "Group Name"
-msgstr ""
+msgstr "グループ名"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:4
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/view.ctp:4
@@ -672,11 +671,11 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:9
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/view.ctp:9
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: c:/xampp/htdocs/cakephp/app/View/GroupNames/view.ctp:20
 msgid "Delete Group Name"
-msgstr ""
+msgstr "グループ名の削除"
 
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:64
 msgid "Visualize Tool"
@@ -694,60 +693,64 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
+#: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:101
+msgid "メトリクス領域図"
+msgstr ""
+
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:102
 msgid "Origin City"
 msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/add.ctp:4
 msgid "Add Model Name"
-msgstr ""
+msgstr "新規モデル名の追加"
 
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/add.ctp:15
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/edit.ctp:17
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/view.ctp:23
 msgid "List Model Names"
-msgstr ""
+msgstr "モデル名一覧"
 
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/edit.ctp:4
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/view.ctp:20
 msgid "Edit Model Name"
-msgstr ""
+msgstr "モデル名の編集"
 
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/index.ctp:2
 msgid "Model Names"
-msgstr ""
+msgstr "モデル名"
 
 #: c:/xampp/htdocs/cakephp/app/View/ModelNames/view.ctp:2
 msgid "Model Name"
-msgstr ""
+msgstr "モデル名"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:4
 msgid "Edit Upload Data"
-msgstr ""
+msgstr "アップロード情報の編集"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:20
 msgid "List Upload Data"
-msgstr ""
+msgstr "アップロードデータ一覧"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:21
 msgid "List Modelnames"
-msgstr ""
+msgstr "モデル名一覧"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:22
 msgid "New Modelname"
-msgstr ""
+msgstr "新規モデル名"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:23
 #: c:/xampp/htdocs/cakephp/app/View/Users/add.ctp:68
 #: c:/xampp/htdocs/cakephp/app/View/Users/edit.ctp:40
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:36
 msgid "List Users"
-msgstr ""
+msgstr "ユーザー一覧"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:24
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:37
 msgid "New User"
-msgstr ""
+msgstr "新規ユーザー"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/edit.ctp:25
 msgid "List Graphs"
@@ -760,32 +763,32 @@ msgstr ""
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/index.ctp:2
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:2
 msgid "Upload Data"
-msgstr ""
+msgstr "アップロードデータ"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:9
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:14
 msgid "Modelname"
-msgstr ""
+msgstr "モデル名"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:19
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:2
 msgid "User"
-msgstr ""
+msgstr "ユーザー"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:25
 msgid "Comment"
-msgstr ""
+msgstr "コメント"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:34
 msgid "Part of Related Data"
-msgstr ""
+msgstr "データ内容(先頭20項目)"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:39
 msgid "filepath"
-msgstr ""
+msgstr "ファイルパス"
 
 #: c:/xampp/htdocs/cakephp/app/View/UploadData/view.ctp:40
 msgid "1"
@@ -889,65 +892,65 @@ msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/add.ctp:17
 msgid "Add User"
-msgstr ""
+msgstr "ユーザーの追加"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/delete.ctp:18
 #: c:/xampp/htdocs/cakephp/app/View/Users/own_delete.ctp:18
 msgid "Delete User Account"
-msgstr ""
+msgstr "アカウント削除"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/edit.ctp:4
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:34
 msgid "Edit User"
-msgstr ""
+msgstr "ユーザー情報の変更"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/edit.ctp:15
 msgid "グループ名▼"
-msgstr "Group names"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/index.ctp:50
 msgid "Add New User"
-msgstr ""
+msgstr "新規ユーザーの追加"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/manage.ctp:6
 msgid "アカウント操作"
-msgstr "Account operation"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/manage.ctp:8
 msgid "管理"
-msgstr "Manage"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/manage.ctp:10
 msgid "変更"
-msgstr "Edit"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/manage.ctp:11
 msgid "削除"
-msgstr "Delete"
+msgstr ""
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/own_Edit.ctp:18
 msgid "Change Your Password"
-msgstr ""
+msgstr "パスワードの変更"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:9
 msgid "Username"
-msgstr ""
+msgstr "ユーザー名"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:14
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:19
 msgid "Role"
-msgstr ""
+msgstr "権限"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:24
 msgid "Group"
-msgstr ""
+msgstr "グループ"
 
 #: c:/xampp/htdocs/cakephp/app/View/Users/view.ctp:35
 msgid "Delete User"
-msgstr ""
+msgstr "ユーザーの削除"
 
 #: Model/GroupName.php:validation for field name
 #: Model/ModelName.php:validation for field name
@@ -975,12 +978,11 @@ msgstr ""
 msgid "A group is required"
 msgstr ""
 
-#手動追加
-msgid "表示を更新"
-msgstr "Update"
+msgid "add"
+msgstr "追加"
 
-msgid "データ取得日"
-msgstr "Date"
+msgid "edit"
+msgstr "更新"
 
-msgid "アップロード"
-msgstr "Upload"
+msgid "delete"
+msgstr "削除"
