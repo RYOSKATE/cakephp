@@ -164,37 +164,41 @@ class UsersController extends AppController {
     {
         if ($this->request->is('post'))
         {
-            $message = 'Invalid username or password, try again.';
-            $username = $this->request['data']['User']['username'];
-            $password = $this->request['data']['User']['password'];
-			
-			$role = $this->Auth->user('role');
-			$numOfAdmin = count($this->User->find('all', array("roll" => "admin")));
-			$message == "あなたは最後のadminユーザーです";
-			if($role !="admin" && 1<$numOfAdmin)
+            //正しいログインデータを保持。
+            //一度ログアウトし、入力情報でログインできれば正しい名前とパスワードとして削除実行
+            //ログインできなければエラー出力と保持しているデータでログイン状態に。
+            $data = array(
+            'id' => $this->Auth->user('id'),
+            'username' => $this->Auth->user('username'),
+            'password' => $this->Auth->user('password'),
+			'role' => $this->Auth->user('role'),
+            );
+            
+            $this->Auth->logout();
+            //$login['username'] = $this->request['data']['User']['username'];
+            //$login['password'] = $this->Auth->password($this->request['data']['User']['password']);
+            $numOfAdmin = count($this->User->find('all', array("roll" => "admin")));
+			$message = "あなたは最後のadminユーザーです";
+			if($data['role'] !="admin" || 1!=$numOfAdmin)
 			{
-				$message == "ユーザーネームとパスワードを確認してください";
-				if($username == $this->Auth->user('username'))
+				$message = "ユーザーネームとパスワードを確認してください";
+				if($this->Auth->login())
 				{
-					$message == "このユーザーは既に存在しません";
-					$id = $this->Auth->user('id');
-					if ($this->User->exists($id)) 
-					{
-						if ($this->User->delete($id)) 
-						{
-                            $this->flashText(__('user deleted'));
-							$this->redirect(array('action' => 'login'));
-						}
-					}
+                    if ($this->User->delete($data['id'])) 
+                    {
+                        $this->flashText(__('user deleted'));
+                        $this->redirect(array('action' => 'login'));
+                    }
 				}
 			}
+            $this->Auth->login($data);
             $this->flashText($message,false);
         }
     }
     public function login()
     {
         if ($this->request->is('post'))
-        {
+        {            
             if ($this->Auth->login()) 
             {
                 $this->redirect($this->Auth->redirect());
@@ -202,7 +206,7 @@ class UsersController extends AppController {
             else 
             {
                 $message = __('Invalid username or password, try again.');
-                $this->Session->setFlash(message . '<button class="close" data-dismiss="alert">&times;</button>', 'default', ['class'=> 'alert alert-warning alert-dismissable']);
+                $this->Session->setFlash($message . '<button class="close" data-dismiss="alert">&times;</button>', 'default', ['class'=> 'alert alert-warning alert-dismissable']);
             }
         }
     }

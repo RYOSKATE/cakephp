@@ -26,7 +26,7 @@
 	)); ?>
 
 	<div class="form-group">
-		<?php echo $this->Form->submit('Delete Account', array(
+		<?php echo $this->Form->submit(__('Delete Account'), array(
 			'div' => 'col col-md-6 col-md-offset-2',
 			'class' => 'btn btn-lg btn-primary',
 			'style' => 'background: #FF0000'

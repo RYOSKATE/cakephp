@@ -14,7 +14,7 @@
 	'class' => 'well form-horizontal',
 )); ?>
 	<fieldset>
-	<legend>Please input Username and Password!</legend>
+	<legend><?php echo __('Please input Username and Password!');?></legend>
 	<?php echo $this->Form->input('username', array(
 		'placeholder' => 'username'
 	)); ?>
@@ -22,7 +22,7 @@
 		'placeholder' => 'Password'
 	)); ?>
 	<div class="form-group">
-		<?php echo $this->Form->submit('Sign in', array(
+		<?php echo $this->Form->submit(__('Sign in'), array(
 			'div' => 'col col-md-6 col-md-offset-2',
 			'class' => 'btn btn-lg btn-primary',
 			'style' => 'padding:8px 20px;'

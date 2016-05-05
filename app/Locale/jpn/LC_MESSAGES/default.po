@@ -152,7 +152,7 @@ msgstr "ユーザーを削除できませんでした。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:185
 msgid "user deleted"
-msgstr "ユーザーの削除"
+msgstr "アカウントを削除しました。"
 
 #: c:/xampp/htdocs/cakephp/app/Controller/UsersController.php:204
 msgid "Invalid username or password, try again."
@@ -985,4 +985,13 @@ msgid "edit"
 msgstr "更新"
 
 msgid "delete"
+msgstr "削除"
+
+msgid "Please input Username and Password!"
+msgstr "ユーザー名とパスワードを入力し、ログインしてください。"
+
+msgid "Sign in"
+msgstr "ログイン"
+
+msgid "Delete Account"
 msgstr "削除"
