@@ -112,11 +112,23 @@ class GraphsController extends AppController
             $data=[];//nullだとページ切替時枠が描画されない
             if (isset($this->request->data['set'])) 
             {
-                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 $selectMetrics = $this->data['Graph'] ['Metrics'];
-                $data = $this->Graph->getGroupData($selectUploadDataId,$selectMetrics,$selectGroupName);
-                $selectModelName = $uploadList[$selectUploadDataId];
+                if (!empty($this->data['Graph'] ['選択ファイル']['name'])) 
+                {
+                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                    $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
+                    move_uploaded_file($up_file, $fileName);
+                    $data = $this->Graph->getGroupDataFromCSV($fileName,$selectMetrics);
+                    $selectModelName = basename($fileName);
+                }
+                else
+                {                
+                    $selectUploadDataId = $this->data['Graph']['CSV_ID'];
+                    $data = $this->Graph->getGroupData($selectUploadDataId,$selectMetrics,$selectGroupName);
+                    $selectModelName = $uploadList[$selectUploadDataId];            
+                }
             }
             $this->set('data',$data);
             $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);
@@ -395,7 +407,6 @@ class GraphsController extends AppController
 
         $metricsListData = $this->setMetricsList();
         $selectMetrics = 3;
-        
         $selectModelName = null;
         $data=null;
         if ($uploadList && isset($this->request->data['set'])) 
