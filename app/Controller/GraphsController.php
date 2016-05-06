@@ -228,11 +228,13 @@ class GraphsController extends AppController
             if (isset($this->request->data['set']))
             {
                 $chartMetrics = array();
-                for ($i = 0; $i < 25; ++$i)
+                for ($i = 0; $i < count($metricsListData); ++$i)
                 {
-                    if(!empty($this->data['Graph']['Metrics' . $i]))
-                        $chartMetrics[] = $this->data['Graph']['Metrics' . $i];
+                    $number = $this->data['Graph']['Metrics' . $i];
+                    if(isset($metricsListData[$number]))
+                        $chartMetrics[] = $number;
                 }
+
                 $chartMetrics = array_unique($chartMetrics);
                 sort($chartMetrics);
                 $chartMetricsStr = array();

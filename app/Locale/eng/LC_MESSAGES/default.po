@@ -1014,3 +1014,6 @@ msgstr "value=size of circle:File size (LOC)"
 
 msgid "直線：最小二乗法による近似直線"
 msgstr "Line: approximate straight line by the least squares method"
+
+msgid "選択したメトリクスをレーダーチャート表示します。"
+msgstr "selected metrics are displayed on radar chart."
