@@ -9,8 +9,8 @@
 <?php $this->Html->script('amcharts/pie', array('inline' => false));?>
 
 <script>
-    var defactsByOrigin1 = JSON.parse('<?=json_encode($model1);?>');
-    var defactsByOrigin2 = JSON.parse('<?=json_encode($model2);?>');
+    var defactsByOrigin1 = JSON.parse('<?=json_encode($data1);?>');
+    var defactsByOrigin2 = JSON.parse('<?=json_encode($data2);?>');
 </script>
 <div data-role='page'>
 <?php echo $this->Html->script('origin', array('inline' => true));?>

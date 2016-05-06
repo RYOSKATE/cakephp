@@ -16,7 +16,7 @@
     <?php echo $this->element('selectForm1'); ?>
 </div>
 <h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
-<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsName,4);?></h6>
+<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 <div class="row">
     <div class="col-md-12 col-sm-12">
          <div id="canvas-wrapper"></div>

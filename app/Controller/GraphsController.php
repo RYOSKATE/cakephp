@@ -131,7 +131,7 @@ class GraphsController extends AppController
             }
         }
         $this->set('data',$data);
-        $this->set('name',$selectModelName);
+        $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
         $this->set('selectMetricsStr', $selectMetricsStr);
     }
@@ -297,7 +297,7 @@ class GraphsController extends AppController
                 }
             }
             $this->set('data'.$i,$data);
-            $this->set('name'.$i,$selectModelName);
+            $this->set('selectModelName'.$i,$selectModelName);
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
@@ -337,7 +337,7 @@ class GraphsController extends AppController
                     $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
             }
-            $this->set('model'.$i,$data);
+            $this->set('data'.$i,$data);
             $this->set('ModelName'.$i,$selectModelName);
         }
         $this->set('useLocalCSV',true);
@@ -377,7 +377,7 @@ class GraphsController extends AppController
                     $data = $this->Graph->getOriginCity($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
             }
-            $this->set('model'.$i,$data);
+            $this->set('data'.$i,$data);
             $this->set('ModelName'.$i,$selectModelName);
         }
         $this->set('useLocalCSV',true);
@@ -395,7 +395,7 @@ class GraphsController extends AppController
         $selectMetrics = 3;
         $selectMetricsStr = '';
      
-        $data=null;//nullだとページ切替時枠が描画されない
+        $data=null;
         if (isset($this->request->data['set'])) 
         {
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
@@ -419,7 +419,7 @@ class GraphsController extends AppController
         $this->set('data',$data);
         $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsName', $selectMetricsStr);    
+        $this->set('selectMetricsStr', $selectMetricsStr);    
     }
 
     public function upload()

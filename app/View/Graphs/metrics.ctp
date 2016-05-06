@@ -9,8 +9,8 @@ echo '</pre>';*/
 <script type="text/javascript">
     var dataset1 = JSON.parse('<?=json_encode($data1);?>');
     var dataset2 = JSON.parse('<?=json_encode($data2);?>');
-    var label1 = '<?php echo $name1;?>';
-    var label2 = '<?php echo $name2;?>';
+    var label1 = '<?php echo $selectModelName1;?>';
+    var label2 = '<?php echo $selectModelName2;?>';
 </script>
 <?php echo $this->Html->script('metrics', array('inline' => true));?>
 <?php echo $this->element('pagepath', array("secondPath" => __("レイヤー"),"thirdPath" => __("メトリクスレーダーチャート")));?>
@@ -25,7 +25,7 @@ echo '</pre>';*/
     </div>
 <?php echo __('表の列をクリックすることで表示項目切り替え');?>
     <div class="col-md-12 col-sm-12" >
-		<?php echo $this->element('metricstable', array("name" => $name1,"data" => $data1,"metricsName"=>substr($selectMetricsStr,4)));?>
-		<?php echo $this->element('metricstable', array("name" => $name2,"data" => $data2,"metricsName"=>substr($selectMetricsStr,4)));?>
+		<?php echo $this->element('metricstable', array("name" => $nselectModelName1,"data" => $data1,"metricsName"=>substr($selectMetricsStr,4)));?>
+		<?php echo $this->element('metricstable', array("name" => $selectModelName2,"data" => $data2,"metricsName"=>substr($selectMetricsStr,4)));?>
     </div>
 </div>

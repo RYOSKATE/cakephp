@@ -7,7 +7,7 @@
     <h1><small><?php echo __('メトリクス散布図');?></small></h1>
      <?php echo $this->element('selectForm1'); ?>
 </div>
-<h4><?php echo __('モデル名');?>:<?php echo $name;?></h4>
+<h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
 <h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 <div id="chartdiv" style="height:500px;"></div>
 
