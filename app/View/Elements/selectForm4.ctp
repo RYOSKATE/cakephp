@@ -6,14 +6,14 @@
                 echo $this->element('seceletCSVid', array("formname" => 'CSV_ID1',"isAllowEmpty" => false));
                 if(isset($useLocalCSV))
                 {
-                    echo $this->element('localCSV',array("formname" => __('選択ファイル1')));
+                    echo $this->element('localCSV',array("formname" => __('selectCSV1')));
                 }
         echo '</div>';
         echo '<div class="col-md-6 col-sm-6">';
                 echo $this->element('seceletCSVid', array("formname" => 'CSV_ID2',"isAllowEmpty" => false));
                 if(isset($useLocalCSV))
                 {
-                    echo $this->element('localCSV',array("formname" => __('選択ファイル2')));
+                    echo $this->element('localCSV',array("formname" => __('selectCSV2')));
                 }            
         echo '</div>';
         echo '<div class="col-md-6 col-sm-6">';

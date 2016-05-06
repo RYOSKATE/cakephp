@@ -5,7 +5,7 @@
         echo $this->element('seceletCSVid', array("formname" => 'CSV_ID',"isAllowEmpty" => false));
         echo '</div>';
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
-        echo $this->element('localCSV',array("formname" => __('選択ファイル')));
+        echo $this->element('localCSV',array("formname" => __('selectCSV')));
         echo '</div>';
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
         echo $this->element('selectGroup',$groupName); 

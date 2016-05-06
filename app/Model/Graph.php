@@ -315,7 +315,7 @@ class Graph extends AppModel
     function getCompareMetricsTableFromCSV($up_file,$selectMetrics)
     {
         $data = $this->readCSV($up_file,-1,-1);
-        return $this->getFileMetricsTableImple($data, $selectMetrics, $chartMetrics);
+        return $this->getCompareMetricsTableImple($data, $selectMetrics);
     }
 
     function getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
@@ -347,13 +347,13 @@ class Graph extends AppModel
         {
             return null;
         }
-        $modelName = $data[0]['Modelname']['name'];
+        //$modelName = $data[0]['Modelname']['name'];
         $newData = array();
         for ($i = 0; $i < 7; ++$i)
         {
             $newData[$i]=array('ModelLayer'=>
                                 array(
-                                    'model'           =>$modelName,
+                                    //'model'           =>$modelName,
                                     'layer'           =>$i,
                                     'all_file_num'    =>0,
                                     'defect_file_num' =>0,

@@ -75,7 +75,7 @@ echo '<div class="row">';
             ));
             echo '</div>';
             echo '<div class="col-md-12 col-sm-12">';
-            echo $this->element('localCSV',array("formname" => '選択ファイル'));
+            echo $this->element('localCSV',array("formname" => 'selectCSV'));
             echo '</div>';
             echo '<div class="col-md-12 col-sm-12">';
             echo $this->Form->input('comment', array
