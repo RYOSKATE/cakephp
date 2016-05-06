@@ -254,7 +254,49 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                
         $this->set('useLocalCSV',true);
     }
+    
+    public function metrics()
+    {
+        $this->operateSticky();
+        $uploadList = $this->setUploadList();
+        $groupNameData = $this->setGroupNameWithAll();
+        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $metricsListData = $this->setMetricsList();
+        $selectMetrics = 3;        
+        for($i=1;$i<=2;++$i)
+        {
+            $selectModelName = null;
+            $data=null;
+            if ($uploadList && isset($this->request->data['set']))
+            {
+                $selectUploadDataId = $this->getFirstKey($uploadList);                
+                $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i]; 
+                $selectMetrics = $this->data['Graph'] ['Metrics'];                            
+                $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
+                if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
+                {
+                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
+                    $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
+                    move_uploaded_file($up_file, $fileName);
+                    $data = $this->Graph->getCompareMetricsTableFromCSV($fileName,$selectMetrics);
+                    $selectModelName = basename($fileName);
+                }
+                else
+                {
+                    $selectModelName = $uploadList[$selectUploadDataId];                
+                    $data = $this->Graph->getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics);
+                }
+            }
+            $this->set('data'.$i,$data);
+            $this->set('name'.$i,$selectModelName);
+        }
+        $this->set('useLocalCSV',true);
+        $this->set('selectMetrics',$selectMetrics);
+        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                
 
+    }
+    
     public function origin()
     {
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
@@ -365,42 +407,6 @@ class GraphsController extends AppController
         $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
         $this->set('data',$data);        
-    }
-    
-    public function metrics()
-    {
-        $this->operateSticky();
-        $uploadList = $this->setUploadList();
-        $groupNameData = $this->setGroupNameWithAll();
-        $selectGroupName = reset($groupNameData);//ALLは0に追加されている
-        for($i=1;$i<=2;++$i)
-        {
-            $selectModelName = null;
-            $data=null;
-            if ($uploadList && isset($this->request->data['set']))
-            {
-                $selectUploadDataId = $this->getFirstKey($uploadList);                
-                $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i];            
-                $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-                if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
-                {
-                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
-                    $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                    $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $data = $this->Graph->getCompareMetricsTableFromCSV($fileName);
-                    $selectModelName = basename($fileName);
-                }
-                else
-                {
-                    $selectModelName = $uploadList[$selectUploadDataId];                
-                    $data = $this->Graph->getCompareMetricsTable($selectUploadDataId,$selectGroupName);
-                }
-            }
-            $this->set('data'.$i,$data);
-            $this->set('name'.$i,$selectModelName);
-        }
-        $this->set('useLocalCSV',true);
     }
 
     public function upload()

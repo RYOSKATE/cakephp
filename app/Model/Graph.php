@@ -33,7 +33,7 @@ class Graph extends AppModel
     }
     
     //欠陥ファイル数、
-    function getMetricsValue(&$col,$selectMetrics)
+    function getMetricsValue($col,$selectMetrics)
     {
         $metrics = 1;//0の時はファイル数なので1
         if($selectMetrics==1 && $col[3]==0)
@@ -204,7 +204,7 @@ class Graph extends AppModel
     function getFileMetricsTableImple($data, $selectMetrics,$chartMetrics)
     {
         $this->depth=0;
-        //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
+        //例：model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
         //data[0]=Array
         // (
         //     [Graph] => Array
@@ -213,25 +213,14 @@ class Graph extends AppModel
         //             [filepath] => vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/ImsSenderRxr.java
         //             [3] => 1//欠陥数
         //             [8] => 呼び出す他クラスの関数種類数
-        //             [9] => メソッドの凝集度の欠如(LCOM)
-        //             [10] =>Public メソッド数
-        //             [11] =>Public 属性数
-        //             [18] => 呼び出す他ファイルの関数の種類数
         //             [$selectMetrics] => 選択されたメトリクス
         //         )
-
         // )
 
       
         //木の初期化
         $tree = array('name'    =>   "root",
             'metrics'         =>0,
-            // 'defact'         =>0,
-            // 'otherClassFunc' =>0,
-            // 'LCOM'           =>0,
-            // 'Method'         =>0,
-            // 'Field'          =>0,
-            // 'otherFileFunc'  =>0,
             'layer'          =>0,
             'children'       => array());
         foreach($chartMetrics as $metNum)
@@ -251,13 +240,7 @@ class Graph extends AppModel
             foreach($chartMetrics as $metNum)
             {
                 $c_metrics['metrics' . $metNum] = $this->getMetricsValue($data[$i]['Graph'],$metNum);
-            }      
-            // $defact         = $data[$i]['Graph'][3];
-            // $otherClassFunc = $data[$i]['Graph'][8];
-            // $LCOM           = $data[$i]['Graph'][9];
-            // $Method         = $data[$i]['Graph'][10];
-            // $Field          = $data[$i]['Graph'][11];
-            // $otherFileFunc  = $data[$i]['Graph'][18];
+            }
             $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
             $pathDepth=count($path);
             if($this->depth < $pathDepth)
@@ -277,13 +260,6 @@ class Graph extends AppModel
                             $parent['metrics' . $metNum] += $c_metrics['metrics' . $metNum];
                         }                        
                         $parent['metrics']         += $metrics;
-                        // $parent['defact']         += $defact;
-                        // $parent['otherClassFunc'] += $otherClassFunc;
-                        // $parent['LCOM']           += $LCOM;
-                        // $parent['Method']         += $Method;
-                        // $parent['Field']          += $Field;
-                        // $parent['otherFileFunc']  += $otherFileFunc;
-
                         $parent = &$children[$k];
                         $children[$k] += array('children'=> array());
                         $children = &$children[$k]['children'];
@@ -296,12 +272,6 @@ class Graph extends AppModel
                     $node = array(
                                     'name'           =>$path[$j],
                                     'metrics'        =>$metrics,
-                                    // 'defact'         =>$defact,
-                                    // 'otherClassFunc' =>$otherClassFunc,
-                                    // 'LCOM'           =>$LCOM,
-                                    // 'Method'         =>$Method,
-                                    // 'Field'          =>$Field,
-                                    // 'otherFileFunc'  =>$otherFileFunc,
                                     'layer'          =>($j+1),
                                  );
                     foreach($chartMetrics as $metNum)
@@ -319,12 +289,6 @@ class Graph extends AppModel
             $tmp_array = array(
                                 'metrics'        =>$metrics,
                                 'name'           =>$path[$pathDepth-1],
-                                // 'defact'         =>$defact,
-                                // 'otherClassFunc' =>$otherClassFunc,
-                                // 'LCOM'           =>$LCOM,
-                                // 'Method'         =>$Method,
-                                // 'Field'          =>$Field,
-                                // 'otherFileFunc'  =>$otherFileFunc,
                                 'layer'          => ($pathDepth)
                             );
             foreach($chartMetrics as $metNum)
@@ -333,12 +297,6 @@ class Graph extends AppModel
             }                                  
             $children[] = $tmp_array;
             $parent['metrics']        += $metrics;
-            // $parent['defact']         += $defact;
-            // $parent['otherClassFunc'] += $otherClassFunc;
-            // $parent['LCOM']           += $LCOM;
-            // $parent['Method']         += $Method;
-            // $parent['Field']          += $Field;
-            // $parent['otherFileFunc']  += $otherFileFunc;
             foreach($chartMetrics as $metNum)
             {
                 $node['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
@@ -353,67 +311,13 @@ class Graph extends AppModel
 
 
     ///////メトリクス比較用///////
-    function getCompareMetricsTableFromCSV($up_file)
+    function getCompareMetricsTableFromCSV($up_file,$selectMetrics)
     {
-        setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        $data = array();
-        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
-        $lines = str_getcsv($buf, "\r\n");
-        foreach ($lines as $line) 
-        {
-            $col = str_getcsv($line);
-            if(4<=$col[1])//由来o3,o13,o23,o123のみ
-            {
-              $data[] = array('Graph'=>array('model'=>"localCSV",'filepath'=>$col[0]) +$col);
-            }
-        }
-
-        $modelName = $data[0]['Graph']['model'];
-        $newData = array();
-        for ($i = 0; $i < 7; ++$i)
-        {
-            $newData[$i]=array('ModelLayer'=>
-                                array(
-                                    'model'           =>$modelName,
-                                    'layer'           =>$i,
-                                    'all_file_num'    =>0,
-                                    'defect_file_num' =>0,
-                                    'defect_per_file' =>0,
-                                    'defect_num'      =>0,
-                                     )
-                                );
-        }
-
-        for ($i = 0; $i < count($data); ++$i)
-        {
-            $defact = $data[$i]['Graph'][3];
-            $filePath = $data[$i]['Graph']['filepath'];
-            $layer = $this->getLayer($filePath);
-            if($layer < 0 ||6 < $layer)
-            {
-                continue;
-            }
-            ++$newData[$layer]['ModelLayer']['all_file_num'];
-            if(0<$defact)
-            {
-                ++$newData[$layer]['ModelLayer']['defect_file_num'] ;
-                $newData[$layer]['ModelLayer']['defect_num'] += $defact;
-            }
-        }
-        //最後にファイル率を求める
-        for ($i = 0; $i < count($newData); ++$i)
-        {
-            $temp = $newData[$i]['ModelLayer'];
-            if($temp['all_file_num']!=0)
-            {
-                $newData[$i]['ModelLayer']['defect_per_file'] = 100*$temp['defect_file_num']/$temp['all_file_num'];
-            }
-        }
-        //ファイル率計算時の0除算を防ぐため
-        return $newData;
+        $data = $this->readCSV($up_file,-1,-1);
+        return $this->getFileMetricsTableImple($data, $selectMetrics, $chartMetrics);
     }
 
-    function getCompareMetricsTable($selectUploadDataId,$selectGroupName) 
+    function getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
     {
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
@@ -421,7 +325,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('filepath','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('filepath','3',$selectMetrics),'conditions' => $conditions));
 
         //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
@@ -434,6 +338,10 @@ class Graph extends AppModel
         //         )
 
         // )
+        return $this->getCompareMetricsTableImple($data,$selectMetrics);
+    }
+    function getCompareMetricsTableImple($data,$selectMetrics)
+    {
         if(empty($data))
         {
             return null;
@@ -450,6 +358,7 @@ class Graph extends AppModel
                                     'defect_file_num' =>0,
                                     'defect_per_file' =>0,
                                     'defect_num'      =>0,
+                                    'metrics'         =>0,
                                      )
                                 );
         }
@@ -457,6 +366,7 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $defact = $data[$i]['Graph'][3];
+            $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
             $filePath = $data[$i]['Graph']['filepath'];
             $layer = $this->getLayer($filePath);
             if($layer < 0 ||6 < $layer)
@@ -469,6 +379,7 @@ class Graph extends AppModel
                 ++$newData[$layer]['ModelLayer']['defect_file_num'] ;
                 $newData[$layer]['ModelLayer']['defect_num'] += $defact;
             }
+            $newData[$layer]['ModelLayer']['metrics'] += $metrics;
         }
         //最後にファイル率を求める
         for ($i = 0; $i < count($newData); ++$i)
@@ -480,9 +391,9 @@ class Graph extends AppModel
             }
         }
         //ファイル率計算時の0除算を防ぐため
-        return $newData;
+        return $newData;        
     }
-
+    
     function getLayer($filePath)
     {
         //frameworksを含めていいのか要検討

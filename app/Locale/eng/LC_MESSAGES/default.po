@@ -459,8 +459,8 @@ msgstr "Layer"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/metrics.ctp:16;19
 #: c:/xampp/htdocs/cakephp/app/View/Layouts/default.ctp:96
-msgid "欠陥数レーダーチャート"
-msgstr "Defects Radar Chart"
+msgid "メトリクスレーダーチャート"
+msgstr "Metrics Radar Chart"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup.ctp:20
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/onedevgroup2.ctp:13
@@ -990,3 +990,9 @@ msgstr "File Block Area"
 
 msgid "メトリクス(チャート表示)▼"
 msgstr "Metrics(for Radar Chart)▼"
+
+msgid "表の列をクリックすることで表示項目切り替え"
+msgstr "you can change display data by click on the below table"
+
+msgid "メトリクス値"
+msgstr "Metrics Value▼"

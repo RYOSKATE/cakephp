@@ -44,7 +44,7 @@ var data2= new Array();
         return radarChartData;
     }
     
-    radarChartData = setdata('all_file_num');
+    radarChartData = setdata('metrics');
 
     window.onload = function(){
         window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
@@ -60,11 +60,12 @@ var data2= new Array();
       var $param = 'all_file_num';
       switch($select)
       {
-          case 1 : $param = 'all_file_num'; break;
-          case 2 : $param = 'defect_file_num'; break;
-          case 3 : $param = 'defect_per_file'; break;
-          case 4 : $param = 'defect_num'; break;
-          default :
+          case 1 : $param = 'metrics'; break;
+          case 2 : $param = 'all_file_num'; break;
+          case 3 : $param = 'defect_file_num'; break;
+          case 4 : $param = 'defect_per_file'; break;
+          case 5 : $param = 'defect_num'; break;
+          default :$param = 'metrics'; break;
       }
       radarChartData = setdata($param);
       window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {responsive: true});
