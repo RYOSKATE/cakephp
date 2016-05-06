@@ -52,6 +52,7 @@ echo '<div class="row">';
             echo '</div><div class="col-sm-12 col-md-6 col-lg-6">';
             echo $this->Form->input('date', array(
                 'type'=>__('date'),
+                'value'=>date("Y-m-d"),
                 'label'=>__('データ取得日'),
                 'dateFormat' => 'YMD',
                 'monthNames' => false,

@@ -76,9 +76,7 @@ class Graph extends AppModel
                 if(4<=$records[$i][1])
                 {
                     if($records[$i][25]=='')
-                    {
                         $records[$i][25] = 'グループ名なし';
-                    }
                         
                     //グループ名は;で区切られている
                     $names = explode(';',$records[$i][25]);

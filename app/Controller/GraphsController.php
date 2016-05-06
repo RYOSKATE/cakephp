@@ -119,8 +119,7 @@ class GraphsController extends AppController
                     $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $data = $this->Graph->getGroupDataFromCSV($fileName,$selectMetrics);
+                    $data = $this->Graph->getGroupDataFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else
@@ -249,8 +248,7 @@ class GraphsController extends AppController
                     $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName,$selectMetrics,$chartMetrics);
+                    $tree = $this->Graph->getFileMetricsTableFromCSV($up_file,$selectMetrics,$chartMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else 
@@ -290,8 +288,7 @@ class GraphsController extends AppController
                     $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $data = $this->Graph->getCompareMetricsTableFromCSV($fileName,$selectMetrics);
+                    $data = $this->Graph->getCompareMetricsTableFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else
@@ -332,8 +329,7 @@ class GraphsController extends AppController
                         $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                         $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                         $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
-                        move_uploaded_file($up_file, $fileName);
-                        $data = $this->Graph->getOriginTableFromCSV($fileName,$selectMetrics);
+                        $data = $this->Graph->getOriginTableFromCSV($up_file,$selectMetrics);
                         $selectModelName = basename($fileName);
                     }
                     else
@@ -375,8 +371,7 @@ class GraphsController extends AppController
                     $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['選択ファイル1']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル1']['name'];//data_10_utf.csv
-                    move_uploaded_file($up_file, $fileName);
-                    $data = $this->Graph->getOriginCityFromCSV($fileName,$selectMetrics);
+                    $data = $this->Graph->getOriginCityFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else 
@@ -418,8 +413,7 @@ class GraphsController extends AppController
                 $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                 $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                 $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
-                move_uploaded_file($up_file, $fileName);
-                $data = $this->Graph->getOriginCity2FromCSV($fileName,$selectMetrics);
+                $data = $this->Graph->getOriginCity2FromCSV($up_file,$selectMetrics);
                 $selectModelName = basename($fileName);
             }
             else
@@ -493,8 +487,9 @@ class GraphsController extends AppController
                     }
                 }
                 
-                $date = $this->data['Graph']['date'];
-                $date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+                $date = $this->data['Graph']['date'];       
+                if(isset($date['year']) && isset($date['year']) && isset($date['year']))
+                    $date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
                 if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$date)))
                 {             
                     $message = __('同一のモデル名、日付のデータが既に存在します。');

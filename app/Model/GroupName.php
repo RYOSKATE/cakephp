@@ -40,7 +40,8 @@ class GroupName extends AppModel {
             {
                 if($isCodeCheck && !mb_check_encoding($name,'UTF-8'))
                     $errorNames[] = $name;
-                $data[] = array('name'=> $name);
+                if(!$this->hasAny(array('GroupName.name'=>$name)))
+                    $data[] = array('name'=> $name);
             }
 
             if($errorNames)
