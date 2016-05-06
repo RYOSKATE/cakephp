@@ -27,6 +27,10 @@
     ?>
 </div>-->
 
+<?php echo __('value=円の大きさ:ファイル規模(物理行数)');?>
+<br>
+<?php echo __('直線：最小二乗法による近似直線');?>
+
 <div class="row">
     <div class="col-md-12 col-sm-12" >
     <table class="table table-hover table-condensed" id ="table">

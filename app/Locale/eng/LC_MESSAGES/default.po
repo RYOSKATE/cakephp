@@ -1008,3 +1008,9 @@ msgstr "when you select metrics whose range of value is wide and large, such as 
 
 msgid "値が存在しない場合、グラフは表示されません。"
 msgstr "if there is no value, the graph is not be displayed."
+
+msgid "value=円の大きさ:ファイル規模(物理行数)"
+msgstr "value=size of circle:File size (LOC)"
+
+msgid "直線：最小二乗法による近似直線"
+msgstr "Line: approximate straight line by the least squares method"
