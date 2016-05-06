@@ -25,7 +25,7 @@ echo '</pre>';*/
     </div>
 <?php echo __('表の列をクリックすることで表示項目切り替え');?>
     <div class="col-md-12 col-sm-12" >
-		<?php echo $this->element('metricstable', array("name" => $nselectModelName1,"data" => $data1,"metricsName"=>substr($selectMetricsStr,4)));?>
+		<?php echo $this->element('metricstable', array("name" => $selectModelName1,"data" => $data1,"metricsName"=>substr($selectMetricsStr,4)));?>
 		<?php echo $this->element('metricstable', array("name" => $selectModelName2,"data" => $data2,"metricsName"=>substr($selectMetricsStr,4)));?>
     </div>
 </div>
