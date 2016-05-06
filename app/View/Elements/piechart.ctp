@@ -5,7 +5,7 @@
                     <div class="panel-title"><?php echo $leftModelName?></div>
                 </div>
                 <div class="panel-body">
-                <?php echo '<div id=rightChart' . $No . ' style="height:500px;"></div>'; ?> 
+                <?php echo '<div id=leftChart' . $No . ' style="height:500px;"></div>'; ?> 
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
                     <div class="panel-title"><?php echo $rightModelName?></div>
                 </div>
                 <div class="panel-body">
-                <?php echo '<div id=leftChart' . $No . ' style="height:500px;"></div>'; ?>
+                <?php echo '<div id=rightChart' . $No . ' style="height:500px;"></div>'; ?>
                 </div>
             </div>
         </div>

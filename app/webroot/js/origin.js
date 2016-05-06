@@ -2,13 +2,13 @@
 var chartData1 = [];
 for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
 {
-    var defacts = defactsByOrigin1[origin];
+    var metrics = defactsByOrigin1[origin];
     var chartDataByOrigin = [];
-    for (var j = 0; j < defacts.length; ++j) 
+    for (var j = 0; j < metrics.length; ++j) 
     {
-        if(defacts[j]!=0)
+        if(metrics[j]!=0)
         {
-            chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": defacts[j] });
+            chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": metrics[j] });
         }
     }
     chartData1.push(chartDataByOrigin);
@@ -18,13 +18,13 @@ for (var origin = 0; origin < defactsByOrigin1.length; ++origin)
 var chartData2 = [];
 for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
 {
-    var defacts = defactsByOrigin2[origin];
+    var metrics = defactsByOrigin2[origin];
     var chartDataByOrigin = [];
-    for (var j = 0; j < defacts.length; ++j) 
+    for (var j = 0; j < metrics.length; ++j) 
     {
-        if(defacts[j]!=0)
+        if(metrics[j]!=0)
         {
-            chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": defacts[j] });
+            chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": metrics[j] });
         }
     }
     chartData2.push(chartDataByOrigin);

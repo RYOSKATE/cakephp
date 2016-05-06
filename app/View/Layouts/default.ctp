@@ -101,7 +101,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					</div>
 					<div class="list-group nav nav-tabs nav-stacked fixed-sidebar">
 						<div class="list-group-item active"><?php echo __('由来');?></div>
-						<?php echo $this->Html->link(__('欠陥数円グラフ'),   array('controller' => 'graphs', 'action' => 'origin'), 	 array('class' =>'list-group-item'));?>
+						<?php echo $this->Html->link(__('メトリクス円グラフ'),   array('controller' => 'graphs', 'action' => 'origin'), 	 array('class' =>'list-group-item'));?>
 						<?php echo $this->Html->link(__('メトリクス領域図'),	  array('controller' => 'graphs', 'action' => 'originCity'),  array('class' =>'list-group-item'));?>
 						<?php echo $this->Html->link(__('Origin City'), array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
 					</div>

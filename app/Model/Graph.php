@@ -18,7 +18,7 @@ class Graph extends AppModel
 		)
 	);
 
-    function readCSV($filepath,$selectModelId,$upload_id)
+    function readCSV($filepath,$selectModelId=-1,$upload_id=-1)
     {
         $records = array();
         $file = new SplFileObject($filepath); 
@@ -469,60 +469,14 @@ class Graph extends AppModel
 
     ///////由来比較用///////
         //model[由来0～7][欠陥数] = その欠陥数のファイル数
-    function getOriginTableFromCSV($up_file)
+    function getOriginTableFromCSV($up_file,$selectMetrics)
     {
-        setlocale( LC_ALL, 'ja_JP.UTF-8' );
-        $data = array();
-        $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
-        $lines = str_getcsv($buf, "\r\n");
-        foreach ($lines as $line) 
-        {
-            $col = str_getcsv($line);
-            if(4<=$col[1])//由来o3,o13,o23,o123のみ
-            {
-              $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
-            }
-        }
-        //print_r($data);
-
-        //全ての由来で最大の欠陥数を求める。
-        $maxDefact = array(0,0,0,0,0,0,0,0);
-        for ($i = 0; $i < count($data); ++$i)
-        {
-            $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
-            $maxDefact[$origin] = max($maxDefact[$origin],$defact);
-        }
-        
-        //それぞれの由来の欠陥数のテーブルを用意する
-        $model = array(array(),array(),array(),array(),array(),array(),array(),array());
-        for ($i = 0; $i < count($model); ++$i)
-        {
-            $table = array();
-            $model[$i] = array_pad($table,$maxDefact[$i]+1,0);
-        }
-
-
-        //欠陥数のテーブルを更新していく
-        for ($i = 0; $i < count($data); ++$i)
-        {
-            $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
-
-            ++$model[$origin][$defact];
-        }
-       //       echo '<pre>';
-    // print_r($model);
-    // //print_r($model2);
-    //             // die();
-    // echo '</pre>';
-
-        //print_r($model);
-        return $model;
+        $data = $this->readCSV($up_file,-1,-1);
+        return $this->getOriginTableImple($data,$selectMetrics);   
     }
 
     //model[由来0～7][欠陥数] = その欠陥数のファイル数
-    function getOriginTable($selectUploadDataId,$selectGroupName) 
+    function getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
     {
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
@@ -530,7 +484,13 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('1','3'),'conditions' => $conditions));
+        $data = $this->find('all',array('Fields' => array('1',$selectMetrics),'conditions' => $conditions));
+        
+        return $this->getOriginTableImple($data,$selectMetrics);
+    }
+    
+    function getOriginTableImple($data,$selectMetrics)
+    {
         for ($i = 0; $i < count($data); ++$i)
         {
             $data[$i] = $data[$i]['Graph'];
@@ -542,7 +502,7 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
+            $defact = $this->getMetricsValue($data[$i],$selectMetrics);
             $maxDefact[$origin] = max($maxDefact[$origin],$defact);
         }
         
@@ -559,18 +519,12 @@ class Graph extends AppModel
         for ($i = 0; $i < count($data); ++$i)
         {
             $origin = $data[$i]['1'];
-            $defact = $data[$i]['3'];
+            $defact = $this->getMetricsValue($data[$i],$selectMetrics);
 
             ++$model[$origin][$defact];
         }
-       //       echo '<pre>';
-    // print_r($model);
-    // //print_r($model2);
-    //             // die();
-    // echo '</pre>';
 
-        //print_r($model);
-        return $model;
+        return $model;        
     }
     ///////由来比較用///////
     

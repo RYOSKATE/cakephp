@@ -1,6 +1,5 @@
 
 <?php
-//デバッグ用表示
     // echo 'デバッグ用表示';
     // echo '<pre>';
     // print_r($model1);
@@ -16,12 +15,14 @@
 <div data-role='page'>
 <?php echo $this->Html->script('origin', array('inline' => true));?>
 </div>
-<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("欠陥数円グラフ")));?>
+<?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("メトリクス円グラフ")));?>
 <div class="page-header">
-    <h1><small><?php echo __('欠陥数円グラフ');?></small></h1>
-    <?php echo $this->element('selectForm4'); ?>
+    <h1><small><?php echo __('メトリクス円グラフ');?></small></h1>
+    <?php echo $this->element('selectForm5'); ?>
 </div>
 <!-- Nav tabs -->
+<h4><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h4>
+
 <!-- // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい -->
 <ul class="nav nav-tabs nav-justified" id = "mytab" role="tablist">
     <li class = 'active'><a href ="#o13" role="tab" data-toggle="tab">o13</a></li>
@@ -44,3 +45,8 @@
         }
     ?>
 </div>
+<?php echo __('注意');?><br>
+<?php echo __('メトリクス値nのファイルの個数が円グラフの要素になります。');?><br>
+<?php echo __('ex:メトリクスに"欠陥の数"を選択時、円グラフに値0 1000(90%)という要素があれば欠陥数0のファイルが1000個あり、それは全ファイルの90%ということを表します。');?><br>
+<?php echo __('"物理行数"など値の範囲が広く大きいメトリクスは処理が停止する可能性があります。');?><br>
+<?php echo __('値が存在しない場合、グラフは表示されません。');?><br>

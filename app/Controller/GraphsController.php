@@ -304,28 +304,31 @@ class GraphsController extends AppController
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
+        $metricsListData = $this->setMetricsList();
+        $selectMetrics = 3;                
         for($i=1;$i<=2;++$i)
         {
             $selectModelName =  null;
             $data=null;
             if($uploadList)
             {
-                $selectUploadDataId = $this->getFirstKey($uploadList);                
                 if (isset($this->request->data['set']))
                 {
+                    $selectMetrics = $this->data['Graph'] ['Metrics'];                            
                     if (!empty($this->data['Graph'] ['選択ファイル'.$i]['name'])) 
                     {
                         $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                         $up_file = $this->data['Graph']['選択ファイル'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                         $fileName = $uploadfile.$this->data['Graph']['選択ファイル'.$i]['name'];//data_10_utf.csv
                         move_uploaded_file($up_file, $fileName);
-                        $data = $this->Graph->getOriginTableFromCSV($fileName);
+                        $data = $this->Graph->getOriginTableFromCSV($fileName,$selectMetrics);
                         $selectModelName = basename($fileName);
                     }
                     else
                     {
+                        $selectUploadDataId = $this->getFirstKey($uploadList);                
                         $selectModelName = $uploadList[$selectUploadDataId];
-                        $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName);
+                        $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                     }
                 }
             }
@@ -333,6 +336,8 @@ class GraphsController extends AppController
             $this->set('ModelName'.$i,$selectModelName);
         }
         $this->set('useLocalCSV',true);
+        $this->set('selectMetrics',$selectMetrics);
+        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                        
     }
     
     public function originCity()
