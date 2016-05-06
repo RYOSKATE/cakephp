@@ -617,9 +617,29 @@ class Graph extends AppModel
         // print_r($valueByOrigin);
         return $valueByOrigin;
     }
-    ///////由来比較用///////
-        //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity2($selectUploadDataId,$selectGroupName,$metricsNumber) 
+    
+    ///////OriginCity(3D)用///////
+    function getOriginCity2FromCSV($up_file,$selectMetrics)
+    {   
+        $data = $this->readCSV($up_file,-1,-1);
+        return $this->getOriginCity2Imple($data, $selectMetrics);
+    }
+    
+    function getOriginCity2($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    {
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
+		//由来比較なので全部取得　$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        
+        $fields = array('modelname_id','filepath',1,$selectMetrics);     
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
+        return $this->getOriginCity2Imple($data,$selectMetrics);
+    }
+    
+    function getOriginCity2Imple($allData,$selectMetrics) 
     {	
     // 0L"(1) フォルダ／ファイル名",
 	// 1L"(2) 由来(1 - 7 = 2,12,1,13,123,23,3)",
@@ -627,31 +647,15 @@ class Graph extends AppModel
 	// 3L"(4) 欠陥の数",
 	// 4L"(5) 物理行数",
     // 5L"(25) 手を加えた組織の数",
-            
-        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
-        if($selectGroupName != 'ALL')
-        {
-            $conditions += array('Graph.25' => $selectGroupName);
-        }
 
-        //1は由来,2はファイル数,3は欠陥数
         $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
         for($i = 1;$i<=7;++$i)
         {
-            $ori_cond = $conditions + array('Graph.1' => $i);
-            $tmp_data = $this->find('all',array('fields' => array('filepath',$metricsNumber,'3'),'conditions' => $ori_cond));
             $layers = array('numOfFiles'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
-            foreach ($tmp_data as $line) 
+            $dataByOrigin = array_filter($allData, function($v)use($i) {return $v['Graph'][1]==$i;});
+            foreach ($dataByOrigin as $line) 
             {
-                $metrics = 1;//0の時は(1)ファイル数なので1
-                if($metricsNumber==1 && $line['Graph']['3']==0)
-			    {
-				    $metrics = 0;//"1のときは(2) 欠陥ファイル数"なので'3'が1以上なら1
-			    }
-                else if(2<$metricsNumber)//3～欠陥数
-				    $metrics = $line['Graph'][$metricsNumber];           
-                if($metrics<0)
-                    $metrics=0;
+                $metrics = $this->getMetricsValue($line['Graph'],$selectMetrics);
                 $layer =  $this->getLayer($line['Graph']['filepath']);
                 ++$layers['numOfFiles'];
                 $layers['layerHeight'][$layer]+=$metrics;

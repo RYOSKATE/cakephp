@@ -118,7 +118,9 @@ $(function()
         var width = canvas_wrapper.clientWidth;
         var height =  width*9/16;
         renderer.setSize(width, height);
-        renderer.setClearColor( 0xffffff, 1);
+        
+        //IEなどでは設定すると背景がちらつく
+        //renderer.setClearColor(new THREE.Color(0xffffff),1);
         return renderer;
     }
     
