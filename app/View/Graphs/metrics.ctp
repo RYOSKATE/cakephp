@@ -12,7 +12,7 @@ echo '</pre>';*/
     var label1 = '<?php echo $selectModelName1;?>';
     var label2 = '<?php echo $selectModelName2;?>';
 </script>
-<?php echo $this->Html->script('metrics', array('inline' => true));?>
+<?php echo $this->Html->script('metricsRadar', array('inline' => true));?>
 <?php echo $this->element('pagepath', array("secondPath" => __("レイヤー"),"thirdPath" => __("メトリクスレーダーチャート")));?>
 
 <div class="page-header">

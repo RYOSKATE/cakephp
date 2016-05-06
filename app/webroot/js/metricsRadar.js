@@ -1,6 +1,6 @@
 var radarChartData;
-var data1=new Array();
-var data2= new Array();
+var data1 = new Array();
+var data2 = new Array();
     function setdata(showParam)
     {
         for( var i  = 0; i < dataset1.length; ++i )

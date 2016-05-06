@@ -117,9 +117,8 @@ class GraphsController extends AppController
             $selectMetricsStr = $metricsListData[$selectMetrics];
             if (!empty($this->data['Graph'] ['selectCSV']['name'])) 
             {
-                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                 $up_file = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
+                $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
                 $data = $this->Graph->getGroupDataFromCSV($up_file,$selectMetrics);
                 $selectModelName = basename($fileName);
             }
@@ -244,9 +243,8 @@ class GraphsController extends AppController
             $selectMetrics = $this->data['Graph'] ['Metrics']; 
             if (!empty($this->data['Graph']['selectCSV']['name'])) 
             {
-                $uploadfile = APP."webroot\\files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                 $up_file = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
+                $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
                 $tree = $this->Graph->getFileMetricsTableFromCSV($up_file,$selectMetrics,$chartMetrics);
                 $selectModelName = basename($fileName);
             }
@@ -273,18 +271,17 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         $selectMetrics = 3;
         $selectMetricsStr = '';
-        $data=null;
+        $data=[];
         for($i=1;$i<=2;++$i)
         {
             $selectModelName = null;
             if (isset($this->request->data['set']))
             {
-                $selectMetrics = $this->data['Graph'] ['Metrics'];                            
+                $selectMetrics = $this->data['Graph']['Metrics'];                            
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
-                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                    $fileName = $uploadfile.$this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
+                    $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
                     $data = $this->Graph->getCompareMetricsTableFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
@@ -323,9 +320,8 @@ class GraphsController extends AppController
                 $selectMetrics = $this->data['Graph'] ['Metrics'];                            
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
-                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                    $fileName = $uploadfile.$this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
+                    $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
                     $data = $this->Graph->getOriginTableFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
@@ -337,7 +333,7 @@ class GraphsController extends AppController
                     $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
             }
-            $this->set('data'.$i,$data);
+            $this->set('data'.$i,$data);            
             $this->set('ModelName'.$i,$selectModelName);
         }
         $this->set('useLocalCSV',true);
@@ -363,9 +359,8 @@ class GraphsController extends AppController
                 $selectMetrics = $this->data['Graph'] ['Metrics'];                            
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
-                    $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                    $fileName = $uploadfile.$this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
+                    $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
                     $data = $this->Graph->getOriginCityFromCSV($up_file,$selectMetrics);
                     $selectModelName = basename($fileName);
                 }
@@ -403,9 +398,8 @@ class GraphsController extends AppController
             $selectMetricsStr = $metricsListData[$selectMetrics];
             if (!empty($this->data['Graph'] ['selectCSV']['name'])) 
             {
-                $uploadfile = APP."webroot/files".DS;//C:\xampp\htdocs\cakephp\app\webroot/files\  など
                 $up_file = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $uploadfile.$this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
+                $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
                 $data = $this->Graph->getOriginCity2FromCSV($up_file,$selectMetrics);
                 $selectModelName = basename($fileName);
             }
@@ -460,8 +454,7 @@ class GraphsController extends AppController
                     $message = __('モデル名が入力されていません。');   
                     throw new Exception();
                 }
-  
-                
+     
                 //新規モデル名入力時はDBに存在チェック、なければDBに追加。
                 if(empty($selectModelId))
                 {
