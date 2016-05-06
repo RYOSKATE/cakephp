@@ -982,5 +982,11 @@ msgstr "Update"
 msgid "データ取得日"
 msgstr "Date"
 
-msgid "アップロード"
-msgstr "Upload"
+msgid "表示ディレクトリ階層"
+msgstr "Display Directory Layer"
+
+msgid "ブロック面積"
+msgstr "File Block Area"
+
+msgid "メトリクス(チャート表示)▼"
+msgstr "Metrics(for Radar Chart)▼"

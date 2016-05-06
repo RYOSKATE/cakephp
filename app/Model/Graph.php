@@ -31,6 +31,20 @@ class Graph extends AppModel
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
 	    return $records;
     }
+    
+    //欠陥ファイル数、
+    function getMetricsValue(&$col,$selectMetrics)
+    {
+        $metrics = 1;//0の時はファイル数なので1
+        if($selectMetrics==1 && $col[3]==0)
+        {
+            $metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
+        }else if(2<$selectMetrics)//3～欠陥数
+            $metrics = $col[$selectMetrics];
+        if($metrics<0)
+            return 0;
+        return $metrics;
+    }
     ///////csvのアップロード用///////
     function uploadFromCSV($filepath,$selectModelId,$upload_id) 
     {
@@ -159,20 +173,35 @@ class Graph extends AppModel
      
      
     ///////ファイルメトリクス用///////
-    function getFileMetricsTableFromCSV($up_file,$selectMetrics)
-    {
-        $data = $this->readCSV($up_file,-1,-1);
-        return $this->getFileMetricsTableImple($data, $selectMetrics);
-    }
-
-
     private $depth = 0;
 
     public function getDepth()
     {
         return $this->depth;
     }
-    function getFileMetricsTableImple($data, $selectMetrics)
+        
+    function getFileMetricsTableFromCSV($up_file,$selectMetrics,$chartMetrics)
+    {   
+        $data = $this->readCSV($up_file,-1,-1);
+        return $this->getFileMetricsTableImple($data, $selectMetrics,$chartMetrics);
+    }
+
+    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics) 
+    {
+
+        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
+		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
+        if($selectGroupName != 'ALL')
+        {
+            $conditions += array('Graph.25' => $selectGroupName);
+        }
+        
+        $fields = array_merge(array('modelname_id','filepath',$selectMetrics),$chartMetrics);     
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
+        return $this->getFileMetricsTableImple($data,$selectMetrics,$chartMetrics);
+    }
+
+    function getFileMetricsTableImple($data, $selectMetrics,$chartMetrics)
     {
         $this->depth=0;
         //model名,レイヤー、全ファイル数、血管のあるファイル数、欠陥数
@@ -192,18 +221,23 @@ class Graph extends AppModel
         //         )
 
         // )
-        
+
+      
         //木の初期化
         $tree = array('name'    =>   "root",
             'metrics'         =>0,
-            'defact'         =>0,
-            'otherClassFunc' =>0,
-            'LCOM'           =>0,
-            'Method'         =>0,
-            'Field'          =>0,
-            'otherFileFunc'  =>0,
+            // 'defact'         =>0,
+            // 'otherClassFunc' =>0,
+            // 'LCOM'           =>0,
+            // 'Method'         =>0,
+            // 'Field'          =>0,
+            // 'otherFileFunc'  =>0,
             'layer'          =>0,
             'children'       => array());
+        foreach($chartMetrics as $metNum)
+        {
+            $tree['metrics' . $metNum] = 0;
+        }
         $dataSize = count($data);
 
         for ($i = 0; $i < $dataSize; ++$i)
@@ -213,19 +247,18 @@ class Graph extends AppModel
             $path[0]  = trim($path[0]);
             $parent   = &$tree;
             $children = &$tree['children'];
-            $defact         = $data[$i]['Graph'][3];
-            $otherClassFunc = $data[$i]['Graph'][8];
-            $LCOM           = $data[$i]['Graph'][9];
-            $Method         = $data[$i]['Graph'][10];
-            $Field          = $data[$i]['Graph'][11];
-            $otherFileFunc  = $data[$i]['Graph'][18];
-            $metrics = 1;//0の時はファイル数なので1
-            if($selectMetrics==1 && $defact==0)
+            $c_metrics = array();
+            foreach($chartMetrics as $metNum)
             {
-                $metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
-            }else if(2<$selectMetrics)//3～欠陥数
-                $metrics = $data[$i]['Graph'][$selectMetrics];     
-
+                $c_metrics['metrics' . $metNum] = $this->getMetricsValue($data[$i]['Graph'],$metNum);
+            }      
+            // $defact         = $data[$i]['Graph'][3];
+            // $otherClassFunc = $data[$i]['Graph'][8];
+            // $LCOM           = $data[$i]['Graph'][9];
+            // $Method         = $data[$i]['Graph'][10];
+            // $Field          = $data[$i]['Graph'][11];
+            // $otherFileFunc  = $data[$i]['Graph'][18];
+            $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
             $pathDepth=count($path);
             if($this->depth < $pathDepth)
             {
@@ -239,13 +272,17 @@ class Graph extends AppModel
                     $isTheDir = ($children[$k]['name'] == $path[$j]);
                     if($isTheDir)//そのディレクトリが存在した
                     {
+                        foreach($chartMetrics as $metNum)
+                        {
+                            $parent['metrics' . $metNum] += $c_metrics['metrics' . $metNum];
+                        }                        
                         $parent['metrics']         += $metrics;
-                        $parent['defact']         += $defact;
-                        $parent['otherClassFunc'] += $otherClassFunc;
-                        $parent['LCOM']           += $LCOM;
-                        $parent['Method']         += $Method;
-                        $parent['Field']          += $Field;
-                        $parent['otherFileFunc']  += $otherFileFunc;
+                        // $parent['defact']         += $defact;
+                        // $parent['otherClassFunc'] += $otherClassFunc;
+                        // $parent['LCOM']           += $LCOM;
+                        // $parent['Method']         += $Method;
+                        // $parent['Field']          += $Field;
+                        // $parent['otherFileFunc']  += $otherFileFunc;
 
                         $parent = &$children[$k];
                         $children[$k] += array('children'=> array());
@@ -259,56 +296,59 @@ class Graph extends AppModel
                     $node = array(
                                     'name'           =>$path[$j],
                                     'metrics'        =>$metrics,
-                                    'defact'         =>$defact,
-                                    'otherClassFunc' =>$otherClassFunc,
-                                    'LCOM'           =>$LCOM,
-                                    'Method'         =>$Method,
-                                    'Field'          =>$Field,
-                                    'otherFileFunc'  =>$otherFileFunc,
+                                    // 'defact'         =>$defact,
+                                    // 'otherClassFunc' =>$otherClassFunc,
+                                    // 'LCOM'           =>$LCOM,
+                                    // 'Method'         =>$Method,
+                                    // 'Field'          =>$Field,
+                                    // 'otherFileFunc'  =>$otherFileFunc,
                                     'layer'          =>($j+1),
                                  );
+                    foreach($chartMetrics as $metNum)
+                    {
+                        $node['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
+                    }                                   
                     $children[] = $node;
                     $children = &$children[count($children) - 1]['children'];
                 }
             }
-            $parent['metrics']        += $metrics;
-            $parent['defact']         += $defact;
-            $parent['otherClassFunc'] += $otherClassFunc;
-            $parent['LCOM']           += $LCOM;
-            $parent['Method']         += $Method;
-            $parent['Field']          += $Field;
-            $parent['otherFileFunc']  += $otherFileFunc;
-            $children[] = array(
+            foreach($chartMetrics as $metNum)
+            {
+                $parent['metrics' . $metNum] += $c_metrics['metrics' . $metNum];
+            }               
+            $tmp_array = array(
                                 'metrics'        =>$metrics,
                                 'name'           =>$path[$pathDepth-1],
-                                'defact'         =>$defact,
-                                'otherClassFunc' =>$otherClassFunc,
-                                'LCOM'           =>$LCOM,
-                                'Method'         =>$Method,
-                                'Field'          =>$Field,
-                                'otherFileFunc'  =>$otherFileFunc,
+                                // 'defact'         =>$defact,
+                                // 'otherClassFunc' =>$otherClassFunc,
+                                // 'LCOM'           =>$LCOM,
+                                // 'Method'         =>$Method,
+                                // 'Field'          =>$Field,
+                                // 'otherFileFunc'  =>$otherFileFunc,
                                 'layer'          => ($pathDepth)
                             );
+            foreach($chartMetrics as $metNum)
+            {
+                $tmp_array['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
+            }                                  
+            $children[] = $tmp_array;
+            $parent['metrics']        += $metrics;
+            // $parent['defact']         += $defact;
+            // $parent['otherClassFunc'] += $otherClassFunc;
+            // $parent['LCOM']           += $LCOM;
+            // $parent['Method']         += $Method;
+            // $parent['Field']          += $Field;
+            // $parent['otherFileFunc']  += $otherFileFunc;
+            foreach($chartMetrics as $metNum)
+            {
+                $node['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
+            }                                
         }
- // echo '<pre>';
- // print_r($tree);
- // echo '</pre>';
+
         $tree=json_encode($tree);
         return $tree;        
     }
-    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
-    {
 
-        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
-		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
-        if($selectGroupName != 'ALL')
-        {
-            $conditions += array('Graph.25' => $selectGroupName);
-        }
-        $data = $this->find('all',array('fields' => array('modelname_id','filepath',$selectMetrics,'3','8','9','10','11','18'),'conditions' => $conditions));
-
-        return $this->getFileMetricsTableImple($data,$selectMetrics);
-    }
     ///////ファイルメトリクス用///////
 
 

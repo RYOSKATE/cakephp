@@ -23,9 +23,9 @@
                                           'class' => 'well form-inline',
                                           )
                               );
-    echo $this->Form->input('レイヤー',array
+    echo $this->Form->input('表示ディレクトリ階層',array
     (
-    	'id'=>'layer',
+    	  'id'=>'layer',
         'type'=>'number',
         'class' => 'form-control',
         'step'=>1,
@@ -35,8 +35,9 @@
         // 'list'=>array(1,2,3),
      ));	
   ?>
+  <label for="select"><?php echo __('ブロック面積');?></label>
   <select id = "select" class = "form-control">
-	  <option value="size"><?php echo substr($selectMetrics,4);?></option>
+	  <option value="size"><?php echo substr($selectMetricsStr,4);?></option>
     <option value="count"><?php echo __('ファイル数');?></option>
   </select>
   <input id = "zoomreset" class = 'form-control' type="button" value="<?php echo __('全体を表示');?>">
@@ -53,14 +54,18 @@
   ・size:欠陥の数  count:ディレクトリ以下のファイル数<br>
   ・ディレクトリブロックをクリックでズーム(alt:低速ズーム)<br>
   (sizeが0で重なりあった複数のブロックを同時にクリックするとレイアウトが崩れる不具合あり)
-  ');?>
-  
+  ');
+?>  
   </div>
 </div>
 
       <!-- <canvas id="canvas" height="200" width="450"></canvas> -->
+<br>      
 <canvas id="canvas"></canvas>
 
 <!-- グラフ・表の作成処理 -->
-<script type="text/javascript"> var originPathJson = JSON.parse('<?php echo $tree; ?>');</script>
+<script type="text/javascript"> 
+  var originPathJson = JSON.parse('<?php echo $tree; ?>');
+  var chartMetricsStr = JSON.parse('<?php echo json_encode($chartMetricsStr); ?>');
+</script>
 <?php echo $this->Html->script('filemetrics', array('inline' => true));?>

@@ -216,7 +216,20 @@ class GraphsController extends AppController
             $selectGroupName = reset($groupNameData);//ALLは0に追加されている
             if (isset($this->request->data['set']))
             {
-               
+                $chartMetrics = array();
+                for ($i = 0; $i < 25; ++$i)
+                {
+                    if(!empty($this->data['Graph']['Metrics' . $i]))
+                        $chartMetrics[] = $this->data['Graph']['Metrics' . $i];
+                }
+                $chartMetrics = array_unique($chartMetrics);
+                sort($chartMetrics);
+                $chartMetricsStr = array();
+                foreach($chartMetrics as $metId)
+                {
+                    $chartMetricsStr[] = $metricsListData[$metId];
+                }
+                $this->set('chartMetricsStr',$chartMetricsStr);
                 $selectMetrics = $this->data['Graph'] ['Metrics']; 
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 if (!empty($this->data['Graph']['選択ファイル']['name'])) 
@@ -225,19 +238,20 @@ class GraphsController extends AppController
                     $up_file = $this->data['Graph']['選択ファイル']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $uploadfile.$this->data['Graph']['選択ファイル']['name'];//data_10_utf.csv
                     move_uploaded_file($up_file, $fileName);
-                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName,$selectMetrics);
+                    $tree = $this->Graph->getFileMetricsTableFromCSV($fileName,$selectMetrics,$chartMetrics);
                     $selectModelName = basename($fileName);
                 }
                 else 
                 {
                     $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                    $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics);
+                    $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics);
                 }
             }
         }
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
-		$this->set('selectMetrics',$metricsListData[$selectMetrics]);                
+		$this->set('selectMetrics',$selectMetrics);
+        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                
         $this->set('useLocalCSV',true);
     }
 

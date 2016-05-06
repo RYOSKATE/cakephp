@@ -11,7 +11,7 @@
         echo $this->element('selectGroup',$groupName); 
         echo '</div>';
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
-        echo $this->element('selectMetrics',$groupName); 
+        echo $this->element('selectMetrics',array("selectMetrics" => $selectMetrics,"metricsList" => $metricsList)); 
         echo '</div>';
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
         echo $this->element('setButton'); 
@@ -28,9 +28,14 @@
 <!-- 折り畳まれ部分 -->
 <div id="open" style="display:none;clear:both;">
 <?php
+    
+    echo '<br><div class="col-sm-12 col-md-12 col-lg-12">';
+    echo __('選択したメトリクスをレーダーチャート表示します。');
+    echo '</div>';
+
     for($i=0;$i<count($metricsList);++$i)
     {
-        echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+        echo '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">';
         echo $this->Form->input('Metrics'.$i,array
         (
             'type'=>'select',

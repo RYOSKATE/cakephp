@@ -188,30 +188,22 @@ $(function()
 
   function setdata(node)
   {
-    //defactは数百でもLCOMは百万オーダー
-    // var dataset = [node.defact,
-    //                node.otherClassFunc/1000,
-    //                node.LCOM/10000,
-    //                node.Method/100,
-    //                node.Field/10,
-    //                node.otherFileFunc/1000
-    //               ];
-    var dataset = [node.defact,
-                   node.otherClassFunc,
-                   node.LCOM,
-                   node.Method,
-                   node.Field,
-                   node.otherFileFunc
-                  ];
+    var dataset = [];
+    var names = Object.getOwnPropertyNames( node );
+    for (var i = 0, len = 25; i < len; ++i) {
+      var name = "metrics" + i;
+        if(0<=$.inArray(name, names))
+        {
+          dataset.push(node[name])
+        }
+    }
+    
+    labels = [];
+    for (var i = 0; i < chartMetricsStr.length; ++i) {
+      labels.push(chartMetricsStr[i]);
+    }
     var radarChartData = {
-        labels: [
-              "欠陥数",
-              "呼び出す他クラスの関数種類数",
-              "メソッドの凝集度の欠如(LCOM)",
-              "Public メソッド数",
-              "Public 属性数",
-              "呼び出す他ファイルの関数の種類数",
-      ],
+        labels: labels,
         datasets: [
             {
                 label:"MetricsData",
