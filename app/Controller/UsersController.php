@@ -36,7 +36,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
-        $this->rejectWithoutAdmin();
+        $this->rejectNotAdmin();
 		$this->User->recursive = 0;
 		$this->set('users', $this->Paginator->paginate());
 	}
@@ -49,7 +49,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-        $this->rejectWithoutAdmin();
+        $this->rejectNotAdmin();
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -81,7 +81,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-        $this->rejectWithoutAdmin();
+        $this->rejectNotAdmin();
         $groupNameData = $this->setGroupNameWithAll('add');
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
@@ -146,7 +146,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
-        $this->rejectWithoutAdmin();
+        $this->rejectNotAdmin();
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));

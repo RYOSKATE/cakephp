@@ -35,7 +35,7 @@ class UploadDataController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		$this->rejectWithoutAdmin();
+		$this->rejectReader();
 		if (!$this->UploadData->exists($id)) {
 			throw new NotFoundException(__('Invalid upload data'));
 		}
@@ -48,22 +48,22 @@ class UploadDataController extends AppController {
  *
  * @return void
  */
-	public function add() {
-		$this->rejectWithoutAdmin();
-		if ($this->request->is('post')) {
-			$this->UploadData->create();
-			if ($this->UploadData->save($this->request->data)) {
+	// public function add() {
+	// 	$this->rejectNotAdmin();
+	// 	if ($this->request->is('post')) {
+	// 		$this->UploadData->create();
+	// 		if ($this->UploadData->save($this->request->data)) {
 				
-				$this->flashText(__('The upload data has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
-			}
-		}
-		$modelnames = $this->UploadData->Modelname->find('list');
-		$users = $this->UploadData->User->find('list');
-		$this->set(compact('modelnames', 'users'));
-	}
+	// 			$this->flashText(__('The upload data has been saved.'));
+	// 			return $this->redirect(array('action' => 'index'));
+	// 		} else {
+	// 			$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
+	// 		}
+	// 	}
+	// 	$modelnames = $this->UploadData->Modelname->find('list');
+	// 	$users = $this->UploadData->User->find('list');
+	// 	$this->set(compact('modelnames', 'users'));
+	// }
 
 /**
  * edit method
@@ -72,26 +72,26 @@ class UploadDataController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
-		$this->rejectWithoutAdmin();
-		if (!$this->UploadData->exists($id)) {
-			throw new NotFoundException(__('Invalid upload data'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->UploadData->save($this->request->data)) {
-				$this->flashText(__('The upload data has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
-			}
-		} else {
-			$options = array('conditions' => array('UploadData.' . $this->UploadData->primaryKey => $id));
-			$this->request->data = $this->UploadData->find('first', $options);
-		}
-		$modelnames = $this->UploadData->Modelname->find('list');
-		$users = $this->UploadData->User->find('list');
-		$this->set(compact('modelnames', 'users'));
-	}
+	// public function edit($id = null) {		
+	// 	$this->rejectReader();
+	// 	if (!$this->UploadData->exists($id)) {
+	// 		throw new NotFoundException(__('Invalid upload data'));
+	// 	}
+	// 	if ($this->request->is(array('post', 'put'))) {
+	// 		if ($this->UploadData->save($this->request->data)) {
+	// 			$this->flashText(__('The upload data has been saved.'));
+	// 			return $this->redirect(array('action' => 'index'));
+	// 		} else {
+	// 			$this->flashText(__('The upload data could not be saved. Please, try again.'),false);
+	// 		}
+	// 	} else {
+	// 		$options = array('conditions' => array('UploadData.' . $this->UploadData->primaryKey => $id));
+	// 		$this->request->data = $this->UploadData->find('first', $options);
+	// 	}
+	// 	$modelnames = $this->UploadData->Modelname->find('list');
+	// 	$users = $this->UploadData->User->find('list');
+	// 	$this->set(compact('modelnames', 'users'));
+	// }
 
 /**
  * delete method

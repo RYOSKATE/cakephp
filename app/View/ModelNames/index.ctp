@@ -5,7 +5,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<?php if($userData['role']=='admin'){?>
+			<?php if($userData['role']!='reader'){?>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 			<?php }?>
 	</tr>
@@ -15,7 +15,7 @@
 	<tr>
 		<td><?php echo h($modelName['ModelName']['id']); ?>&nbsp;</td>
 		<td><?php echo h($modelName['ModelName']['name']); ?>&nbsp;</td>
-			<?php if($userData['role']=='admin'){?>
+			<?php if($userData['role']!='reader'){?>
 		<td class="actions">
 			<!--<?php echo $this->Html->link(__('View'), array('action' => 'view', $modelName['ModelName']['id'])); ?>-->
 

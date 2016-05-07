@@ -32,11 +32,12 @@
 			?>&nbsp;
 		</td>
 		<td><?php echo h($uploadData['UploadData']['comment']); ?>&nbsp;</td>
-		<?php if($userData['role']=='admin' || $uploadData['User']['id']==$userData['id']){?>
+		<?php if($userData['role']!='reader'){?>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('action' => 'view', $uploadData['UploadData']['id'])); ?>
 				<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $uploadData['UploadData']['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $uploadData['UploadData']['id']), array(), __('Are you sure you want to delete # %s?', $uploadData['UploadData']['id'])); ?>
+				<?php if($userData['role']=='admin' || $uploadData['User']['id']==$userData['id'])
+					echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $uploadData['UploadData']['id']), array(), __('Are you sure you want to delete # %s?', $uploadData['UploadData']['id'])); ?>
 			</td>
 		<?php }?>
 	</tr>

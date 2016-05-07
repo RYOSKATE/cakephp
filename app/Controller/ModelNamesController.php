@@ -67,7 +67,7 @@ class ModelNamesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		$this->rejectWithoutAdmin();
+		$this->rejectReader()();
 		if (!$this->ModelName->exists($id)) {
 			throw new NotFoundException(__('Invalid model name'));
 		}
@@ -94,7 +94,7 @@ class ModelNamesController extends AppController {
  
  //そのモデル名のCSVデータが全て削除されていればモデル名も削除可能
 	public function delete($id = null) {
-		$this->rejectWithoutAdmin();
+		$this->rejectReader()();
 		if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$id))){
 			$this->flashText(__('そのモデルに依存したデータはまだ存在しています'),false);
 		}else {

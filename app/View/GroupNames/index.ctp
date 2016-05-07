@@ -5,7 +5,9 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+<?php if($userData['role']!='reader'){?>
 			<th class="actions"><?php echo __('Actions'); ?></th>
+<?php }?>			
 	</tr>
 	</thead>
 	<tbody>
@@ -14,9 +16,10 @@
 		<td><?php echo h($groupName['GroupName']['id']); ?>&nbsp;</td>
 		<td><?php echo h($groupName['GroupName']['name']); ?>&nbsp;</td>
 		<td class="actions">
-			<!--<?php echo $this->Html->link(__('View'), array('action' => 'view', $groupName['GroupName']['id'])); ?>-->
+<?php if($userData['role']!='reader'){?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $groupName['GroupName']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $groupName['GroupName']['id']), array(), __('Are you sure you want to delete # %s?', $groupName['GroupName']['id'])); ?>
+<?php }?>			
 		</td>
 	</tr>
 <?php endforeach; ?>

@@ -127,17 +127,24 @@ class AppController extends Controller
   {
       return $this->isUserRole('admin');
   }
-    
-  protected function rejectWithoutAdmin()
-  {
-      if(!$this->isUserRoleAdmin())
-        $this->redirect(array('controller' => 'graphs', 'action' => 'index'));
-  }
+  
   protected function rejectReader()
   {
       if($this->isUserRole('reader'))
-        $this->redirect(array('controller' => 'graphs', 'action' => 'index'));
+      {
+          $this->flashText(__('表示権限のないページにアクセスしようとしました。'),false);          	 
+          $this->redirect(array('controller' => 'graphs', 'action' => 'edit'));
+      }
   }
+  protected function rejectNotAdmin()
+  {
+      if(!$this->isUserRoleAdmin())
+      {
+          $this->flashText(__('表示権限のないページにアクセスしようとしました。'),false);          	 
+          $this->redirect(array('controller' => 'graphs', 'action' => 'edit'));
+      }
+  }
+
   public function beforeRender()
   {
     $this->set('stickies', $this->Sticky->getStickies($this->action));

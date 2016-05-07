@@ -139,7 +139,7 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
-        $groupNameData = $this->setGroupName();
+        $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();
         $selectGroupName = reset($groupNameData);
         

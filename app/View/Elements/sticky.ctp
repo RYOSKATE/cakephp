@@ -8,7 +8,8 @@
 											);
 ?>
 	<fieldset>
-			
+		<legend>付箋</legend>
+
 			<div class="row">
 
 				<?php
