@@ -18,7 +18,14 @@
 	といった二つの方法があります。
 </p>
 <p>
-	CSVファイルをDBにアップロードする場合、まずヘッダーメニューよりアップロードフォームページへ移動してください。
+	CSVファイルをDBにアップロードする場合、まずヘッダーメニューより
+	<?php 
+	if($userData['role']!='reader') 
+		echo $this->Html->link(__('アップロードフォームページ'),array('controller' => 'graphs', 'action' => 'upload'));
+	else
+		echo 'アップロードフォームページ';	
+	?>
+	へ移動してください。
 	CSVファイルを選択、モデル名・日付を入力しアップロードボタンを押すことでDBへのアップロードが完了します。
 	ただし権限が"閲覧者"のアカウントではアップロードはできません。
 <p>
@@ -47,7 +54,12 @@
 		<li>権限</li>
 	</ul>
 	を設定したアカウントを作成する必要があります。<br>
-	アカウントの作成はAdmin権限を持つユーザーのみ可能です。
+	
+	<?php echo ($userData['role']=='admin') ?
+	 $this->Html->link(__('新規アカウントの作成'),array('controller' => 'users', 'action' => 'add')):
+	 __('新規アカウントの作成');
+	 ?>	
+	 はAdmin権限を持つユーザーのみ可能です。
 </p>	
 <h3>所属開発グループ</h3>
 	<p>	
@@ -74,15 +86,30 @@
         </thead>
         <tbody>
 <?php
+
 	$userAuth = array(
 		array(__('アップロードデータの可視化'),__('◯'),__('◯'),__('◯')),
 		array(__('ローカルCSVデータの可視化'),__('◯'),__('◯'),__('◯')),
-		array(__('ローカルCSVデータのアップロード'),__(''),__('◯'),__('◯')),
-		array(__('アップロードデータの一覧表示'),__('◯'),__('◯'),__('◯')),
+		array(($userData['role']!='reader')?
+			$this->Html->link(__('ローカルCSVデータのアップロード'),array('controller' => 'graphs', 'action' => 'upload')):
+			__('ローカルCSVデータのアップロード'),__(''),__('◯'),__('◯')),
+		array($this->Html->link(__('アップロードデータ'),array('controller' => 'upload_data', 'action' => 'index')) . __('の一覧表示')
+			,__('◯'),__('◯'),__('◯')),
 		array(__('アップロードデータの削除'),__(''),__('△'),__('◯')),
-		array(__('ユーザーの一覧表示・追加・削除'),__(''),__(''),__('◯')),
-		array(__('開発グループ名・モデル名の一覧表示'),__('◯'),__('◯'),__('◯')),
-		array(__('開発グループ名・モデル名の編集・削除'),__(''),__('◯'),__('◯')),
+		array(($userData['role']=='admin')?
+			$this->Html->link(__('ユーザーの一覧表示'),array('controller' => 'users', 'action' => 'index')):
+			__('ユーザーの一覧表示') .
+			__('・追加・削除'),__(''),__(''),__('◯')),
+		array(
+		 $this->Html->link(__('開発グループ名'),array('controller' => 'group_names', 'action' => 'index'))
+		 . '・'.
+		 $this->Html->link(__('モデル名'),array('controller' => 'model_names', 'action' => 'index')) 
+		 . __('の一覧表示'),__('◯'),__('◯'),__('◯')),
+		array(
+		 $this->Html->link(__('開発グループ名'),array('controller' => 'group_names', 'action' => 'index'))
+		 . '・'.
+		 $this->Html->link(__('モデル名'),array('controller' => 'model_names', 'action' => 'index')) 
+		 . __('の編集・削除'),__(''),__('◯'),__('◯')),		 
 	);
 	foreach($userAuth as $row)
 	{
@@ -102,23 +129,23 @@
 		<li>
 			全開発グループ
 			<ul>
-				<dt>メトリクス散布図</dt>
-				<	dd>　横軸：ファイル数、縦軸：選択メトリクスとして開発グループ単位の円を散布図で表示します。円の大きさはファイル規模(総物理行数)になります。</dd>
+				<dt><?php echo $this->Html->link(__('メトリクス散布図'),array('controller' => 'graphs', 'action' => 'alldevgroup'));?></dt>
+				<dd>　横軸：ファイル数、縦軸：選択メトリクスとして開発グループ単位の円を散布図で表示します。円の大きさはファイル規模(総物理行数)になります。</dd>
 			</ul>
 		</li>
 		<li>
 			各開発グループ
 			<ul>
-				<dt>メトリクス遷移</dt>
+				<dt><?php echo $this->Html->link(__('メトリクス遷移'),array('controller' => 'graphs', 'action' => 'onedevgroup'));?></dt>
 					<dd>　横軸：日付、縦軸：選択メトリクスとしてメトリクスの変化を折れ線グラフで表示します。同時に4つのデータまで表示可能です。</dd>
-				<dt>メトリクスファイルマップ</dt>
+				<dt><?php echo $this->Html->link(__('メトリクスファイルマップ'),array('controller' => 'graphs', 'action' => 'onedevgroup2'));?></dt>
 					<dd>　各ディレクトリ以下のメトリクス合計値をブロックの大きさに対応させたツリーマップを表示します。またクリックしたディレクトリについてオプションで選択したメトリクスをレーダーチャートで表示します。</dd>
 			</ul>			
 		</li>
 		<li>
 			レイヤー
 			<ul>
-				<dt>メトリクスレーダーチャート</dt>
+				<dt><?php echo $this->Html->link(__('メトリクスレーダーチャート'),array('controller' => 'graphs', 'action' => 'metrics'));?></dt>
 					<dd>　KernelからAPPまでの各機能レイヤー毎にメトリクス値の合計をレーダーチャートで表示します。</dd>
 			</ul>			
 			
@@ -126,11 +153,11 @@
 		<li>
 			由来
 			<ul>
-				<dt>メトリクス円グラフ</dt>
+				<dt><?php echo $this->Html->link(__('メトリクス円グラフ'),array('controller' => 'graphs', 'action' => 'origin'));?></dt>
 					<dd>　メトリクス値nのファイルの割合を由来毎の円グラフで表示します。</dd>
-				<dt>メトリクス領域図</dt>
+				<dt><?php echo $this->Html->link(__('メトリクス領域図'),array('controller' => 'graphs', 'action' => 'originCity'));?></dt>
 					<dd>　由来毎のメトリクス値を面積に対応させた図形を表示します。</dd>
-				<dt>OriginCity</dt>
+				<dt><?php echo $this->Html->link(__('OriginCity'),array('controller' => 'graphs', 'action' => 'originCity2'));?></dt>
 					<dd>　由来毎のファイル数を面積、高さをメトリクス値、それを機能レイヤー毎に塗り分けた3Dオブジェクトを表示します。</dd>
 			<br>
 			<p>
@@ -159,17 +186,23 @@
 <p>
 	ヘッダーメニューの各項目について説明します。
 	<dl>
-		<dt>Visualize Tool</dt>
+		<dt><?php echo $this->Html->link(__('Visualize Tool'),array('controller' => 'graphs', 'action' => 'index'));?></dt>
 			<dd>　このページヘ移動します。</dd>
-		<dt>日本語・English</dt>
+		<dt><?php echo $this->Html->link('日本語',array('controller' => 'graphs', 'action' => 'index/lang:jpn'));?>
+		・
+		<?php echo $this->Html->link('English',array('controller' => 'graphs', 'action' => 'index/lang:eng'));?>
+		</dt>
 			<dd>　表示言語を切り替えます。</dd>
-		<dt>ユーザー名</dt>
+		<dt><?php echo $this->Html->link('ユーザー名',array('controller' => 'users',  'action' => 'manage'));?></dt>
 			<dd>　アカウントのパスワード変更・削除ページヘ移動します。</dd>
-		<dt>Upload</dt>
+		<dt><?php if($userData['role']!='reader')
+					echo $this->Html->link(__('Upload'),array('controller' => 'graphs', 'action' => 'upload'));
+				else echo 'Upload';
+		?></dt>
 			<dd>　CSVデータのアップロードページヘ移動します。閲覧者権限のユーザーには表示されません。</dd>
-		<dt>Data</dt>
+		<dt><?php echo $this->Html->link(__('Data'),array('controller' => 'upload_data', 'action' => 'index'));?></dt>
 			<dd>　DBに登録されたデータの一覧ページヘ移動します。編集者・管理者はこのページから各データの編集・削除が可能です。</dd>
-		<dt>Logout</dt>
+		<dt><?php echo $this->Html->link(__('Logout'),array('controller' => 'users',  'action' => 'logout'));?></dt>
 			<dd>　ログアウトしログイン画面へ移動します。</dd>
 	</dl>
 </p>	
