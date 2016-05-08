@@ -15,6 +15,9 @@
 <div class="page-header">
 	<h1><small><?php echo __('メトリクスファイルマップ');?></small></h1>
   <?php echo $this->element('selectForm3'); ?>
+  
+<h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
+<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 
 
   <?php

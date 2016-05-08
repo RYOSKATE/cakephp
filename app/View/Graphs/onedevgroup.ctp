@@ -13,7 +13,7 @@
 	data.push(JSON.parse('<?=json_encode($data2);?>'));
 	data.push(JSON.parse('<?=json_encode($data3);?>'));
 	data.push(JSON.parse('<?=json_encode($data4);?>'));
-	var modelName = JSON.parse('<?=json_encode($model);?>');
+	var modelName = JSON.parse('<?=json_encode($selectModelName);?>');
 </script>
 <?php echo $this->Html->script('onedevgroup', array('inline' => true));?>
 
@@ -24,4 +24,5 @@
     <?php echo $this->element('selectForm2'); ?>
 </div>
 
+<h4><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h4>
 <div id="chartdiv" style="height:600px;"></div>

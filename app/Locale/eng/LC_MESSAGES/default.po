@@ -590,7 +590,7 @@ msgstr "If you want to visualizing by individual group, you can select only "Dev
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/index.ctp:70
 msgid "(複数選択可)"
-msgstr "(Multiple selections allowed)"
+msgstr "(Multiple selections is allowed)"
 
 #: c:/xampp/htdocs/cakephp/app/View/Graphs/index.ctp:74
 msgid "権限には"

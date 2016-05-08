@@ -146,6 +146,7 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         $selectModelName = null;
         $selectMetrics = 3;
+        $selectMetricsStr = '';
         if ($uploadList && isset($this->request->data['set'])) 
         {
             $selectModelId = array_fill(1,  4, null);
@@ -161,7 +162,7 @@ class GraphsController extends AppController
        
             $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
             $selectMetrics = $this->data['Graph'] ['Metrics'];
-            
+            $selectMetricsStr = $metricsListData[$selectMetrics];
             $data = array_fill(1,  4, array());
             $error_message = '';      
             for($i=1;$i<=count($selectModelId);++$i)
@@ -205,9 +206,10 @@ class GraphsController extends AppController
                 $this->flashText($error_message,false);
             }
 
-            $this->set('model',$selectModelName);
+            $this->set('selectModelName',$selectModelName);
         }
         $this->set('selectMetrics',$selectMetrics);
+        $this->set('selectMetricsStr', $selectMetricsStr);
     }
 
     public function onedevgroup2() 
@@ -219,7 +221,7 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         $selectMetrics = 3;
         $selectMetricsStr = '';   
-        
+        $selectModelName = null;
         if (isset($this->request->data['set']))
         {
                 $chartMetrics = array();
@@ -241,6 +243,7 @@ class GraphsController extends AppController
                 $this->set('chartMetricsStr',$chartMetricsStr);
             
             $selectMetrics = $this->data['Graph'] ['Metrics']; 
+            $selectMetricsStr = $metricsListData[$selectMetrics];
             if (!empty($this->data['Graph']['selectCSV']['name'])) 
             {
                 $up_file = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -253,12 +256,14 @@ class GraphsController extends AppController
                 $selectUploadDataId = $this->data['Graph']['CSV_ID'];
                 $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
                 $tree = $this->Graph->getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics);
+                $selectModelName = $uploadList[$selectUploadDataId];                            
             }
         }
         $this->set('tree',$tree);
         $this->set('depth',$this->Graph->getDepth());
+        $this->set('selectModelName',$selectModelName);        
 		$this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                
+        $this->set('selectMetricsStr',$selectMetricsStr);                                
         $this->set('useLocalCSV',true);
     }
     
@@ -277,7 +282,8 @@ class GraphsController extends AppController
             $selectModelName = null;
             if (isset($this->request->data['set']))
             {
-                $selectMetrics = $this->data['Graph']['Metrics'];                            
+                $selectMetrics = $this->data['Graph']['Metrics'];
+                $selectMetricsStr = $metricsListData[$selectMetrics];                    
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -298,7 +304,7 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                
+        $this->set('selectMetricsStr',$selectMetricsStr);                                
     }
     
     public function origin()
@@ -317,7 +323,8 @@ class GraphsController extends AppController
             $selectModelName =  null;
             if (isset($this->request->data['set']))
             {
-                $selectMetrics = $this->data['Graph'] ['Metrics'];                            
+                $selectMetrics = $this->data['Graph'] ['Metrics'];
+                $selectMetricsStr = $metricsListData[$selectMetrics];                                                            
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -338,7 +345,7 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);                                        
+        $this->set('selectMetricsStr',$selectMetricsStr);                                        
     }
     
     public function originCity()
@@ -356,7 +363,8 @@ class GraphsController extends AppController
             $selectModelName = null;
             if (isset($this->request->data['set']))
             {
-                $selectMetrics = $this->data['Graph'] ['Metrics'];                            
+                $selectMetrics = $this->data['Graph'] ['Metrics'];
+                $selectMetricsStr = $metricsListData[$selectMetrics];                                                              
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
                     $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
@@ -377,7 +385,7 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$metricsListData[$selectMetrics]);     
+        $this->set('selectMetricsStr',$selectMetricsStr);     
     }
     
     public function originCity2()
