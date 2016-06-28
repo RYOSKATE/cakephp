@@ -23,48 +23,41 @@ $(function()
         areas[t[123]].w = o123wh;
 	    areas[t[123]].h = o123wh; 
         
-        areas[t[12]].h = o123wh;
-	    areas[t[23]].w = o123wh;
-	    areas[t[13]].w = o123wh;
-        for(var i=1;i<=numOfBuilding;++i)
-	    {
-		    if (areas[i].h < 1)
-			    areas[i].h = 1;
-		    if (areas[i].w < 1)
-			    areas[i].w = 1;
-	    } 
-
-    	areas[t[12]].w = data[t[12]].numOfFiles / areas[t[12]].h;
-	    areas[t[23]].h = data[t[23]].numOfFiles / areas[t[23]].w;
-	    areas[t[13]].h = data[t[13]].numOfFiles / areas[t[13]].w;
-        for(var i=1;i<=numOfBuilding;++i)
-	    {
-		    if (areas[i].h < 1)
-			    areas[i].h = 1;
-		    if (areas[i].w < 1)
-			    areas[i].w = 1;
-	    }
-        var offset = 20;
+        areas[t[12]].h =  Math.sqrt(data[t[12]].numOfFiles);
+        areas[t[12]].w =  areas[t[12]].h;
+        areas[t[23]].h =  Math.sqrt(data[t[23]].numOfFiles);
+        areas[t[23]].w =  areas[t[23]].h;
+        areas[t[13]].h =  Math.sqrt(data[t[13]].numOfFiles);
+        areas[t[13]].w =  areas[t[13]].h;
         
+        //x=r*cosθ
+        //y=r*sinθ
+        function Radians(degree){return degree*Math.PI/180.0;}
+        var N = 3;
+        
+        var r1 = Math.sqrt(2)*Math.max(areas[t[1]].h,areas[t[2]].h,areas[t[3]].h);
+        var r2 = Math.sqrt(2)*Math.max(areas[t[12]].h,areas[t[13]].h,areas[t[23]].h);
+        var r3 = Math.sqrt(2)*areas[t[123]].h
 
-	    areas[t[12]].x = -(areas[t[123]].w + areas[t[12]].w)/2 - offset;
-        areas[t[12]].y = areas[t[123]].y;
+	    areas[t[1]].x = Math.cos(Radians(0))*(r3+r2+r1)/2;
+        areas[t[1]].y = Math.sin(Radians(0))*(r3+r2+r1)/2;
 
-	    areas[t[13]].x = areas[t[123]].x;
-        areas[t[13]].y = -(areas[t[123]].h + o123wh)/2 - offset;
+	    areas[t[2]].x = Math.cos(Radians(120))*(r3+r2+r1)/2;
+        areas[t[2]].y = Math.sin(Radians(120))*(r3+r2+r1)/2;
 
-	    areas[t[23]].x = areas[t[123]].x;
-        areas[t[23]].y = (areas[t[123]].h + areas[t[23]].h)/2 + offset;
+	    areas[t[3]].x = Math.cos(Radians(-120))*(r3+r2+r1)/2;
+        areas[t[3]].y = Math.sin(Radians(-120))*(r3+r2+r1)/2;
 
-	    areas[t[1]].x = -(areas[t[123]].w + areas[t[1]].w)/2 - offset;
-        areas[t[1]].y = (areas[t[123]].h + areas[t[1]].h)/2 + offset;
 
-	    areas[t[2]].x = -(areas[t[123]].w + areas[t[2]].w)/2 - offset;
-        areas[t[2]].y = -(areas[t[123]].h + areas[t[2]].h)/2 - offset;
+	    areas[t[12]].x = (areas[t[1]].x+areas[t[2]].x)/2;
+        areas[t[12]].y = (areas[t[1]].y+areas[t[2]].y)/2;
 
-	    areas[t[3]].x = (areas[t[123]].w + areas[t[3]].w)/2 + offset;
-        areas[t[3]].y = areas[t[123]].y;    
-	    
+	    areas[t[13]].x = (areas[t[1]].x+areas[t[3]].x)/2;
+        areas[t[13]].y = (areas[t[1]].y+areas[t[3]].y)/2;
+
+	    areas[t[23]].x = (areas[t[2]].x+areas[t[3]].x)/2;
+        areas[t[23]].y = (areas[t[2]].y+areas[t[3]].y)/2;
+
         return areas;
     }
     
