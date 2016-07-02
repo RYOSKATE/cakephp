@@ -392,6 +392,7 @@ class GraphsController extends AppController
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
+        $modelNameData = $this->setModelName();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
         $selectModelName = null;
@@ -411,11 +412,11 @@ class GraphsController extends AppController
                 $data = $this->Graph->getOriginCity2FromCSV($up_file,$selectMetrics);
                 $selectModelName = basename($fileName);
             }
-            else if(isset($this->data['Graph']['CSV_ID']))
+            else if(isset($this->data['Graph']['selectModel']))
             {                
-                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                $data = $this->Graph->getOriginCity2($selectUploadDataId,$selectGroupName,$selectMetrics);
-                $selectModelName = $uploadList[$selectUploadDataId];            
+                $selectModelId = $this->data['Graph']['selectModel'];
+                $data = $this->Graph->getOriginCity2($selectModelId,$selectGroupName,$selectMetrics);
+                $selectModelName = $uploadList[$selectModelId];            
             }
         }
         $this->set('data',$data);

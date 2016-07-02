@@ -626,16 +626,16 @@ class Graph extends AppModel
         return $this->getOriginCity2Imple($data, $selectMetrics);
     }
     
-    function getOriginCity2($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    function getOriginCity2($selectModelId,$selectGroupName,$selectMetrics) 
     {
-        $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
+        $conditions = array('Graph.modelname_id' => $selectModelId);
 		//由来比較なので全部取得　$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
         
-        $fields = array('modelname_id','filepath',1,$selectMetrics);     
+        $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);     
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         return $this->getOriginCity2Imple($data,$selectMetrics);
     }
@@ -648,32 +648,45 @@ class Graph extends AppModel
 	// 3L"(4) 欠陥の数",
 	// 4L"(5) 物理行数",
     // 5L"(25) 手を加えた組織の数",
+        $ids = array();
+        foreach ($allData as $line)
+        {
+            $id = $line['Graph']['upload_data_id'];
+            if(!in_array($id, $ids))
+                $ids[]=$id;
+        }
 
-        $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
-        for($i = 1;$i<=7;++$i)
+        $newAllData = array();
+        foreach ($ids as $id) 
         {
-            $layers = array('numOfFiles'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
-            $dataByOrigin = array_filter($allData, function($v)use($i) {return $v['Graph'][1]==$i;});
-            foreach ($dataByOrigin as $line) 
+            $tmpAllData = array_filter($allData, function($v)use($id) {return $v['Graph']['upload_data_id']==$id;});
+            $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
+            for($i = 1;$i<=7;++$i)
             {
-                $metrics = $this->getMetricsValue($line['Graph'],$selectMetrics);
-                $layer =  $this->getLayer($line['Graph']['filepath']);
-                ++$layers['numOfFiles'];
-                $layers['layerHeight'][$layer]+=$metrics;
+                $layers = array('numOfFiles'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
+                $dataByOrigin = array_filter($tmpAllData, function($v)use($i) {return $v['Graph'][1]==$i;});
+                foreach ($dataByOrigin as $line) 
+                {
+                    $metrics = $this->getMetricsValue($line['Graph'],$selectMetrics);
+                    $layer =  $this->getLayer($line['Graph']['filepath']);
+                    ++$layers['numOfFiles'];
+                    $layers['layerHeight'][$layer]+=$metrics;
+                }
+                $data[$i] = $layers;
             }
-            $data[$i] = $layers;
-        }
         
-        $sumOfValue=0;
-        for($i = 1;$i<=7;++$i)
-        {
-            for($j = 0;$j<=6;++$j)
+            $sumOfValue=0;
+            for($i = 1;$i<=7;++$i)
             {
-                $sumOfValue = $data[$i]['layerHeight'][$j];
+                for($j = 0;$j<=6;++$j)
+                {
+                    $sumOfValue = $data[$i]['layerHeight'][$j];
+                }
             }
+            if($sumOfValue==0)
+                $data[0]=0;
+            $newAllData[] = $data;
         }
-        if($sumOfValue==0)
-            $data[0]=0;
-        return $data;
+        return $newAllData;
     }
 }

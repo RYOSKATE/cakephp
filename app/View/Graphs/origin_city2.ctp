@@ -13,16 +13,36 @@
 <?php echo $this->element('pagepath', array("secondPath" => __("由来"),"thirdPath" => __("OriginCity")));?>
 <div class="page-header">
     <h1><small><?php echo __('OriginCity');?></small></h1>
-    <?php echo $this->element('selectForm1'); ?>
+    <?php echo $this->element('selectForm6'); ?>
 </div>
 <h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
 <h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 <div class="row">
     <div class="col-md-12 col-sm-12">
+          <?php
+    echo $this->Form->create('Graph',array('inputDefaults' => 
+                                          array('div' => 'form-group',),
+                                          'class' => 'well',
+                                          )
+                              );
+    echo $this->Form->input('表示ディレクトリ階層',array
+    (
+    	'id'=>'timeSlider',
+        'type'=>'range',
+        //'class' => 'form-control',
+        'step'=>1,
+        'min'=>0,
+        //'max'=>$depth,
+        'value'=>1,
+        // 'list'=>array(1,2,3),
+     ));	
+  ?>
+  <?php echo $this->Form->end();?>
+
          <div id="canvas-wrapper"></div>
     </div>
     <div class="col-md-12 col-sm-12">
-		<?php echo $this->element('originCityTable2', array("data" => $data));?>
+		<?php echo $this->element('originCityTable2', array("data" => $data[1]));?>
     </div>
 </div>
 

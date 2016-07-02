@@ -312,10 +312,10 @@ $(function()
     
     }
     //ここまではdrawBuilding()内などで使われる描画処理
-
+    var scene;
     function drawBuilding(boxes)
     {
-        var scene = new THREE.Scene();
+        scene = new THREE.Scene();
     
         var maxZ = 0;
         for (var i = 1; i < boxes.length; i++)
@@ -344,33 +344,40 @@ $(function()
     
         //描画処理追加
         addRenderControl(scene,camera,renderer);
-    }
-    
-    //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
-    if(data!=null && data[0]!=0)
-    {
-        var areas = calcBuildingPos(data);
-        var boxes = calcBuildingHeight(areas,data);
-        drawBuilding(boxes);
-    }
-    else
-    {
-        var scene = new THREE.Scene();
-        var camera = makeCamera(-100, -100, 100);
-        var renderer = makeRenderer();
-
-        //平面追加
-        addPlane(renderer,scene);
-
-        //x,y,z軸表示
-        addAxisLine(scene);                          
         
-        //環境光、平行光追加
-        addLight(scene);
-
-        //描画処理追加
-        addRenderControl(scene,camera,renderer);    
+        return scene;
     }
+    function exec()
+    {
+        //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
+        var sliderValue = $("#timeSlider").val();
+        var selectedData = data[sliderValue];
+        if(selectedData!=null && selectedData[0]!=0)
+        {
+            var areas = calcBuildingPos(selectedData);
+            var boxes = calcBuildingHeight(areas,selectedData);
+            drawBuilding(boxes);
+        }
+        else
+        {
+            var scene = new THREE.Scene();
+            var camera = makeCamera(-100, -100, 100);
+            var renderer = makeRenderer();
+
+            //平面追加
+            addPlane(renderer,scene);
+
+            //x,y,z軸表示
+            addAxisLine(scene);                          
+
+            //環境光、平行光追加
+            addLight(scene);
+
+            //描画処理追加
+            addRenderControl(scene,camera,renderer);    
+        }
+    }
+   
     function building(x,y,z,w,h,d)
     {
 	    //コンストラクタとメンバ変数
@@ -381,4 +388,35 @@ $(function()
         this.h = h;
         this.d = d;
     }
+
+    exec();
+	$("#timeSlider").change(function(){
+        for( var i = scene.children.length - 1; i >= 5; i--)
+        {
+            if(scene.children[i].type == "Mesh")
+                scene.remove(scene.children[i]);
+        }
+        //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
+        var sliderValue = $("#timeSlider").val();
+        var selectedData = data[sliderValue];
+        if(selectedData!=null && selectedData[0]!=0)
+        {
+            var areas = calcBuildingPos(selectedData);
+            var boxes = calcBuildingHeight(areas,selectedData);
+    
+            var maxZ = 0;
+            for (var i = 1; i < boxes.length; i++)
+            {
+                var j = boxes[i].length-1;
+                var p = boxes[i][j].z;
+                if(maxZ < p)
+                    maxZ = p;
+            }
+            //var scale = 0.0000001;
+            var scale = 300.0 / maxZ;
+
+            //建物追加
+            addBoxes(scene,boxes,scale);
+        }
+    });
 });
