@@ -392,17 +392,81 @@ $(function()
     }
 
     exec();
-	$("#timeSlider").change(function(){
+    
+    var animate = function()
+    {
+        var slider = $("#timeSlider")
+        var value = slider.val();
+        $('#timeSlider').val(++value);
+        var id = setTimeout(animate, 1000);
+        changeObjects();
+        if(value==slider[0].max)
+        {
+            clearTimeout(id); //idをclearTimeoutで指定している
+        }
+    }
+    $('#play').click(function (e) {
+        animate();
+        return e.preventDefault();//リロードさせない
+    });
+    var changeObjects = function(){
+        //オブジェクト破棄
         for( var i = scene.children.length - 1; i >= 5; i--)
         {
             if(scene.children[i].type == "Mesh")
                 scene.remove(scene.children[i]);
         }
-        //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
+
+        //スライダー値取得
         var sliderValue = $("#timeSlider").val();
         var id = uploadIdList[sliderValue];
         var selectedData = data[id];
+
+        //表の値更新
         $("#modelname").text(uploadList[id]);
+        var table = $('#table')[0];
+        var rows = table.rows;
+
+        var array = new Array()
+        array[0] = new Array();
+        for( var j = 1; j<rows.length; ++j)//レイヤー
+        {
+            array[j] = new Array();
+            array[j][0] = 0;
+            var cells = rows[j].cells;
+            for( var i = 1; i<cells.length; ++i)//由来
+            {
+                if(j==1)
+                    array[0][i]=0;
+                var value=0;
+                if(i<cells.length-1)//レイヤー合計値
+                {
+                    if(j<rows.length-2)//メトリクス
+                    {
+                        value = selectedData[i]['layerHeight'][j-1];
+                        array[0][i] += value;//由来
+                    }
+                    else if(j<rows.length-1)//メトリクス合計値
+                    {
+                        value = array[0][i];
+                    }
+                    else//合計ファイル数
+                    {
+                        if(i<cells.length-1)
+                            value = selectedData[i]['numOfFiles'];
+                    }
+                    
+                    array[j][0] += value;//レイヤー
+                    array[j][i] = value;
+                    
+                    $(rows[j].cells[i]).text(value);
+                }
+                else
+                    $(rows[j].cells[i]).text(array[j][0]);
+            }
+        }
+
+        //オブジェクト再生成
         if(selectedData!=null && selectedData[0]!=0)
         {
             var areas = calcBuildingPos(selectedData);
@@ -422,5 +486,6 @@ $(function()
             //建物追加
             addBoxes(scene,boxes,scale);
         }
-    });
+    }
+	$("#timeSlider").change(function(){changeObjects();});
 });
