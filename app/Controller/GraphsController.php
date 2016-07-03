@@ -398,7 +398,9 @@ class GraphsController extends AppController
         $selectModelName = null;
         $selectMetrics = 3;
         $selectMetricsStr = '';
-     
+        $uploadIdList = null;
+        $uploadDateList = null;
+
         $data=null;
         if (isset($this->request->data['set'])) 
         {
@@ -416,10 +418,31 @@ class GraphsController extends AppController
             {                
                 $selectModelId = $this->data['Graph']['selectModel'];
                 $data = $this->Graph->getOriginCity2($selectModelId,$selectGroupName,$selectMetrics);
-                $selectModelName = $uploadList[$selectModelId];            
+                $selectModelName = $uploadList[$selectModelId];   
+        $selectModelDataList = $this->UploadData->find('list',array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId)));
+        asort($selectModelDataList);
+
+        $uploadIdList = array_keys($selectModelDataList);
+        $uploadDateList = array_values($selectModelDataList);
+        echo '<pre>';
+        print_r($uploadList);
+        print_r($selectModelId);
+        print_r($selectModelDataList);
+
+        
+        print_r($uploadIdList);
+        print_r($uploadDateList);
+        //print_r($data);
+        echo '</pre>';    
+        //die();
+                 
             }
         }
+        
         $this->set('data',$data);
+        $this->set('uploadList',$uploadList);
+        $this->set('uploadIdList',$uploadIdList);
+        $this->set('uploadDateList',$uploadDateList);
         $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
         $this->set('selectMetricsStr', $selectMetricsStr);    

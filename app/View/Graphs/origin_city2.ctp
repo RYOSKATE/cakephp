@@ -15,7 +15,7 @@
     <h1><small><?php echo __('OriginCity');?></small></h1>
     <?php echo $this->element('selectForm6'); ?>
 </div>
-<h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
+<h4><?php echo __('モデル名');?>:<div id="modelname"><?php echo $selectModelName;?></div></h4>
 <h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
 <div class="row">
     <div class="col-md-12 col-sm-12">
@@ -32,8 +32,8 @@
         //'class' => 'form-control',
         'step'=>1,
         'min'=>0,
-        //'max'=>$depth,
-        'value'=>1,
+        'max'=>count($data)-1,
+        'value'=>0,
         // 'list'=>array(1,2,3),
      ));	
   ?>
@@ -42,11 +42,15 @@
          <div id="canvas-wrapper"></div>
     </div>
     <div class="col-md-12 col-sm-12">
-		<?php echo $this->element('originCityTable2', array("data" => $data[1]));?>
+		<?php echo $this->element('originCityTable2', array("data" => $data[$uploadIdList[0]]));?>
     </div>
 </div>
 
 <script>
+    
+    var uploadList = JSON.parse('<?=json_encode($uploadList);?>');
+    var uploadIdList = JSON.parse('<?=json_encode($uploadIdList);?>');
+    var uploadDateList = JSON.parse('<?=json_encode($uploadDateList);?>');
     var data = JSON.parse('<?=json_encode($data);?>');
 </script>
 <?php echo $this->Html->script('originCity2', array('inline' => true));?>

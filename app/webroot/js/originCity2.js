@@ -351,7 +351,9 @@ $(function()
     {
         //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
         var sliderValue = $("#timeSlider").val();
-        var selectedData = data[sliderValue];
+        var id = uploadIdList[sliderValue];
+        var selectedData = data[id];
+        $("#modelname").text(uploadList[id]);
         if(selectedData!=null && selectedData[0]!=0)
         {
             var areas = calcBuildingPos(selectedData);
@@ -398,7 +400,9 @@ $(function()
         }
         //ページ切り替え直後、メトリクス非選択時は平面と軸のみ描画
         var sliderValue = $("#timeSlider").val();
-        var selectedData = data[sliderValue];
+        var id = uploadIdList[sliderValue];
+        var selectedData = data[id];
+        $("#modelname").text(uploadList[id]);
         if(selectedData!=null && selectedData[0]!=0)
         {
             var areas = calcBuildingPos(selectedData);

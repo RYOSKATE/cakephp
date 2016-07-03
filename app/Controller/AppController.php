@@ -209,7 +209,7 @@ class AppController extends Controller
         {
             $uploadList[$key]=$modelnameList[$uploadModelList[$key]]."(".strval($value).")";
         }
-    
+        krsort($uploadList);
         $this->set('uploadList',$uploadList);
 // echo '<pre>';
 // print_r($uploadList);

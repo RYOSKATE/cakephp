@@ -685,7 +685,7 @@ class Graph extends AppModel
             }
             if($sumOfValue==0)
                 $data[0]=0;
-            $newAllData[] = $data;
+            $newAllData[$id] = $data;
         }
         return $newAllData;
     }
