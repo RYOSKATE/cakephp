@@ -418,12 +418,21 @@ class GraphsController extends AppController
             {                
                 $selectModelId = $this->data['Graph']['selectModel'];
                 $data = $this->Graph->getOriginCity2($selectModelId,$selectGroupName,$selectMetrics);
-                $selectModelName = $uploadList[$selectModelId];   
                 $selectModelDataList = $this->UploadData->find('list',array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId)));
+                
                 asort($selectModelDataList);
 
                 $uploadIdList = array_keys($selectModelDataList);
                 $uploadDateList = array_values($selectModelDataList);
+
+                $selectModelName = $uploadList[$uploadIdList[0]];
+        // echo '<pre>';
+        // print_r($selectModelId);
+        // print_r($selectModelDataList);
+        // print_r($uploadIdList);
+        // print_r($uploadDateList);
+        // print_r($uploadList);
+        // echo '</pre>';
             }
         }
         
