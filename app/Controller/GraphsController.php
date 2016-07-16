@@ -335,7 +335,7 @@ class GraphsController extends AppController
                 else if(isset($this->data['Graph']['CSV_ID'.$i]))
                 {
                     $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];                    
-                    $selectUploadDataId = $this->getFirstKey($uploadList);                
+                    $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i];              
                     $selectModelName = $uploadList[$selectUploadDataId];
                     $data = $this->Graph->getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics);
                 }
