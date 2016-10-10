@@ -1,20 +1,17 @@
 <?php
 class TargetData
 {
-    public $csvName = null;
+    public $csvName = null;//ローカルファイル名
     public $modelName = null;
     public $groupName;
     public $metricsName = '';
     public $otherMethodName;
 
-    public $csvID;
+    public $csvID;//データベースのid
     public $modelId;
     public $groupId;
     public $metricsId = 3;
     public $otherMethodId;
-
-    
-    
 }
 
 class GraphsController extends AppController 
@@ -186,8 +183,8 @@ class GraphsController extends AppController
             }
             else if(isset($this->data['Graph']['CSV_ID']))
             {                
-                $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                $target->$modelName = $uploadList[$selectUploadDataId];
+                $target->$csvID = $this->data['Graph']['CSV_ID'];
+                $target->$modelName = $uploadList[$target->$csvID];
             }
 
             if($this->data['Graph']['可視化手法'] != null)
