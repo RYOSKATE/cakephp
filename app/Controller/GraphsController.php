@@ -4,10 +4,10 @@ class TargetData
     public $csvName = null;//ローカルファイル名
     public $modelName = '';
     public $groupName = '';
-    public $metricsName = '';
+    public $metricsName = '';//空文字を画面表示
     public $otherMethodName;
 
-    public $csvID = null;//データベースのid
+    public $csvId = null;//データベースのid
     public $modelId;
     public $groupId;
     public $metricsId = 3;
@@ -162,127 +162,129 @@ class GraphsController extends AppController
         if($formData != null)
         {
             $target = $formData;
-            if ($target->$csvName != null)
+            if ($target->csvName != null)
             {
-                $data = $this->Graph->getGroupDataFromCSV($target->$csvName,$target->$metricsId);
+                $data = $this->Graph->getGroupDataFromCSV($target->csvName,$target->metricsId);
             }
-            else if($target->$csvID != null)
+            else if($target->csvId != null)
             {
-                $data = $this->Graph->getGroupData($target->$csvID,$target->$metricsId,$target->$groupName);
+                $data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
             }
         }
         else if (isset($this->request->data['set']))
         {
-            $target->$groupId = $this->data['Graph'] ['開発グループ'];
-            $target->$groupName = $groupNameData[$target->$groupId];
-            $target->$metricsId = $this->data['Graph'] ['Metrics'];
-            $target->$metricsName = $metricsListData[$target->metricsId];
+            $target->groupId = $this->data['Graph'] ['開発グループ'];
+            $target->groupName = $groupNameData[$target->groupId];
+            $target->metricsId = $this->data['Graph'] ['Metrics'];
+            $target->metricsName = $metricsListData[$target->metricsId];
 
             if (!empty($this->data['Graph'] ['selectCSV']['name']))
             {
-                $target->$csvName = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $target->csvName = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                 $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
-                $target->$modelName = basename($fileName);
+                $target->modelName = basename($fileName);
             }
             else if(isset($this->data['Graph']['CSV_ID']))
             {                
-                $target->$csvID = $this->data['Graph']['CSV_ID'];
-                $target->$modelName = $uploadList[$target->$csvID];
+                $target->csvId = $this->data['Graph']['CSV_ID'];
+                $target->modelName = $uploadList[$target->csvId];
             }
 
             if($this->data['Graph']['可視化手法'] != null)
             {
-                $target->$otherMethodId = $this->data['Graph']['可視化手法'];
-                $target->$otherMethodName = $this->actions[$target->$otherMethodId];
+                $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                $target->otherMethodName = $this->actions[$target->otherMethodId];
                 $this->setAction($target,$this->data);
                 return;
             }
 
             if (!empty($this->data['Graph'] ['selectCSV']['name']))
             {
-                $target->$data = $this->Graph->getGroupDataFromCSV($up_file,$target->$metricsId);
+                $target->data = $this->Graph->getGroupDataFromCSV($target->csvName,$target->metricsId);
             }
             else if(isset($this->data['Graph']['CSV_ID']))
             {
-                $target->$data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
+                $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
             }
         }
-echo '<pre>';
-print_r($target);
-print_r($target->$data);
-echo '</pre>';
-        $this->set('data',$target->$data);
-        $this->set('selectModelName', $target->$modelName);
+
+        $this->set('data',$target->data);
+        $this->set('selectModelName', $target->modelName);
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);
     }
     
     public function onedevgroup($formData=null)
     {
-        if($formData != null)
-        {
-            $formData['Graph']['可視化手法']=null;
-            $this->data = $formData;
-        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();
-        $selectGroupName = reset($groupNameData);
-        
+        $modelNameData = $this->setModelName();        
         $metricsListData = $this->setMetricsList();
-        $selectModelName = null;
-        $selectMetrics = 3;
-        $selectMetricsStr = '';
-        if ($uploadList && isset($this->request->data['set'])) 
+
+        $target = array_fill(1,4,new TargetData());
+        foreach ($target as &$t)
         {
-            if($this->data['Graph']['可視化手法']!=null)
+            $t->modelName = reset($groupNameData);
+        }
+
+        if ($uploadList && isset($this->request->data['set']) || $formData != null) 
+        {
+            if($this->data['Graph']['可視化手法'] != null)
             {
-                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                $target->otherMethodName = $this->actions[$target->otherMethodId];
+                $this->setAction($target,$this->data);
                 return;
             }
-            $selectModelId = array_fill(1,  4, null);
-            $selectModelName = array_fill(1,  4, null);
-            for($i=1;$i<=count($selectModelName);++$i)
+            foreach ($target  as &$t)
+            {
+                $t->modelId = null;
+                $t->modelName = null;
+            }
+
+            for($i=1; $i<=4; ++$i)
             {
                 if($this->data['Graph']['モデル'.$i] != '')
                 {
-                    $selectModelId[$i] = $this->data['Graph']['モデル'.$i];
-                    $selectModelName[$i] = $modelNameData[$selectModelId[$i]];
+                    $target[$i]->modelId = $this->data['Graph']['モデル'.$i];
+                    $target[$i]->modelName = $modelNameData[$target[$i]->modelId]; 
                 }
+                $target[$i]->groupId = $this->data['Graph']['開発グループ'];
+                $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
+
+                $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
+                $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
+                $target[$i]->data = array();
             }
-       
-            $selectGroupName = $groupNameData[$this->data['Graph']['開発グループ']];
-            $selectMetrics = $this->data['Graph'] ['Metrics'];
-            $selectMetricsStr = $metricsListData[$selectMetrics];
-            $data = array_fill(1,  4, array());
+
             $error_message = '';      
-            for($i=1;$i<=count($selectModelId);++$i)
+            for($i=1; $i<=4; ++$i)
             {
                 $isDuplicate  = false;
                 for($j=1;$j<$i;++$j)
                 {
-                    if($selectModelId[$i]==$selectModelId[$j])
+                    if($target[$i]->metricsId == $target[$j]->metricsId)
                     {
                         $isDuplicate=true;
-                        $data[$i] = $data[$j];
+                        $target[$i]->data = $target[$j]->data;
                         break;
                     }
                 }
-                if(!$isDuplicate && $selectModelId[$i]!=null)
+                if(!$isDuplicate && $target[$i]->metricsId != null)
                 {
                     //モデル名Aのidのデータのidを全て取得
-                    $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $selectModelId[$i])));
+                    $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),'conditions' => array('modelname_id' => $target[$i]->modelId)));
                     if($dataIdByModel)
                     {
-                        foreach($dataIdByModel as $id=>$date)//モデルAの日付ごとのデータ
+                        foreach($dataIdByModel as $id => $date)//モデルAの日付ごとのデータ
                         {
-                            $groupData = $this->Graph->getGroupData($id,$selectMetrics,$selectGroupName);
+                            $groupData = $this->Graph->getGroupData($id,$target[1]->metricsId,$target[1]->groupName);
                             if(isset($groupData[0]))
                             {
-                                $groupData=$groupData[0];
+                                $groupData = $groupData[0];
                                 $groupData['date'] = $date;
-                                $data[$i][] = $groupData;
+                                $target[$i]->data[] = $groupData;
                             }
                         }
                     }
@@ -291,17 +293,16 @@ echo '</pre>';
                         $error_message .= $selectModelName[$i].'のデータが存在しません<br>';
                     }
                 }
-                $this->set('data'.$i,$data[$i]);
+                $this->set('data'.$i, $target[$i]->data);
             }  
             if($error_message!='')
             {
-                $this->flashText($error_message,false);
+                $this->flashText($error_message, false);
             }
-
-            $this->set('selectModelName',$selectModelName);
+            $this->set('selectModelName',$target[1]->modelName);
         }
-        $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr', $selectMetricsStr);
+        $this->set('selectMetrics',$target[1]->metricsId);
+        $this->set('selectMetricsStr', $target[1]->metricsName);
     }
 
     public function onedevgroup2($formData=null)
