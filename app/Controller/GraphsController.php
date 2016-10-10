@@ -2,12 +2,12 @@
 class TargetData
 {
     public $csvName = null;//ローカルファイル名
-    public $modelName = null;
-    public $groupName;
+    public $modelName = '';
+    public $groupName = '';
     public $metricsName = '';
     public $otherMethodName;
 
-    public $csvID;//データベースのid
+    public $csvID = null;//データベースのid
     public $modelId;
     public $groupId;
     public $metricsId = 3;
@@ -159,13 +159,14 @@ class GraphsController extends AppController
         $data=[];//nullだとページ切替時枠が描画されない
         if($formData != null)
         {
-            if ($formData->$csvName != null)
+            $target = $formData;
+            if ($target->$csvName != null)
             {
-                $data = $this->Graph->getGroupDataFromCSV($formData->$csvName,$target->$metricsId);
+                $data = $this->Graph->getGroupDataFromCSV($target->$csvName,$target->$metricsId);
             }
-            else if(isset($this->data['Graph']['CSV_ID']))
+            else if($target->$csvID != null)
             {
-                $data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
+                $data = $this->Graph->getGroupData($target->$csvID,$target->$metricsId,$target->$groupName);
             }
         }
         else if (isset($this->request->data['set']))
@@ -204,8 +205,11 @@ class GraphsController extends AppController
                 $data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
             }
         }
+echo '<pre>';
+print_r($target);
+echo '</pre>';
         $this->set('data',$data);
-        $this->set('selectModelName',$target->$modelName);
+        $this->set('selectModelName', $target->$modelName);
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);
     }
