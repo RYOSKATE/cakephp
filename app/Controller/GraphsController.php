@@ -1,18 +1,22 @@
 <?php
-class Data
+class TargetData
 {
-    public $modelName;
+    public $csvName = null;
+    public $modelName = null;
     public $groupName;
-    public $metricsName;
+    public $metricsName = '';
+    public $otherMethodName;
 
+    public $csvID;
     public $modelId;
     public $groupId;
-    public $metricsId;
+    public $metricsId = 3;
+    public $otherMethodId;
 
-    public $otherMethod;
-
-    public $csvName;
+    
+    
 }
+
 class GraphsController extends AppController 
 {    
     public $helpers = array('Html', 'Form', 'Session');
@@ -145,51 +149,68 @@ class GraphsController extends AppController
         $now = time();
         return mktime(date("H",$now),date("i",$now),date("s",$now),date("m",$now),date("d",$now)+$day,date("Y",$now));
     }
+
     public function alldevgroup($formData=null)
     {
-        if($formData != null)
-        {
-            $formData['Graph']['可視化手法']=null;
-            $this->data = $formData;
-        } 
+
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
         
-        $selectModelName = null;
-        $selectMetrics = 3;
-        $selectMetricsStr = '';
-
+        $target = new TargetData();
         $data=[];//nullだとページ切替時枠が描画されない
-        if (isset($this->request->data['set'])) 
+        if($formData != null)
         {
-            if($this->data['Graph']['可視化手法']!=null)
+            if ($formData->$csvName != null)
             {
-                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
-                return;
+                $data = $this->Graph->getGroupDataFromCSV($formData->$csvName,$target->$metricsId);
             }
-            $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-            $selectMetrics = $this->data['Graph'] ['Metrics'];
-            $selectMetricsStr = $metricsListData[$selectMetrics];
-            if (!empty($this->data['Graph'] ['selectCSV']['name'])) 
+            else if(isset($this->data['Graph']['CSV_ID']))
             {
-                $up_file = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
+            }
+        }
+        else if (isset($this->request->data['set']))
+        {
+            $target->$groupId = $this->data['Graph'] ['開発グループ'];
+            $target->$groupName = $groupNameData[$target->$groupId];
+            $target->$metricsId = $this->data['Graph'] ['Metrics'];
+            $target->$metricsName = $metricsListData[$target->metricsId];
+
+            if (!empty($this->data['Graph'] ['selectCSV']['name']))
+            {
+                $target->$csvName = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                 $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
-                $data = $this->Graph->getGroupDataFromCSV($up_file,$selectMetrics);
-                $selectModelName = basename($fileName);
+                $target->$modelName = basename($fileName);
             }
             else if(isset($this->data['Graph']['CSV_ID']))
             {                
                 $selectUploadDataId = $this->data['Graph']['CSV_ID'];
-                $data = $this->Graph->getGroupData($selectUploadDataId,$selectMetrics,$selectGroupName);
-                $selectModelName = $uploadList[$selectUploadDataId];            
+                $target->$modelName = $uploadList[$selectUploadDataId];
+            }
+
+            if($this->data['Graph']['可視化手法'] != null)
+            {
+                $target->$otherMethodId = $this->data['Graph']['可視化手法'];
+                $target->$otherMethodName = $this->actions[$target->$otherMethodId];
+                $this->setAction($target,$this->data);
+                return;
+            }
+
+            if (!empty($this->data['Graph'] ['selectCSV']['name']))
+            {
+                $data = $this->Graph->getGroupDataFromCSV($up_file,$target->$metricsId);
+            }
+            else if(isset($this->data['Graph']['CSV_ID']))
+            {
+                $data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
             }
         }
         $this->set('data',$data);
-        $this->set('selectModelName',$selectModelName);
-        $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr', $selectMetricsStr);
+        $this->set('selectModelName',$target->$modelName);
+        $this->set('selectMetrics',$target->metricsId);
+        $this->set('selectMetricsStr', $target->metricsName);
     }
     
     public function onedevgroup($formData=null)
