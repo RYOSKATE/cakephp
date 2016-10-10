@@ -16,6 +16,9 @@
         echo '<div class="col-sm-6 col-md-6 col-lg-6">';
         echo $this->element('setButton'); 
         echo '</div>';
+        echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+        echo $this->element('changeGraphButton'); 
+        echo '</div>';        
         ?>
 <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
 <a style="cursor:pointer;"><?php 

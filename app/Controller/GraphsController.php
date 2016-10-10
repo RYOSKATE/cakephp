@@ -10,7 +10,11 @@ class GraphsController extends AppController
     メトリクス   
     由来比較     OriginChart
     */
-    
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+        $this->setMethodList();
+    }
     private function setModelName()
     {
         //すでに存在する開発グループ名一覧を取得
@@ -23,6 +27,32 @@ class GraphsController extends AppController
     private function getFirstKey($array)
     {
         return array_keys($array)[0];
+    }
+    private function setMethodList()
+    {
+        $methods = array(
+            __('メトリクス領域図'),
+			__('メトリクス遷移図'),
+			__('メトリクスファイルマップ'),
+			__('メトリクスレーダーチャート'),
+			__('メトリクス円グラフ'),
+			__('メトリクス領域図'),
+			__('Origin City'),
+        );
+        if($this->getLang()=='eng')
+        {
+            $methods = array(
+                __('Metrics Scatter Plot'),
+                __('Metrics Transition'),
+                __('Metrics File Map'),
+                __('Metrics Radar Chart'),
+                __('Metrics Pie Chart'),
+                __('Metrics Area Figure'),
+                __('Origin City'),
+            );
+        }
+        $this->set('methods',$methods);
+        return $methods;        
     }
 	private function setMetricsList()
     {
