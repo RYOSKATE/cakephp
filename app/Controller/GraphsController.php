@@ -12,6 +12,9 @@ class TargetData
     public $groupId;
     public $metricsId = 3;
     public $otherMethodId;
+
+    public $data=[];//解析結果データ
+    //nullだとページ切替時枠が描画されない
 }
 
 class GraphsController extends AppController 
@@ -156,7 +159,6 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         
         $target = new TargetData();
-        $data=[];//nullだとページ切替時枠が描画されない
         if($formData != null)
         {
             $target = $formData;
@@ -198,17 +200,18 @@ class GraphsController extends AppController
 
             if (!empty($this->data['Graph'] ['selectCSV']['name']))
             {
-                $data = $this->Graph->getGroupDataFromCSV($up_file,$target->$metricsId);
+                $target->$data = $this->Graph->getGroupDataFromCSV($up_file,$target->$metricsId);
             }
             else if(isset($this->data['Graph']['CSV_ID']))
             {
-                $data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
+                $target->$data = $this->Graph->getGroupData($selectUploadDataId,$target->$metricsId,$target->$groupName);
             }
         }
 echo '<pre>';
 print_r($target);
+print_r($target->$data);
 echo '</pre>';
-        $this->set('data',$data);
+        $this->set('data',$target->$data);
         $this->set('selectModelName', $target->$modelName);
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);
