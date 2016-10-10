@@ -1,12 +1,25 @@
 <?php
+class Data
+{
+    public $modelName;
+    public $groupName;
+    public $metricsName;
+
+    public $modelId;
+    public $groupId;
+    public $metricsId;
+
+    public $otherMethod;
+
+    public $csvName;
+}
 class GraphsController extends AppController 
 {    
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session','Paginator');
 
     public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData');
-
-    static public $globalData;
+    public $actions = array('alldevgroup','onedevgroup','onedevgroup2','metrics','origin','originCity','originCity2');
 
     /*
     CSV入力      Graph
@@ -132,23 +145,29 @@ class GraphsController extends AppController
         $now = time();
         return mktime(date("H",$now),date("i",$now),date("s",$now),date("m",$now),date("d",$now)+$day,date("Y",$now));
     }
-    public function alldevgroup() 
+    public function alldevgroup($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
+        
         $selectModelName = null;
         $selectMetrics = 3;
         $selectMetricsStr = '';
-     
+
         $data=[];//nullだとページ切替時枠が描画されない
         if (isset($this->request->data['set'])) 
         {
-            if($this->data['Graph']['可視化手法'])
+            if($this->data['Graph']['可視化手法']!=null)
             {
-                GraphsController::$globalData = $this->data;	             
-                $this->redirect("/graphs/originCity", 303);
+                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                return;
             }
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             $selectMetrics = $this->data['Graph'] ['Metrics'];
@@ -173,8 +192,13 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr', $selectMetricsStr);
     }
     
-    public function onedevgroup() 
+    public function onedevgroup($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
@@ -187,6 +211,11 @@ class GraphsController extends AppController
         $selectMetricsStr = '';
         if ($uploadList && isset($this->request->data['set'])) 
         {
+            if($this->data['Graph']['可視化手法']!=null)
+            {
+                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                return;
+            }
             $selectModelId = array_fill(1,  4, null);
             $selectModelName = array_fill(1,  4, null);
             for($i=1;$i<=count($selectModelName);++$i)
@@ -250,8 +279,13 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr', $selectMetricsStr);
     }
 
-    public function onedevgroup2() 
+    public function onedevgroup2($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
@@ -262,12 +296,22 @@ class GraphsController extends AppController
         $selectModelName = null;
         if (isset($this->request->data['set']))
         {
-                $chartMetrics = array();
+            if($this->data['Graph']['可視化手法']!=null)
+            {
+                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                return;
+            }
+            {    $chartMetrics = array();
                 for ($i = 0; $i < count($metricsListData); ++$i)
                 {
-                    $number = $this->data['Graph']['Metrics' . $i];
-                    if(isset($metricsListData[$number]))
-                        $chartMetrics[] = $number;
+                    if(isset($this->data['Graph']['Metrics' . $i]))
+                    {
+                        $number = $this->data['Graph']['Metrics' . $i];
+                        if(isset($metricsListData[$number]))
+                        {
+                            $chartMetrics[] = $number;
+                        }
+                    }
                 }
 
                 $chartMetrics = array_unique($chartMetrics);
@@ -279,6 +323,7 @@ class GraphsController extends AppController
                     $chartMetricsStr[] = $metricsListData[$metId];
                 }
                 $this->set('chartMetricsStr',$chartMetricsStr);
+            }
             
             $selectMetrics = $this->data['Graph'] ['Metrics']; 
             $selectMetricsStr = $metricsListData[$selectMetrics];
@@ -305,8 +350,13 @@ class GraphsController extends AppController
         $this->set('useLocalCSV',true);
     }
     
-    public function metrics()
+    public function metrics($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
@@ -320,6 +370,11 @@ class GraphsController extends AppController
             $selectModelName = null;
             if (isset($this->request->data['set']))
             {
+                if($this->data['Graph']['可視化手法']!=null)
+                {
+                    $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                    return;
+                }
                 $selectMetrics = $this->data['Graph']['Metrics'];
                 $selectMetricsStr = $metricsListData[$selectMetrics];                    
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
@@ -345,8 +400,13 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr',$selectMetricsStr);                                
     }
     
-    public function origin()
+    public function origin($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         //origin_chartsテーブルからデータを全て取得し、変数$dataにセットする
         $this->operateSticky();
         $uploadList = $this->setUploadList();
@@ -361,6 +421,11 @@ class GraphsController extends AppController
             $selectModelName =  null;
             if (isset($this->request->data['set']))
             {
+                if($this->data['Graph']['可視化手法']!=null)
+                {
+                    $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                    return;
+                }
                 $selectMetrics = $this->data['Graph'] ['Metrics'];
                 $selectMetricsStr = $metricsListData[$selectMetrics];                                                            
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
@@ -386,8 +451,13 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr',$selectMetricsStr);                                        
     }
     
-    public function originCity()
+    public function originCity($formData=null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        }  
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
@@ -396,22 +466,16 @@ class GraphsController extends AppController
         $selectMetrics = 3;
         $selectMetricsStr = '';
         $data=null;
-        
+     
         for($i=1;$i<=2;++$i)
         {
-            $selectModelName = null;
-echo '<pre>';
-print_r(GraphsController::$globalData);
-print_r($this->data);
-echo '</pre>';
-die();	 
-            if (isset($this->request->data['set']) || GraphsController::$globalData != null)
+            $selectModelName = null; 
+            if (isset($this->request->data['set']))
             {
-                if($globalData != null)
+                if($this->data['Graph']['可視化手法']!=null)
                 {
-                   
-                    $this->data = GraphsController::$globalData;
-                    GraphsController::$globalData = null;
+                    $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                    return;
                 }
                 $selectMetrics = $this->data['Graph'] ['Metrics'];
                 $selectMetricsStr = $metricsListData[$selectMetrics];                                                              
@@ -438,8 +502,13 @@ die();
         $this->set('selectMetricsStr',$selectMetricsStr);     
     }
     
-    public function originCity2()
+    public function originCity2($formData = null)
     {
+        if($formData != null)
+        {
+            $formData['Graph']['可視化手法']=null;
+            $this->data = $formData;
+        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $modelNameData = $this->setModelName();
@@ -454,6 +523,11 @@ die();
         $data=null;
         if (isset($this->request->data['set'])) 
         {
+            if($this->data['Graph']['可視化手法']!=null)
+            {
+                $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
+                return;
+            }
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             $selectMetrics = $this->data['Graph'] ['Metrics'];
             $selectMetricsStr = $metricsListData[$selectMetrics];
