@@ -5,6 +5,9 @@ class GraphsController extends AppController
     public $components = array('Session','Paginator');
 
     public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData');
+
+    static public $globalData;
+
     /*
     CSV入力      Graph
     メトリクス   
@@ -31,7 +34,7 @@ class GraphsController extends AppController
     private function setMethodList()
     {
         $methods = array(
-            __('メトリクス領域図'),
+            __('メトリクス散布図'),
 			__('メトリクス遷移図'),
 			__('メトリクスファイルマップ'),
 			__('メトリクスレーダーチャート'),
@@ -142,6 +145,11 @@ class GraphsController extends AppController
         $data=[];//nullだとページ切替時枠が描画されない
         if (isset($this->request->data['set'])) 
         {
+            if($this->data['Graph']['可視化手法'])
+            {
+                GraphsController::$globalData = $this->data;	             
+                $this->redirect("/graphs/originCity", 303);
+            }
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
             $selectMetrics = $this->data['Graph'] ['Metrics'];
             $selectMetricsStr = $metricsListData[$selectMetrics];
@@ -388,11 +396,23 @@ class GraphsController extends AppController
         $selectMetrics = 3;
         $selectMetricsStr = '';
         $data=null;
+        
         for($i=1;$i<=2;++$i)
         {
             $selectModelName = null;
-            if (isset($this->request->data['set']))
+echo '<pre>';
+print_r(GraphsController::$globalData);
+print_r($this->data);
+echo '</pre>';
+die();	 
+            if (isset($this->request->data['set']) || GraphsController::$globalData != null)
             {
+                if($globalData != null)
+                {
+                   
+                    $this->data = GraphsController::$globalData;
+                    GraphsController::$globalData = null;
+                }
                 $selectMetrics = $this->data['Graph'] ['Metrics'];
                 $selectMetricsStr = $metricsListData[$selectMetrics];                                                              
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
