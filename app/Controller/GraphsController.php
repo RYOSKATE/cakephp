@@ -156,7 +156,7 @@ class GraphsController extends AppController
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
-        $metricsListData = $this->setMetricsList();    
+        $metricsListData = $this->setMetricsList();
         $target = new TargetData();
         if($formData != null)
         {
@@ -201,14 +201,15 @@ class GraphsController extends AppController
                 $this->data =  $temp;
                 $this->setAction($target->otherMethodName, array_fill(1,4,$target));
                 return;
-            }            
+            }
+
             if($target->isLoadExternalCSV)
             {
                 $target->data = $this->Graph->getGroupDataFromCSV($target->csvName,$target->metricsId);
             }
             else
             {
-                $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
+                $target->data = $this->Graph->getGroupData();
             }
         }
         $this->set('data',$target->data);
@@ -426,52 +427,84 @@ class GraphsController extends AppController
     
     public function metrics($formData=null)
     {
-        if($formData != null)
-        {
-            $formData['Graph']['可視化手法']=null;
-            $this->data = $formData;
-        } 
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $selectGroupName = reset($groupNameData);//ALLは0に追加されている
         $metricsListData = $this->setMetricsList();
-        $selectMetrics = 3;
-        $selectMetricsStr = '';
-        $data=[];
-        for($i=1;$i<=2;++$i)
+        $target = array_fill(1,2,new TargetData());
+        
+        if($formData != null)
         {
-            $selectModelName = null;
-            if (isset($this->request->data['set']))
+            for($i=1;$i<=2;++$i)
             {
-                if($this->data['Graph']['可視化手法']!=null)
+                $target[$i] = $formData[$i];
+                if ($target[$i]->isLoadExternalCSV)
                 {
-                    $this->setAction($this->actions[$this->data['Graph']['可視化手法']],$this->data);
-                    return;
+                    $target[$i]->data = $this->Graph->getGroupDataFromCSV($target[$i]->csvName,$target[$i]->metricsId);
                 }
-                $selectMetrics = $this->data['Graph']['Metrics'];
-                $selectMetricsStr = $metricsListData[$selectMetrics];                    
+                else
+                {
+                    $target[$i]->data = $this->Graph->getGroupData($target[$i]->csvId,$target[$i]->metricsId,$target[$i]->groupName);
+                }
+                $this->set('data'.$i,$target[$i]->data);
+                $this->set('selectModelName'.$i,$target[$i]->csvName);
+            }
+        }
+        else if (isset($this->request->data['set']))
+        {
+            for($i=1;$i<=2;++$i)
+            {
+                $target[$i]->groupId = $this->data['Graph'] ['開発グループ'];
+                $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
+                $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
+                $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
+                
                 if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
                 {
-                    $up_file = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                    $target[$i]->csvName = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
-                    $data = $this->Graph->getCompareMetricsTableFromCSV($up_file,$selectMetrics);
-                    $selectModelName = basename($fileName);
+                    $target[$i]->csvName = basename($fileName);
+                    $target->isLoadExternalCSV = true;
                 }
                 else if(isset($this->data['Graph']['CSV_ID'.$i]))
                 {
-                    $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
-                    $selectUploadDataId = $this->data['Graph']['CSV_ID'.$i]; 
-                    $selectModelName = $uploadList[$selectUploadDataId];                
-                    $data = $this->Graph->getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics);
+                    $target[$i]->csvId = $this->data['Graph']['CSV_ID'.$i];
+                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];          
                 }
             }
-            $this->set('data'.$i,$data);
-            $this->set('selectModelName'.$i,$selectModelName);
+            if($this->data['Graph']['可視化手法'] != null)
+            {
+                for($i=1;$i<=2;++$i)
+                {
+                    $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
+                    $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
+                    $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                    $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                }
+                $temp = $this->data;
+                $temp['Graph']['可視化手法'] = null;
+                $this->data =  $temp;               
+                $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
+                return;
+            }
+            for($i=1;$i<=2;++$i)
+            {
+                if($target[$i]->isLoadExternalCSV)
+                {
+                    $target[$i]->data = $this->Graph->getCompareMetricsTableFromCSV($target[$i]->csvName,$target[$i]->metricsId);
+                }
+                else
+                {
+                    $target[$i]->data = $this->Graph->getCompareMetricsTable($target[$i]->csvId,$target[$i]->groupName,$target[$i]->metricsId);
+                }
+                $this->set('data'.$i,$target[$i]->data);
+                $this->set('selectModelName'.$i,$target[$i]->csvName);
+            }
         }
         $this->set('useLocalCSV',true);
-        $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$selectMetricsStr);                                
+        $this->set('selectMetrics',$target[1]->metricsId);
+        $this->set('selectMetricsStr',$target[1]->metricsName);                                
     }
     
     public function origin($formData=null)
