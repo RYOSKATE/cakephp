@@ -216,6 +216,7 @@ class GraphsController extends AppController
         $this->set('selectModelName', $target->csvName);
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);
+        $this->set('methodId',0);
     }
     
     public function onedevgroup($formData=null)
@@ -327,6 +328,7 @@ class GraphsController extends AppController
         }
         $this->set('selectMetrics',$target[1]->metricsId);
         $this->set('selectMetricsStr', $target[1]->metricsName);
+        $this->set('methodId',1);
     }
 
     public function onedevgroup2($formData=null)
@@ -423,6 +425,7 @@ class GraphsController extends AppController
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);                            
         $this->set('useLocalCSV',true);
+        $this->set('methodId',2);
     }
     
     public function metrics($formData=null)
@@ -504,7 +507,8 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$target[1]->metricsId);
-        $this->set('selectMetricsStr',$target[1]->metricsName);                                
+        $this->set('selectMetricsStr',$target[1]->metricsName);
+        $this->set('methodId',3);                            
     }
     
     public function origin($formData=null)
@@ -555,7 +559,8 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$selectMetricsStr);                                        
+        $this->set('selectMetricsStr',$selectMetricsStr);
+        $this->set('methodId',4);                                   
     }
     
     public function originCity($formData=null)
@@ -606,7 +611,8 @@ class GraphsController extends AppController
         }
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr',$selectMetricsStr);     
+        $this->set('selectMetricsStr',$selectMetricsStr);
+        $this->set('methodId',5);
     }
     
     public function originCity2($formData = null)
@@ -657,13 +663,6 @@ class GraphsController extends AppController
                 $uploadDateList = array_values($selectModelDataList);
 
                 $selectModelName = $uploadList[$uploadIdList[0]];
-        // echo '<pre>';
-        // print_r($selectModelId);
-        // print_r($selectModelDataList);
-        // print_r($uploadIdList);
-        // print_r($uploadDateList);
-        // print_r($uploadList);
-        // echo '</pre>';
             }
         }
         
@@ -673,7 +672,8 @@ class GraphsController extends AppController
         $this->set('uploadDateList',$uploadDateList);
         $this->set('selectModelName',$selectModelName);
         $this->set('selectMetrics',$selectMetrics);
-        $this->set('selectMetricsStr', $selectMetricsStr);    
+        $this->set('selectMetricsStr', $selectMetricsStr);
+        $this->set('methodId',6);  
     }
 
     public function upload()
