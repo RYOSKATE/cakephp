@@ -206,7 +206,7 @@ class UsersController extends AppController {
             else 
             {
                 $message = __('Invalid username or password, try again.');
-                $this->Session->setFlash($message . '<button class="close" data-dismiss="alert">&times;</button>', 'default', ['class'=> 'alert alert-warning alert-dismissable']);
+                $this->Session->setFlash($message . '<button class="close" data-dismiss="alert">&times;</button>', 'default', array('class'=> 'alert alert-warning alert-dismissable'));
             }
         }
     }

@@ -22,7 +22,8 @@ class GraphsController extends AppController
 	
     private function getFirstKey($array)
     {
-        return array_keys($array)[0];
+        $temp = array_keys($array); 
+        return $temp[0];
     }
 	private function setMetricsList()
     {
@@ -109,7 +110,7 @@ class GraphsController extends AppController
         $selectMetrics = 3;
         $selectMetricsStr = '';
      
-        $data=[];//nullだとページ切替時枠が描画されない
+        $data=array();//nullだとページ切替時枠が描画されない
         if (isset($this->request->data['set'])) 
         {
             $selectGroupName = $groupNameData[$this->data['Graph'] ['開発グループ']];
@@ -276,7 +277,7 @@ class GraphsController extends AppController
         $metricsListData = $this->setMetricsList();
         $selectMetrics = 3;
         $selectMetricsStr = '';
-        $data=[];
+        $data=array();
         for($i=1;$i<=2;++$i)
         {
             $selectModelName = null;

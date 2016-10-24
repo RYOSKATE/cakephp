@@ -32,6 +32,7 @@
 					));
 					echo '</div>';
 					echo '<div class="col-xs-6 col-sm-12 col-md-12 col-lg-6">';       
+					$temp = end($stickies);
 					echo $this->Form->input('id',array
 					(
 						'id'=> 'id',
@@ -39,7 +40,7 @@
 						'class' => 'form-control',
 						'step'=>1,
 						'min'=>0,
-						'max'=>end($stickies)['id'],
+						'max'=>$temp['id'],
 						'value'=>0,
 						'style'=>"width:100%;",
 						// 'list'=>array(1,2,3),
