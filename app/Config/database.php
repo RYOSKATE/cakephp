@@ -69,7 +69,7 @@ class DATABASE_CONFIG {
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
-		'password' => 'root',
+		'password' => 'crmsn213',
 		'database' => 'visualizetool',
 		'prefix' => '',
 		//'encoding' => 'utf8',
