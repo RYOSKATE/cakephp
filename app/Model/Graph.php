@@ -337,7 +337,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('filepath','3',$selectMetrics),'conditions' => $conditions));
+        $data = $this->find('all',array('fields' => array('filepath','3',$selectMetrics),'conditions' => $conditions));
 
         //model名,レイヤー、全ファイル数、欠陥のあるファイル数、欠陥数
 //data[0]=Array
@@ -496,7 +496,7 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        $data = $this->find('all',array('Fields' => array('1',$selectMetrics),'conditions' => $conditions));
+        $data = $this->find('all',array('fields' => array('1',$selectMetrics),'conditions' => $conditions));
         
         return $this->getOriginTableImple($data,$selectMetrics);
     }
@@ -596,6 +596,7 @@ class Graph extends AppModel
         if($ret !== false) {
 echo '<pre>';
 print_r("using cache");
+print_r($ret);
 echo '</pre>';
             return $ret;
         }
@@ -609,13 +610,18 @@ echo '</pre>';
             $conditions += array('Graph.25' => $selectGroupName);
         }
         //1は由来,2はファイル数,3は欠陥数
+
+        $fields = array('filepath' ,'1',$metricsNumber);
 echo '<pre>';
 print_r(date( "Y年m月d日 H時i分s秒" ) );
+//print_r($fields);
 echo '</pre>';
 
-        $data = $this->find('all',array('Fields' => array('filepath','1',$metricsNumber),'conditions' => $conditions));
+
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));
 echo '<pre>';
 print_r(date( "Y年m月d日 H時i分s秒" ) );
+//print_r($data);
 echo '</pre>';
 
         $newData = array();
@@ -641,7 +647,7 @@ echo '</pre>';
             {
                 $height += $newData[$i]['layerHeight'][$j];
             }
-            $newData[$i]['height']=$height;
+            $newData[$i]['height'] = $height;
             $sumOfValue += $height;
         }
         if($sumOfValue==0)
@@ -650,9 +656,8 @@ echo '</pre>';
         Cache::write($cName, $newData);
 echo '<pre>';
 print_r(date( "Y年m月d日 H時i分s秒" ) );
-print_r($newData);
+//print_r($newData);
 echo '</pre>';
-die();	
         return $newData;
     }
     
@@ -673,7 +678,7 @@ die();
         }
         
         $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);     
-        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));       
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));       
         return $this->getOriginCity2Imple($data,$selectMetrics);
     }
     

@@ -11,11 +11,15 @@ $(function()
 	makeRegionGraph(originalSum2, 2,w);
 	function makeRegionGraph(originsum, num,w)
 	{
-		var sum = originsum;//ここは関数の引数にする
-
+		var sum = new Array();//ここは関数の引数にする
+		sum.push(0);
+		for(var i=1; i<=7;++i)
+		{
+			sum.push(originsum[i]["height"]);
+		}
 		var allOfZero=true;
 		$.each(sum,function(index,val){
-			allOfZero &= (val["height"] == 0);
+			allOfZero &= (val == 0);
 		});
 		if(allOfZero)
 			return;
@@ -38,9 +42,9 @@ $(function()
 			23 : 6, 
 			3 : 7 };
 		var originStr = ["","o1","o12","o2","o13","o123","o23","o3"];
-		var sum1 = sum[o[1]]["height"] + sum[o[12]]["height"] + sum[o[13]]["height"] + sum[o[123]]["height"];
-		var sum2 = sum[o[2]]["height"] + sum[o[12]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
-		var sum3 = sum[o[3]]["height"] + sum[o[13]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
+		var sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
+		var sum2 = sum[o[2]] + sum[o[12]] + sum[o[23]] + sum[o[123]];
+		var sum3 = sum[o[3]] + sum[o[13]] + sum[o[23]] + sum[o[123]];
 
 		function radiusFromArea(area) {
 			return Math.sqrt(area / Math.PI);
@@ -53,11 +57,11 @@ $(function()
 
 		for(var i=1; i<8;++i)
 		{
-			sum[i]["height"] *= scale*scale;
+			sum[i] *= scale*scale;
 		}
-		sum1 = sum[o[1]]["height"] + sum[o[12]]["height"] + sum[o[13]]["height"] + sum[o[123]]["height"];
-		sum2 = sum[o[2]]["height"] + sum[o[12]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
-		sum3 = sum[o[3]]["height"] + sum[o[13]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
+		sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
+		sum2 = sum[o[2]] + sum[o[12]] + sum[o[23]] + sum[o[123]];
+		sum3 = sum[o[3]] + sum[o[13]] + sum[o[23]] + sum[o[123]];
 
 		var r1 = radiusFromArea(sum1);
 		var r2 = radiusFromArea(sum2);
@@ -260,7 +264,8 @@ $(function()
 			{
 				//o1,o2,o12はareaが最初からsum[1],sum[12],sum[2]より多いはず
 				var newOrigin = ori + 3;
-				if (sum[ori] < areas[ori] && areas[newOrigin]<sum[newOrigin])
+				if (sum[ori] < areas[ori]
+					&& areas[newOrigin] < sum[newOrigin])
 				{
 					--areas[ori];
 					++areas[newOrigin];
@@ -272,7 +277,7 @@ $(function()
 			else if (ori == 0)
 			{
 				//なにもないところならo3にする
-				if (areas[o[3]]<sum[o[3]])
+				if (areas[o[3]] < sum[o[3]])
 				{
 					--areas[0];
 					++areas[o[3]];
@@ -309,6 +314,7 @@ $(function()
 			radius : r1,
 			oriTxt : originStr[o[1]],
 			selectable : false,
+			origin : 1
 			//opacity : 0.5
 		});
 		canvas.add(circle1);
@@ -321,6 +327,7 @@ $(function()
 			radius : r2,
 			oriTxt : originStr[o[2]],
 			selectable : false,
+			origin : 3
 			//opacity : 0.5
 		});
 		canvas.add(circle2);
@@ -393,20 +400,41 @@ $(function()
 		{
   			if (options.target) 
 			{
+				var width = WindowSize.x*0.2;
+				var height = WindowSize.y*0.7;
+				
 				var rect = new fabric.Rect({
 					fill: '#eef',
-					width: WindowSize.x*0.2,
-					height: WindowSize.y*0.7,
+					width: width,
+					height: height,
 				});
 
+				var originData = originsum[options.target.origin];
+				var total = originData["height"];
+				var scale = 0.8 * height / total;
+				var oriColor = new Array('#C869FF','#6BCDFF','#71FD5E','#FECA61','#FA6565','#000000','#DDDDDD');
+				var layer = new Array('APP','FW','OSS','SYSTEM', 'HW','Kernel','Others');
+				var rects = new Array();
+				for(var i=0; i<7; ++i)
+				{
+					var h = originData['layerHeight'][i]*scale;
+					var r = new fabric.Rect({
+						fill: oriColor[i],
+						width: width*0.9,
+						height: h,
+						top : WindowCenter.y + height/2 - h,
+						left: WindowCenter.x - width/2 + width*0.05,
+					});
+					rects.push(r);
+				}
 				var text = new fabric.Text(options.target.oriTxt, 
 				{
 					fontSize: 30
 				});
 
-				var group = new fabric.Group([ rect, text ], {
-					left: WindowCenter.x - (WindowSize.x*0.2)/2,
-					top: WindowCenter.y - (WindowSize.y*0.7)/2,
+				var group = new fabric.Group([ rect, text, rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6] ], {
+					left: WindowCenter.x - width/2,
+					top: WindowCenter.y - height/2,
 				});
 
 				canvas.add(group);

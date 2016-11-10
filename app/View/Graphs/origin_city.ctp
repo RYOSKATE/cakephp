@@ -1,14 +1,12 @@
 
 <?php
+
 //デバッグ用表示
-    // echo 'デバッグ用表示';
-    // echo '<pre>';
-    // print_r($data1);
-    // print_r($data2);
-    // echo '</pre>';
+   // echo 'デバッグ用表示';
+    //echo '<pre>';
+echo $this->element('sql_dump');
+    //echo '</pre>';
 ?>
-
-
 <div data-role='page'>
 </div>
 
