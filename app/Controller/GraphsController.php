@@ -712,7 +712,6 @@ class GraphsController extends AppController
                 $this->set('data'.$i,$target[$i]->data);
             }
         }
-
         for($i=1;$i<=2;++$i)
         {
             $this->set('ModelName'.$i,$target[$i]->csvName);
@@ -791,6 +790,7 @@ class GraphsController extends AppController
             {
                 $target->data = $this->Graph->getOriginCity2($target->modelId,$target->groupName,$target->metricsId);
             }
+
         }
         if($target->data != null)
         {            

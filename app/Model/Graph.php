@@ -18,6 +18,17 @@ class Graph extends AppModel
 		)
 	);
 
+    function makeCacheName($graphName,$paramArray)
+    {
+        $str = $graphName;
+        foreach ($paramArray as $param)
+        {
+            $str += "_";
+            $str += $param;
+        }
+        return $str;
+    }
+
     function readCSV($filepath,$selectModelId=-1,$upload_id=-1)
     {
         $records = array();
@@ -579,6 +590,16 @@ class Graph extends AppModel
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
     function getOriginCity($selectUploadDataId,$selectGroupName,$metricsNumber) 
     {
+        $cName = $this->makeCacheName("origincity",array($selectUploadDataId,$selectGroupName,$metricsNumber));
+        App::uses('Cache', 'Cache');
+        $ret = Cache::read($cName);
+        if($ret !== false) {
+echo '<pre>';
+print_r("using cache");
+echo '</pre>';
+            return $ret;
+        }
+
 		if($metricsNumber==2)//未使用
 			return array(0,0,0,0,0,0,0,0);
 			
@@ -588,36 +609,51 @@ class Graph extends AppModel
             $conditions += array('Graph.25' => $selectGroupName);
         }
         //1は由来,2はファイル数,3は欠陥数
-        $data = $this->find('all',array('Fields' => array('1',$metricsNumber),'conditions' => $conditions));
-	
-        for ($i = 0; $i < count($data); ++$i)
-        {
-            $data[$i] = $data[$i]['Graph'];
-        }
-        //print_r($data);
+echo '<pre>';
+print_r(date( "Y年m月d日 H時i分s秒" ) );
+echo '</pre>';
 
-        //由来ごとのメトリクスの総数を調べる
-        $valueByOrigin = array(0,0,0,0,0,0,0,0);
-        for ($i = 0; $i < count($data); ++$i)
+        $data = $this->find('all',array('Fields' => array('filepath','1',$metricsNumber),'conditions' => $conditions));
+echo '<pre>';
+print_r(date( "Y年m月d日 H時i分s秒" ) );
+echo '</pre>';
+
+        $newData = array();
+        for($i = 1;$i<=7;++$i)
         {
-            $origin = $data[$i]['1'];
-            $metrics = 1;//0の時はファイル数なので1
-			if($metricsNumber==1 && $data[$i]['3']==0)
-			{
-				$metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
-			}
-			else if(2<$metricsNumber)//3～欠陥数
-				$metrics = $data[$i][$metricsNumber];
-			if(0<$metrics)//-1が無効値の物がある
-            	$valueByOrigin[$origin] += $metrics;
+            $layers = array('numOfFiles'=>0,'height'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
+            $dataByOrigin = array_filter($data, function($d)use($i) {return $d['Graph'][1]==$i;});
+            foreach ($dataByOrigin as $line) 
+            {
+                $metrics = $this->getMetricsValue($line['Graph'], $metricsNumber);
+                $layer =  $this->getLayer($line['Graph']['filepath']);
+                ++$layers['numOfFiles'];
+                $layers['layerHeight'][$layer]+=$metrics;
+            }
+            $newData[$i] = $layers;
         }
 
-        // echo '<pre>';
-        // print_r($valueByOrigin);
-        // die();
-        // echo '</pre>';
-        // print_r($valueByOrigin);
-        return $valueByOrigin;
+        $sumOfValue=0;
+        for($i = 1;$i<=7;++$i)
+        {
+            $height = 0;
+            for($j = 0;$j<=6;++$j)
+            {
+                $height += $newData[$i]['layerHeight'][$j];
+            }
+            $newData[$i]['height']=$height;
+            $sumOfValue += $height;
+        }
+        if($sumOfValue==0)
+            $newData[0]=0;
+
+        Cache::write($cName, $newData);
+echo '<pre>';
+print_r(date( "Y年m月d日 H時i分s秒" ) );
+print_r($newData);
+echo '</pre>';
+die();	
+        return $newData;
     }
     
     ///////OriginCity(3D)用///////
@@ -664,7 +700,7 @@ class Graph extends AppModel
             $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
             for($i = 1;$i<=7;++$i)
             {
-                $layers = array('numOfFiles'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
+                $layers = array('numOfFiles'=>0,'height'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
                 $dataByOrigin = array_filter($tmpAllData, function($v)use($i) {return $v['Graph'][1]==$i;});
                 foreach ($dataByOrigin as $line) 
                 {
@@ -679,10 +715,13 @@ class Graph extends AppModel
             $sumOfValue=0;
             for($i = 1;$i<=7;++$i)
             {
+                $height = 0;
                 for($j = 0;$j<=6;++$j)
                 {
-                    $sumOfValue += $data[$i]['layerHeight'][$j];
+                    $height += $data[$i]['layerHeight'][$j];
                 }
+                $data[$i]['height']=$height;
+                $sumOfValue += $height;
             }
             if($sumOfValue==0)
                 $data[0]=0;

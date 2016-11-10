@@ -37,9 +37,9 @@
 			3=>array(7,4,6,5)
 		);
         $oriSum= array(
-			1=>$data[1]+$data[2]+$data[4]+$data[5],
-			2=>$data[2]+$data[3]+$data[5]+$data[6],
-			3=>$data[4]+$data[5]+$data[6]+$data[7],
+			1=>$data[1]["height"]+$data[2]["height"]+$data[4]["height"]+$data[5]["height"],
+			2=>$data[2]["height"]+$data[3]["height"]+$data[5]["height"]+$data[6]["height"],
+			3=>$data[4]["height"]+$data[5]["height"]+$data[6]["height"]+$data[7]["height"],
 		);
         ?>
 <table class="table table-condensed" id ="table">
@@ -107,7 +107,7 @@
         <?php 
 		for($i=1;$i<8;++$i)
 		{
-			$value = $data[$i];
+			$value = $data[$i]["height"];
 			{
         ?>
 		<tr>

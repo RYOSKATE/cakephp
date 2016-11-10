@@ -15,7 +15,7 @@ $(function()
 
 		var allOfZero=true;
 		$.each(sum,function(index,val){
-			allOfZero &= (val == 0);
+			allOfZero &= (val["height"] == 0);
 		});
 		if(allOfZero)
 			return;
@@ -38,9 +38,9 @@ $(function()
 			23 : 6, 
 			3 : 7 };
 		var originStr = ["","o1","o12","o2","o13","o123","o23","o3"];
-		var sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
-		var sum2 = sum[o[2]] + sum[o[12]] + sum[o[23]] + sum[o[123]];
-		var sum3 = sum[o[3]] + sum[o[13]] + sum[o[23]] + sum[o[123]];
+		var sum1 = sum[o[1]]["height"] + sum[o[12]]["height"] + sum[o[13]]["height"] + sum[o[123]]["height"];
+		var sum2 = sum[o[2]]["height"] + sum[o[12]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
+		var sum3 = sum[o[3]]["height"] + sum[o[13]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
 
 		function radiusFromArea(area) {
 			return Math.sqrt(area / Math.PI);
@@ -49,11 +49,15 @@ $(function()
 		var maxSum = Math.max(sum1, sum2, sum3);
 		var maxR = radiusFromArea(maxSum);
 		var scale = (HEIGHT / 4.0) / maxR;//直径が画面の縦の半分程度になるようスケール調整
-		sum = sum.map(function(value, index, array) { return value*scale*scale; });
+		//sum = sum.map(function(value, index, array) { return value*scale*scale; });
 
-		sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
-		sum2 = sum[o[2]] + sum[o[12]] + sum[o[23]] + sum[o[123]];
-		sum3 = sum[o[3]] + sum[o[13]] + sum[o[23]] + sum[o[123]];
+		for(var i=1; i<8;++i)
+		{
+			sum[i]["height"] *= scale*scale;
+		}
+		sum1 = sum[o[1]]["height"] + sum[o[12]]["height"] + sum[o[13]]["height"] + sum[o[123]]["height"];
+		sum2 = sum[o[2]]["height"] + sum[o[12]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
+		sum3 = sum[o[3]]["height"] + sum[o[13]]["height"] + sum[o[23]]["height"] + sum[o[123]]["height"];
 
 		var r1 = radiusFromArea(sum1);
 		var r2 = radiusFromArea(sum2);
