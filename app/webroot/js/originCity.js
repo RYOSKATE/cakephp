@@ -1,7 +1,7 @@
 
 $(function()
 {
-		var w = $('#canvas-wrapper').width();
+	var w = $('#canvas-wrapper').width();
 	$('#canvas1').width(w);
 	$('#canvas2').width(w);
 	$('#canvas1').height(w);
@@ -28,7 +28,16 @@ $(function()
 		var WindowCenter = new Vec2(WIDTH / 2, HEIGHT / 2);
 
 		// 連想配列を生成する
-		var o = { 0: 0, 1 : 1, 12 : 2, 2 : 3, 13 : 4, 123 : 5, 23 : 6, 3 : 7 };
+		var o = { 
+			0: 0, 
+			1 : 1, 
+			12 : 2, 
+			2 : 3, 
+			13 : 4, 
+			123 : 5, 
+			23 : 6, 
+			3 : 7 };
+		var originStr = ["","o1","o12","o2","o13","o123","o23","o3"];
 		var sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
 		var sum2 = sum[o[2]] + sum[o[12]] + sum[o[23]] + sum[o[123]];
 		var sum3 = sum[o[3]] + sum[o[13]] + sum[o[23]] + sum[o[123]];
@@ -289,11 +298,12 @@ $(function()
 		//o1全体の円とo2全体の円は最初に描画しておく
 		var circle1 = new fabric.Circle({
 		originX: 'center',
-				originY : 'center',
+			originY : 'center',
 			left : e1.x,//x
 			top : e1.y,//y
 			fill : originColor[o[1]],
 			radius : r1,
+			oriTxt : originStr[o[1]],
 			selectable : false,
 			//opacity : 0.5
 		});
@@ -305,6 +315,7 @@ $(function()
 			top : e2.y,//y
 			fill : originColor[o[2]],
 			radius : r2,
+			oriTxt : originStr[o[2]],
 			selectable : false,
 			//opacity : 0.5
 		});
@@ -367,6 +378,8 @@ $(function()
 				stroke : originColor[i],
 				strokeWIDTH : 1,
 				selectable : false,
+				oriTxt : originStr[i],
+				origin : i
 				//opacity : 0.9
 			});
 
@@ -376,7 +389,34 @@ $(function()
 		{
   			if (options.target) 
 			{
-    			console.log('an object was clicked! ', options.target.type);
+				var rect = new fabric.Rect({
+					fill: '#eef',
+					width: WindowSize.x*0.2,
+					height: WindowSize.y*0.7,
+				});
+
+				var text = new fabric.Text(options.target.oriTxt, 
+				{
+					fontSize: 30
+				});
+
+				var group = new fabric.Group([ rect, text ], {
+					left: WindowCenter.x - (WindowSize.x*0.2)/2,
+					top: WindowCenter.y - (WindowSize.y*0.7)/2,
+				});
+
+				canvas.add(group);
+
+    			console.log('an object was clicked! ', options.target.oriTxt);
+  			}
+		});
+		canvas.on('mouse:up', function(options) 
+		{
+  			if (options.target) 
+			{
+				var objs = canvas.getObjects();
+				canvas.remove(canvas.item(objs.length-1));
+    			console.log('an object was un clicked! ', options.target.oriTxt);
   			}
 		});
 		
