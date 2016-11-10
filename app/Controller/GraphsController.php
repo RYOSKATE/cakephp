@@ -706,7 +706,8 @@ class GraphsController extends AppController
                 }
                 for($d=0;$d<=7;++$d)
                 {
-                    $target[1]->data[$d] = rand(100,32676);
+                    //乱数でいい感じのMAFに
+                    //$target[1]->data[$d] = rand(100,32676);
                 }
                 $this->set('data'.$i,$target[$i]->data);
             }
@@ -789,10 +790,7 @@ class GraphsController extends AppController
             else
             {
                 $target->data = $this->Graph->getOriginCity2($target->modelId,$target->groupName,$target->metricsId);
-            }   
-echo '<pre>';
-print_r($target);
-echo '</pre>'; 
+            }
         }
         if($target->data != null)
         {            
