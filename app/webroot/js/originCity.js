@@ -294,17 +294,19 @@ $(function()
 			top : e1.y,//y
 			fill : originColor[o[1]],
 			radius : r1,
-			selectable : false
+			selectable : false,
+			//opacity : 0.5
 		});
 		canvas.add(circle1);
 		var circle2 = new fabric.Circle({
-		originX: 'center',
-				originY : 'center',
+			originX: 'center',
+			originY : 'center',
 			left : e2.x,//x
 			top : e2.y,//y
 			fill : originColor[o[2]],
 			radius : r2,
-			selectable : false
+			selectable : false,
+			//opacity : 0.5
 		});
 		canvas.add(circle2);
 
@@ -316,18 +318,41 @@ $(function()
 			minPos.push(new Vec2(WIDTH, HEIGHT));
 			drawPoints.push(new Array());
 		}
+		
+		function isSurrounded(x,y)
+		{
+			var ori = origin[y][x];
+			var touched = 0;
+			for(var w= -1; w<=1;++w)
+			{
+				for(var h= -1; h<=1;++h)
+				{
+					if(0 <= x+w && x+w < WIDTH && 0 <= y+h && y+h < HEIGHT)
+					{
+						if(ori == origin[y+h][x+w])
+						{
+							++touched;
+						}
+					}
+				}
+			}
+			return touched==9;
+		}
 		for (var h = 0; h < HEIGHT; ++h)
 		{
 			for (var w = 0; w < WIDTH; ++w)
 			{
 				var ori = origin[h][w];
 				if (ori != 0)
-				{
-					if (w<minPos[ori].x)
-						minPos[ori].x = w;
-					if (h<minPos[ori].y)
-						minPos[ori].y = h;
-					drawPoints[ori].push({ x: w, y : h })
+				{				
+					if(!isSurrounded(w,h))
+					{
+						if (w<minPos[ori].x)
+							minPos[ori].x = w;
+						if (h<minPos[ori].y)
+							minPos[ori].y = h;
+						drawPoints[ori].push({ x: w, y : h })
+					}
 				}
 			}
 		}
@@ -336,16 +361,24 @@ $(function()
 		{
 			var i = paintedRegion[n];
 			var polygon = new fabric.Polygon(drawPoints[i], {
-			top: minPos[i].y,
+				top: minPos[i].y,
 				left : minPos[i].x,
 				fill : originColor[i],
 				stroke : originColor[i],
 				strokeWIDTH : 1,
-				selectable : false
+				selectable : false,
+				//opacity : 0.9
 			});
 
 			canvas.add(polygon);
-		}	
+		}
+		canvas.on('mouse:down', function(options) 
+		{
+  			if (options.target) 
+			{
+    			console.log('an object was clicked! ', options.target.type);
+  			}
+		});
 		
 		
         //Canvasのサイズをウィンドウサイズに追従

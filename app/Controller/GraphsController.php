@@ -192,24 +192,26 @@ class GraphsController extends AppController
 
             if($this->data['Graph']['可視化手法'] != null)
             {
-                $target->otherMethodId = $this->data['Graph']['可視化手法'];
-                $target->otherMethodName = $this->actions[$target->otherMethodId];
-                $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
-                $target->modelId = array_search($target->modelName, $this->setModelName());
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;
-                $this->setAction($target->otherMethodName, array_fill(1,4,$target));
-                return;
+                if($this->data['Graph']['可視化手法'] != 0)
+                {
+                    $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                    $target->otherMethodName = $this->actions[$target->otherMethodId];
+                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
+                    $target->modelId = array_search($target->modelName, $this->setModelName());
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;
+                    $this->setAction($target->otherMethodName, array_fill(1,4,$target));
+                    return;
+                }
             }
-
             if($target->isLoadExternalCSV)
             {
                 $target->data = $this->Graph->getGroupDataFromCSV($target->csvName,$target->metricsId);
             }
             else
             {
-                $target->data = $this->Graph->getGroupData();
+                $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
             }
         }
         $this->set('data',$target->data);
@@ -227,7 +229,10 @@ class GraphsController extends AppController
         $modelNameData = $this->setModelName();        
         $metricsListData = $this->setMetricsList();
 
-        $target = array_fill(1,4,new TargetData());
+        $target[1] = new TargetData();
+        $target[2] = new TargetData();
+        $target[3] = new TargetData();
+        $target[4] = new TargetData();
         foreach ($target as &$t)
         {
             $t->modelName = reset($groupNameData);
@@ -314,12 +319,15 @@ class GraphsController extends AppController
                 $this->set('data'.$i, $target[$i]->data);
             }
             if($this->data['Graph']['可視化手法'] != null)
-            {                
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;
-                $this->setAction($target[1]->otherMethodName,$target);
-                return;
+            {
+                if($this->data['Graph']['可視化手法'] != 1)
+                {
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;
+                    $this->setAction($target[1]->otherMethodName,$target);
+                    return;
+                }
             }
             if($error_message!='')
             {
@@ -400,15 +408,18 @@ class GraphsController extends AppController
             }
             if($this->data['Graph']['可視化手法'] != null)
             {
-                $target->otherMethodId = $this->data['Graph']['可視化手法'];
-                $target->otherMethodName = $this->actions[$target->otherMethodId];
-                $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
-                $target->modelId = array_search($target->modelName, $this->setModelName());
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;
-                $this->setAction($target->otherMethodName, array_fill(1,4,$target));
-                return;
+                if($this->data['Graph']['可視化手法'] != 2)
+                {
+                    $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                    $target->otherMethodName = $this->actions[$target->otherMethodId];
+                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
+                    $target->modelId = array_search($target->modelName, $this->setModelName());
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;
+                    $this->setAction($target->otherMethodName, array_fill(1,4,$target));
+                    return;
+                }
             }            
 
             if ($target->isLoadExternalCSV)
@@ -435,7 +446,8 @@ class GraphsController extends AppController
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
-        $target = array_fill(1,2,new TargetData());
+        $target[1] = new TargetData();
+        $target[2] = new TargetData();
         
         if($formData != null)
         {
@@ -476,18 +488,21 @@ class GraphsController extends AppController
             }
             if($this->data['Graph']['可視化手法'] != null)
             {
-                for($i=1;$i<=2;++$i)
+                if($this->data['Graph']['可視化手法'] != 3)
                 {
-                    $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
-                    $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                    $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
-                    $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    for($i=1;$i<=2;++$i)
+                    {
+                        $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
+                        $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    }
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;               
+                    $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
+                    return;
                 }
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;               
-                $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
-                return;
             }
             for($i=1;$i<=2;++$i)
             {
@@ -521,7 +536,8 @@ class GraphsController extends AppController
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
-        $target = array_fill(1,2,new TargetData());
+        $target[1] = new TargetData();
+        $target[2] = new TargetData();
 
         for($i=1;$i<=2;++$i)
         {
@@ -567,18 +583,21 @@ class GraphsController extends AppController
             }
             if($this->data['Graph']['可視化手法'] != null)
             {
-                for($i=1;$i<=2;++$i)
+                if($this->data['Graph']['可視化手法'] != 4)
                 {
-                    $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
-                    $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                    $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
-                    $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    for($i=1;$i<=2;++$i)
+                    {
+                        $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
+                        $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    }
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;               
+                    $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
+                    return;
                 }
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;               
-                $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
-                return;
             }
             for($i=1;$i<=2;++$i)
             {
@@ -611,13 +630,13 @@ class GraphsController extends AppController
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
-        $target = array_fill(1,2,new TargetData());
-
+        $target[1] = new TargetData();
+        $target[2] = new TargetData();
         for($i=1;$i<=2;++$i)
         {
             $this->set('ModelName'.$i,null);
             $target[$i]->data = null;
-        }       
+        }      
         if($formData != null)
         {
             for($i=1;$i<=2;++$i)
@@ -655,21 +674,26 @@ class GraphsController extends AppController
                     $target[$i]->csvName = $uploadList[$target[$i]->csvId];          
                 }
             }
+
             if($this->data['Graph']['可視化手法'] != null)
             {
-                for($i=1;$i<=2;++$i)
+                if($this->data['Graph']['可視化手法'] != 5)
                 {
-                    $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
-                    $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                    $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
-                    $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    for($i=1;$i<=2;++$i)
+                    {
+                        $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
+                        $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
+                    }
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;               
+                    $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
+                    return;
                 }
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;               
-                $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
-                return;
             }
+
             for($i=1;$i<=2;++$i)
             {
                 if ($target[$i]->isLoadExternalCSV)
@@ -680,6 +704,11 @@ class GraphsController extends AppController
                 {
                     $target[$i]->data = $this->Graph->getOriginCity($target[$i]->csvId,$target[$i]->groupName,$target[$i]->metricsId);
                 }
+                for($d=0;$d<=7;++$d)
+                {
+                    $target[1]->data[$d] = rand(100,32676);
+                }
+
                 $this->set('data'.$i,$target[$i]->data);
             }
         }
@@ -742,13 +771,16 @@ class GraphsController extends AppController
 
             if($this->data['Graph']['可視化手法'] != null)
             {
-                $target->otherMethodId = $this->data['Graph']['可視化手法'];
-                $target->otherMethodName = $this->actions[$target->otherMethodId];
-                $temp = $this->data;
-                $temp['Graph']['可視化手法'] = null;
-                $this->data =  $temp;
-                $this->setAction($target->otherMethodName, array_fill(1,4,$target));
-                return;
+                if($this->data['Graph']['可視化手法'] != 6)
+                {
+                    $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                    $target->otherMethodName = $this->actions[$target->otherMethodId];
+                    $temp = $this->data;
+                    $temp['Graph']['可視化手法'] = null;
+                    $this->data =  $temp;
+                    $this->setAction($target->otherMethodName, array_fill(1,4,$target));
+                    return;
+                }
             }
 
             if ($target->isLoadExternalCSV)

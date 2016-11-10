@@ -589,6 +589,7 @@ class Graph extends AppModel
         }
         //1は由来,2はファイル数,3は欠陥数
         $data = $this->find('all',array('Fields' => array('1',$metricsNumber),'conditions' => $conditions));
+	
         for ($i = 0; $i < count($data); ++$i)
         {
             $data[$i] = $data[$i]['Graph'];
