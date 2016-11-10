@@ -637,7 +637,7 @@ class Graph extends AppModel
         }
         
         $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);     
-        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));       
         return $this->getOriginCity2Imple($data,$selectMetrics);
     }
     
@@ -681,7 +681,7 @@ class Graph extends AppModel
             {
                 for($j = 0;$j<=6;++$j)
                 {
-                    $sumOfValue = $data[$i]['layerHeight'][$j];
+                    $sumOfValue += $data[$i]['layerHeight'][$j];
                 }
             }
             if($sumOfValue==0)

@@ -708,7 +708,6 @@ class GraphsController extends AppController
                 {
                     $target[1]->data[$d] = rand(100,32676);
                 }
-
                 $this->set('data'.$i,$target[$i]->data);
             }
         }
@@ -763,11 +762,11 @@ class GraphsController extends AppController
                 $target->csvName = basename($fileName);
                 $target->isLoadExternalCSV = true;
             }
-            else if(isset($this->data['Graph']['CSV_ID']))
-            {                
-                $target->csvId = $this->data['Graph']['CSV_ID'];
-                $target->csvName = $uploadList[$target->csvId];
-            }
+            // else if(isset($this->data['Graph']['CSV_ID']))
+            // {                
+            //     $target->csvId = $this->data['Graph']['CSV_ID'];
+            //     $target->csvName = $uploadList[$target->csvId];
+            // }
 
             if($this->data['Graph']['可視化手法'] != null)
             {
@@ -789,8 +788,11 @@ class GraphsController extends AppController
             }
             else
             {
-                $target->data = $this->Graph->getOriginCity2($target->csvId,$target->groupName,$target->metricsId);
-            }    
+                $target->data = $this->Graph->getOriginCity2($target->modelId,$target->groupName,$target->metricsId);
+            }   
+echo '<pre>';
+print_r($target);
+echo '</pre>'; 
         }
         if($target->data != null)
         {            
@@ -804,6 +806,7 @@ class GraphsController extends AppController
 
             $target->modelName = $uploadList[$uploadIdList[0]];
         }
+
         $this->set('data',$target->data);
         $this->set('uploadList',$uploadList);
         $this->set('uploadIdList',$uploadIdList);
