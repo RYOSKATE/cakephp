@@ -11,6 +11,8 @@ $(function()
 	makeRegionGraph(originalSum2, 2,w);
 	function makeRegionGraph(originsum, num,w)
 	{
+		if(originsum==null)
+			return;
 		var sum = new Array();//ここは関数の引数にする
 		sum.push(0);
 		for(var i=1; i<=7;++i)
@@ -287,15 +289,25 @@ $(function()
 			}
 		}
 		
+		// var originColor = {
+		// 	0: 	'#FFFFFF',//不使用
+		// 	1 : '#FA6565',//赤
+		// 	2 : '#FECA61',//黄
+		// 	3 : '#71FD5E',//緑
+		// 	4 : '#7869FF',//紫
+		// 	5 : '#DDDDDD',//灰
+		// 	6 : '#6BCDFF',//水
+		// 	7 : '#0055FF'//青
+		// };
 		var originColor = {
 			0: 	'#FFFFFF',//不使用
-			1 : '#FA6565',//赤
-			2 : '#FECA61',//黄
-			3 : '#71FD5E',//緑
-			4 : '#7869FF',//紫
-			5 : '#DDDDDD',//灰
-			6 : '#6BCDFF',//水
-			7 : '#0055FF'//青
+			1 : '#00FFFF',//シアン
+			2 : '#0000FF',//青
+			3 : '#FF00FF',//マゼンタ
+			4 : '#FF0000',//赤
+			5 : '#000000',//黒
+			6 : '#00FF00',//緑
+			7 : '#FFFF00'//イエロー
 		};
 		var canvas;
 		if(num==1)
@@ -314,8 +326,8 @@ $(function()
 			radius : r1,
 			oriTxt : originStr[o[1]],
 			selectable : false,
-			origin : 1
-			//opacity : 0.5
+			origin : 1,
+			opacity : 0.9
 		});
 		canvas.add(circle1);
 		var circle2 = new fabric.Circle({
@@ -327,8 +339,8 @@ $(function()
 			radius : r2,
 			oriTxt : originStr[o[2]],
 			selectable : false,
-			origin : 3
-			//opacity : 0.5
+			origin : 3,
+			opacity : 0.9
 		});
 		canvas.add(circle2);
 
@@ -390,69 +402,115 @@ $(function()
 				strokeWIDTH : 1,
 				selectable : false,
 				oriTxt : originStr[i],
-				origin : i
-				//opacity : 0.9
+				origin : i,
+				opacity : 0.9
 			});
 
 			canvas.add(polygon);
 		}
 		canvas.on('mouse:down', function(options) 
 		{
+			function deleteLayers()
+			{
+				while(7 < canvas.getObjects().length) 
+				{	
+					canvas.remove(canvas.item(canvas.getObjects().length-1));			
+				}
+			}
+
   			if (options.target) 
 			{
+				if(options.target.oriTxt=="layers")
+				{
+					return;
+				}
+				deleteLayers();
 				var width = WindowSize.x*0.2;
 				var height = WindowSize.y*0.7;
 				
 				var rect = new fabric.Rect({
-					fill: '#eef',
+					fill: '#ffffff',
 					width: width,
 					height: height,
+					top : 0,
+					left: 0,
 				});
 
 				var originData = originsum[options.target.origin];
-				var total = originData["height"];
+				var total = originData.height;
 				var scale = 0.8 * height / total;
 				var oriColor = new Array('#C869FF','#6BCDFF','#71FD5E','#FECA61','#FA6565','#000000','#DDDDDD');
 				var layer = new Array('APP','FW','OSS','SYSTEM', 'HW','Kernel','Others');
 				var rects = new Array();
-				for(var i=0; i<7; ++i)
+				var sumH = WindowSize.y*0.2;
+				function addLayer(i)
 				{
 					var h = originData['layerHeight'][i]*scale;
 					var r = new fabric.Rect({
 						fill: oriColor[i],
 						width: width*0.9,
 						height: h,
-						top : WindowCenter.y + height/2 - h,
-						left: WindowCenter.x - width/2 + width*0.05,
+						top : sumH,
+						left: width*0.05,
+						opacity : 0.8
 					});
 					rects.push(r);
+					sumH += h;
 				}
-				var text = new fabric.Text(options.target.oriTxt, 
+				addLayer(6);
+				for(var i=0; i<6; ++i)
 				{
-					fontSize: 30
+					addLayer(i)
+				}
+				var oriText = new fabric.Text(options.target.oriTxt+":", 
+				{
+					fontSize: 30,
+					top : 0,
+					left : 10,
+				});
+				
+				var hText = new fabric.Text(""+total, 
+				{
+					fontSize: 30,
+					top : WindowSize.y*0.1,
+					left : 10,
 				});
 
-				var group = new fabric.Group([ rect, text, rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6] ], {
-					left: WindowCenter.x - width/2,
+				var line = new fabric.Line(
+					[options.e.offsetX, options.e.offsetY, WindowSize.x - width, WindowCenter.y], 
+				{
+					stroke: 'black',
+					fill: 'black',
+					strokeWidth: 5,
+					selectable : false,
+				});
+
+				var group = new fabric.Group([ rect, oriText, hText, 
+				rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6] ], {
+					left: WindowSize.x - width,
 					top: WindowCenter.y - height/2,
+					oriTxt : "layers"
+				});
+				
+				group.on('moving', function() {
+					var l = canvas.item(canvas.getObjects().length-1);
+					l.x2 = group.left;
+					l.y2 = group.top+height/2;
+					l.width = Math.abs(l.x2-l.x1);
+					l.height = Math.abs(l.y2-l.y1);
+					l.left = Math.min(l.x2,l.x1);
+					l.top = Math.min(l.y2,l.y1);
 				});
 
 				canvas.add(group);
-
+				canvas.add(line);
     			console.log('an object was clicked! ', options.target.oriTxt);
   			}
-		});
-		canvas.on('mouse:up', function(options) 
-		{
-  			if (options.target) 
+			else
 			{
-				var objs = canvas.getObjects();
-				canvas.remove(canvas.item(objs.length-1));
-    			console.log('an object was un clicked! ', options.target.oriTxt);
-  			}
-		});
-		
-		
+				deleteLayers();
+			}
+		});	
         //Canvasのサイズをウィンドウサイズに追従
         window.addEventListener( 'resize', onWindowResize, false );
 

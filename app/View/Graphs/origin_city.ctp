@@ -4,7 +4,7 @@
 //デバッグ用表示
    // echo 'デバッグ用表示';
     //echo '<pre>';
-echo $this->element('sql_dump');
+//echo $this->element('sql_dump');
     //echo '</pre>';
 ?>
 <div data-role='page'>

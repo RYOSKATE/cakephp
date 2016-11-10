@@ -596,7 +596,7 @@ class Graph extends AppModel
         if($ret !== false) {
 echo '<pre>';
 print_r("using cache");
-print_r($ret);
+//print_r($ret);
 echo '</pre>';
             return $ret;
         }
