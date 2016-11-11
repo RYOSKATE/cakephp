@@ -153,7 +153,7 @@ class GraphsController extends AppController
 
     public function alldevgroup($formData=null)
     {
-        $this->operateSticky();
+        $lastForm = $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
@@ -170,37 +170,41 @@ class GraphsController extends AppController
                 $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
             }
         }
-        else if (isset($this->request->data['set']))
+        else if (isset($this->request->data['set']) || isset($lastForm))
         {
-            $target->groupId = $this->data['Graph'] ['開発グループ'];
+            if($lastForm==null)
+            {
+                $lastForm = $this->data['Graph'];
+            }
+            $target->groupId = $lastForm ['開発グループ'];
             $target->groupName = $groupNameData[$target->groupId];
-            $target->metricsId = $this->data['Graph'] ['Metrics'];
+            $target->metricsId = $lastForm ['Metrics'];
             $target->metricsName = $metricsListData[$target->metricsId];
 
-            if (!empty($this->data['Graph'] ['selectCSV']['name']))
+            if (!empty($lastForm ['selectCSV']['name']))
             {
-                $target->csvName = $this->data['Graph']['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
-                $fileName = $this->data['Graph']['selectCSV']['name'];//data_10_utf.csv
+                $target->csvName = $lastForm['selectCSV']['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
+                $fileName = $lastForm['selectCSV']['name'];//data_10_utf.csv
                 $target->csvName = basename($fileName);
                 $target->isLoadExternalCSV = true;
             }
-            else if(isset($this->data['Graph']['CSV_ID']))
+            else if(isset($lastForm['CSV_ID']))
             {                
-                $target->csvId = $this->data['Graph']['CSV_ID'];
+                $target->csvId = $lastForm['CSV_ID'];
                 $target->csvName = $uploadList[$target->csvId];
             }
 
-            if($this->data['Graph']['可視化手法'] != null)
+            if($lastForm['可視化手法'] != null)
             {
-                if($this->data['Graph']['可視化手法'] != 0)
+                if($lastForm['可視化手法'] != 0)
                 {
-                    $target->otherMethodId = $this->data['Graph']['可視化手法'];
+                    $target->otherMethodId = $lastForm['可視化手法'];
                     $target->otherMethodName = $this->actions[$target->otherMethodId];
                     $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
                     $target->modelId = array_search($target->modelName, $this->setModelName());
-                    $temp = $this->data;
-                    $temp['Graph']['可視化手法'] = null;
-                    $this->data =  $temp;
+                    $temp = $lastForm;
+                    $temp['可視化手法'] = null;
+                    $lastForm =  $temp;
                     $this->setAction($target->otherMethodName, array_fill(1,4,$target));
                     return;
                 }
@@ -223,7 +227,7 @@ class GraphsController extends AppController
     
     public function onedevgroup($formData=null)
     {
-        $this->operateSticky();
+        $lastForm = $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $modelNameData = $this->setModelName();        
@@ -238,8 +242,12 @@ class GraphsController extends AppController
             $t->modelName = reset($groupNameData);
         }
 
-        if ($uploadList && isset($this->request->data['set']) || $formData != null) 
+        if ($uploadList && isset($this->request->data['set']) || $formData != null  || isset($lastForm)) 
         {
+            if($lastForm==null)
+            {
+                $lastForm = $this->data['Graph'];
+            }
             foreach ($target  as &$t)
             {
                 $t->modelId = null;
@@ -248,23 +256,23 @@ class GraphsController extends AppController
 
             for($i=1; $i<=4; ++$i)
             {
-                if(!isset($this->data['Graph']['モデル'.$i]) && $formData != null)
+                if(!isset($lastForm['モデル'.$i]) && $formData != null)
                 {
-                    $temp = $this->data;
-                    $temp['Graph']['モデル'.$i] = $formData[$i]->modelId;
-                    $temp['Graph']['開発グループ'] = $formData[$i]->groupId;
-                    $temp['Graph']['Metrics'] = $formData[$i]->metricsId;
+                    $temp = $lastForm;
+                    $temp['モデル'.$i] = $formData[$i]->modelId;
+                    $temp['開発グループ'] = $formData[$i]->groupId;
+                    $temp['Metrics'] = $formData[$i]->metricsId;
                     $this->data = $temp;
                 }
-                if($this->data['Graph']['モデル'.$i] != '')
+                if($lastForm['モデル'.$i] != '')
                 {
-                    $target[$i]->modelId = $this->data['Graph']['モデル'.$i];
+                    $target[$i]->modelId = $lastForm['モデル'.$i];
                     $target[$i]->modelName = $modelNameData[$target[$i]->modelId]; 
                 }
-                $target[$i]->groupId = $this->data['Graph']['開発グループ'];
+                $target[$i]->groupId = $lastForm['開発グループ'];
                 $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
 
-                $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
+                $target[$i]->metricsId = $lastForm ['Metrics'];
                 $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
                 $target[$i]->data = array();
             }
@@ -295,11 +303,11 @@ class GraphsController extends AppController
                     {
                         foreach($dataIdByModel as $id => $date)//モデルAの日付ごとのデータ
                         {
-                            if($this->data['Graph']['可視化手法'] != null)
+                            if($lastForm['可視化手法'] != null)
                             {                
                                 $target[$i]->csvId = $id;                              
                                 $target[$i]->csvName = $modelNameData[$target[$i]->modelId] . '(' . $date . ')';
-                                $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
+                                $target[$i]->otherMethodId = $lastForm['可視化手法'];
                                 $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
                             }
                             $groupData = $this->Graph->getGroupData($id,$target[1]->metricsId,$target[1]->groupName);
@@ -318,13 +326,13 @@ class GraphsController extends AppController
                 }
                 $this->set('data'.$i, $target[$i]->data);
             }
-            if($this->data['Graph']['可視化手法'] != null)
+            if($lastForm['可視化手法'] != null)
             {
-                if($this->data['Graph']['可視化手法'] != 1)
+                if($lastForm['可視化手法'] != 1)
                 {
-                    $temp = $this->data;
-                    $temp['Graph']['可視化手法'] = null;
-                    $this->data =  $temp;
+                    $temp = $lastForm;
+                    $temp['可視化手法'] = null;
+                    $lastForm =  $temp;
                     $this->setAction($target[1]->otherMethodName,$target);
                     return;
                 }

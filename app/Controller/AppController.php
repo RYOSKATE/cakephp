@@ -32,7 +32,6 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller 
 {
-
    public $uses = array('GroupName','Sticky','UploadData');
 
    public $components = array
@@ -72,8 +71,8 @@ class AppController extends Controller
   
   public function getLang()
   {
-		//全てに当てはまらなかった場合の初期値
-		$lang = 'jpn';
+	//全てに当てはまらなかった場合の初期値
+	$lang = 'jpn';
     //表示言語を判別する。
 	if (isset($this->params['named']['lang'])) {
 		//URL中の"lang"パラメータ
@@ -150,30 +149,49 @@ class AppController extends Controller
     $this->set('stickies', $this->Sticky->getStickies($this->action));
   }
 
+  //Stickyの更新時のみ最後に生成した図・グラフのフォームデータを返す
   protected function operateSticky()
   {
+    App::uses('Cache', 'Cache');
+    $cName = "lastFormData";
     if(!empty($this->data['Graph']))
     {
+      
       $formData = $this->data['Graph'];
       $user_id = $this->Auth->user('id');
 
-
+      $ret = Cache::read($cName);
       if(isset($this->request->data['delete']))
       {
           $this->Sticky->deleteSticky($formData['id']);
+          if($ret !== false) {
+              return $ret;
+          }
       }
       else if (isset($formData['textarea']) && trim($formData['textarea'])!="") 
       {
           if(isset($this->request->data['add']))
           {
-              $this->Sticky->addSticky($this->action,$user_id,$formData);  
+              $this->Sticky->addSticky($this->action,$user_id,$formData); 
+              if($ret !== false) {
+                    return $ret;
+              }          
           }
           else if(isset($this->request->data['edit']))
           {
-              $this->Sticky->editSticky($this->action,$user_id,$formData);  
+              $this->Sticky->editSticky($this->action,$user_id,$formData);
+              if($ret !== false) {
+                    return $ret;
+              }                
           }
       }
+      else//通常のグラフ表示のみ
+      {
+        Cache::write($cName, $this->data['Graph']);
+      }
     }
+
+    return null;
   }
     //$groupNameに開発グループ名一覧をセットする
    protected function setGroupName($state=null)

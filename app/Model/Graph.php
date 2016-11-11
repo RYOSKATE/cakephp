@@ -590,14 +590,14 @@ class Graph extends AppModel
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
     function getOriginCity($selectUploadDataId,$selectGroupName,$metricsNumber) 
     {
-        $cName = $this->makeCacheName("origincity",array($selectUploadDataId,$selectGroupName,$metricsNumber));
         App::uses('Cache', 'Cache');
+        $cName = $this->makeCacheName("origincity",array($selectUploadDataId,$selectGroupName,$metricsNumber));
         $ret = Cache::read($cName);
         if($ret !== false) {
-echo '<pre>';
-print_r("using cache");
+//echo '<pre>';
+//print_r("using cache");
 //print_r($ret);
-echo '</pre>';
+//echo '</pre>';
             return $ret;
         }
 
@@ -612,17 +612,17 @@ echo '</pre>';
         //1は由来,2はファイル数,3は欠陥数
 
         $fields = array('filepath' ,'1',$metricsNumber);
-echo '<pre>';
-print_r(date( "Y年m月d日 H時i分s秒" ) );
-//print_r($fields);
-echo '</pre>';
+// echo '<pre>';
+// print_r(date( "Y年m月d日 H時i分s秒" ) );
+// print_r($fields);
+// echo '</pre>';
 
 
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));
-echo '<pre>';
-print_r(date( "Y年m月d日 H時i分s秒" ) );
-//print_r($data);
-echo '</pre>';
+// echo '<pre>';
+// print_r(date( "Y年m月d日 H時i分s秒" ) );
+// //print_r($data);
+// echo '</pre>';
 
         $newData = array();
         for($i = 1;$i<=7;++$i)
@@ -654,10 +654,10 @@ echo '</pre>';
             $newData[0]=0;
 
         Cache::write($cName, $newData);
-echo '<pre>';
-print_r(date( "Y年m月d日 H時i分s秒" ) );
-//print_r($newData);
-echo '</pre>';
+// echo '<pre>';
+// print_r(date( "Y年m月d日 H時i分s秒" ) );
+// print_r($newData);
+// echo '</pre>';
         return $newData;
     }
     
@@ -670,6 +670,12 @@ echo '</pre>';
     
     function getOriginCity2($selectModelId,$selectGroupName,$selectMetrics) 
     {
+        App::uses('Cache', 'Cache');
+        $cName = $this->makeCacheName("MetricsAreaFigure",array($selectModelId,$selectGroupName,$selectMetrics));
+        $ret = Cache::read($cName);
+        if($ret !== false) {
+            return $ret;
+        }
         $conditions = array('Graph.modelname_id' => $selectModelId);
 		//由来比較なので全部取得　$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
         if($selectGroupName != 'ALL')
@@ -679,7 +685,9 @@ echo '</pre>';
         
         $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);     
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));       
-        return $this->getOriginCity2Imple($data,$selectMetrics);
+        $newData = $this->getOriginCity2Imple($data,$selectMetrics); 
+        Cache::write($cName, $newData);
+        return $newData;
     }
     
     function getOriginCity2Imple($allData,$selectMetrics) 

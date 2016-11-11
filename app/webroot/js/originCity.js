@@ -191,7 +191,7 @@ $(function()
 
 			var yp1 = x1*sin1 + y1*cos1 + a.y;
 			var yp2 = x1*sin1 - y1*cos1 + a.y;
-			if (yp1<yp2)
+			if (yp1 < yp2)
 			{
 				return new Vec2(x1*cos1 - y1*sin1 + a.x, yp1);
 			}
@@ -289,6 +289,7 @@ $(function()
 			}
 		}
 		
+		//以前使用、今はレイヤー用
 		// var originColor = {
 		// 	0: 	'#FFFFFF',//不使用
 		// 	1 : '#FA6565',//赤
@@ -420,7 +421,8 @@ $(function()
 
   			if (options.target) 
 			{
-				if(options.target.oriTxt=="layers")
+				if(options.target.oriTxt=="layers" 
+				|| options.target.oriTxt=="line")
 				{
 					return;
 				}
@@ -442,6 +444,7 @@ $(function()
 				var oriColor = new Array('#C869FF','#6BCDFF','#71FD5E','#FECA61','#FA6565','#000000','#DDDDDD');
 				var layer = new Array('APP','FW','OSS','SYSTEM', 'HW','Kernel','Others');
 				var rects = new Array();
+				var texts = new Array();
 				var sumH = WindowSize.y*0.2;
 				function addLayer(i)
 				{
@@ -455,7 +458,26 @@ $(function()
 						opacity : 0.8
 					});
 					rects.push(r);
+
+					var colors = [
+						'#111111',//黒
+						'#FA6565',//赤
+						'#FECA61',//黄色
+						'#71FD5E',//緑
+						'#6BCDFF',//水色
+						'#C869FF',//紫
+						'#DDDDDD',//灰色
+					];
+					var text = new fabric.Text(layer[i], 
+					{
+						fontSize: 10,
+						top : sumH,
+						left : width*0.1,
+					});
+					texts.push(text);
+					
 					sumH += h;
+
 				}
 				addLayer(6);
 				for(var i=0; i<6; ++i)
@@ -471,7 +493,7 @@ $(function()
 				
 				var hText = new fabric.Text(""+total, 
 				{
-					fontSize: 30,
+					fontSize: 28,
 					top : WindowSize.y*0.1,
 					left : 10,
 				});
@@ -479,22 +501,24 @@ $(function()
 				var line = new fabric.Line(
 					[options.e.offsetX, options.e.offsetY, WindowSize.x - width, WindowCenter.y], 
 				{
-					stroke: 'black',
-					fill: 'black',
-					strokeWidth: 5,
+					stroke: 'gray',
+					fill: 'gray',
+					strokeWidth: 3,
 					selectable : false,
+					oriTxt : "line"
 				});
 
 				var group = new fabric.Group([ rect, oriText, hText, 
-				rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6] ], {
+				rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6], 
+				texts[0],texts[1],texts[2],texts[3],texts[4],texts[5],texts[6] ], {
 					left: WindowSize.x - width,
 					top: WindowCenter.y - height/2,
 					oriTxt : "layers"
 				});
 				
 				group.on('moving', function() {
-					var l = canvas.item(canvas.getObjects().length-1);
-					l.x2 = group.left;
+					var l = canvas.item(canvas.getObjects().length-2);
+					l.x2 = group.left+width/2;
 					l.y2 = group.top+height/2;
 					l.width = Math.abs(l.x2-l.x1);
 					l.height = Math.abs(l.y2-l.y1);
@@ -502,8 +526,8 @@ $(function()
 					l.top = Math.min(l.y2,l.y1);
 				});
 
-				canvas.add(group);
 				canvas.add(line);
+				canvas.add(group);
     			console.log('an object was clicked! ', options.target.oriTxt);
   			}
 			else
