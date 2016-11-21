@@ -1361,3 +1361,6 @@ msgstr "Upload"
 
 msgid "付箋"
 msgstr "Sticky"
+
+msgid "他の可視化手法に変更"
+msgstr "Change to other visualization method"
