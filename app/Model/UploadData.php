@@ -66,7 +66,7 @@ class UploadData extends AppModel {
  */
 	public $belongsTo = array(
 		'Modelname' => array(
-			'className' => 'Modelname',
+			'className' => 'ModelName',
 			'foreignKey' => 'modelname_id',
 			'conditions' => '',
 			'fields' => '',
