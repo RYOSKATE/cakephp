@@ -29,7 +29,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-		
+
 		<?php
 		echo $this->Html->meta('icon');
 
@@ -68,10 +68,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					</div>
 					<div class="navbar-collapse collapse">
 						<ul class="nav navbar-nav navbar-right">
-							
+
 							<li><?php echo $this->Html->link($userData['username'],array('controller' => 'users',  'action' => 'manage'));?></li>
 							<?php if($userData['role']!='reader'){?>
 							<li><?php echo $this->Html->link(__('Upload'),array('controller' => 'graphs', 'action' => 'upload'));?></li>
+							<li><?php echo $this->Html->link(__('Setting'),array('controller' => 'layers', 'action' => 'index'));?></li>
 							<?php }?>
 							<li><?php echo $this->Html->link(__('Data'),array('controller' => 'upload_data', 'action' => 'index'));?></li>
 							<li><?php echo $this->Html->link(__('Logout'),array('controller' => 'users',  'action' => 'logout'));?></li>
@@ -106,8 +107,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 						<?php echo $this->Html->link(__('Origin City'), array('controller' => 'graphs', 'action' => 'originCity2'), array('class' =>'list-group-item'));?>
 					</div>
 					<!-- 付箋 -->
-					
-					<?php echo $this->element('sticky'); ?>	
+
+					<?php echo $this->element('sticky'); ?>
 				</div>
 				<!-- 残り9列はコンテンツ表示部分として使う -->
 				<div class="col-xs-12 col-sm-9 col-md-10 col-lg-9">
