@@ -1,5 +1,5 @@
 <?php
-class Graph extends AppModel 
+class Graph extends AppModel
 {
     public $belongsTo = array(
 		'Modelname' => array(
@@ -32,17 +32,17 @@ class Graph extends AppModel
     function readCSV($filepath,$selectModelId=-1,$upload_id=-1)
     {
         $records = array();
-        $file = new SplFileObject($filepath); 
-        $file->setFlags(SplFileObject::READ_CSV); 
+        $file = new SplFileObject($filepath);
+        $file->setFlags(SplFileObject::READ_CSV);
         foreach ($file as $line) {
-            $records[] = array('Graph'=>$line + array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$line[0])); 
+            $records[] = array('Graph'=>$line + array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$line[0]));
         }
 
         if(!isset($records[count($records)-1]['Graph'][1]))
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
 	    return $records;
     }
-    
+
     //欠陥ファイル数、
     function getMetricsValue($col,$selectMetrics)
     {
@@ -57,7 +57,7 @@ class Graph extends AppModel
         return $metrics;
     }
     ///////csvのアップロード用///////
-    function uploadFromCSV($filepath,$selectModelId,$upload_id) 
+    function uploadFromCSV($filepath,$selectModelId,$upload_id)
     {
     // php.iniを変更する場合
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
@@ -71,13 +71,13 @@ class Graph extends AppModel
             //ini_set('memory_limit', -1);
 
             //$this->begin();//トランザクション(永続的な接続処理の開始)
-            
+
             $records = array();
             {
-                $file = new SplFileObject($filepath); 
-                $file->setFlags(SplFileObject::READ_CSV); 
+                $file = new SplFileObject($filepath);
+                $file->setFlags(SplFileObject::READ_CSV);
                 foreach ($file as $line) {
-                    $records[] = $line; 
+                    $records[] = $line;
                 }
             }
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
@@ -88,7 +88,7 @@ class Graph extends AppModel
                 {
                     if($records[$i][25]=='')
                         $records[$i][25] = 'グループ名なし';
-                        
+
                     //グループ名は;で区切られている
                     $names = explode(';',$records[$i][25]);
                     for ($j = 0; $j< count($names); ++$j)
@@ -109,7 +109,7 @@ class Graph extends AppModel
 
             //$this->commit();
         }
-        catch(Exception $e) 
+        catch(Exception $e)
         {
             //$this->rollback();
             return null;
@@ -117,18 +117,18 @@ class Graph extends AppModel
         return $groupNameData;
     }
     ///////csvのアップロード用///////
-    
-    
+
+
     /////////全開発グループ用/////////
-    
-    
+
+
     function getGroupDataFromCSV($up_file,$selectMetrics)
-    {   
+    {
         $data = $this->readCSV($up_file,-1,-1);
         $data = array_filter($data, function($row) {return $row['Graph'][25];});
         return $this->getGroupDataImple($data, $selectMetrics);
     }
-    
+
     function getGroupData($upload_data_id,$selectMetrics,$selectGroupName)
     {
         $conditions = array('Graph.upload_data_id' => $upload_data_id);
@@ -137,13 +137,13 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        
-        $fields = array(1,3,$selectMetrics,4,25);     
+
+        $fields = array(1,3,$selectMetrics,4,25);
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         return $this->getGroupDataImple($data,$selectMetrics);
     }
-        
-    function getGroupDataImple($data,$selectMetrics) 
+
+    function getGroupDataImple($data,$selectMetrics)
     {
         $group_array = array();
         foreach($data as $value)
@@ -182,8 +182,8 @@ class Graph extends AppModel
         return $data;
     }
      /////////全開発グループ用/////////
-     
-     
+
+
     ///////ファイルメトリクス用///////
     private $depth = 0;
 
@@ -191,14 +191,14 @@ class Graph extends AppModel
     {
         return $this->depth;
     }
-        
+
     function getFileMetricsTableFromCSV($up_file,$selectMetrics,$chartMetrics)
-    {   
+    {
         $data = $this->readCSV($up_file,-1,-1);
         return $this->getFileMetricsTableImple($data, $selectMetrics,$chartMetrics);
     }
 
-    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics) 
+    function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics)
     {
 
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
@@ -207,8 +207,8 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        
-        $fields = array_merge(array('modelname_id','filepath',$selectMetrics),$chartMetrics);     
+
+        $fields = array_merge(array('modelname_id','filepath',$selectMetrics),$chartMetrics);
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         return $this->getFileMetricsTableImple($data,$selectMetrics,$chartMetrics);
     }
@@ -229,7 +229,7 @@ class Graph extends AppModel
         //         )
         // )
 
-      
+
         //木の初期化
         $tree = array('name'    =>   "root",
             'metrics'         =>0,
@@ -270,7 +270,7 @@ class Graph extends AppModel
                         foreach($chartMetrics as $metNum)
                         {
                             $parent['metrics' . $metNum] += $c_metrics['metrics' . $metNum];
-                        }                        
+                        }
                         $parent['metrics']         += $metrics;
                         $parent = &$children[$k];
                         $children[$k] += array('children'=> array());
@@ -289,7 +289,7 @@ class Graph extends AppModel
                     foreach($chartMetrics as $metNum)
                     {
                         $node['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
-                    }                                   
+                    }
                     $children[] = $node;
                     $children = &$children[count($children) - 1]['children'];
                 }
@@ -297,7 +297,7 @@ class Graph extends AppModel
             foreach($chartMetrics as $metNum)
             {
                 $parent['metrics' . $metNum] += $c_metrics['metrics' . $metNum];
-            }               
+            }
             $tmp_array = array(
                                 'metrics'        =>$metrics,
                                 'name'           =>$path[$pathDepth-1],
@@ -306,17 +306,17 @@ class Graph extends AppModel
             foreach($chartMetrics as $metNum)
             {
                 $tmp_array['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
-            }                                  
+            }
             $children[] = $tmp_array;
             $parent['metrics']        += $metrics;
             foreach($chartMetrics as $metNum)
             {
                 $node['metrics' . $metNum] = $c_metrics['metrics' . $metNum];
-            }                                
+            }
         }
 
         $tree=json_encode($tree);
-        return $tree;        
+        return $tree;
     }
 
     ///////ファイルメトリクス用///////
@@ -329,7 +329,7 @@ class Graph extends AppModel
         return $this->getCompareMetricsTableImple($data, $selectMetrics);
     }
 
-    function getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    function getCompareMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics)
     {
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
@@ -375,12 +375,13 @@ class Graph extends AppModel
                                 );
         }
 
+		$layerpaths = $this->getLayerpaths();
         for ($i = 0; $i < count($data); ++$i)
         {
             $defact = $data[$i]['Graph'][3];
             $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
             $filePath = $data[$i]['Graph']['filepath'];
-            $layer = $this->getLayer($filePath);
+            $layer = $this->getLayer($filePath, $layerpaths);
             if($layer < 0 ||6 < $layer)
             {
                 continue;
@@ -403,70 +404,62 @@ class Graph extends AppModel
             }
         }
         //ファイル率計算時の0除算を防ぐため
-        return $newData;        
+        return $newData;
     }
-    
-    function getLayer($filePath)
-    {
+
+	function getLayerpaths()
+	{
+		//降順
+		if(!function_exists('cmp'))
+		{
+			function cmp($a, $b)
+			{
+				$a_path = $a['Layerpath']['path'];
+				$numOfSlashA = substr_count($a_path, '/');
+
+				$b_path = $b['Layerpath']['path'];
+				$numOfSlashB = substr_count($b_path, '/');
+				if ($numOfSlashA == $numOfSlashB) {
+					return 0;
+				}
+				return ($numOfSlashA < $numOfSlashB) ? 1 : -1;
+			}
+		}
         //frameworksを含めていいのか要検討
         //vendor/fujitsu/やbootable/bootloaderなども
-        
+
 			// 0=>'アプリケーション(APP)',
 			// 1=>'アプリケーションフレームワーク(FW)',
 			// 2=>'ライブラリ(外部OSS)',
-			// 3=>'Android Runtinme(SYSTEM)', 
+			// 3=>'Android Runtinme(SYSTEM)',
 			// 4=>'HWライブラリ',
 			// 5=>'Kernel',
 			// //5=>'Kernel/ドライバ/ブードローダー',
 			// 6=>'Others',
-            
-        $path = explode('/',$filePath);//先頭フォルダ名
-        $path[0] = trim($path[0]);
-        $layer= 6;
+        $Layerpath = ClassRegistry::init('Layerpath');
+		$layerpaths = $Layerpath->find('all');
+		usort($layerpaths, "cmp");
+		return $layerpaths;
+	}
 
-        if($path[0]=='packages')
-        {
-            $layer = 0;
-        }
-        else if($path[0]=='frameworks')//frameworksを含めていいのか要検討
-        {
-            if($path[1]=='ex' || $path[1]=='opt')
-            {
-                $layer = 1;
-            }
-            else if($path[1]=='base')
-            {
-                switch ($path[2]) 
-                {
-                    case 'packages':
-                        $layer = 0;
-                        break;
-                    case 'libs':
-                        $layer = 3;
-                        break;
-                    default:
-                        $layer = 1;
-                }
-            }
-        }
-        else if($path[0]=='external')
-        {
-            $layer = 2;
-        }
-        else if($path[0]=='dalvik' || $path[0]=='libcore' || $path[0]=='system')
-        {
-            $layer = 3;
-        }
-        else if($path[0]=='hardware' || ($path[0]=='vendor' && $path[1]=='qcom' && $path[2]=='proprietary'))
-        {
-            //vendorのときはチップベンダー、製品リリースならば
-            $layer = 4;
-        }
-        else if($path[0]=='kernel')
-        {
-            $layer = 5;
-        }
-
+    function getLayer($filePath, $layerpaths)
+    {
+		$layer= 6;
+		$count = count($layerpaths);
+		for ($i = 0; $i < $count; ++$i)
+		{
+			$path = $layerpaths[$i]['Layerpath']['path'];
+			$pos = strpos($filePath, $path);
+			if($pos !== false)
+			{
+				if($pos == 0)
+				{
+					$layer= $layerpaths[$i]['Layer']['layer'];
+					break;
+				}
+			}
+			unset($layerpaths[$i]);
+		}
         // if($layer == 0)
         // {
         // echo '<pre>';
@@ -484,11 +477,11 @@ class Graph extends AppModel
     function getOriginTableFromCSV($up_file,$selectMetrics)
     {
         $data = $this->readCSV($up_file,-1,-1);
-        return $this->getOriginTableImple($data,$selectMetrics);   
+        return $this->getOriginTableImple($data,$selectMetrics);
     }
 
     //model[由来0～7][欠陥数] = その欠陥数のファイル数
-    function getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics) 
+    function getOriginTable($selectUploadDataId,$selectGroupName,$selectMetrics)
     {
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
 		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
@@ -497,10 +490,10 @@ class Graph extends AppModel
             $conditions += array('Graph.25' => $selectGroupName);
         }
         $data = $this->find('all',array('fields' => array('1',$selectMetrics),'conditions' => $conditions));
-        
+
         return $this->getOriginTableImple($data,$selectMetrics);
     }
-    
+
     function getOriginTableImple($data,$selectMetrics)
     {
         for ($i = 0; $i < count($data); ++$i)
@@ -517,7 +510,7 @@ class Graph extends AppModel
             $defact = $this->getMetricsValue($data[$i],$selectMetrics);
             $maxDefact[$origin] = max($maxDefact[$origin],$defact);
         }
-        
+
         //それぞれの由来の欠陥数のテーブルを用意する
         $model = array(array(),array(),array(),array(),array(),array(),array(),array());
         for ($i = 0; $i < count($model); ++$i)
@@ -536,32 +529,32 @@ class Graph extends AppModel
             ++$model[$origin][$defact];
         }
 
-        return $model;        
+        return $model;
     }
     ///////由来比較用///////
-    
-    
+
+
     function getOriginCityFromCSV($up_file,$metricsNumber)
     {
 		if($metricsNumber==2)//未使用
 			return array(0,0,0,0,0,0,0,0);
-			
+
         setlocale( LC_ALL, 'ja_JP.UTF-8' );
         $data = array();
         $buf = mb_convert_encoding(file_get_contents($up_file), "utf-8", "auto");//sjis-win''
         $lines = str_getcsv($buf, "\r\n");
-        foreach ($lines as $line) 
+        foreach ($lines as $line)
         {
             $col = str_getcsv($line);
             //7由来全て用いる
             $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
-            
+
             //if(4<=$col[1])//由来o3,o13,o23,o123のみ
             //{
             //  $data[] = array('model'=>"localCSV",'filepath'=>$col[0]) +$col;
             //}
         }
-        
+
         //1は由来,2はファイル数,3は欠陥数
         //由来ごとのメトリクスの総数を調べる
         $valueByOrigin = array(0,0,0,0,0,0,0,0);
@@ -586,9 +579,9 @@ class Graph extends AppModel
         // print_r($valueByOrigin);
         return $valueByOrigin;
     }
-    
+
     //model[由来0～7] = その由来のメトリクスサイズ(3は欠陥数)
-    function getOriginCity($selectUploadDataId,$selectGroupName,$metricsNumber) 
+    function getOriginCity($selectUploadDataId,$selectGroupName,$metricsNumber)
     {
         App::uses('Cache', 'Cache');
         $cName = $this->makeCacheName("origincity",array($selectUploadDataId,$selectGroupName,$metricsNumber));
@@ -603,7 +596,7 @@ class Graph extends AppModel
 
 		if($metricsNumber==2)//未使用
 			return array(0,0,0,0,0,0,0,0);
-			
+
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
         if($selectGroupName != 'ALL')
         {
@@ -624,15 +617,16 @@ class Graph extends AppModel
 // //print_r($data);
 // echo '</pre>';
 
+		$layerpaths = $this->getLayerpaths();
         $newData = array();
         for($i = 1;$i<=7;++$i)
         {
             $layers = array('numOfFiles'=>0,'height'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
             $dataByOrigin = array_filter($data, function($d)use($i) {return $d['Graph'][1]==$i;});
-            foreach ($dataByOrigin as $line) 
+            foreach ($dataByOrigin as $line)
             {
                 $metrics = $this->getMetricsValue($line['Graph'], $metricsNumber);
-                $layer =  $this->getLayer($line['Graph']['filepath']);
+                $layer =  $this->getLayer($line['Graph']['filepath'], $layerpaths);
                 ++$layers['numOfFiles'];
                 $layers['layerHeight'][$layer]+=$metrics;
             }
@@ -660,15 +654,15 @@ class Graph extends AppModel
 // echo '</pre>';
         return $newData;
     }
-    
+
     ///////OriginCity(3D)用///////
     function getOriginCity2FromCSV($up_file,$selectMetrics)
-    {   
+    {
         $data = $this->readCSV($up_file,-1,-1);
         return $this->getOriginCity2Imple($data, $selectMetrics);
     }
-    
-    function getOriginCity2($selectModelId,$selectGroupName,$selectMetrics) 
+
+    function getOriginCity2($selectModelId,$selectGroupName,$selectMetrics)
     {
         App::uses('Cache', 'Cache');
         $cName = $this->makeCacheName("MetricsAreaFigure",array($selectModelId,$selectGroupName,$selectMetrics));
@@ -682,16 +676,16 @@ class Graph extends AppModel
         {
             $conditions += array('Graph.25' => $selectGroupName);
         }
-        
-        $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);     
-        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));       
-        $newData = $this->getOriginCity2Imple($data,$selectMetrics); 
+
+        $fields = array('upload_data_id','modelname_id','filepath',1,$selectMetrics);
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions,'recursive'=>-1));
+        $newData = $this->getOriginCity2Imple($data,$selectMetrics);
         Cache::write($cName, $newData);
         return $newData;
     }
-    
-    function getOriginCity2Imple($allData,$selectMetrics) 
-    {	
+
+    function getOriginCity2Imple($allData,$selectMetrics)
+    {
     // 0L"(1) フォルダ／ファイル名",
 	// 1L"(2) 由来(1 - 7 = 2,12,1,13,123,23,3)",
 	// 2L"(3) 未使用",
@@ -707,7 +701,8 @@ class Graph extends AppModel
         }
 
         $newAllData = array();
-        foreach ($ids as $id) 
+		$layerpaths = $this->getLayerpaths();
+        foreach ($ids as $id)
         {
             $tmpAllData = array_filter($allData, function($v)use($id) {return $v['Graph']['upload_data_id']==$id;});
             $data = array();//origin=>全レイヤーのメトリクスの合計・layer=>そのレイヤーのメトリクスの合計
@@ -715,16 +710,16 @@ class Graph extends AppModel
             {
                 $layers = array('numOfFiles'=>0,'height'=>0,'layerHeight'=>array(0,0,0,0,0,0,0));
                 $dataByOrigin = array_filter($tmpAllData, function($v)use($i) {return $v['Graph'][1]==$i;});
-                foreach ($dataByOrigin as $line) 
+                foreach ($dataByOrigin as $line)
                 {
                     $metrics = $this->getMetricsValue($line['Graph'],$selectMetrics);
-                    $layer =  $this->getLayer($line['Graph']['filepath']);
+                    $layer =  $this->getLayer($line['Graph']['filepath'], $layerpaths);
                     ++$layers['numOfFiles'];
                     $layers['layerHeight'][$layer]+=$metrics;
                 }
                 $data[$i] = $layers;
             }
-        
+
             $sumOfValue=0;
             for($i = 1;$i<=7;++$i)
             {
