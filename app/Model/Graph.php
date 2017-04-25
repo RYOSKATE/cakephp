@@ -360,7 +360,7 @@ class Graph extends AppModel
         }
         //$modelName = $data[0]['Modelname']['name'];
         $newData = array();
-        for ($i = 0; $i < 7; ++$i)
+        for ($i = 0; $i < count($this->getLayers()); ++$i)
         {
             $newData[$i]=array('ModelLayer'=>
                                 array(
@@ -406,6 +406,13 @@ class Graph extends AppModel
         //ファイル率計算時の0除算を防ぐため
         return $newData;
     }
+
+	function getLayers()
+	{
+		$Layer = ClassRegistry::init('Layer');
+		$layer = $Layer->find('all');
+		return $layer;
+	}
 
 	function getLayerpaths()
 	{

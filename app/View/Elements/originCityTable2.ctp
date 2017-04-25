@@ -41,7 +41,7 @@ th {text-align: right;}
         </thead>
         <tbody>
         <?php
-		for($i=0;$i<=6;++$i)//レイヤー
+		for($i=0; $i < count($layer); ++$i)//レイヤー
 		{
         ?>
 		<tr>
