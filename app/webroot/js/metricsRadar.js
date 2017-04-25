@@ -9,15 +9,7 @@ var data2 = new Array();
             data2[i]=dataset2[i]['ModelLayer'][showParam];
         }
         var radarChartData = {
-            labels: [
-                     "アプリケーション(APP)", 
-                     "アプリケーションフレームワーク(FW)", 
-                     "ライブラリ(外部OSS)", 
-                     "Android Runtime(SYSTEM)", 
-                     "HWライブラリ", 
-                     "Kernel",//"Kernel/ドライバ/ブートローダー",
-                     "Others"
-            ],
+            labels,
             datasets: [
                 {
                     label:label1,
@@ -43,7 +35,7 @@ var data2 = new Array();
         };
         return radarChartData;
     }
-    
+
     radarChartData = setdata('metrics');
 
     window.onload = function(){
@@ -53,7 +45,7 @@ var data2 = new Array();
     // JavaScript
     //  イベントハンドラ
     $('#table td').live('click',function(){
-      var $cur_td = $(this)[0]; // (1):セルのHTML表現 [0]をつける点に留意のこと。  
+      var $cur_td = $(this)[0]; // (1):セルのHTML表現 [0]をつける点に留意のこと。
       var $cur_tr = $(this).parent()[0]; // (2):行のHTML表現
       // $cur_tr = $(this).closest('tr')[0]; // このほうが確実
       var $select = $cur_td.cellIndex;

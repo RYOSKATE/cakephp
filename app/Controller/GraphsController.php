@@ -18,17 +18,17 @@ class TargetData
     //nullだとページ切替時枠が描画されない
 }
 
-class GraphsController extends AppController 
-{    
+class GraphsController extends AppController
+{
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session','Paginator');
 
-    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData');
+    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData','Layer');
     public $actions = array('alldevgroup','onedevgroup','onedevgroup2','metrics','origin','originCity','originCity2');
 
     /*
     CSV入力      Graph
-    メトリクス   
+    メトリクス
     由来比較     OriginChart
     */
     public function beforeFilter()
@@ -44,7 +44,16 @@ class GraphsController extends AppController
 
         return $modelNameData;
     }
-	
+
+	private function setLayer()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $layer = $this->Layer->find('list',array('fields' => array('layer','name')));
+        $this->set('layer',$layer);
+
+        return $layer;
+    }
+
     private function getFirstKey($array)
     {
         return array_keys($array)[0];
@@ -73,7 +82,7 @@ class GraphsController extends AppController
             );
         }
         $this->set('methods',$methods);
-        return $methods;        
+        return $methods;
     }
 	private function setMetricsList()
     {
@@ -105,7 +114,7 @@ class GraphsController extends AppController
 			__('(24) 明示的に初期化していない静的記憶域期間のオブジェクト数'),
 			__('(25) 手を加えた組織の数')
 		);
-        
+
         if($this->getLang()=='eng')
         {
             $metricsList = array(
@@ -139,7 +148,7 @@ class GraphsController extends AppController
         $this->set('metricsList',$metricsList);
         return $metricsList;
     }
-	
+
     public function index()
     {
         $this->operateSticky();
@@ -189,7 +198,7 @@ class GraphsController extends AppController
                 $target->isLoadExternalCSV = true;
             }
             else if(isset($lastForm['CSV_ID']))
-            {                
+            {
                 $target->csvId = $lastForm['CSV_ID'];
                 $target->csvName = $uploadList[$target->csvId];
             }
@@ -200,7 +209,7 @@ class GraphsController extends AppController
                 {
                     $target->otherMethodId = $lastForm['可視化手法'];
                     $target->otherMethodName = $this->actions[$target->otherMethodId];
-                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
+                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);
                     $target->modelId = array_search($target->modelName, $this->setModelName());
                     $temp = $lastForm;
                     $temp['可視化手法'] = null;
@@ -224,13 +233,13 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr', $target->metricsName);
         $this->set('methodId',0);
     }
-    
+
     public function onedevgroup($formData=null)
     {
         $lastForm = $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
-        $modelNameData = $this->setModelName();        
+        $modelNameData = $this->setModelName();
         $metricsListData = $this->setMetricsList();
 
         $target[1] = new TargetData();
@@ -242,7 +251,7 @@ class GraphsController extends AppController
             $t->modelName = reset($groupNameData);
         }
 
-        if ($uploadList && isset($this->request->data['set']) || $formData != null  || isset($lastForm)) 
+        if ($uploadList && isset($this->request->data['set']) || $formData != null  || isset($lastForm))
         {
             if($lastForm==null)
             {
@@ -267,7 +276,7 @@ class GraphsController extends AppController
                 if($lastForm['モデル'.$i] != '')
                 {
                     $target[$i]->modelId = $lastForm['モデル'.$i];
-                    $target[$i]->modelName = $modelNameData[$target[$i]->modelId]; 
+                    $target[$i]->modelName = $modelNameData[$target[$i]->modelId];
                 }
                 $target[$i]->groupId = $lastForm['開発グループ'];
                 $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
@@ -276,12 +285,12 @@ class GraphsController extends AppController
                 $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
                 $target[$i]->data = array();
             }
-            $error_message = '';      
+            $error_message = '';
             for($i=1; $i<=4; ++$i)
             {
                 if($formData != null)
                 {
-                    $target[$i] = $formData[$i];             
+                    $target[$i] = $formData[$i];
                 }
                 $isDuplicate  = false;
                 for($j=1;$j<$i;++$j)
@@ -295,7 +304,7 @@ class GraphsController extends AppController
                 }
 
                 if(!$isDuplicate && $target[$i]->metricsId != null)
-                {            
+                {
                     //モデル名Aのidのデータのidを全て取得
                     $dataIdByModel = $this->UploadData->find('list', array('fields' => array('date'),
                         'conditions' => array('modelname_id' => $target[$i]->modelId)));
@@ -304,8 +313,8 @@ class GraphsController extends AppController
                         foreach($dataIdByModel as $id => $date)//モデルAの日付ごとのデータ
                         {
                             if($lastForm['可視化手法'] != null)
-                            {                
-                                $target[$i]->csvId = $id;                              
+                            {
+                                $target[$i]->csvId = $id;
                                 $target[$i]->csvName = $modelNameData[$target[$i]->modelId] . '(' . $date . ')';
                                 $target[$i]->otherMethodId = $lastForm['可視化手法'];
                                 $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
@@ -319,7 +328,7 @@ class GraphsController extends AppController
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         $error_message .= $target[$i]->modelName.'のデータが存在しません<br>';
                     }
@@ -374,7 +383,7 @@ class GraphsController extends AppController
             $chartMetrics = array_unique($chartMetrics);
             sort($chartMetrics);
             $chartMetricsStr = array();
-            
+
             foreach($chartMetrics as $metId)
             {
                 $chartMetricsStr[] = $metricsListData[$metId];
@@ -410,7 +419,7 @@ class GraphsController extends AppController
                 $target->isLoadExternalCSV = true;
             }
             else if(isset($this->data['Graph']['CSV_ID']))
-            {                
+            {
                 $target->csvId = $this->data['Graph']['CSV_ID'];
                 $target->csvName = $uploadList[$target->csvId];
             }
@@ -420,7 +429,7 @@ class GraphsController extends AppController
                 {
                     $target->otherMethodId = $this->data['Graph']['可視化手法'];
                     $target->otherMethodName = $this->actions[$target->otherMethodId];
-                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);  
+                    $target->modelName = mb_substr($target->csvName,0,mb_strlen($target->csvName)-12);
                     $target->modelId = array_search($target->modelName, $this->setModelName());
                     $temp = $this->data;
                     $temp['Graph']['可視化手法'] = null;
@@ -428,7 +437,7 @@ class GraphsController extends AppController
                     $this->setAction($target->otherMethodName, array_fill(1,4,$target));
                     return;
                 }
-            }            
+            }
 
             if ($target->isLoadExternalCSV)
             {
@@ -443,20 +452,21 @@ class GraphsController extends AppController
         $this->set('depth',$this->Graph->getDepth());
         $this->set('selectModelName', $target->csvName);
         $this->set('selectMetrics',$target->metricsId);
-        $this->set('selectMetricsStr', $target->metricsName);                            
+        $this->set('selectMetricsStr', $target->metricsName);
         $this->set('useLocalCSV',true);
         $this->set('methodId',2);
     }
-    
+
     public function metrics($formData=null)
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
+		$layer = $this->setLayer();
         $target[1] = new TargetData();
         $target[2] = new TargetData();
-        
+
         if($formData != null)
         {
             for($i=1;$i<=2;++$i)
@@ -480,8 +490,8 @@ class GraphsController extends AppController
                 $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
                 $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
                 $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
-                
-                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
+
+                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name']))
                 {
                     $target[$i]->csvName = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
@@ -491,7 +501,7 @@ class GraphsController extends AppController
                 else if(isset($this->data['Graph']['CSV_ID'.$i]))
                 {
                     $target[$i]->csvId = $this->data['Graph']['CSV_ID'.$i];
-                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];          
+                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];
                 }
             }
             if($this->data['Graph']['可視化手法'] != null)
@@ -502,12 +512,12 @@ class GraphsController extends AppController
                     {
                         $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
                         $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);
                         $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
                     }
                     $temp = $this->data;
                     $temp['Graph']['可視化手法'] = null;
-                    $this->data =  $temp;               
+                    $this->data =  $temp;
                     $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
                     return;
                 }
@@ -520,9 +530,9 @@ class GraphsController extends AppController
                 }
                 else
                 {
-                    
+
                     $target[$i]->data = $this->Graph->getCompareMetricsTable($target[$i]->csvId,$target[$i]->groupName,$target[$i]->metricsId);
-                }                
+                }
             }
         }
 
@@ -535,9 +545,9 @@ class GraphsController extends AppController
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$target[1]->metricsId);
         $this->set('selectMetricsStr',$target[1]->metricsName);
-        $this->set('methodId',3);                            
+        $this->set('methodId',3);
     }
-    
+
     public function origin($formData=null)
     {
         $this->operateSticky();
@@ -550,7 +560,7 @@ class GraphsController extends AppController
         for($i=1;$i<=2;++$i)
         {
             $this->set('ModelName'.$i,null);
-        }       
+        }
         if($formData != null)
         {
             for($i=1;$i<=2;++$i)
@@ -575,8 +585,8 @@ class GraphsController extends AppController
                 $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
                 $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
                 $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
-                
-                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
+
+                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name']))
                 {
                     $target[$i]->csvName = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
@@ -586,7 +596,7 @@ class GraphsController extends AppController
                 else if(isset($this->data['Graph']['CSV_ID'.$i]))
                 {
                     $target[$i]->csvId = $this->data['Graph']['CSV_ID'.$i];
-                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];          
+                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];
                 }
             }
             if($this->data['Graph']['可視化手法'] != null)
@@ -597,12 +607,12 @@ class GraphsController extends AppController
                     {
                         $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
                         $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);
                         $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
                     }
                     $temp = $this->data;
                     $temp['Graph']['可視化手法'] = null;
-                    $this->data =  $temp;               
+                    $this->data =  $temp;
                     $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
                     return;
                 }
@@ -629,22 +639,23 @@ class GraphsController extends AppController
         $this->set('useLocalCSV',true);
         $this->set('selectMetrics',$target[1]->metricsId);
         $this->set('selectMetricsStr',$target[1]->metricsName);
-        $this->set('methodId',4);                           
+        $this->set('methodId',4);
     }
-    
+
     public function originCity($formData=null)
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
+		$layer = $this->setLayer();
         $target[1] = new TargetData();
         $target[2] = new TargetData();
         for($i=1;$i<=2;++$i)
         {
             $this->set('ModelName'.$i,null);
             $target[$i]->data = null;
-        }      
+        }
         if($formData != null)
         {
             for($i=1;$i<=2;++$i)
@@ -668,8 +679,8 @@ class GraphsController extends AppController
                 $target[$i]->groupName = $groupNameData[$target[$i]->groupId];
                 $target[$i]->metricsId = $this->data['Graph'] ['Metrics'];
                 $target[$i]->metricsName = $metricsListData[$target[$i]->metricsId];
-                
-                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name'])) 
+
+                if (!empty($this->data['Graph'] ['selectCSV'.$i]['name']))
                 {
                     $target[$i]->csvName = $this->data['Graph']['selectCSV'.$i]['tmp_name'];//C:\xampp\tmp\php7F8D.tmp
                     $fileName = $this->data['Graph']['selectCSV'.$i]['name'];//data_10_utf.csv
@@ -679,7 +690,7 @@ class GraphsController extends AppController
                 else if(isset($this->data['Graph']['CSV_ID'.$i]))
                 {
                     $target[$i]->csvId = $this->data['Graph']['CSV_ID'.$i];
-                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];          
+                    $target[$i]->csvName = $uploadList[$target[$i]->csvId];
                 }
             }
 
@@ -691,12 +702,12 @@ class GraphsController extends AppController
                     {
                         $target[$i]->otherMethodId = $this->data['Graph']['可視化手法'];
                         $target[$i]->otherMethodName = $this->actions[$target[$i]->otherMethodId];
-                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);  
+                        $target[$i]->modelName = mb_substr($target[$i]->csvName,0,mb_strlen($target[$i]->csvName)-12);
                         $target[$i]->modelId = array_search($target[$i]->modelName, $this->setModelName());
                     }
                     $temp = $this->data;
                     $temp['Graph']['可視化手法'] = null;
-                    $this->data =  $temp;               
+                    $this->data =  $temp;
                     $this->setAction($target[1]->otherMethodName, array(1=>$target[1],$target[2],$target[1],$target[2]));
                     return;
                 }
@@ -731,16 +742,17 @@ class GraphsController extends AppController
         $this->set('selectMetricsStr',$target[1]->metricsName);
         $this->set('methodId',5);
     }
-    
+
     public function originCity2($formData = null)
     {
         $this->operateSticky();
         $uploadList = $this->setUploadList();
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
-        $modelNameData = $this->setModelName();  
+        $modelNameData = $this->setModelName();
         $uploadIdList = null;
         $uploadDateList = null;
+		$layer = $this->setLayer();
         $target = new TargetData();
         $target->data = null;
         if($formData != null)
@@ -771,7 +783,7 @@ class GraphsController extends AppController
                 $target->isLoadExternalCSV = true;
             }
             // else if(isset($this->data['Graph']['CSV_ID']))
-            // {                
+            // {
             //     $target->csvId = $this->data['Graph']['CSV_ID'];
             //     $target->csvName = $uploadList[$target->csvId];
             // }
@@ -801,10 +813,10 @@ class GraphsController extends AppController
 
         }
         if($target->data != null)
-        {            
+        {
             $selectModelDataList = $this->UploadData->find('list',array('fields' => array('date'),
                     'conditions' => array('modelname_id' => $target->modelId)));
-                
+
             asort($selectModelDataList);
 
             $uploadIdList = array_keys($selectModelDataList);
@@ -820,7 +832,7 @@ class GraphsController extends AppController
         $this->set('selectModelName', $target->modelName);
         $this->set('selectMetrics',$target->metricsId);
         $this->set('selectMetricsStr', $target->metricsName);
-        $this->set('methodId',6);
+		$this->set('methodId',6);
     }
 
     public function upload()
@@ -829,16 +841,16 @@ class GraphsController extends AppController
         //すでに存在するモデル名一覧を取得
         $modelNames = $this->ModelName->find('list');
         $this->set('modelName',$modelNames);
-        
+
         $uploadList = $this->setUploadList();
 		$this->UploadData->recursive = 0;
         $this->Paginator->paginate();
 		$this->set('uploadData', $this->requestAction('upload_data/index'));
-        
+
         $message = '';//エラーメッセージ用文字列
         $upload_id = 0;//アップロード時のid
-        
-        if (!empty($this->data)) 
+
+        if (!empty($this->data))
         {
             try
 		    {
@@ -854,14 +866,14 @@ class GraphsController extends AppController
                 //モデル名(id)を取得・あるいは新規追加
                 $selectModelId = $this->data['Graph'] ['モデル名'];
                 $newModelName = $this->data['Graph'] ['新規モデル名'];
-                
+
                 //既存モデル名・新規モデル名のチェック
                 if(empty($newModelName) && empty($selectModelId))
                 {
-                    $message = __('モデル名が入力されていません。');   
+                    $message = __('モデル名が入力されていません。');
                     throw new Exception();
                 }
-     
+
                 //新規モデル名入力時はDBに存在チェック、なければDBに追加。
                 if(empty($selectModelId))
                 {
@@ -870,23 +882,23 @@ class GraphsController extends AppController
                         //DBに新規モデル名を追加。
                         $selectModelId = $this->ModelName->addNewModelName($newModelName);
                     }
-                    else 
+                    else
                     {
                         //既にDBにそのモデル名が存在していた場合。
                         $selectModelId = key($this->ModelName->find('list',array('conditions' => array('name' => $newModelName))));
                         $message .=$newModelName.'は既に登録されています。';
                     }
                 }
-                
-                $date = $this->data['Graph']['date'];       
+
+                $date = $this->data['Graph']['date'];
                 if(isset($date['year']) && isset($date['year']) && isset($date['year']))
                     $date = $date['year'] . '-' . $date['month'] . '-' . $date['day'];
                 if($this->UploadData->hasAny(array('UploadData.modelname_id'=>$selectModelId,'UploadData.date'=>$date)))
-                {             
+                {
                     $message = __('同一のモデル名、日付のデータが既に存在します。');
                     throw new Exception();
                 }
-                
+
                 //UploadDataをDBに追加
                 $UploadData = array(
                     'date'=>$this->data['Graph']['date'],
@@ -896,11 +908,11 @@ class GraphsController extends AppController
                 );
                 $upload_id = $this->UploadData->upload($UploadData);
                 if($upload_id==0)
-                {                
+                {
                     $message = __('UploadDataの登録に失敗しました。');
                     throw new Exception();
                 }
-                        
+
                 //CSVの内容をDBにアップロードする
                 $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
                 if($groupNames == null)
@@ -908,11 +920,11 @@ class GraphsController extends AppController
                     $message = __('CSVデータの内容のアップロードに失敗しました。');
                     throw new Exception();
                 }
-                
+
                 //最後にグループ名を追加する
                 $isCodeCheck = $this->data['Graph']['code_check'];
                 $errorGroupNames = $this->GroupName->uploadFromCSV($groupNames,$isCodeCheck);
-                
+
                 if(!empty($errorGroupNames))
                 {
                     $message = __('グループ名の登録に失敗しました。<br>');
@@ -922,17 +934,17 @@ class GraphsController extends AppController
                         {
                             $message .= '・' . $name . '<br>';
                         }
-                        $message .= __('UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。');                                        
+                        $message .= __('UTF-8で読み込めませんでした。CSVファイルの文字コードを確認してください。');
                     }
                     throw new Exception();
                 }
-                
+
                 $this->flashText(__( $fileName. 'のデータをアップロードしました。'));
                 $this->Graph->commit();
             }
-            catch(Exception $e) 
+            catch(Exception $e)
             {
-                $this->flashText($message.'<br>アップロード処理を中断しました。',false);               
+                $this->flashText($message.'<br>アップロード処理を中断しました。',false);
                 $this->Graph->rollback();
             }
         }

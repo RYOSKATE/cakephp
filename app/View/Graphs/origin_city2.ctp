@@ -20,14 +20,14 @@
 <div class="row">
     <div class="col-md-12 col-sm-12">
         <?php
-        echo $this->Form->create('Graph',array('inputDefaults' => 
+        echo $this->Form->create('Graph',array('inputDefaults' =>
                                             array('div' => 'form-group',),
                                             'class' => 'well',
                                             )
                                 );
         ?>
         <div class="row">
-            <div class="col-md-2 col-sm-2">                    
+            <div class="col-md-2 col-sm-2">
                 <button id="play" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>
             </div>
             <div class="col-md-10 col-sm-10">
@@ -42,7 +42,7 @@
                 'max'=>count($data)-1,
                 'value'=>0,
                 // 'list'=>array(1,2,3),
-            ));	
+            ));
             ?>
             </div>
         </div>
@@ -52,12 +52,12 @@
          <div id="canvas-wrapper"></div>
     </div>
     <div class="col-md-12 col-sm-12">
-		<?php echo $this->element('originCityTable2', array("data" => $data[$uploadIdList[0]]));?>
+		<?php echo $this->element('originCityTable2', array("layer"=>$layer,"data" => $data[$uploadIdList[0]]));?>
     </div>
 </div>
 
 <script>
-    
+
     var uploadList = JSON.parse('<?=json_encode($uploadList);?>');
     var uploadIdList = JSON.parse('<?=json_encode($uploadIdList);?>');
     var uploadDateList = JSON.parse('<?=json_encode($uploadDateList);?>');

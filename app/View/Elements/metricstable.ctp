@@ -12,17 +12,7 @@
         </tr>
         </thead>
         <tbody>
-        <?php $layer = array( 0=>__('アプリケーション(APP)'),
-                              1=>__('アプリケーションフレームワーク(FW)'),
-                              2=>__('ライブラリ(外部OSS)'),
-                              3=>__('Android Runtinme(SYSTEM)'), 
-                              4=>__('HWライブラリ'),
-                              5=>__('Kernel'),
-                              //5=>__('Kernel/ドライバ/ブードローダー'),
-                              6=>__('Others'),
-                             );
-        ?>
-        <?php 
+        <?php
         if(!empty($data))
         {
           foreach($data as $key => $value)
@@ -37,7 +27,7 @@
               <td><?php echo sprintf("%.2f",$val['defect_per_file']);?></td>
               <td><?php echo $val['defect_num'];?></td>
           </tr>
-          <?php 
+          <?php
           }
         }?>
         </tbody>

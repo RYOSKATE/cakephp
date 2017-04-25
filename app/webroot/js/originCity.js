@@ -29,19 +29,19 @@ $(function()
 		//var originSum1 = new Array(0, 8, 2, 2, 153, 183, 27, 334);
 		var WIDTH = Math.round(w);
 		var HEIGHT = WIDTH;
-		
+
 		var WindowSize = new Vec2(WIDTH, HEIGHT);
 		var WindowCenter = new Vec2(WIDTH / 2, HEIGHT / 2);
 
 		// 連想配列を生成する
-		var o = { 
-			0: 0, 
-			1 : 1, 
-			12 : 2, 
-			2 : 3, 
-			13 : 4, 
-			123 : 5, 
-			23 : 6, 
+		var o = {
+			0: 0,
+			1 : 1,
+			12 : 2,
+			2 : 3,
+			13 : 4,
+			123 : 5,
+			23 : 6,
 			3 : 7 };
 		var originStr = ["","o1","o12","o2","o13","o123","o23","o3"];
 		var sum1 = sum[o[1]] + sum[o[12]] + sum[o[13]] + sum[o[123]];
@@ -288,7 +288,7 @@ $(function()
 				}
 			}
 		}
-		
+
 		//以前使用、今はレイヤー用
 		// var originColor = {
 		// 	0: 	'#FFFFFF',//不使用
@@ -313,7 +313,7 @@ $(function()
 		var canvas;
 		if(num==1)
 			canvas= new fabric.Canvas('canvas1');
-		else 
+		else
 			canvas= new fabric.Canvas('canvas2');
 		canvas.setWidth(w);
 		canvas.setHeight(w);
@@ -353,7 +353,7 @@ $(function()
 			minPos.push(new Vec2(WIDTH, HEIGHT));
 			drawPoints.push(new Array());
 		}
-		
+
 		function isSurrounded(x,y)
 		{
 			var ori = origin[y][x];
@@ -379,7 +379,7 @@ $(function()
 			{
 				var ori = origin[h][w];
 				if (ori != 0)
-				{				
+				{
 					if(!isSurrounded(w,h))
 					{
 						if (w<minPos[ori].x)
@@ -409,19 +409,19 @@ $(function()
 
 			canvas.add(polygon);
 		}
-		canvas.on('mouse:down', function(options) 
+		canvas.on('mouse:down', function(options)
 		{
 			function deleteLayers()
 			{
-				while(7 < canvas.getObjects().length) 
-				{	
-					canvas.remove(canvas.item(canvas.getObjects().length-1));			
+				while(7 < canvas.getObjects().length)
+				{
+					canvas.remove(canvas.item(canvas.getObjects().length-1));
 				}
 			}
 
-  			if (options.target) 
+  			if (options.target)
 			{
-				if(options.target.oriTxt=="layers" 
+				if(options.target.oriTxt=="layers"
 				|| options.target.oriTxt=="line")
 				{
 					return;
@@ -429,7 +429,7 @@ $(function()
 				deleteLayers();
 				var width = WindowSize.x*0.2;
 				var height = WindowSize.y*0.7;
-				
+
 				var rect = new fabric.Rect({
 					fill: '#ffffff',
 					width: width,
@@ -442,7 +442,14 @@ $(function()
 				var total = originData.height;
 				var scale = 0.8 * height / total;
 				var oriColor = new Array('#C869FF','#6BCDFF','#71FD5E','#FECA61','#FA6565','#000000','#DDDDDD');
-				var layer = new Array('APP','FW','OSS','SYSTEM', 'HW','Kernel','Others');
+				for(var i=0;i<layer.length;++i)
+				{
+					if(6 < layer[i].length)
+					{
+						layer = new Array('APP','FW','OSS','SYSTEM', 'HW','Kernel','Others');
+						break;
+					}
+				}
 				var rects = new Array();
 				var texts = new Array();
 				var sumH = WindowSize.y*0.2;
@@ -468,14 +475,14 @@ $(function()
 						'#C869FF',//紫
 						'#DDDDDD',//灰色
 					];
-					var text = new fabric.Text(layer[i], 
+					var text = new fabric.Text(layer[i],
 					{
 						fontSize: 10,
 						top : sumH,
 						left : width*0.1,
 					});
 					texts.push(text);
-					
+
 					sumH += h;
 
 				}
@@ -484,14 +491,14 @@ $(function()
 				{
 					addLayer(i)
 				}
-				var oriText = new fabric.Text(options.target.oriTxt+":", 
+				var oriText = new fabric.Text(options.target.oriTxt+":",
 				{
 					fontSize: 30,
 					top : 0,
 					left : 10,
 				});
-				
-				var hText = new fabric.Text(""+total, 
+
+				var hText = new fabric.Text(""+total,
 				{
 					fontSize: 28,
 					top : WindowSize.y*0.1,
@@ -499,7 +506,7 @@ $(function()
 				});
 
 				var line = new fabric.Line(
-					[options.e.offsetX, options.e.offsetY, WindowSize.x - width, WindowCenter.y], 
+					[options.e.offsetX, options.e.offsetY, WindowSize.x - width, WindowCenter.y],
 				{
 					stroke: 'gray',
 					fill: 'gray',
@@ -508,14 +515,14 @@ $(function()
 					oriTxt : "line"
 				});
 
-				var group = new fabric.Group([ rect, oriText, hText, 
-				rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6], 
+				var group = new fabric.Group([ rect, oriText, hText,
+				rects[0],rects[1],rects[2],rects[3],rects[4],rects[5],rects[6],
 				texts[0],texts[1],texts[2],texts[3],texts[4],texts[5],texts[6] ], {
 					left: WindowSize.x - width,
 					top: WindowCenter.y - height/2,
 					oriTxt : "layers"
 				});
-				
+
 				group.on('moving', function() {
 					var l = canvas.item(canvas.getObjects().length-2);
 					l.x2 = group.left+width/2;
@@ -534,7 +541,7 @@ $(function()
 			{
 				deleteLayers();
 			}
-		});	
+		});
         //Canvasのサイズをウィンドウサイズに追従
         window.addEventListener( 'resize', onWindowResize, false );
 

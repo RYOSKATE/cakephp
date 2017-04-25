@@ -18,6 +18,7 @@
 <script>
     var originalSum1 = JSON.parse('<?=json_encode($data1);?>');
     var originalSum2 = JSON.parse('<?=json_encode($data2);?>');
+	var layer = JSON.parse('<?=json_encode($layer);?>');
 </script>
 
 <div class="row">
