@@ -444,11 +444,16 @@ class Graph extends AppModel
 
     function getLayer($filePath, $layerpaths)
     {
-		$layer= 6;
+		$layer = null;
 		$count = count($layerpaths);
 		for ($i = 0; $i < $count; ++$i)
 		{
 			$path = $layerpaths[$i]['Layerpath']['path'];
+			if(empty($path))//その他など
+			{
+				$layer= $layerpaths[$i]['Layer']['layer'];
+				break;
+			}
 			$pos = strpos($filePath, $path);
 			if($pos !== false)
 			{
