@@ -4,14 +4,14 @@
 			1=>'o1',
 			2=>'o12',
 			3=>'o2',
-			4=>'o13', 
+			4=>'o13',
 			5=>'o123',
 			6=>'o23',
 			7=>'o3',
 		);
-        
+
 		//RGB
-		// $oriColor = array(		
+		// $oriColor = array(
 		// 	0 => '#FFFFFF',//不使用
 		// 	1 => '#FA6565',//赤
 		// 	2 => '#FECA61',//黄
@@ -23,7 +23,7 @@
         // );
 
 		//CMY
-		$oriColor = array(		
+		$oriColor = array(
 			0  =>  '#FFFFFF',//不使用
 			1  =>  '#00FFFF',//シアン
 			2  =>  '#0000FF',//青
@@ -33,12 +33,7 @@
 			6  =>  '#00FF00',//緑
 			7  =>  '#FFFF00'//イエロー
 		);
-        
-		$oriStr = array(
-			1=>'1:Google',
-			2=>'2:Qualcomm',
-			3=>'3:Fujitsu',
-		);
+
 		$oriNumStr = array(
 			1=>'G',
 			2=>'Q',
@@ -61,7 +56,7 @@
 			<th></th><th></th><th></th><th></th>
             <th><?php echo __('関連領域');?></th>
             <th><?php echo __('面積');?></th>
-			<?php 
+			<?php
 			for($i=1;$i<=3;++$i)
 			{?>
 				<th>/<?php echo $oriNumStr[$i];?></th>
@@ -82,9 +77,9 @@
 				<td id="a" bgcolor=<?php echo $oriColor[$oriNums[$i][$j]];?>></td>
 			<?php
 			}?>
-			<td><?php echo $oriStr[$i];?></td>
+			<td><?php echo (strval($i).":".$oriStr[$i]);?></td>
             <td><?php echo $oriSum[$i];?></td>
-			<?php 
+			<?php
 			for($j=1;$j<=3;++$j)
 			{
 				?><td><?php
@@ -108,7 +103,7 @@
 			<th> 　　 </th>
             <th><?php echo __('由来');?></th>
             <th><?php echo __('面積');?></th>
-			<?php 
+			<?php
 			for($i=1;$i<=3;++$i)
 			{?>
 				<th>/<?php echo $oriNumStr[$i];?></th>
@@ -117,7 +112,7 @@
         </tr>
         </thead>
         <tbody>
-        <?php 
+        <?php
 		for($i=1;$i<8;++$i)
 		{
 			$value = $data[$i]["height"];
@@ -127,7 +122,7 @@
 			<td bgcolor=<?php echo $oriColor[$i];?>></td>
 			<td><?php echo $ori[$i];?></td>
             <td><?php echo $value;?></td>
-			<?php 
+			<?php
 			for($j=1;$j<=3;++$j)
 			{
 				?><td><?php
@@ -141,7 +136,7 @@
 			}
 			?>
         </tr>
-        <?php 
+        <?php
 			}
 		}
         ?>

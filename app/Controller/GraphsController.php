@@ -23,7 +23,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session','Paginator');
 
-    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData','Layer');
+    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData','Layer','Organizations');
     public $actions = array('alldevgroup','onedevgroup','onedevgroup2','metrics','origin','originCity','originCity2');
 
     /*
@@ -53,7 +53,14 @@ class GraphsController extends AppController
 
         return $layer;
     }
+	private function setOrganizations()
+    {
+        //すでに存在する開発グループ名一覧を取得
+        $organizations = $this->Organizations->find('list',array('fields' => array('id','name')));
+        $this->set('organizations',$organizations);
 
+        return $organizations;
+    }
     private function getFirstKey($array)
     {
         return array_keys($array)[0];
@@ -649,6 +656,7 @@ class GraphsController extends AppController
         $groupNameData = $this->setGroupNameWithAll();
         $metricsListData = $this->setMetricsList();
 		$layer = $this->setLayer();
+		$organizations = $this->setOrganizations();
         $target[1] = new TargetData();
         $target[2] = new TargetData();
         for($i=1;$i<=2;++$i)
