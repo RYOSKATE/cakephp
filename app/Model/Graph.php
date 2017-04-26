@@ -23,8 +23,8 @@ class Graph extends AppModel
         $str = $graphName;
         foreach ($paramArray as $param)
         {
-            $str += "_";
-            $str += $param;
+            $str .= "_";
+            $str .= strval($param);
         }
         return $str;
     }
