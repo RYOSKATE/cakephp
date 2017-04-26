@@ -216,17 +216,17 @@ $(function()
 		}
 
 		//ここを有効化すると処理は重くなるが放射状に領域拡張していく
-		// serchPoints.sort(function(va, vb)
-		// {
-		// 	var a = va.length();
-		// 	var b = vb.length();
-		// 	if (a < b)
-		// 		return -1;
-		// 	if (a > b)
-		// 		return 1;
-		// 	return 0;
-		// });
-		// serchPoints.shift();
+		serchPoints.sort(function(va, vb)
+		{
+			var a = va.length();
+			var b = vb.length();
+			if (a < b)
+				return -1;
+			if (a > b)
+				return 1;
+			return 0;
+		});
+		serchPoints.shift();
 
 
 		var queue = new Queue();//Vec2を格納する
@@ -330,7 +330,7 @@ $(function()
 			origin : 1,
 			opacity : 0.9
 		});
-		canvas.add(circle1);
+
 		var circle2 = new fabric.Circle({
 			originX: 'center',
 			originY : 'center',
@@ -343,7 +343,6 @@ $(function()
 			origin : 3,
 			opacity : 0.9
 		});
-		canvas.add(circle2);
 
 		//それぞれの領域の画素を結合したポリゴンを作成する
 		var drawPoints = new Array();
@@ -406,7 +405,11 @@ $(function()
 				origin : i,
 				opacity : 0.9
 			});
-
+			if(n==0)
+			{
+				canvas.add(circle1);
+				canvas.add(circle2);
+			}
 			canvas.add(polygon);
 		}
 		canvas.on('mouse:down', function(options)
