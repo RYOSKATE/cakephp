@@ -59,11 +59,6 @@ class Metricslist extends AppModel {
         catch(Exception $e)
         {
             $this->rollback();
-echo '<pre>';
-print_r($filepath);
-print_r($data);
-echo '</pre>';
-die();
             return false;
         }
         return true;
