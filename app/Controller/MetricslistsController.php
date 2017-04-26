@@ -48,8 +48,19 @@ class MetricslistsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Metricslist->create();
-			if ($this->Metricslist->save($this->request->data)) {
+			$fileName = $this->data['MetricsList']['selectCSV']['name'];//data_10_utf.csv
+			$ret;
+			if(empty($fileName))
+			{
+				$this->Metricslist->create();
+				$ret = $this->Metricslist->save($this->request->data);
+			}
+			else
+			{
+				$tmp_file_file = $this->data['MetricsList']['selectCSV']['tmp_name'];
+				$ret = $this->Metricslist->uploadFromCSV($tmp_file_file);
+			}
+			if ($ret) {
 				$this->Session->setFlash(__('The metricslist has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
