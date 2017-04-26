@@ -604,11 +604,6 @@ class Graph extends AppModel
         $cName = $this->makeCacheName("origincity",array($selectUploadDataId,$selectGroupName,$metricsNumber));
         $ret = Cache::read($cName);
         if($ret !== false) {
-//echo '<pre>';
-//print_r("using cache");
-//print_r($ret);
-//echo '</pre>';
-
             return $ret;
         }
 
