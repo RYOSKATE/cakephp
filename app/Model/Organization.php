@@ -30,4 +30,36 @@ class Organization extends AppModel {
 			),
 		),
 	);
+
+    function uploadFromCSV($filepath)
+    {
+        try
+        {
+            setlocale( LC_ALL, 'ja_JP.UTF-8' );
+            $data = array();
+            $buf = mb_convert_encoding(file_get_contents($filepath), "utf-8", 'ASCII,JIS,UTF-8,eucJP-win,SJIS-win');//sjis-win''
+            $lines = str_getcsv($buf, "\n");
+            $id = 0;
+            foreach ($lines as $line)
+            {
+                $col = str_getcsv(trim($line));
+                $data[] = array('id'=> ++$id ,'name'=>$col[0]);
+            }
+
+            $this->begin();
+
+            if (!$this->saveAll($data))
+            {
+                throw new Exception();
+            }
+
+            $this->commit();
+        }
+        catch(Exception $e)
+        {
+            $this->rollback();
+            return false;
+        }
+        return true;
+    }
 }

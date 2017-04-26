@@ -44,6 +44,9 @@
 			2=>array(3,2,6,5),
 			3=>array(7,4,6,5)
 		);
+		echo '<pre>';
+print_r($data1);
+echo '</pre>';
         $oriSum= array(
 			1=>$data[1]["height"]+$data[2]["height"]+$data[4]["height"]+$data[5]["height"],
 			2=>$data[2]["height"]+$data[3]["height"]+$data[5]["height"]+$data[6]["height"],

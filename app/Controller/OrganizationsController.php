@@ -48,8 +48,19 @@ class OrganizationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Organization->create();
-			if ($this->Organization->save($this->request->data)) {
+            $fileName = $this->data['Organization']['selectCSV']['name'];//data_10_utf.csv
+            $ret;
+            if(empty($fileName))
+            {
+                $this->Organization->create();
+                $ret = $this->Organization->save($this->request->data);
+            }
+            else
+            {
+                $tmp_file_file = $this->data['Organization']['selectCSV']['tmp_name'];
+                $ret = $this->Organization->uploadFromCSV($tmp_file_file);
+            }
+            if ($ret) {
 				$this->Session->setFlash(__('The organization has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {

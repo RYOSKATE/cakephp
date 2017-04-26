@@ -608,6 +608,7 @@ class Graph extends AppModel
 //print_r("using cache");
 //print_r($ret);
 //echo '</pre>';
+
             return $ret;
         }
 
@@ -665,10 +666,6 @@ class Graph extends AppModel
             $newData[0]=0;
 
         Cache::write($cName, $newData);
-// echo '<pre>';
-// print_r(date( "Y年m月d日 H時i分s秒" ) );
-// print_r($newData);
-// echo '</pre>';
         return $newData;
     }
 

@@ -48,8 +48,19 @@ class LayerpathsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Layerpath->create();
-			if ($this->Layerpath->save($this->request->data)) {
+            $fileName = $this->data['Layerpath']['selectCSV']['name'];//data_10_utf.csv
+            $ret;
+            if(empty($fileName))
+            {
+                $this->Layerpath->create();
+                $ret = $this->Layerpath->save($this->request->data);
+            }
+            else
+            {
+                $tmp_file_file = $this->data['Layerpath']['selectCSV']['tmp_name'];
+                $ret = $this->Layerpath->uploadFromCSV($tmp_file_file);
+            }
+            if ($ret) {
 				$this->Session->setFlash(__('The layerpath has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {

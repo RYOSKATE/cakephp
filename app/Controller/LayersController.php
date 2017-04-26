@@ -48,8 +48,19 @@ class LayersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Layer->create();
-			if ($this->Layer->save($this->request->data)) {
+            $fileName = $this->data['Layer']['selectCSV']['name'];//data_10_utf.csv
+            $ret;
+            if(empty($fileName))
+            {
+                $this->Layer->create();
+                $ret = $this->Layer->save($this->request->data);
+            }
+            else
+            {
+                $tmp_file_file = $this->data['Layer']['selectCSV']['tmp_name'];
+                $ret = $this->Layer->uploadFromCSV($tmp_file_file);
+            }
+            if ($ret) {
 				$this->Session->setFlash(__('The layer has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
