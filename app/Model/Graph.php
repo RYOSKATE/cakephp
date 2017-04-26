@@ -80,12 +80,17 @@ class Graph extends AppModel
                     $records[] = $line;
                 }
             }
+
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
         	for ($i = 0; $i< count($records); ++$i)
             {
                 $records[$i] += array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
                 if(4<=$records[$i][1])
                 {
+					if(!array_key_exists (25, $records[$i]))
+					{
+						$records[$i]["25"] = '';
+					}
                     if($records[$i][25]=='')
                         $records[$i][25] = 'グループ名なし';
 
