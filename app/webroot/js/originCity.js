@@ -405,12 +405,12 @@ $(function()
 				origin : i,
 				opacity : 0.9
 			});
+			canvas.add(polygon);
 			if(n==0)
 			{
 				canvas.add(circle1);
 				canvas.add(circle2);
 			}
-			canvas.add(polygon);
 		}
 		canvas.on('mouse:down', function(options)
 		{
