@@ -15,6 +15,13 @@ class Graph extends AppModel
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+        'Metricslist' => array(
+			'className' => 'Metricslist',
+			'foreignKey' => 'metricslist_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
