@@ -390,7 +390,7 @@ $(function()
 				}
 			}
 		}
-		var paintedRegion = [o[3], o[12], o[13], o[23], o[123]];
+		var paintedRegion = [o[3], o[13], o[23],o[12], o[123]];
 		for (var n = 0; n<paintedRegion.length; ++n)
 		{
 			var i = paintedRegion[n];
