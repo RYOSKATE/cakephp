@@ -65,7 +65,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 						<?php echo $this->Html->link(__('Visualize Tool'),array('controller' => 'graphs', 'action' => 'index'),array('class' =>'navbar-brand'));?>
 						<?php echo $this->Html->link('日本語',array('controller' => 'graphs', 'action' => 'index/lang:jpn'),array('class' =>'navbar-brand'));?>
 						<?php echo $this->Html->link('English',array('controller' => 'graphs', 'action' => 'index/lang:eng'),array('class' =>'navbar-brand'));?>
-						<!--<label><input id="fluidcheckbox" type="checkbox" value="">Extend </label>-->
 					</div>
 					<div class="navbar-collapse collapse">
 						<ul class="nav navbar-nav navbar-right">
@@ -131,45 +130,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	</div>
 	<script type="text/javascript">
 		var stickies = JSON.parse('<?=json_encode($stickies);?>');
-		if (window.localStorage) {
-			function setFluid(enable){
-				if(enable)
-				{
-					$('#header-container').removeClass('container');
-					$('#outer-container').removeClass('container');
-					$('#inner-container').removeClass('container');
-					$('#header-container').addClass('container-fluid');
-					$('#outer-container').addClass('container-fluid');
-					$('#inner-container').addClass('container-fluid');
-				}
-				else
-				{
-					$('#header-container').removeClass('container-fluid');
-					$('#outer-container').removeClass('container-fluid');
-					$('#inner-container').removeClass('container-fluid');
-					$('#header-container').addClass('container');
-					$('#outer-container').addClass('container');
-					$('#inner-container').addClass('container');
-				}
-			}
-
-			$("#fluidcheckbox").change(function () {
-				var isChecked = $("#fluidcheckbox").prop('checked');
-				window.localStorage.setItem("fluidcheckbox", isChecked);
-				setFluid(isChecked);
-
-			});
-			if(window.localStorage.getItem("fluidcheckbox"))
-			{
-				$("#fluidcheckbox").prop('checked', true);
-				setFluid(true);
-			}
-
-		}
-		else{
-			$("#fluidcheckbox").hide();
-		}
-
 	</script>
 	<?php echo $this->Html->script('sticky', array('inline' => true)); ?>
 	</body>
