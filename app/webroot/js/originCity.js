@@ -1,6 +1,7 @@
 
 $(function()
 {
+	var GLOBAL_SCALE = -1;
 	var w = $('#canvas-wrapper').width();
 	$('#canvas1').width(w);
 	$('#canvas2').width(w);
@@ -54,7 +55,12 @@ $(function()
 
 		var maxSum = Math.max(sum1, sum2, sum3);
 		var maxR = radiusFromArea(maxSum);
-		var scale = (HEIGHT / 4.0) / maxR;//直径が画面の縦の半分程度になるようスケール調整
+
+		if(GLOBAL_SCALE < 0)
+		{
+			GLOBAL_SCALE = (HEIGHT / 4.0) / maxR;//直径が画面の縦の半分程度になるようスケール調整
+		}
+		var scale = GLOBAL_SCALE;
 		//sum = sum.map(function(value, index, array) { return value*scale*scale; });
 
 		for(var i=1; i<8;++i)
