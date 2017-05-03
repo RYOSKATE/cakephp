@@ -27,12 +27,27 @@
                                 );
         ?>
         <div class="row">
-            <div class="col-md-2 col-sm-2">
+            <div class="col-md-1 col-sm-1">
                 <button id="play" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>
             </div>
-            <div class="col-md-10 col-sm-10">
+            <div class="col-md-2 col-sm-2">
             <?php
-            echo $this->Form->input('時系列',array
+			echo $this->Form->input('Scale:',array
+            (
+                'id'=>'scalespin',
+                'type'=>'number',
+                //'class' => 'form-control',
+                'step'=>0.1,
+                'min'=>0.1,
+                'max'=>3.0,
+                'value'=>1.0,
+                // 'list'=>array(1,2,3),
+            ));
+	            ?>
+            </div>
+			<div class="col-md-9 col-sm-9">
+            <?php
+            echo $this->Form->input('時系列:',array
             (
                 'id'=>'timeSlider',
                 'type'=>'range',
