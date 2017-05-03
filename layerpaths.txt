@@ -1,5 +1,7 @@
-1,src/apps
+1,src/VBox/Frontends
 2,src/VBox
 3,src/libs
 4,src/VBox/Runtime
-5,
+5,src/VBox/Additions
+6,src/VBox/Devices
+7,
