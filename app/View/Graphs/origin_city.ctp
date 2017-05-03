@@ -29,6 +29,8 @@
 	<div class="col-md-6 col-sm-6 ">
 		<?php echo $this->element('originCityTable', array("name" => $ModelName1,"data" => $data1,"metricsName"=>substr($selectMetricsStr,4), "oriStr"=>$organizations));?>
     </div>
+	</div>
+	<div class="row">
 	<div class="col-md-6 col-sm-6">
 		<canvas id="canvas2"style="border:1px solid;width:100%;height:auto"></canvas>
     </div>

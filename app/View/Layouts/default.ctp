@@ -51,10 +51,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		?>
 	</head>
 	<body>
-		<div class="container">
+		<div id="outer-container" class="container">
 		<div id="header">
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-				<div class="container">
+				<div id="header-container" class="container">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 							<span class="sr-only">Toggle navigation</span>
@@ -65,6 +65,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 						<?php echo $this->Html->link(__('Visualize Tool'),array('controller' => 'graphs', 'action' => 'index'),array('class' =>'navbar-brand'));?>
 						<?php echo $this->Html->link('日本語',array('controller' => 'graphs', 'action' => 'index/lang:jpn'),array('class' =>'navbar-brand'));?>
 						<?php echo $this->Html->link('English',array('controller' => 'graphs', 'action' => 'index/lang:eng'),array('class' =>'navbar-brand'));?>
+						<!--<label><input id="fluidcheckbox" type="checkbox" value="">Extend </label>-->
 					</div>
 					<div class="navbar-collapse collapse">
 						<ul class="nav navbar-nav navbar-right">
@@ -86,7 +87,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			<h1><?php //echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
 		</div>
 
-		<div class="container">
+		<div class="inner-container">
 			<div class="row">
 				<!-- 3列をサイドメニューに割り当て -->
 				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-3">
@@ -130,6 +131,27 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	</div>
 	<script type="text/javascript">
 		var stickies = JSON.parse('<?=json_encode($stickies);?>');
+		$("#fluidcheckbox").change(function () {
+		var isChecked = $("#fluidcheckbox").prop('checked');
+		if(isChecked)
+		{
+			$('#header-container').removeClass('container');
+			$('#outer-container').removeClass('container');
+			$('#inner-container').removeClass('container');
+			$('#header-container').addClass('container-fluid');
+			$('#outer-container').addClass('container-fluid');
+			$('#inner-container').addClass('container-fluid');
+		}
+		else
+		{
+			$('#header-container').removeClass('container-fluid');
+			$('#outer-container').removeClass('container-fluid');
+			$('#inner-container').removeClass('container-fluid');
+			$('#header-container').addClass('container');
+			$('#outer-container').addClass('container');
+			$('#inner-container').addClass('container');
+		}
+		});
 	</script>
 	<?php echo $this->Html->script('sticky', array('inline' => true)); ?>
 	</body>
