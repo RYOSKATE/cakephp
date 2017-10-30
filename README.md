@@ -12,6 +12,22 @@ First, set up environment for cakePHP2 as official instruction
 
 Then, edit Database Setting in app/Config/database.php for your environment.
 
+```
+//app/Config/database.php
+class DATABASE_CONFIG {
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => 'root',
+		'database' => 'visualizetool',
+		'prefix' => '',
+		//'encoding' => 'utf8',
+	);
+}
+```
+
 # Input Data
 
 * Layer
