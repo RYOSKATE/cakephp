@@ -62,6 +62,7 @@
  * flags =>
  * A key/value array of driver specific connection options.
  */
+// user have to rewrite for own environment
 class DATABASE_CONFIG {
 
 	public $default = array(
