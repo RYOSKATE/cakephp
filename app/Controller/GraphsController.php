@@ -23,7 +23,7 @@ class GraphsController extends AppController
     public $helpers = array('Html', 'Form', 'Session');
     public $components = array('Session','Paginator');
 
-    public $uses = array('Graph','ModelName','GroupName','Sticky','UploadData','Layer','Organizations');
+    public $uses = array('Graph','ModelName','GroupName','Sticky','Metricslist','UploadData','Layer','Organizations');
     public $actions = array('alldevgroup','onedevgroup','onedevgroup2','metrics','origin','originCity','originCity2');
 
     /*
@@ -93,64 +93,70 @@ class GraphsController extends AppController
     }
 	private function setMetricsList()
     {
-        //すでに存在する開発グループ名一覧を取得
-        $metricsList = array(
-			__('(1) ファイル数'),
-			__('(2) 欠陥ファイル数'),
-			__('(3) 未使用'),
-			__('(4) 欠陥の数'),
-			__('(5) 物理行数'),
-			__('(6) 一行に複数の宣言や文がある数'),
-			__('(8) サイクロマティック複雑度'),
-			__('(9) 継承木における深さ'),
-			__('(10) 他クラスの関数を呼び出す関数の率'),
-			__('(11) 呼び出す他クラスの関数の種類数'),
-			__('(12) メソッドの凝集度の欠如(COM)'),
-			__('(13) Pubic メソッド数'),
-			__('(14) Pubic 属性数'),
-			__('(15) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数'),
-			__('(16) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数(OO)'),
-			__('(17) 呼び出す他ファイルの関数の種類数'),
-			__('(18) 使用する他ファイルの外部結合グローバル変数の種類数'),
-			__('(19) 自ファイルの関数を呼び出す他ファイルの関数の種類数'),
-			__('(20) 外部結合グローバル変数の定義数'),
-			__('(21) 外部結合グローバル変数の定義数(OO)'),
-			__('(22) 明示的に初期化していない静的記憶域期間のオブジェクト数'),
-			__('(23) LOC（コメントを除く行数）'),
-			__('(24) 自ファイルのサイクロマティック複雑度の最大値'),
-			__('(25) 自ファイルのネストの深さの最大値'),
-			__('(26) 手を加えた組織の数')
-		);
+        $metricsList = $this->Metricslist->find('list');
 
-        if($this->getLang()=='eng')
+        if (empty($metricsList))
         {
+            //すでに存在する開発グループ名一覧を取得
             $metricsList = array(
-                '(1) Number of files',
-                '(2) Number of defects file',
-                '(3) Unused',
-                '(4) Number of defects',
-                '(5) Lines of code',
-                '(6) Number of multiple declarations or statements on one line',
-                '(7) Depth of inheritance tree',
-                '(8) Rate of the function that calls the function of the other class',
-                '(9) Number of types of function calls other class',
-                '(10) Lack of cohesion in methods',
-                '(11) Number of public methods',
-                '(12) Number of public fields',
-                '(13) Number of types of outer join global variables used by other file',
-                '(14) Number of types of outer join global variables used by other file(00)',
-                '(15) Number of types of functions using outer join global variables in other file',
-                '(16) Number of types of functions using outer join global variables in other file(00)',
-                '(17) Number of types of files in own directory using outer join global variables in other directory',
-                '(18) Number of types of files in own directory using outer join global variables in other directory(00)',
-                '(19) Number of type of functions in other file',
-                '(20) Number of types of outer join global variables in other file',
-                '(21) Number of types of functions in in other file calling function in own file',
-                '(22) Number of definition of outer join global variables',
-                '(23) Number of definition of outer join global variables(00)',
-                '(24) Number of explicitly uninitialized objects in static storage',
-                '(25) Number of edited organization',
-                );
+                __('(1) ファイル数'),
+                __('(2) 欠陥ファイル数'),
+                __('(3) 未使用'),
+                __('(4) 欠陥の数'),
+                __('(5) 物理行数'),
+                __('(6) 一行に複数の宣言や文がある数'),
+                __('(8) サイクロマティック複雑度'),
+                __('(9) 継承木における深さ'),
+                __('(10) 他クラスの関数を呼び出す関数の率'),
+                __('(11) 呼び出す他クラスの関数の種類数'),
+                __('(12) メソッドの凝集度の欠如(COM)'),
+                __('(13) Pubic メソッド数'),
+                __('(14) Pubic 属性数'),
+                __('(15) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数'),
+                __('(16) ディレクトリ外部の外部結合グローバル変数を使用する自ディレクトリのファイルの種類数(OO)'),
+                __('(17) 呼び出す他ファイルの関数の種類数'),
+                __('(18) 使用する他ファイルの外部結合グローバル変数の種類数'),
+                __('(19) 自ファイルの関数を呼び出す他ファイルの関数の種類数'),
+                __('(20) 外部結合グローバル変数の定義数'),
+                __('(21) 外部結合グローバル変数の定義数(OO)'),
+                __('(22) 明示的に初期化していない静的記憶域期間のオブジェクト数'),
+                __('(23) LOC（コメントを除く行数）'),
+                __('(24) 自ファイルのサイクロマティック複雑度の最大値'),
+                __('(25) 自ファイルのネストの深さの最大値'),
+                __('(26) 手を加えた組織の数')
+            );
+        
+        
+            if($this->getLang()=='eng')
+            {
+                $metricsList = array(
+                    '(1) Number of files',
+                    '(2) Number of defects file',
+                    '(3) Unused',
+                    '(4) Number of defects',
+                    '(5) Lines of code',
+                    '(6) Number of multiple declarations or statements on one line',
+                    '(7) Depth of inheritance tree',
+                    '(8) Rate of the function that calls the function of the other class',
+                    '(9) Number of types of function calls other class',
+                    '(10) Lack of cohesion in methods',
+                    '(11) Number of public methods',
+                    '(12) Number of public fields',
+                    '(13) Number of types of outer join global variables used by other file',
+                    '(14) Number of types of outer join global variables used by other file(00)',
+                    '(15) Number of types of functions using outer join global variables in other file',
+                    '(16) Number of types of functions using outer join global variables in other file(00)',
+                    '(17) Number of types of files in own directory using outer join global variables in other directory',
+                    '(18) Number of types of files in own directory using outer join global variables in other directory(00)',
+                    '(19) Number of type of functions in other file',
+                    '(20) Number of types of outer join global variables in other file',
+                    '(21) Number of types of functions in in other file calling function in own file',
+                    '(22) Number of definition of outer join global variables',
+                    '(23) Number of definition of outer join global variables(00)',
+                    '(24) Number of explicitly uninitialized objects in static storage',
+                    '(25) Number of edited organization',
+                    );
+            }
         }
         $this->set('metricsList',$metricsList);
         return $metricsList;
