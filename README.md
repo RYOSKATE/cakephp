@@ -44,8 +44,9 @@ class DATABASE_CONFIG {
 
 ## Reference
 
-[Research Paper](http://www.washi.cs.waseda.ac.jp/?p=3160)
-* Metrics visualization technique based on the origins and function layers for OSS-based development
+Research Paper
+* [Metrics visualization technique based on the origins and function layers for OSS-based development](http://www.washi.cs.waseda.ac.jp/?p=3160)
+* [Metrics Visualization Techniques based on Historical Origins and Functional Layers for Developments by Multiple Organizations](http://www.worldscientific.com/doi/pdf/10.1142/S0218194018500067)
 
 [Demo Site](http://www.washi.cs.waseda.ac.jp/metrics-visualize-tool/graphs) 
 * Login ID: reader
