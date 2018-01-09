@@ -57,7 +57,7 @@ class Graph extends AppModel
         return $metrics;
     }
     ///////csvのアップロード用///////
-    function uploadFromCSV($filepath,$selectModelId,$upload_id)
+    function uploadFromCSV($filepath,$selectModelId,$upload_id,$groupcol)
     {
     // php.iniを変更する場合
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
@@ -65,7 +65,8 @@ class Graph extends AppModel
     // upload_max_filesize=32M  8万行のデータで約10MB
     // max_execution_time=180   8万行のデータをローカルサーバのデータベースにアップロードするのに約60秒かかった
         //AppControllerのbeforeFilterで設定している
-		$groupNameData = array();
+        $groupNameData = array();
+
         try
         {
             //ini_set('memory_limit', -1);
@@ -82,32 +83,47 @@ class Graph extends AppModel
             }
 
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
+            $data = array();
         	for ($i = 0; $i< count($records); ++$i)
             {
-                $records[$i] += array('modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
-                if(4<=$records[$i][1])
+                if(0<$groupcol)
                 {
-					if(!array_key_exists (25, $records[$i]))
-					{
-						$records[$i]["25"] = '';
-					}
-                    if($records[$i][25]=='')
-                        $records[$i][25] = 'グループ名なし';
-
+                    if(!array_key_exists ($groupcol, $records[$i]))
+                    {
+                        $records[$i][$groupcol] = '';
+                    }
+                    if($records[$i][$groupcol]=='')
+                    {
+                        $records[$i][$groupcol] = 'グループ名なし';
+                    }
                     //グループ名は;で区切られている
-                    $names = explode(';',$records[$i][25]);
+                    $names = explode(';',$records[$i][$groupcol]);
                     for ($j = 0; $j< count($names); ++$j)
                     {
                         $name = trim($names[$j]);
                         if(!in_array($name, $groupNameData))
                         {
-                            $groupNameData[]=$name;
+                            if($name)
+                            {
+                                $groupNameData[]=$name;
+                            }
                         }
                     }
                 }
-        	}
+                $metrics = $records[$i][1];
+                for ($k = 2; $k< count($records[$i]); ++$k)
+                {
+                    $metrics .= "," . $records[$i][$k];
+                }
+                $data[] = array('metrics'=>$metrics,'modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
+            }
+            // echo '<pre>';
+            // print_r($data);
+            // print_r($groupNameData);
+            // echo '</pre>';
+            // die();
             //ここまではたぶん数秒で終わる
-            if (!$this->saveAll($records))
+            if (!$this->saveAll($data))
             {
                 throw new Exception();
             }
