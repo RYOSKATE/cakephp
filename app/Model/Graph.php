@@ -45,7 +45,7 @@ class Graph extends AppModel
 	    return $records;
     }
 
-    function getMetricsValue($col,$selectMetrics,$type)
+    function getMetricsValue($col,$type)
     {
         $metrics = 1;//0の時はファイル数なので1
         if($type == 'string')
@@ -176,12 +176,18 @@ class Graph extends AppModel
         return $this->getGroupDataImple($data,$selectMetrics,$selectGroupName);
     }
 
-    function getGroupDataImple($data,$selectMetrics,$selectGroupName)
+    function getMetricsType($selectMetrics)//1origin
     {
         App::import('Model', 'Metricslist');
         $metricsList = new Metricslist;
         $metricslist = $metricsList->find('all');
         $type = $metricslist[$selectMetrics+1]['Metricslist']['type'];
+        return $type;
+    }
+
+    function getGroupDataImple($data,$selectMetrics,$selectGroupName)
+    {
+        $type = $this->getMetricsType($selectMetrics);
         if($type == 'string')
             return;
         $group_array = array();
@@ -192,7 +198,7 @@ class Graph extends AppModel
             for($i=0; $i<$numOfNames; ++$i)
             {
                 $name = $names[$i];
-                $metrics = $this->getMetricsValue($value['Graph'],$selectMetrics,$type);
+                $metrics = $this->getMetricsValue($value['Graph'],$type);
                 $loc = 0;//$value['Graph'][4];
                 if((strpos($selectGroupName,'ALL') !== false) || $selectGroupName == $name)
                 {
@@ -249,16 +255,32 @@ class Graph extends AppModel
 
     function getFileMetricsTable($selectUploadDataId,$selectGroupName,$selectMetrics,$chartMetrics)
     {
-
         $conditions = array('Graph.upload_data_id' => $selectUploadDataId);
-		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
-        if($selectGroupName != 'ALL')
+        $fields = array('Graph.metrics','Graph.filepath');
+        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
+        //$selectMetricsと$group列だけ残す
+        $selectMetrics -= 2;
+        $index = -1;
+
+        foreach($data as $value)
         {
-            $conditions += array('Graph.25' => $selectGroupName);
+            ++$index;
+            $metrics = explode(',',$value['Graph']['metrics']);
+            for($i=0; $i<count($metrics); ++$i)
+            {
+                $metric = trim($metrics[$i]);
+                if(strpos($metric,';') !== false)//グループの列がある
+                {
+                    $data[$index]['Graph']['groups'] = $metric;
+                }  
+                if($i == $selectMetrics)
+                {
+                    $data[$index]['Graph']['metrics'] = $metric;
+                }
+   
+            }
         }
 
-        $fields = array_merge(array('modelname_id','filepath',$selectMetrics),$chartMetrics);
-        $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         return $this->getFileMetricsTableImple($data,$selectMetrics,$chartMetrics);
     }
 
@@ -277,8 +299,11 @@ class Graph extends AppModel
         //             [$selectMetrics] => 選択されたメトリクス
         //         )
         // )
-
-
+        $type = $this->getMetricsType($selectMetrics);
+        if($type == 'string')
+        {
+            return;
+        }
         //木の初期化
         $tree = array('name'    =>   "root",
             'metrics'         =>0,
@@ -300,7 +325,7 @@ class Graph extends AppModel
             $c_metrics = array();
             foreach($chartMetrics as $metNum)
             {
-                $c_metrics['metrics' . $metNum] = $this->getMetricsValue($data[$i]['Graph'],$metNum);
+                $c_metrics['metrics' . $metNum] = $this->getMetricsValue($data[$i]['Graph'],$type);
             }
             $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
             $pathDepth=count($path);
