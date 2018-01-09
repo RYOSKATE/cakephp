@@ -111,6 +111,17 @@ echo '<div class="row">';
         </fieldset>
         <br>
     </div>
+<h4><?php echo __('csvファイルフォーマット');?></h4>
+<ul>
+    <?php echo __('
+        <li>対応フォーマット:CSV(utf8)</li>
+        <li>ヘッダー行、インデックス列なし</li>
+        <li>0列目:ファイルパス</li>
+        <li>1列名~(n-1)列目,:メトリクス</li>
+        <li>n列目:グループ名(セミコロン区切り)
+        <li>例:<code>root/header/function.hpp,1,2,0.837,header,3,AndroidPF;Camera;</code></li>
+    ');?>
+</ul>
 <h4><?php echo __('アップロード時の注意');?></h4>
 <ul>
     <?php echo __('
