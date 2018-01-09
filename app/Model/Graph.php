@@ -57,7 +57,7 @@ class Graph extends AppModel
         return $metrics;
     }
     ///////csvのアップロード用///////
-    function uploadFromCSV($filepath,$selectModelId,$upload_id,$groupcol)
+    function uploadFromCSV($filepath,$selectModelId,$upload_id)
     {
     // php.iniを変更する場合
     // memory_limit=1024M       8万行のデータを以下の$ret[] に格納するのに約256MB
@@ -84,38 +84,36 @@ class Graph extends AppModel
 
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
             $data = array();
-        	for ($i = 0; $i< count($records); ++$i)
+            
+            for ($i = 0; $i< count($records); ++$i)
             {
-                if(0<$groupcol)
+                $lastIndex = count($records[$i]) - 1;
+                //最後の列は必ず;区切りのグループ名
+                if($records[$i][$lastIndex]=='')
                 {
-                    if(!array_key_exists ($groupcol, $records[$i]))
+                    $records[$i][$lastIndex] = 'グループ名なし;';
+                }
+                //グループ名は;で区切られている
+                $names = explode(';',$records[$i][$lastIndex]);
+
+                for ($j = 0; $j< count($names); ++$j)
+                {
+                    $name = trim($names[$j]);
+                    if(!in_array($name, $groupNameData))
                     {
-                        $records[$i][$groupcol] = '';
-                    }
-                    if($records[$i][$groupcol]=='')
-                    {
-                        $records[$i][$groupcol] = 'グループ名なし;';
-                    }
-                    //グループ名は;で区切られている
-                    $names = explode(';',$records[$i][$groupcol]);
-                    for ($j = 0; $j< count($names); ++$j)
-                    {
-                        $name = trim($names[$j]);
-                        if(!in_array($name, $groupNameData))
+                        if($name)
                         {
-                            if($name)
-                            {
-                                $groupNameData[]=$name;
-                            }
+                            $groupNameData[]=$name;
                         }
                     }
                 }
                 $metrics = $records[$i][1];
-                for ($k = 2; $k< count($records[$i]); ++$k)
+                for ($k = 2; $k < $lastIndex; ++$k)
                 {
                     $metrics .= "," . $records[$i][$k];
                 }
-                $data[] = array('metrics'=>$metrics,'modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
+                $data[] = array('metrics'=>$metrics,'modelname_id'=>$selectModelId
+                ,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0],'groups'=>$records[$i][$lastIndex]);
             }
 
             //ここまではたぶん数秒で終わる
@@ -149,29 +147,16 @@ class Graph extends AppModel
     function getGroupData($upload_data_id,$selectMetrics,$selectGroupName)
     {
         $conditions = array('Graph.upload_data_id' => $upload_data_id);
-        $fields = array('Graph.metrics');
+        $fields = array('Graph.metrics','Graph.groups');
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         //$selectMetricsと$group列だけ残す
-        $selectMetrics -= 2;
+        $selectMetrics -= 1;
         $index = -1;
-
-        foreach($data as $value)
+        foreach($data as &$value)
         {
-            ++$index;
             $metrics = explode(',',$value['Graph']['metrics']);
-            for($i=0; $i<count($metrics); ++$i)
-            {
-                $metric = trim($metrics[$i]);
-                if(strpos($metric,';') !== false)//グループの列がある
-                {
-                    $data[$index]['Graph']['groups'] = $metric;
-                }  
-                if($i == $selectMetrics)
-                {
-                    $data[$index]['Graph']['metrics'] = $metric;
-                }
-   
-            }
+            $value['Graph']['metrics'] = null;
+            $value['Graph']['metrics'] = trim($metrics[$selectMetrics]);
         }
         return $this->getGroupDataImple($data,$selectMetrics,$selectGroupName);
     }
@@ -181,7 +166,7 @@ class Graph extends AppModel
         App::import('Model', 'Metricslist');
         $metricsList = new Metricslist;
         $metricslist = $metricsList->find('all');
-        $type = $metricslist[$selectMetrics+1]['Metricslist']['type'];
+        $type = $metricslist[$selectMetrics]['Metricslist']['type'];
         return $type;
     }
 
@@ -259,7 +244,7 @@ class Graph extends AppModel
         $fields = array('Graph.metrics','Graph.filepath');
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         //$selectMetricsと$group列だけ残す
-        $selectMetrics -= 2;
+        $selectMetrics -= 1;
         $index = -1;
 
         foreach($data as $value)
@@ -327,7 +312,7 @@ class Graph extends AppModel
             {
                 $c_metrics['metrics' . $metNum] = $this->getMetricsValue($data[$i]['Graph'],$type);
             }
-            $metrics = $this->getMetricsValue($data[$i]['Graph'],$selectMetrics);
+            $metrics = $this->getMetricsValue($data[$i]['Graph'],$type);
             $pathDepth=count($path);
             if($this->depth < $pathDepth)
             {
@@ -390,6 +375,7 @@ class Graph extends AppModel
         }
 
         $tree=json_encode($tree);
+
         return $tree;
     }
 

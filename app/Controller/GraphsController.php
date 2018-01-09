@@ -929,8 +929,8 @@ class GraphsController extends AppController
 
                 //CSVの内容をDBにアップロードする
 
-                $groupcol = intval($this->data['Graph']['groupcol']);
-                $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id,$groupcol);
+                //$groupcol = intval($this->data['Graph']['groupcol']);
+                $groupNames = $this->Graph->uploadFromCSV($tmp_file_file,$selectModelId,$upload_id);
                 if($groupNames == null)
                 {
                     $message = __('CSVデータの内容のアップロードに失敗しました。');

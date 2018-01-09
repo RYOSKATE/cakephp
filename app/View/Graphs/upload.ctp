@@ -73,14 +73,14 @@ echo '<div class="row">';
                 // 'style'=>"width:100%;",
                 // 'div'=>'form-group',
             ));
-            echo $this->Form->input( 'groupcol', array( 
-                'id'=> 'groupcol',
-                'type' => 'number',
-                'label' => __('開発グループ列(zero-based)'),    // チェックボックスのラベル
-                'step'=>1,
-                'min'=>-1,
-                'value'=>1,
-            ));
+            // echo $this->Form->input( 'groupcol', array( 
+            //     'id'=> 'groupcol',
+            //     'type' => 'number',
+            //     'label' => __('開発グループ列(zero-based)'),    // チェックボックスのラベル
+            //     'step'=>1,
+            //     'min'=>-1,
+            //     'value'=>1,
+            // ));
             echo '</div>';
             echo '<div class="col-md-12 col-sm-12">';
             echo $this->element('localCSV',array("formname" => 'selectCSV'));

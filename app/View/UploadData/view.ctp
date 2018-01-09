@@ -37,6 +37,7 @@
 	<tr>
 		<th><?php echo __('Id'); ?></th>
 		<th><?php echo __('filepath'); ?></th>
+		<th><?php echo __('groups'); ?></th>
 		<th><?php echo __('metrics'); ?></th>
 		<!--<th class="actions"><?php //echo __('Actions'); ?></th>-->
 	</tr>
@@ -47,6 +48,7 @@
 		<tr>
 			<td><?php echo $graph['id']; ?></td>
 			<td><?php echo $graph['filepath']; ?></td>
+			<td><?php echo $graph['groups']; ?></td>
 			<td><?php echo $graph['metrics']; ?></td>
 			<!--<td class="actions">
 				<?php //echo $this->Html->link(__('View'), array('controller' => 'graphs', 'action' => 'view', $graph['id'])); ?>

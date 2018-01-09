@@ -1,6 +1,4 @@
-﻿ファイル名,string
-修正回数,int
-質問Gr,string,
-種別,string,
+﻿修正回数,int
+種別,string
 ページ数,int
 シート数,int
