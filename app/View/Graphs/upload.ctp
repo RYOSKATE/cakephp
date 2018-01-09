@@ -119,7 +119,11 @@ echo '<div class="row">';
         <li>0列目:ファイルパス</li>
         <li>1列名~(n-1)列目,:メトリクス</li>
         <li>n列目:グループ名(セミコロン区切り)
-        <li>例:<code>root/header/function.hpp,1,2,0.837,header,3,AndroidPF;Camera;</code></li>
+        <li>例:<br><code>
+        root/header/function.hpp,1,2,0.837,header,3,AndroidPF;Camera;<br>
+        root/source/function.cpp,1,2,0.837,source,3,AndroidPF;Camera;<br>
+        root/source/function.java,1,2,0.837,source,3,UI;Network;
+        </code></li>
     ');?>
 </ul>
 <h4><?php echo __('アップロード時の注意');?></h4>

@@ -35,7 +35,26 @@
         ?>
  </div>
 </fieldset>
-
+<h4><?php echo __('csvファイルフォーマット');?></h4>
+<ul>
+    <?php echo __('
+        <li>対応フォーマット:CSV(utf8)</li>
+        <li>ヘッダー行、インデックス列なし</li>
+        <li>0列目:メトリクス名</li>
+        <li>1列名,メトリクスの型(int,float,string)</li>
+		<li>例:<br><code>
+		loc,int<br>
+		numOfDefects,int<br>
+		filetype,string
+		</code></li>
+    ');?>
+</ul>
+<h4><?php echo __('アップロード時の注意');?></h4>
+<ul>
+    <?php echo __('
+		<li>データ用CSVには0列名にファイルパス,n列目に開発グループを含みますが、これらはメトリクスではないため1列目からn-1列目が対象になります。</li>
+    ');?>
+</ul>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
