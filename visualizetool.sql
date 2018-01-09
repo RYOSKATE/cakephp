@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2017 年 4 朁E25 日 14:10
+-- Generation Time: 2017 年 4 ?E25 日 14:10
 -- サーバのバージョン： 5.6.24
 -- PHP Version: 5.6.8
 
@@ -102,7 +102,8 @@ CREATE TABLE `layers` (
 
 CREATE TABLE `metricslists` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

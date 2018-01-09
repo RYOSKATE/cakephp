@@ -11,6 +11,11 @@
 			<?php echo h($metricslist['Metricslist']['name']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Type'); ?></dt>
+		<dd>
+			<?php echo h($metricslist['Metricslist']['type']); ?>
+			&nbsp;
+		</dd>	
 	</dl>
 </div>
 <div class="actions">

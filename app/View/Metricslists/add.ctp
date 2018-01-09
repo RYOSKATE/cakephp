@@ -4,6 +4,7 @@
 		<legend><?php echo __('Add Metricslist'); ?></legend>
 	<?php
 		echo $this->Form->input('name');
+		echo $this->Form->input('type');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

@@ -44,7 +44,7 @@ class Metricslist extends AppModel {
 			foreach ($lines as $line)
 			{
 				$col = str_getcsv(trim($line));
-				$data[] = array('id'=> ++$id ,'name'=>$col[0]);
+				$data[] = array('id'=> ++$id ,'name'=>$col[0],'type'=>$col[1]);
 			}
 
 			$this->begin();

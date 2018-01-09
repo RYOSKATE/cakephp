@@ -5,6 +5,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('type'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -13,6 +14,7 @@
 	<tr>
 		<td><?php echo h($metricslist['Metricslist']['id']); ?>&nbsp;</td>
 		<td><?php echo h($metricslist['Metricslist']['name']); ?>&nbsp;</td>
+		<td><?php echo h($metricslist['Metricslist']['type']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $metricslist['Metricslist']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $metricslist['Metricslist']['id'])); ?>
