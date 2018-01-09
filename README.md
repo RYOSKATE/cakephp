@@ -1,49 +1,53 @@
-# CakePHP
+# MetricsVisualizer <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
 
-[![Bake Status](https://secure.travis-ci.org/cakephp/cakephp.png?branch=master)](http://travis-ci.org/cakephp/cakephp)
-[![Latest Stable Version](https://poser.pugx.org/cakephp/cakephp/v/stable.svg)](https://packagist.org/packages/cakephp/cakephp)
-[![License](https://poser.pugx.org/cakephp/cakephp/license.svg)](https://packagist.org/packages/cakephp/cakephp)
+Metrics Visualizer is a Dashboard for Nultiple Organization and Layer Architecture Software Development.
 
-[![CakePHP](http://cakephp.org/img/cake-logo.png)](http://www.cakephp.org)
+Developed by CakePHP2.
 
-CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.
-Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.
+# Installation
 
-
-## Some Handy Links
+First, set up environment for cakePHP2 as official instruction 
 
 [CakePHP](http://www.cakephp.org) - The rapid development PHP framework
 
-[CookBook](http://book.cakephp.org) - THE CakePHP user documentation; start learning here!
+Then, edit Database Setting in app/Config/database.php for your environment.
 
-[API](http://api.cakephp.org) - A reference to CakePHP's classes
+```
+//app/Config/database.php
+class DATABASE_CONFIG {
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => 'root',
+		'database' => 'visualizetool',
+		'prefix' => '',
+		//'encoding' => 'utf8',
+	);
+}
+```
 
-[Plugins](http://plugins.cakephp.org/) - A repository of extensions to the framework
+# Input Data
 
-[The Bakery](http://bakery.cakephp.org) - Tips, tutorials and articles
+* Layer
+* LayerPath
+* MetricsList
+* Organization
 
-[Community Center](http://community.cakephp.org) - A source for everything community related
+# Upload Data
 
-[Training](http://training.cakephp.org) - Join a live session and get skilled with the framework
-
-[CakeFest](http://cakefest.org) - Don't miss our annual CakePHP conference
-
-[Cake Software Foundation](http://cakefoundation.org) - Promoting development related to CakePHP
-
-
-## Get Support!
-
-[#cakephp](http://webchat.freenode.net/?channels=#cakephp) on irc.freenode.net - Come chat with us, we have cake
-
-[Google Group](https://groups.google.com/group/cake-php) - Community mailing list and forum
-
-[GitHub Issues](https://github.com/cakephp/cakephp/issues) - Got issues? Please tell us!
-
-[Roadmaps](https://github.com/cakephp/cakephp/wiki#roadmaps) - Want to contribute? Get involved!
+* 1st column: filepath (e.g., kernel/drivers/base/power/wakeup.c
+* 2nd ~ column: metrics value (e.g., LOC, Cyclomatic complexity)
+* last column: Dev group separated by ; (semi-coron) (e.g., Camera Group;Browser Group; Map Group)
 
 
-## Contributing
+## Reference
 
-[CONTRIBUTING.md](CONTRIBUTING.md) - Quick pointers for contributing to the CakePHP project
+Research Paper
+* [Metrics visualization technique based on the origins and function layers for OSS-based development](http://www.washi.cs.waseda.ac.jp/?p=3160)
+* [Metrics Visualization Techniques based on Historical Origins and Functional Layers for Developments by Multiple Organizations](http://www.worldscientific.com/doi/pdf/10.1142/S0218194018500067)
 
-[CookBook "Contributing" Section (2.x)](http://book.cakephp.org/2.0/en/contributing.html) [(3.0)](http://book.cakephp.org/3.0/en/contributing.html) - Version-specific details about contributing to the project
+[Demo Site](http://www.washi.cs.waseda.ac.jp/metrics-visualize-tool/graphs) 
+* Login ID: reader
+* password: guest
