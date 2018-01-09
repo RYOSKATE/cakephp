@@ -72,10 +72,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 							<li><?php echo $this->Html->link($userData['username'],array('controller' => 'users',  'action' => 'manage'));?></li>
 							<?php if($userData['role']!='reader'){?>
 							<li><?php echo $this->Html->link(__('Upload'),array('controller' => 'graphs', 'action' => 'upload'));?></li>
-							<li><?php echo $this->Html->link(__('Layer'),array('controller' => 'layers', 'action' => 'index'));?></li>
-							<li><?php echo $this->Html->link(__('LayerPath'),array('controller' => 'layerpaths', 'action' => 'index'));?></li>
+							<!-- <li><?php echo $this->Html->link(__('Layer'),array('controller' => 'layers', 'action' => 'index'));?></li> -->
+							<!-- <li><?php echo $this->Html->link(__('LayerPath'),array('controller' => 'layerpaths', 'action' => 'index'));?></li> -->
 							<li><?php echo $this->Html->link(__('MetricsList'),array('controller' => 'metricslists', 'action' => 'index'));?></li>
-							<li><?php echo $this->Html->link(__('Organization'),array('controller' => 'organizations', 'action' => 'index'));?></li>
+							<!-- <li><?php echo $this->Html->link(__('Organization'),array('controller' => 'organizations', 'action' => 'index'));?></li> -->
 							<?php }?>
 							<li><?php echo $this->Html->link(__('Data'),array('controller' => 'upload_data', 'action' => 'index'));?></li>
 							<li><?php echo $this->Html->link(__('Logout'),array('controller' => 'users',  'action' => 'logout'));?></li>
