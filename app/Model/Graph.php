@@ -16,7 +16,9 @@ class Graph extends AppModel
 			'fields' => '',
 			'order' => ''
 		)
-	);
+    );
+    
+
 
     function makeCacheName($graphName,$paramArray)
     {
@@ -43,17 +45,15 @@ class Graph extends AppModel
 	    return $records;
     }
 
-    //欠陥ファイル数、
-    function getMetricsValue($col,$selectMetrics)
+    function getMetricsValue($col,$selectMetrics,$type)
     {
         $metrics = 1;//0の時はファイル数なので1
-        if($selectMetrics==1 && $col[3]==0)
-        {
-            $metrics = 0;//"(2) 欠陥ファイル数"の時は1以上なら1
-        }else if(2<$selectMetrics)//3～欠陥数
-            $metrics = $col[$selectMetrics];
-        if($metrics<0)
-            return 0;
+        if($type == 'string')
+            return $col['metrics'];
+        if($type == 'int')
+            return intval($col['metrics']);
+        if($type == 'float')
+            return floatval($col['metrics']);
         return $metrics;
     }
     ///////csvのアップロード用///////
@@ -94,7 +94,7 @@ class Graph extends AppModel
                     }
                     if($records[$i][$groupcol]=='')
                     {
-                        $records[$i][$groupcol] = 'グループ名なし';
+                        $records[$i][$groupcol] = 'グループ名なし;';
                     }
                     //グループ名は;で区切られている
                     $names = explode(';',$records[$i][$groupcol]);
@@ -117,11 +117,7 @@ class Graph extends AppModel
                 }
                 $data[] = array('metrics'=>$metrics,'modelname_id'=>$selectModelId,'upload_data_id'=>$upload_id,'filepath'=>$records[$i][0]);
             }
-            // echo '<pre>';
-            // print_r($data);
-            // print_r($groupNameData);
-            // echo '</pre>';
-            // die();
+
             //ここまではたぶん数秒で終わる
             if (!$this->saveAll($data))
             {
@@ -147,44 +143,76 @@ class Graph extends AppModel
     {
         $data = $this->readCSV($up_file,-1,-1);
         $data = array_filter($data, function($row) {return $row['Graph'][25];});
-        return $this->getGroupDataImple($data, $selectMetrics);
+        return $this->getGroupDataImple($data, $selectMetrics, 'ALL');
     }
 
     function getGroupData($upload_data_id,$selectMetrics,$selectGroupName)
     {
         $conditions = array('Graph.upload_data_id' => $upload_data_id);
-		$conditions += array('Graph.1 >=' => 4);//これがないとo1,o12,o2が入り処理が長くなる
-        if($selectGroupName != 'ALL')
-        {
-            $conditions += array('Graph.25' => $selectGroupName);
-        }
-
-        $fields = array(1,3,$selectMetrics,4,25);
+        $fields = array('Graph.metrics');
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
-        return $this->getGroupDataImple($data,$selectMetrics);
+        //$selectMetricsと$group列だけ残す
+        $selectMetrics -= 2;
+        $index = -1;
+
+        foreach($data as $value)
+        {
+            ++$index;
+            $metrics = explode(',',$value['Graph']['metrics']);
+            for($i=0; $i<count($metrics); ++$i)
+            {
+                $metric = trim($metrics[$i]);
+                if(strpos($metric,';') !== false)//グループの列がある
+                {
+                    $data[$index]['Graph']['groups'] = $metric;
+                }  
+                if($i == $selectMetrics)
+                {
+                    $data[$index]['Graph']['metrics'] = $metric;
+                }
+   
+            }
+        }
+        return $this->getGroupDataImple($data,$selectMetrics,$selectGroupName);
     }
 
-    function getGroupDataImple($data,$selectMetrics)
+    function getGroupDataImple($data,$selectMetrics,$selectGroupName)
     {
+        App::import('Model', 'Metricslist');
+        $metricsList = new Metricslist;
+        $metricslist = $metricsList->find('all');
+        $type = $metricslist[$selectMetrics+1]['Metricslist']['type'];
+        if($type == 'string')
+            return;
         $group_array = array();
         foreach($data as $value)
         {
-            $names = explode(';',$value['Graph'][25]);
-            $numOfNames = count($names);
-            foreach($names as $name)
+            $names = explode(';',$value['Graph']['groups']);
+            $numOfNames = count($names)-1;
+            for($i=0; $i<$numOfNames; ++$i)
             {
-                $name = trim($name);
-                $metrics = $this->getMetricsValue($value['Graph'],$selectMetrics);
-                $loc = $value['Graph'][4];
-                if(!isset($group_array[$name]))
+                $name = $names[$i];
+                $metrics = $this->getMetricsValue($value['Graph'],$selectMetrics,$type);
+                $loc = 0;//$value['Graph'][4];
+                if((strpos($selectGroupName,'ALL') !== false) || $selectGroupName == $name)
                 {
-                    $group_array += array($name=>array('file_num'=>1,'defact_num'=>$metrics,'loc'=>$loc));
-                }
-                else
-                {
-                    $group_array[$name]['file_num']   += 1;
-                    $group_array[$name]['defact_num'] += $metrics;
-                    $group_array[$name]['loc']        += $loc;
+                    if($selectGroupName == 'ALL without no group')
+                    {
+                        if($name =='グループ名なし')
+                        {
+                            continue;
+                        }
+                    }
+                    if(!isset($group_array[$name]))
+                    {
+                        $group_array += array($name=>array('file_num'=>1,'defact_num'=>$metrics,'loc'=>$loc));
+                    }
+                    else
+                    {
+                        $group_array[$name]['file_num']   += 1;
+                        $group_array[$name]['defact_num'] += $metrics;
+                        $group_array[$name]['loc']        += $loc;
+                    }
                 }
             }
         }

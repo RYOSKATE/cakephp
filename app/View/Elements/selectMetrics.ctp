@@ -16,6 +16,6 @@
 	    'class' => 'form-control',
 		'empty' => false,
 		'style'=>"width:100%;",
-		'disabled' => array(2,7)
+		//'disabled' => array(2,7)
 	 ));
 ?> 

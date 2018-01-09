@@ -213,6 +213,7 @@ class AppController extends Controller
     {
         //すでに存在する開発グループ名一覧を取得
         $groupNameData = array(0=>"ALL") + $this->setGroupName($state);
+        $groupNameData += array(count($groupNameData) =>"ALL without no group");
         $this->set('groupName',$groupNameData);
         return $groupNameData;
     }
