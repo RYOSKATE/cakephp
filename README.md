@@ -8,7 +8,7 @@ Developed by CakePHP2.
 
 # Installation
 
-[Quick Start Guide is here.](https://github.com/RYOSKATE/MetricsVisualizer/wiki/Quick-Start-Guide-for-Windows).
+[Quick Start Guide is here.](https://github.com/RYOSKATE/MetricsVisualizer/wiki).
 
 This system is developed by [CakePHP](http://www.cakephp.org) - The rapid development PHP framework.
 
