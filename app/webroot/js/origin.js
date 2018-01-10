@@ -1,13 +1,10 @@
 
 var chartData1 = [];
-for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
-{
+for (var origin = 0; origin < defactsByOrigin1.length; ++origin) {
     var metrics = defactsByOrigin1[origin];
     var chartDataByOrigin = [];
-    for (var j = 0; j < metrics.length; ++j) 
-    {
-        if(metrics[j]!=0)
-        {
+    for (var j = 0; j < metrics.length; ++j) {
+        if (metrics[j] != 0) {
             chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": metrics[j] });
         }
     }
@@ -16,14 +13,11 @@ for (var origin = 0; origin < defactsByOrigin1.length; ++origin)
 
 
 var chartData2 = [];
-for (var origin = 0; origin < defactsByOrigin1.length; ++origin) 
-{
+for (var origin = 0; origin < defactsByOrigin1.length; ++origin) {
     var metrics = defactsByOrigin2[origin];
     var chartDataByOrigin = [];
-    for (var j = 0; j < metrics.length; ++j) 
-    {
-        if(metrics[j]!=0)
-        {
+    for (var j = 0; j < metrics.length; ++j) {
+        if (metrics[j] != 0) {
             chartDataByOrigin.push({ "numOfDefacts": String(j), "numOfFiles": metrics[j] });
         }
     }
@@ -46,18 +40,15 @@ origin(実際の由来は+1する)
 6:0-39 0が8割くらい
 */
 // 由来(1-7 = o2,o12,o1,o13,o123,o23,o3)0は使ってないらしい
-function toggleActive()
-{
+function toggleActive() {
     $('#o123').toggleClass('active');
     $('#o23').toggleClass('active');
     $('#o3').toggleClass('active');
 
 }
-AmCharts.ready(function () 
-{
+AmCharts.ready(function () {
     toggleActive();
-    for (var origin = 4; origin <chartData1.length; ++origin) 
-    {   
+    for (var origin = 4; origin < chartData1.length; ++origin) {
         // PIE CHART
         leftChart[origin] = new AmCharts.AmPieChart();
         leftChart[origin].dataProvider = chartData1[origin];
@@ -72,7 +63,7 @@ AmCharts.ready(function ()
         leftChart[origin].addLegend(leftlegend[origin]);
 
         // WRITE
-        leftChart[origin].write("leftChart"+origin);
+        leftChart[origin].write("leftChart" + origin);
 
         // PIE CHART
         rightChart[origin] = new AmCharts.AmPieChart();
@@ -89,7 +80,7 @@ AmCharts.ready(function ()
 
         // WRITE
 
-        rightChart[origin].write("rightChart"+origin);
+        rightChart[origin].write("rightChart" + origin);
 
         // changes label position (labelRadius)
         leftChart[origin].labelRadius = -30;
@@ -102,7 +93,7 @@ AmCharts.ready(function ()
         leftChart[origin].depth3D = 0;
         leftChart[origin].angle = 0;
         rightChart[origin].depth3D = 0;
-        rightChart[origin].angle = 0;   
+        rightChart[origin].angle = 0;
         leftChart[origin].validateNow();
         rightChart[origin].validateNow();
         // changes switch of the leftlegend[origin] (x or v)

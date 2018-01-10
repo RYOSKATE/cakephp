@@ -1,4 +1,4 @@
-function assign(ta, {setOverflowX = true, setOverflowY = true} = {}) {
+function assign(ta, { setOverflowX = true, setOverflowY = true } = {}) {
 	if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || ta.hasAttribute('data-autosize-on')) return;
 
 	let heightOffset = null;
@@ -14,9 +14,9 @@ function assign(ta, {setOverflowX = true, setOverflowY = true} = {}) {
 		}
 
 		if (style.boxSizing === 'content-box') {
-			heightOffset = -(parseFloat(style.paddingTop)+parseFloat(style.paddingBottom));
+			heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
 		} else {
-			heightOffset = parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth);
+			heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
 		}
 
 		update();
@@ -52,7 +52,7 @@ function assign(ta, {setOverflowX = true, setOverflowY = true} = {}) {
 
 		ta.style.height = 'auto';
 
-		let endHeight = ta.scrollHeight+heightOffset;
+		let endHeight = ta.scrollHeight + heightOffset;
 
 		if (ta.scrollHeight === 0) {
 			// If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
@@ -60,7 +60,7 @@ function assign(ta, {setOverflowX = true, setOverflowY = true} = {}) {
 			return;
 		}
 
-		ta.style.height = endHeight+'px';
+		ta.style.height = endHeight + 'px';
 
 		// prevents scroll-position jumping
 		document.documentElement.scrollTop = htmlTop;
@@ -69,7 +69,7 @@ function assign(ta, {setOverflowX = true, setOverflowY = true} = {}) {
 
 	function update() {
 		const startHeight = ta.style.height;
-		
+
 		resize();
 
 		const style = window.getComputedStyle(ta, null);
