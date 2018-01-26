@@ -21,7 +21,18 @@ $(function () {
 
         var d = [b, a * maxFile + b];
         return d;
-    }
+	}
+
+	function randomColor() {
+		// 配列
+		var arr = [ "#ff2800", "#faf500", "#35a16b", "#0041ff",
+					"#66ccff", "#ff99a0", "#ff9900", "#9a0079", "#663300"
+		 ] ;
+
+		// 配列からランダムで値を選択
+		var color = arr[ Math.floor( Math.random() * arr.length ) ] ;
+		return color;
+	}
 
     /*
       $data[] = array('model'=>$modelname,
@@ -74,7 +85,7 @@ $(function () {
         xy[1] = 0;
         data.push({ "group": "", "y": 0, "x": x, "value": 0 });
     }
-    AmCharts.themes.none = {};
+	AmCharts.themes.none = {};
 
     var chart = AmCharts.makeChart("chartdiv", {
         "type": "xy",
@@ -84,7 +95,7 @@ $(function () {
         "valueAxes": [{
             "axisAlpha": 0,
             "position": "bottom",
-            "title": "ファイル数"
+            "title": metricsName2
         }, {
             "axisAlpha": 0,
             "position": "left",
@@ -101,7 +112,8 @@ $(function () {
             "valueField": "value",
             "xField": "x",
             "yField": "y",
-            "maxBulletSize": 100
+			"maxBulletSize": 10,
+			"bulletColor":"#ff2800"
         }],
         "trendLines": [{
             "finalValue": xy[1],

@@ -4,13 +4,15 @@ class TargetData
     public $csvName = null;//ローカルファイル名
     public $modelName = '';
     public $groupName = '';
-    public $metricsName = '';//空文字を画面表示
+	public $metricsName = '';//空文字を画面表示
+	public $metricsName2 = '';//空文字を画面表示
     public $otherMethodName;
 
     public $csvId = null;//データベースのid
     public $modelId;
     public $groupId;
-    public $metricsId = 3;
+	public $metricsId = 3;
+	public $metricsId2 = 3;
     public $otherMethodId;
 
     public $isLoadExternalCSV = false;
@@ -125,8 +127,8 @@ class GraphsController extends AppController
                 __('(25) 自ファイルのネストの深さの最大値'),
                 __('(26) 手を加えた組織の数')
             );
-        
-        
+
+
             if($this->getLang()=='eng')
             {
                 $metricsList = array(
@@ -201,7 +203,9 @@ class GraphsController extends AppController
             $target->groupId = $lastForm ['開発グループ'];
             $target->groupName = $groupNameData[$target->groupId];
             $target->metricsId = $lastForm ['Metrics'];
-            $target->metricsName = $metricsListData[$target->metricsId];
+			$target->metricsName = $metricsListData[$target->metricsId];
+			$target->metricsId2 = $lastForm ['Metrics2'];
+            $target->metricsName2 = $metricsListData[$target->metricsId2];
 
             if (!empty($lastForm ['selectCSV']['name']))
             {
@@ -237,13 +241,15 @@ class GraphsController extends AppController
             }
             else
             {
-                $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->groupName);
+                $target->data = $this->Graph->getGroupData($target->csvId,$target->metricsId,$target->metricsId2,$target->groupName);
             }
         }
         $this->set('data',$target->data);
         $this->set('selectModelName', $target->csvName);
-        $this->set('selectMetrics',$target->metricsId);
-        $this->set('selectMetricsStr', $target->metricsName);
+		$this->set('selectMetrics', $target->metricsId);
+		$this->set('selectMetrics2', $target->metricsId2);
+		$this->set('selectMetricsStr', $target->metricsName);
+		$this->set('selectMetricsStr2', $target->metricsName2);
         $this->set('methodId',0);
     }
 

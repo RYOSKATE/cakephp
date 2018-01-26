@@ -26,8 +26,8 @@ class GroupName extends AppModel {
 			),
 		),
 	);
-    
-    function uploadFromCSV($groupNames,$isCodeCheck) 
+
+    function uploadFromCSV($groupNames,$isCodeCheck)
     {
         $errorNames=array();
         try
@@ -38,8 +38,9 @@ class GroupName extends AppModel {
  			$data = array();
             foreach($result as $name)//何故か空白文字のグループ名が毎回追加されてしまうため1から
             {
-                if($isCodeCheck && !mb_check_encoding($name,'UTF-8'))
-                    $errorNames[] = $name;
+                // if($isCodeCheck && !mb_check_encoding($name,'UTF-8'))
+				//     $errorNames[] = $name;
+				$name = mb_convert_encoding($name, "utf-8", "auto");//sjis-win''
                 if(!$this->hasAny(array('GroupName.name'=>$name)))
                     $data[] = array('name'=> $name);
             }
@@ -48,7 +49,7 @@ class GroupName extends AppModel {
                 throw new Exception();
             if($data)
             {
-                if (!$this->saveAll($data)) 
+                if (!$this->saveAll($data))
                 {
                     $errorNames[0]='saveError';
                     throw new Exception();
@@ -56,10 +57,10 @@ class GroupName extends AppModel {
             }
             //$this->commit();
         }
-        catch(Exception $e) 
+        catch(Exception $e)
         {
             //$this->rollback();
         }
         return $errorNames;
-    }    
+    }
 }

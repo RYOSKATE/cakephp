@@ -1,9 +1,9 @@
 <?php
 	//(n)のnはCSVファイル中の列番号
-	echo $this->Form->input('Metrics',array
+	echo $this->Form->input('Metrics2',array
 	(
 	    'type'=>'select',
-		'label'=>__('メトリクス選択'),
+		'label'=>__('メトリクス選択-x軸'),
 	    'options'=>$metricsList,
 		'value'=>$selectMetrics,//デフォルトは欠陥数
 		// 'style' => 'width: 200px',

@@ -5,14 +5,40 @@
 
 <div class="page-header">
     <h1><small><?php echo __('メトリクス散布図');?></small></h1>
-     <?php echo $this->element('selectForm1'); ?>
+	 <?php
+	     echo $this->element('formCreate');
+		 echo '<div class="row">';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('seceletCSVid', array("formname" => 'CSV_ID',"isAllowEmpty" => false));
+		 echo '</div>';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('localCSV',array("formname" => __('selectCSV')));
+		 echo '</div>';
+		 echo '<div class="col-sm-12 col-md-12 col-lg-12">';
+		 echo $this->element('selectGroup',$groupName);
+		 echo '</div>';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('selectMetrics',array("selectMetrics" => $selectMetrics,"metricsList" => $metricsList));
+		 echo '</div>';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('selectMetrics2',array("selectMetrics" => $selectMetrics2,"metricsList" => $metricsList));
+		 echo '</div>';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('setButton');
+		 echo '</div>';
+		 echo '<div class="col-sm-6 col-md-6 col-lg-6">';
+		 echo $this->element('changeGraphButton');
+		 echo '</div>';
+		 echo '</div>';
+		 echo $this->Form->end();
+	  ?>
 </div>
 <h4><?php echo __('モデル名');?>:<?php echo $selectModelName;?></h4>
-<h6><?php echo __('メトリクス');?>:<?php echo substr($selectMetricsStr,4);?></h6>
+<h6><?php echo __('メトリクス');?>:<?php echo $selectMetricsStr;?>/<?php echo $selectMetricsStr2;?></h6>
 <div id="chartdiv" style="height:500px;"></div>
 
 <!--<div class="col-md-3 col-sm-3 pull-right">
-    <?php 
+    <?php
         echo $this->Form->input('順位表示数',array
         (
             'id'=>'dispNum',
@@ -48,8 +74,9 @@
 </div>
 
 <!-- グラフ・表の作成処理 -->
-<script type="text/javascript">  
+<script type="text/javascript">
     var getData = JSON.parse('<?=json_encode($data);?>');
-    var metricsName = JSON.parse('<?=json_encode(substr($selectMetricsStr,4));?>');
+	var metricsName = JSON.parse('<?=json_encode($selectMetricsStr);?>');
+	var metricsName2 = JSON.parse('<?=json_encode($selectMetricsStr2);?>');
 </script>
 <?php echo $this->Html->script('alldevgroup', array('inline' => true));?>

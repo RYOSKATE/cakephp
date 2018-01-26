@@ -17,7 +17,7 @@ class Graph extends AppModel
 			'order' => ''
 		)
     );
-    
+
 
 
     function makeCacheName($graphName,$paramArray)
@@ -55,6 +55,17 @@ class Graph extends AppModel
         if($type == 'float')
             return floatval($col['metrics']);
         return $metrics;
+	}
+	function getMetricsValue2($col,$type)
+    {
+        $metrics = 1;//0の時はファイル数なので1
+        if($type == 'string')
+            return $col['metrics2'];
+        if($type == 'int')
+            return intval($col['metrics2']);
+        if($type == 'float')
+            return floatval($col['metrics2']);
+        return $metrics;
     }
     ///////csvのアップロード用///////
     function uploadFromCSV($filepath,$selectModelId,$upload_id)
@@ -84,7 +95,7 @@ class Graph extends AppModel
 
             unset($records[count($records)-1]);//最後に[0]だけのものができてしまうため削除
             $data = array();
-            
+
             for ($i = 0; $i< count($records); ++$i)
             {
                 $lastIndex = count($records[$i]) - 1;
@@ -141,24 +152,37 @@ class Graph extends AppModel
     {
         $data = $this->readCSV($up_file,-1,-1);
         $data = array_filter($data, function($row) {return $row['Graph'][25];});
-        return $this->getGroupDataImple($data, $selectMetrics, 'ALL');
+        return $this->getGroupDataImple($data, $selectMetrics, 0, 'ALL');
     }
 
-    function getGroupData($upload_data_id,$selectMetrics,$selectGroupName)
+    function getGroupData($upload_data_id,$selectMetrics,$selectMetrics2,$selectGroupName)
     {
         $conditions = array('Graph.upload_data_id' => $upload_data_id);
-        $fields = array('Graph.metrics','Graph.groups');
+        $fields = array('Graph.filepath','Graph.metrics','Graph.groups');
         $data = $this->find('all',array('fields' => $fields,'conditions' => $conditions));
         //$selectMetricsと$group列だけ残す
-        $selectMetrics -= 1;
-        $index = -1;
+		$selectMetrics -= 1;
+		$selectMetrics2 -= 1;
+		$index = -1;
+
+		// echo '<pre>';
+		// print_r($selectMetrics);
+		// print_r($selectMetrics2);
+		// print_r($data);
+
         foreach($data as &$value)
         {
             $metrics = explode(',',$value['Graph']['metrics']);
-            $value['Graph']['metrics'] = null;
-            $value['Graph']['metrics'] = trim($metrics[$selectMetrics]);
-        }
-        return $this->getGroupDataImple($data,$selectMetrics,$selectGroupName);
+			$value['Graph']['metrics'] = null;
+			$metrics1 = $metrics[$selectMetrics];
+			$metrics2 = $metrics[$selectMetrics2];
+			$value['Graph']['metrics'] = trim($metrics1);
+			$value['Graph']['metrics2'] = trim($metrics2);
+		}
+		// print_r($data);
+		// echo '</pre>';
+		// die();
+        return $this->getGroupDataImple($data,$selectMetrics,$selectMetrics2,$selectGroupName);
     }
 
     function getMetricsType($selectMetrics)//1origin
@@ -170,11 +194,14 @@ class Graph extends AppModel
         return $type;
     }
 
-    function getGroupDataImple($data,$selectMetrics,$selectGroupName)
+    function getGroupDataImple($data,$selectMetrics,$selectMetrics2,$selectGroupName)
     {
         $type = $this->getMetricsType($selectMetrics);
-        if($type == 'string')
-            return;
+		if($type == 'string')
+		{
+			return;
+		}
+
         $group_array = array();
         foreach($data as $value)
         {
@@ -183,7 +210,8 @@ class Graph extends AppModel
             for($i=0; $i<$numOfNames; ++$i)
             {
                 $name = $names[$i];
-                $metrics = $this->getMetricsValue($value['Graph'],$type);
+				$metrics = $this->getMetricsValue($value['Graph'],$type);
+				$metrics2 = $this->getMetricsValue2($value['Graph'],$type);
                 $loc = 0;//$value['Graph'][4];
                 if((strpos($selectGroupName,'ALL') !== false) || $selectGroupName == $name)
                 {
@@ -196,17 +224,18 @@ class Graph extends AppModel
                     }
                     if(!isset($group_array[$name]))
                     {
-                        $group_array += array($name=>array('file_num'=>1,'defact_num'=>$metrics,'loc'=>$loc));
+                        $group_array += array($name=>array('file_num'=>$metrics2,'defact_num'=>$metrics,'loc'=>$loc));
                     }
                     else
                     {
-                        $group_array[$name]['file_num']   += 1;
+                        $group_array[$name]['file_num']   += $metrics2;
                         $group_array[$name]['defact_num'] += $metrics;
                         $group_array[$name]['loc']        += $loc;
                     }
                 }
             }
-        }
+		}
+
 
         $data = array();
         foreach ($group_array as $key => $value)
@@ -257,12 +286,12 @@ class Graph extends AppModel
                 if(strpos($metric,';') !== false)//グループの列がある
                 {
                     $data[$index]['Graph']['groups'] = $metric;
-                }  
+                }
                 if($i == $selectMetrics)
                 {
                     $data[$index]['Graph']['metrics'] = $metric;
                 }
-   
+
             }
         }
 
