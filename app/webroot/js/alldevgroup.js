@@ -36,16 +36,16 @@ $(function () {
 
     /*
       $data[] = array('model'=>$modelname,
-                'group_name' =>$key,
-                'file_num'   =>$value['file_num'],
-                'defact_num' =>$value['defact_num'],
-                'loc'        =>$value['loc'],
+                'filename' =>$key,
+                'x_value'   =>$value['x_value'],
+                'y_value' =>$value['y_value'],
+                'size'        =>$value['size'],
                 'date'       =>$time);
     */
     var data = new Array();
     // var value1 = getData[0];
-    // var value2 = getData[0]["defact_num"];
-    // var value3 = Number(getData[0]["file_num"]);
+    // var value2 = getData[0]["y_value"];
+    // var value3 = Number(getData[0]["x_value"]);
 
     var totalDefact = new Array();
     var defactPerFile = new Array();
@@ -54,11 +54,11 @@ $(function () {
     var maxDefact = 0;
     for (var i = 0; i < getData.length; ++i) {
         var temp = getData[i];
-        var y = Number(temp['defact_num']);
-        var x = Number(temp['file_num']);
-        var loc = Number(temp['loc']);
-        var name = temp['group_name'];
-
+        var y = Number(temp['y_value']);
+        var x = Number(temp['x_value']);
+        var size = Number(temp['size']);
+        var filename = temp['group_name'];
+		var name = temp['group'];
         if (maxFile < x) {
             maxFile = x;
         }
@@ -68,12 +68,12 @@ $(function () {
         //バブルサイズの計算式
         //var dist = (y-x)/Math.sqrt(2);
         //var value = parseInt(Math.round(dist));
-        value = loc;
+        value = size;
 
-        data.push({ "group": name, "x": x, "y": y, "value": value });
+        data.push({ "group": name, "x": x, "y": y, "value": value, "file": filename });
         totalDefact.push({ "group": name, "v": y });
         defactPerFile.push({ "group": name, "v": y / x });
-        defactPerLoc.push({ "group": name, "v": (1000 * y / loc).toFixed(3) });
+        defactPerLoc.push({ "group": name, "v": (1000 * y / size).toFixed(3) });
     }
     totalDefact.sort(function (a, b) { return (a.v > b.v) ? -1 : 1; });
     defactPerFile.sort(function (a, b) { return (a.v > b.v) ? -1 : 1; });
@@ -103,7 +103,7 @@ $(function () {
         }],
         "startDuration": 1.5,
         "graphs": [{
-            "balloonText": "group:<b>[[group]]</b> <br> x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>",
+            "balloonText": "file:<b>[[file]]</b> <br>group:<b>[[group]]</b> <br> x:<b>[[x]]</b> y:<b>[[y]]</b><br>value:<b>[[value]]</b>",
             "bullet": "circle",
             "bulletBorderAlpha": 0.2,
             "bulletAlpha": 0.8,

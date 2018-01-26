@@ -205,49 +205,46 @@ class Graph extends AppModel
         $group_array = array();
         foreach($data as $value)
         {
-            $names = explode(';',$value['Graph']['groups']);
-            $numOfNames = count($names)-1;
-            for($i=0; $i<$numOfNames; ++$i)
-            {
-                $name = $names[$i];
-				$metrics = $this->getMetricsValue($value['Graph'],$type);
-				$metrics2 = $this->getMetricsValue2($value['Graph'],$type);
-                $loc = 0;//$value['Graph'][4];
-                if((strpos($selectGroupName,'ALL') !== false) || $selectGroupName == $name)
-                {
-                    if($selectGroupName == 'ALL without no group')
-                    {
-                        if($name =='グループ名なし')
-                        {
-                            continue;
-                        }
-                    }
-                    if(!isset($group_array[$name]))
-                    {
-                        $group_array += array($name=>array('file_num'=>$metrics2,'defact_num'=>$metrics,'loc'=>$loc));
-                    }
-                    else
-                    {
-                        $group_array[$name]['file_num']   += $metrics2;
-                        $group_array[$name]['defact_num'] += $metrics;
-                        $group_array[$name]['loc']        += $loc;
-                    }
-                }
-            }
+			//$names = explode(';',$value['Graph']['groups']);
+			$name = $value['Graph']['filepath'];
+			$metrics = $this->getMetricsValue($value['Graph'], $type);
+			$metrics2 = $this->getMetricsValue2($value['Graph'], $type);
+			$gourp = $value['Graph']['groups'];
+			$size = 0;//$value['Graph'][4];
+			if((strpos($selectGroupName,'ALL') !== false) || $selectGroupName == $name)
+			{
+				if($selectGroupName == 'ALL without no group')
+				{
+					if($name =='グループ名なし')
+					{
+						continue;
+					}
+				}
+				if(!isset($group_array[$name]))
+				{
+					$group_array += array($name=>array('x_value'=>$metrics2,
+						'y_value'=>$metrics,'size'=>$size, 'group'=>$gourp));
+				}
+				else
+				{
+					$group_array[$name]['x_value'] += $metrics2;
+					$group_array[$name]['y_value'] += $metrics;
+					$group_array[$name]['size']    += $size;
+				}
+			}
 		}
-
 
         $data = array();
         foreach ($group_array as $key => $value)
         {
-            $data[]      = array(
-                            'group_name' =>$key,
-                            'file_num'   =>$value['file_num'],
-                            'defact_num' =>$value['defact_num'],
-                            'loc'        =>$value['loc'],
-                            );
-        }
-
+            $data[] = array(
+						'group_name' =>$key,
+						'x_value' =>$value['x_value'],
+						'y_value' =>$value['y_value'],
+						'size'    =>$value['size'],
+						'group'	  =>$value['group'],
+						);
+		}
         return $data;
     }
      /////////全開発グループ用/////////
