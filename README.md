@@ -11,6 +11,7 @@ Developed by CakePHP2.
 This system is developed by [CakePHP](http://www.cakephp.org) - The rapid development PHP framework.
 
 ## Reference
+This tool is developed by [Ryosuke Ishizue](https://researchmap.jp/ishizue/)
 
 Research Paper
 * [Metrics visualization technique based on the origins and function layers for OSS-based development](http://www.washi.cs.waseda.ac.jp/?p=3160)
