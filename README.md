@@ -1,4 +1,4 @@
-# MetricsVisualizer <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
+# MetricsVisualizer <a href="https://github.com/RYOSKATE/MetricsVisualizer/blob/master/LICENSE"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
 
 Metrics Visualizer is a Dashboard for Multiple Organization and Layer Architecture Software Development.
 
